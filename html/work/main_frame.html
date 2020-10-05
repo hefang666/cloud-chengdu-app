@@ -128,8 +128,10 @@
                 <div v-show='showCbUpdateBtn' class="cbUpdateData-Btn"  @click='updateCbData'>
                     抄表数据更新
                 </div>
-                <div  v-show='showClearDataBtn'  class="cbUpdateData-Btn1" @click='onClearLocalCompletedData'>
-                    任务数据及照片清理
+                <div style="display:none">
+                  <div  v-show='showClearDataBtn'  class="cbUpdateData-Btn1" @click='onClearLocalCompletedData'>
+                      任务数据及照片清理
+                  </div>
                 </div>
             </div>
 
