@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>设置页面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+        }
+
+        .ri {
+            float: right;
+        }
+
+        .le {
+            float: left;
+        }
+
+        .cl {
+            clear: both;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background-color: #fff;
+            color: #333333;
+            font-size: var(--fontsize9);
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333333;
+            font-weight: 900;
+        }
+
+        .aui-list:after {
+            display: none;
+        }
+
+        .aui-list {
+            background-image: none !important;
+        }
+
+        .aui-list-item-arrow:before {
+            border-color: #A2A2A2;
+        }
+
+        .mine_List .aui-list .aui-list-item-media {
+            width: 2.0rem;
+            padding-right: 0 !important;
+        }
+
+        .mine_List .aui-list .aui-list-item {
+            min-height: 2.7rem !important;
+            font-size: var(--fontsize75);
+        }
+
+        .aui-dialog-body {
+            color: #333 !important;
+            font-size: var(--fontsize8) !important;
+        }
+
+        .aui-list .aui-list-item-text {
+            font-size: var(--fontsize6);
+        }
+        /*.fontSize{
+          font-size: 0.8rem  !important;
+          vertical-align: middle;
+        }*/
+        .van-cell__title {
+          flex: 2;
+        }
+        .van-cell__value {
+          flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="aui-bar aui-bar-nav aui-border-b" id="header">
+        <div class="aui-pull-left aui-btn" tapmode onclick='back()'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">设置</div>
+    </header>
+
+    <div id='wrap' class="aui-content mine_List">
+
+        <van-cell-group>
+            <van-cell title="工单数据及照片是否单独上传" value="工单数据及照片是否单独上传" />
+            <van-switch v-model="taskChecked" size="24px" @change="onChangeCheck()" />
+        </van-cell-group>
+        <!-- 添加停水通知单数据、照片单独上传  2020-05-24 zlx -->
+        <van-cell-group>
+            <van-cell title="停水通知单数据及照片单独上传" value="停水通知单数据及照片单独上传" />
+            <van-switch v-model="stopWaterDataChecked" size="24px" @change="onSWDChangeCheck()" />
+        </van-cell-group>
+        <!-- 添加表务照片是否删除 2020-05-25 zlx -->
+        <van-cell-group>
+            <van-cell title="表务照片是否保存在本地" value="表务照片是否保存在本地" />
+            <van-switch v-model="meterManageSaveLocation" size="24px" @change="onSaveChangeCheck()" />
+        </van-cell-group>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                taskChecked: true,
+                stopWaterDataChecked: true,
+                meterManageSaveLocation: true
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                onChangeCheck(){
+                  if(this.taskChecked){
+                    var meterManageUploadPicture = 1;
+                  }else {
+                    var meterManageUploadPicture = 0;
+                  }
+                  $api.setStorage('meterManageUploadPicture',meterManageUploadPicture);
+                },
+                onSWDChangeCheck(){ //添加停水通知单数据单独上传 2020-05-25 zlx
+                  if(this.stopWaterDataChecked){
+                    var stopWaterDataUpload = 1;
+                  }else {
+                    var stopWaterDataUpload = 0;
+                  }
+                  $api.setStorage('stopWaterDataUpload',stopWaterDataUpload);
+                },
+                onSaveChangeCheck(){ //添加表务照片保存到本地 - 提交后是否删除  2020-05-25 zlx
+                  if(this.meterManageSaveLocation){
+                    var meterManageSaveLocation = 1;
+                  }else {
+                    var meterManageSaveLocation = 0;
+                  }
+                  $api.setStorage('meterManageSaveLocation',meterManageSaveLocation);
+                },
+                initSwitch(){
+                  var meterManageUploadPicture =  $api.getStorage('meterManageUploadPicture');
+                  if(meterManageUploadPicture == 1){
+                    this.taskChecked = true;
+                  }else {
+                    this.taskChecked = false;
+                  }
+
+                  var stopWaterDataUpload = $api.getStorage('stopWaterDataUpload');
+                  if (stopWaterDataUpload == 1) {
+                    this.stopWaterDataChecked = true;
+                  } else {
+                    this.stopWaterDataChecked = false;
+                  }
+
+                  var meterManageSaveLocation = $api.getStorage('meterManageSaveLocation');
+                  if (meterManageSaveLocation == 1) {
+                    this.meterManageSaveLocation = true;
+                  } else {
+                    this.meterManageSaveLocation = false;
+                  }
+
+                }
+
+            },
+            mounted: function() {
+              this.initSwitch();
+            }
+        })
+    }
+
+    function back() {
+        api.closeWin({});
+
+    }
+</script>
+
+</html>

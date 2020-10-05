@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>申请换表</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-vertical {
+            max-height: inherit;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+            padding: 0.85rem 0.75rem;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text],
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.9rem;
+            color: #626262;
+        }
+
+        .unusualTypePicker.van-cell {
+            padding: 0 1.3rem;
+            height: 2.87rem;
+            line-height: 2.87rem;
+        }
+
+        .popup {
+            max-height: 35vh;
+        }
+
+        .pickerMain {
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .picker {
+            width: 100vw;
+            height: 2.13rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+            border-bottom: 0.03rem solid #EDEDED;
+        }
+
+        .picker:last-child {
+            border-bottom: none;
+        }
+
+        .picker.active {
+            background-color: #F4F4F4;
+            color: #2F81F6;
+        }
+
+        .popupFooter {
+            width: 100vw;
+            height: 2.46rem;
+            border-top: 0.25rem solid #ECECEC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+        }
+
+        .footer {
+            width: 100vw;
+            height: 4.08rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.35rem;
+        }
+
+        .footer .van-button {
+            width: 5.5rem;
+            height: 1.86rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .footer .van-button:first-child {
+            background-color: #377EFF;
+        }
+
+        .footer .van-button:last-child {
+            background-color: #FF4141;
+        }
+
+        .card {
+            border-radius: 0.6rem;
+            background-color: #fff;
+            padding: 0.9rem 0 1rem 0;
+        }
+
+        .flex-con .van-search__content,
+        .van-search .van-cell {
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .searchInput {
+            display: flex;
+        }
+
+        .searchLabel {
+            height: 0;
+        }
+
+        .flex-con .searchInput span,
+        .flex-con .van-field__label span {
+            width: 3.6rem;
+            font-size: 0.9rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+        }
+
+        .flex-con .searchInput span::after,
+        .flex-con .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .flex-con .van-field__label {
+            height: 0;
+        }
+
+        .flex-con .van-cell.formField,
+        .searchInput,
+        .van-form .van-cell.formField,
+        .textAreaLabel,
+        .locationRow {
+            padding: 0.4rem 0.95rem 0.4rem 1.25rem;
+            background-color: transparent;
+        }
+
+        .flex-con .van-search {
+            background-color: transparent;
+            padding: 0;
+            width: calc(100% - 4.6rem);
+        }
+
+        .van-search .van-field__body,
+        .van-form .van-field__body {
+            border-bottom: 0.03rem solid #D8D8D8;
+        }
+
+        .van-form .textareaField .van-field__body {
+            border-bottom: none;
+        }
+
+        .border {
+            width: calc(100% - 1.1rem);
+            height: 0.15rem;
+            margin: 0.8rem 0.55rem;
+            background-color: #DEDEDE;
+        }
+
+        .van-form .textAreaLabel span.textLabel,
+        .van-form .van-field__label span {
+            width: 3.2rem;
+            font-size: 0.8rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+        }
+
+        .van-form .textAreaLabel span.textLabel::after,
+        .van-form .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .van-form .van-field__label {
+            height: 0;
+        }
+
+        .van-form .van-field__control[type=text],
+        .van-form textarea {
+            font-size: 0.8rem;
+            color: #676767;
+        }
+
+        .textareaField textarea {
+            font-size: 0.9rem;
+            color: #626262;
+        }
+
+        .van-form .textareaField .van-field__value {
+            border: 0.03rem solid #D8D8D8;
+            border-radius: 0.1rem;
+        }
+
+        .van-form textarea {
+            padding: 0.5rem 0.6rem;
+        }
+
+        .van-field__word-limit {
+            color: #E2E2E2;
+            font-size: 0.65rem;
+            padding: 0.5rem;
+            margin: 0;
+        }
+
+        .textAreaLabel {
+            height: 2rem;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .locationRow {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .locationArrow {
+            width: 0.5rem;
+            height: 0.65rem;
+            background: url("../image/MeterManage/dingwei.png") no-repeat center;
+            background-size: 100% 100%;
+            margin-top: 0.15rem;
+            margin-right: 0.45rem;
+        }
+
+        .locationText {
+            font-size: 0.7rem;
+            color: #377EFF;
+            flex: 1;
+        }
+        /*.locationRow .van-icon {
+            margin-top: 0.15rem;
+            color: #377EFF;
+        }*/
+
+        .locationRow .refresh {
+            margin-top: 0.15rem;
+            width: 0.78rem;
+            height: 0.81rem;
+            background: url("../image/MeterManage/gengxin.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">申请</div>
+        </header>
+
+        <van-field class="unusualTypePicker" readonly clickable label="任务类型" v-model="unusualType.Name" placeholder="选择类型" @click="showPicker = true;showUnusualTypeSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+        <van-popup class="popup" v-model="showPicker" position="bottom" @closed="hideAllSelect">
+            <div class="flex-wrap flex-vertical">
+                <div class="flex-con pickerMain" v-if="showUnusualTypeSelect">
+                    <div class="picker" v-for="(item,index) in unusualTypes" :key="index" :class="{active:unusualType.Id == item.Id}" v-if='item.Id==13 ||item.Id==3 ||item.Id==15' @click="changeUnusualType(item)">
+                        {{item.Name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showAreaSelect">
+                    <div class="picker" v-for="(item,index) in AreaData" :key="index" :class="{active:SubmitData.Areas == item.id}" @click="AreaName=item.Name;SubmitData.Areas=item.Id;showPicker=false">
+                        {{item.Name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showSourceSelect">
+                    <div class="picker" v-for="(item,index) in SourceData" :key="index" :class="{active:SubmitData.SourceId==item.Id}" @click="SourceName=item.Name;SubmitData.SourceId=item.Id;showPicker=false">
+                        {{item.Name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showEmergencySelect">
+                    <div class="picker" v-for="(item,index) in EmergencyData" :key="index" :class="{active:SubmitData.Emergency==item.Id}" @click="EmergencyName=item.Name;SubmitData.Emergency=item.Id;showPicker=false">
+                        {{item.Name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showOrderTypeSelect">
+                    <div class="picker" v-for="(item,index) in orderTypeData" :key="index" :class="{active:SubmitData.orderTypeId==item.Id}" @click="orderTypeName=item.Name;SubmitData.orderTypeId=item.Id;orderTypeSelectId=item.Id;showPicker=false">
+                        {{item.Name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showReasonSelect">
+                    <div class="picker" v-for="(item,index) in ReasonData" :key="index" :class="{active:SubmitData.MeterRemark==item.Id}" @click="MeterRemarkName=item.Name;SubmitData.MeterRemark=item.Id;showPicker=false">
+                        {{item.Name}}
+                    </div>
+                </div>
+                <div class="popupFooter" @click="hideAllSelect">
+                    取消
+                </div>
+            </div>
+        </van-popup>
+
+        <div id="main" class="flex-con">
+            <div class="card" v-show="unusualType.Id != 0">
+
+                <div class="searchInput">
+                    <div class="searchLabel">
+                        <span>户号</span>
+                    </div>
+                    <van-search v-model="SubmitData.CustomerCode" left-icon="" placeholder="请输入户号" @search="onSearch" @clear="clearCode"></van-search>
+                </div>
+
+                <div v-if="showCustomerInfo">
+                    <van-field class="formField" :border="false" label="户名" :value="customerInfo.CustomerName" readonly></van-field>
+                    <van-field class="formField textareaField readOnly" :border="false" label="用户地址" :value="customerInfo.Address" rows="1" type="textarea" autosize readonly></van-field>
+                    <van-field class="formField textareaField readOnly" type="textarea" autosize :border="false" label="水表位置" rows="1" :value="customerInfo.Location" readonly></van-field>
+                    <van-field class="formField" :border="false" label="用水性质" :value="customerInfo.Nature" readonly></van-field>
+                    <van-field class="formField" :border="false" label="口径" :value="customerInfo.Caliber" readonly></van-field>
+                    <van-field v-show="unusualType.Id == 2" class="formField" :border="false" label="表号" :value="customerInfo.StampNo" readonly></van-field>
+                    <van-field v-show="unusualType.Id == 2" class="formField" :border="false" label="止度" :value="customerInfo.EndScale" readonly></van-field>
+                </div>
+
+                <van-form v-if="unusualType.Id == '13' && showCustomerInfo">
+                    <div class="border"></div>
+
+                    <div class="textAreaLabel">
+                        <span class="textLabel">原因描述</span>
+                    </div>
+                    <van-field class="formField textareaField" type="textarea" name="Description" :border="false" maxlength="200" show-word-limit v-model="SubmitData.Description" rows="2" autosize></van-field>
+
+                    <div class="locationRow">
+                        <div class="locationArrow"></div>
+                        <div class="locationText">{{Location}}</div>
+                        <!-- <van-icon name="replay" @click="getLocation" /> -->
+                        <div class="refresh" @click="getLocation"></div>
+                    </div>
+
+                </van-form>
+
+                <van-form v-if="unusualType.Id == '3' && showCustomerInfo">
+                    <div class="border"></div>
+
+                    <van-field class="formField" :border="false" label="换表原因" :disabled="chooseOtherReason" :clickable="!chooseOtherReason" readonly name="Reason" v-model="MeterRemarkName" placeholder="请选择" @click="changeReason" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <div v-show="SubmitData.MeterRemark == '-1'">
+                        <div class="textAreaLabel">
+                            <span class="textLabel">其它原因</span>
+                            <!-- <van-checkbox v-model="chooseOtherReason">其它原因</van-checkbox> -->
+                        </div>
+                        <van-field class="formField textareaField" type="textarea" name="OtherReason" :border="false" maxlength="100" show-word-limit v-model="SubmitData.Remark" rows="2" autosize></van-field>
+                    </div>
+
+                    <div class="locationRow">
+                        <div class="locationArrow"></div>
+                        <div class="locationText">{{Location}}</div>
+                        <!-- <van-icon name="replay" @click="getLocation" /> -->
+                        <div class="refresh" @click="getLocation"></div>
+                    </div>
+
+                    <div class="textAreaLabel">
+                        <span class="textLabel">原因描述</span>
+                    </div>
+                    <van-field class="formField textareaField" type="textarea" name="Description" :border="false" maxlength="200" show-word-limit v-model="SubmitData.Description" rows="2" autosize></van-field>
+
+                </van-form>
+
+                <van-form v-if="unusualType.Id == '15' && showCustomerInfo">
+
+                    <div class="border"></div>
+
+                    <!-- <van-field class="formField" :border="false" label="工单编号" name="OrderCode" v-model="SubmitData.OrderCode"></van-field> -->
+
+                    <van-field class="formField" :border="false" label="工单类型" readonly clickable name="orderTypeName" v-model="orderTypeName" placeholder="请选择" @click="showPicker = true;showOrderTypeSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <van-field class="formField" :border="false" label="工单主题" :disabled="chooseOtherReason" :clickable="!chooseOtherReason" readonly name="Reason" v-model="MeterRemarkName" placeholder="请选择" @click="changeReason" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <van-field class="formField" :border="false" label="反映区名" readonly clickable name="AreaName" v-model="AreaName" placeholder="请选择" @click="showPicker = true;showAreaSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <van-field class="formField" :border="false" label="客户电话" name="Tel" v-model="SubmitData.Moblie"></van-field>
+
+                    <van-field class="formField" :border="false" label="信息来源" readonly clickable name="Source" v-model="SourceName" placeholder="请选择" @click="showPicker = true;showSourceSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <van-field class="formField" :border="false" label="紧急情况" readonly clickable name="Emergency" v-model="EmergencyName" placeholder="请选择" @click="showPicker = true;showEmergencySelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <van-field class="formField" :border="false" label="处理级别" clickable name="Level" v-model="SubmitData.ProcessingLevelId" placeholder="请输入处理级别"></van-field>
+
+                    <div class="textAreaLabel">
+                        <span class="textLabel">原因描述</span>
+                    </div>
+                    <van-field class="formField textareaField" type="textarea" name="Description" :border="false" maxlength="200" show-word-limit v-model="SubmitData.Description" rows="2" autosize></van-field>
+
+                </van-form>
+
+            </div>
+        </div>
+
+        <div class="footer">
+
+            <van-button round block type="info" @click="api.closeWin()">
+                返回
+            </van-button>
+
+            <van-button round block type="danger" @click="submit">
+                提交
+            </van-button>
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        TaskObj = api.pageParam.TaskObj;
+        unusualType = {
+            'Name':'用户换表',
+            'Id': 3,
+        };
+
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        bMap = api.require("bMap");
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.ApplyTaskVue = new Vue({
+            el: '#wrap',
+            data: {
+                showCustomerInfo: false,
+                showPicker: false,
+                showUnusualTypeSelect: false,
+                showAreaSelect: false,
+                showSourceSelect: false,
+                showEmergencySelect: false,
+                showOrderTypeSelect: false,
+                showReasonSelect: false,
+                chooseOtherReason: false,
+                unusualType: unusualType.Name,
+                unusualTypeId:unusualType.Id,
+                orderTypeSelectId:'',
+                unusualTypes: [],
+                AreaData: [],
+                SourceData: [],
+                EmergencyData: [{
+                    Name: "一般",
+                    Id: "0"
+                }, {
+                    Name: "紧急",
+                    Id: "1"
+                }],
+                LevelData: [],
+                ReasonData: [],
+                orderTypeData: [],
+                hbReasonData:[],
+                customerInfo: {
+                    CustomerName: "",
+                    Address: "",
+                    Location: "",
+                    Nature: "",
+                    Caliber: "",
+                    StampNo: "",
+                    EndScale: ""
+                },
+                Location: "正在定位中...",
+                SubmitData: {
+                    CustomerCode: TaskObj.CustomerCode,
+                    Moblie: "",
+                    SourceId: "",
+                    MeterRemark: "",
+                    Areas: "",
+                    Emergency: "",
+                    ProcessingLevelId: "",
+                    Description: "",
+                    Remark: "",
+                    Longitude: "",
+                    Latitude: "",
+                    Address: "",
+                    OrderCode: "",
+                    OrderTypeId: "", //工单类型
+                },
+                AreaName: "",
+                SourceName: "",
+                EmergencyName: "",
+                LevelName: "",
+                MeterRemarkName: "",
+                orderTypeName:""
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                changeUnusualType(type) {
+                    this.unusualType = type;
+                    this.unusualTypeId = type.Id;
+                    this.showPicker = false;
+                    this.resetForm();
+                },
+                changeReason() {
+                    if (!this.chooseOtherReason) {
+                        this.showPicker = true;
+                        this.showReasonSelect = true;
+                    }
+                },
+                clearCode() {
+                    this.showCustomerInfo = false;
+                    this.resetForm();
+                },
+                hideAllSelect() {
+                  // 下拉选择关闭
+                    this.showPicker = false;
+                    this.showUnusualTypeSelect = false;
+                    this.showAreaSelect = false;
+                    this.showSourceSelect = false;
+                    this.showEmergencySelect = false;
+                    this.showLevelSelect = false;
+                    this.showReasonSelect = false;
+                    this.showOrderTypeSelect = false;
+                },
+                resetForm() {
+                    this.SubmitData.CustomerCode = "";
+                    this.SubmitData.CustomerName = "";
+                    this.SubmitData.Address ="";
+                    this.SubmitData.OrderCode = "";
+                    this.SubmitData.Areas = "";
+                    this.SubmitData.Moblie = "";
+                    this.SubmitData.SourceId = "";
+                    this.SubmitData.Emergency = "";
+                    this.SubmitData.ProcessingLevelId = "";
+                    this.SubmitData.Description = "";
+                    this.SubmitData.MeterRemark = "";
+                    this.SubmitData.Remark = "";
+                    this.SubmitData.OrderTypeId = "",
+                    this.AreaName = "";
+                    this.SourceName = "";
+                    this.EmergencyName = "";
+                    this.LevelName = "";
+                    this.MeterRemarkName = "";
+                    this.orderTypeName ='';
+                    this.showCustomerInfo = false;
+                },
+                onSearch(val) {
+
+                    var body = {
+                        BookId: '',
+                        ReaderId: '',
+                        Code: '',
+                        BeginTime: '',
+                        EndTime: '',
+                        Obscure: val,
+                        isWater:'',
+                    }
+                    fnPost('OSM002', body, 'application/json', false, false, (ret, err) => {
+                        api.hideProgress();
+                        if (ret && ret.Status == 0) {
+                            this.showCustomerInfo = true;
+                            var data = JSON.parse(ret.Data);
+                            var result = JSON.parse(JSON.stringify(data[0]));
+                            this.SubmitData.CustomerCode = result.CustomerCode;
+                            this.customerInfo.CustomerName = result.CustomerName;
+                            this.customerInfo.Address = result.Address;
+                            this.customerInfo.Location = result.Location;
+                            this.customerInfo.Nature = result.Nature;
+                            this.customerInfo.Caliber = result.Caliber;
+                            this.customerInfo.StampNo = result.StampNo;
+                            this.customerInfo.EndScale = result.EndScale;
+                        }
+                    });
+
+                },
+                submit() {
+                    // 提交
+                    var {
+                        Location,
+                        SubmitData,
+                        Longitude,
+                        Latitude,
+                        unusualType
+                    } = this;
+                    if (Location != "定位失败" && Location != "正在定位中...") {
+                        SubmitData.Address = Location;
+                    }
+                    var Parameter = {
+                        TypeId: unusualType.Id,
+                        CustomerCode: SubmitData.CustomerCode,
+                        Moblie: SubmitData.Moblie,
+                        SourceId: SubmitData.SourceId,
+                        MeterRemark: SubmitData.MeterRemark,
+                        Areas: SubmitData.Areas,
+                        Emergency: SubmitData.Emergency,
+                        ProcessingLevelId: SubmitData.ProcessingLevelId,
+                        OrderNo: SubmitData.OrderCode, //工单编号
+                        OrderTypeId: SubmitData.OrderTypeId,
+                        Remark: SubmitData.Description,
+                        Longitude: Longitude,
+                        Latitude: Latitude,
+                        Address: SubmitData.Address,
+                        ClientId: api.deviceModel,
+                        ClientName: api.deviceName,
+                    };
+                    bwfnPost('MMS101', Parameter, 'application/json', false, false, (ret, err) => {
+                        api.hideProgress();
+                        if (ret && ret.Status == 0) {
+                          this.resetForm();
+                          this.showCustomerInfo = false;
+                          vant.Toast('申请成功!');
+                        }
+                    });
+
+                },
+                SubmitWorkOrder(values) {
+
+                },
+                getLocation() {
+                    this.Location = "正在定位中...";
+                    this.Longitude = 0;
+                    this.Latitude = 0;
+                    bMap.getLocation({
+                        accuracy: '10m',
+                        autoStop: true,
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            ApplyTaskVue.Longitude = ret.lon;
+                            ApplyTaskVue.Latitude = ret.lat;
+                            bMap.getNameFromCoords({
+                                lon: ret.lon,
+                                lat: ret.lat
+                            }, function(ret, err) {
+                                if (ret.status) {
+                                    ApplyTaskVue.Location = ret.address;
+                                } else {
+                                    ApplyTaskVue.Location = "定位失败";
+                                }
+                            });
+                        } else {
+                            ApplyTaskVue.Location = "定位失败";
+                        }
+                    });
+                },
+                getDataDictionary: function() {
+
+                    fnPost('MMS102', {}, 'application/json', false, false, (ret, err) => {
+                        if (ret && ret.Status == 0) {
+                            var data = JSON.parse(ret.Data);
+                            this.AreaData = data;
+                        }
+                    });
+                    //  数据来源
+                    var sourceBody ={
+                        TypeId: 'RPTXXLY'
+                    };
+                    fnPost('MMS103', sourceBody, 'application/json', false, false, (ret, err) => {
+                        if (ret && ret.Status == 0) {
+                            var data = JSON.parse(ret.Data);
+                            this.SourceData = data;
+                        }
+                    });
+                    // 换表原因
+                    var hbBody = {
+                        TypeId: 'RPTHBYY'
+                    };
+                    fnPost('MMS103', hbBody, 'application/json', false, false, (ret, err) => {
+                        if (ret && ret.Status == 0) {
+                            var data = JSON.parse(ret.Data);
+                            this.hbReasonData =data;
+                            this.ReasonData = data;
+                        }
+                    });
+                    // 任务类型
+                    var taskBody = {
+                        TypeId: 'YWLX'
+                    };
+                    fnPost('MMS103', taskBody, 'application/json', false, false, (ret, err) => {
+                        if (ret && ret.Status == 0) {
+                            var data = JSON.parse(ret.Data);
+                            this.unusualTypes = data;
+                        }
+                    });
+                    // 工单类型
+                    var orderTypeBody = {
+                        TypeId: 'SLGDLX'
+                    };
+                    fnPost('MMS103', orderTypeBody, 'application/json', false, false, (ret, err) => {
+                        if (ret && ret.Status == 0) {
+                            var data = JSON.parse(ret.Data);
+                            this.orderTypeData = data;
+                        }
+                    });
+                },
+                orderMain:function(){
+                  // 工单主题
+                  // 工单主题  9811工单
+                  var orderTypeBody = {
+                      TypeId: this.SubmitData.orderTypeId == 2?'96889611GDZT':'RPTGDLX'
+                  };
+                  fnPost('MMS103', orderTypeBody, 'application/json', false, false, (ret, err) => {
+                      if (ret && ret.Status == 0) {
+                          var data = JSON.parse(ret.Data);
+                          this.ReasonData = data;
+                      }
+                  });
+                }
+
+
+            },
+            mounted: function() {
+                this.getLocation();
+                this.getDataDictionary();
+            },
+            watch:{ //监听任务类型和工单类型的变化，用于工单主题字段切换
+              orderTypeSelectId:function(value){
+                this.MeterRemarkName = "";
+                this.ReasonData =[];
+                this.orderMain();
+              },
+              unusualTypeId:function(value){
+                if(value == 3){
+                  this.ReasonData = this.hbReasonData;
+                } else {
+                  this.ReasonData =[];
+                }
+              }
+            }
+        })
+    }
+</script>
+
+</html>

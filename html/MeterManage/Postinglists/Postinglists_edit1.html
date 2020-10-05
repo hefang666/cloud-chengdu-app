@@ -1,0 +1,1294 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>张贴列表任务处理</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <style>
+      html,
+      body {
+          width: 100%;
+          height: 100%;
+          background-color: #F3F3F3;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      .aui-bar-nav .aui-btn .aui-iconfont {
+          color: #FFF;
+          font-size: 0.95rem;
+      }
+
+      .aui-bar-nav .aui-pull-right {
+          font-size: 0.95rem;
+      }
+
+      [v-cloak] {
+          display: none;
+      }
+
+      .flex-con {
+          height: 100%;
+          overflow: hidden;
+          background-color: #F3F3F3;
+          width: 92%;
+          margin: 0 auto;
+          border-radius: 1rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+      }
+
+      /*.footer .van-button {
+          width: 13.98rem;
+          height: 2.23rem;
+          line-height: normal;
+          font-size: 0.95rem;
+          color: #fff;
+          background-color: #377EFF;
+      }*/
+      /*标题*/
+      .aui-info{
+        background: #fff;
+        height: 3rem;
+      }
+      .aui-info .aui-info-item:first-child{
+        padding-left: 1rem;
+      }
+      .aui-info .aui-margin-l-5{
+        font-size: 1rem;
+        font-family: Source Han Sans SC;
+        font-weight: 400;
+        color: #000;
+      }
+      .aui-info .aui-info-item:last-child{
+        padding-right: 1rem;
+        font-size: 0.8rem;
+      }
+      /*列表*/
+
+      .section_one{
+        height: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        /*border-radius: 1rem;*/
+        padding: 0.8rem 1.25rem;
+        background: white;
+        padding-bottom:0.3rem;
+
+      }
+      .aui-card-list .section_one_box .box>div{
+        padding: 0.05rem 0;
+        font-size:1rem;
+        font-family:Source Han Sans SC;
+        font-weight:400;
+        color:rgba(80,80,80,1);
+      }
+      .aui-card-list .section_one_box .box .textareaBox{
+        position: relative;
+      }
+      .aui-card-list .section_one_box .box .textareaBox #in{
+        position: absolute;
+        bottom: 0.2rem;
+        right: 1rem;
+        color: red;
+        font-size: 0.7rem;
+      }
+      .aui-card-list .section_one_box .box .textareaBox textarea{
+
+      }
+      .aui-card-list .section_one_box .box>div:first-child{
+        padding-top: 0rem;
+      }
+      .aui-card-list .section_one_box .box>div:before{
+        content:"";display: table;
+      }
+      .aui-card-list .section_one_box .box>div:after{
+        content:"";display: table;clear: both;
+      }
+      .aui-card-list .section_one_box .box>div>span:nth-child(1){
+        overflow: hidden;
+        float: left;
+        text-align: left;
+        width: 50%;
+
+      }
+      .aui-card-list .section_one_box .box>div>span:nth-child(1)>span{
+        position: relative;
+        bottom: -2px;
+        width: 49%;
+        line-height: 0.8rem;
+        display: inline-block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .aui-card-list .section_one_box .box>div>span:nth-child(2){
+        overflow: hidden;
+        float: right;
+        text-align: left;
+        width: 50%;
+      }
+      .aui-card-list .section_one_box .box>div>span:nth-child(2)>span{
+        position: relative;
+        bottom: -2px;
+        width: 49%;
+        line-height: 0.8rem;
+        display: inline-block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .section_two{
+        border-radius:0.5rem;
+        margin: 0.71rem 0.25rem;
+      }
+      .section_two .box>div:first-child{
+        padding-bottom: 0.5rem;
+      }
+      .section_two .box>div:first-child span:nth-child(1){
+        width: 20%!important;
+        line-height: 2rem;
+      }
+      .section_two .box>div:first-child span:nth-child(2){
+        width: 80%!important;
+
+      }
+      /*报装样式列表设置开始*/
+      .aui-content{
+
+      }
+      .aui-list .aui-list-item .aui-list-item-inner .aui-list-item-title{
+
+      }
+      /*左边占位*/
+      .aui-list .aui-list-item .aui-list-item-inner:first-child{
+        width: 30%!important;
+        white-space: nowrap;
+      }
+      /*右边超出滑动*/
+      .aui-list .aui-list-item .aui-list-item-inner:last-child .aui-list-item-title{
+        overflow: scroll;
+        white-space: nowrap;
+      }
+      /*报装列表样式结束*/
+
+      .footer {
+          width: 100vw;
+          height: auto;
+          background: #fff;
+          /*justify-content: center;*/
+      }
+      .footer ul{
+        display: flex;
+        flex-flow: row;
+        width: 94%;
+        margin: 0 auto;
+        padding-top: 0.3rem;
+        padding-bottom: 1rem;
+      }
+      .footer ul li{
+        flex: 1;
+        text-align: center;
+      }
+      .footer ul li div{
+        width: 90%;
+        margin: 0 auto;
+        border-radius: 1rem;
+        background: rgba(55, 126, 255, 1);
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        text-align: center;
+        color:#fff;
+      }
+      .footer ul li:nth-child(2) div{
+        background: rgba(12, 206, 81, 1);
+      }
+      /*文本框*/
+      #SurveyRequire{
+        width: 100%;
+        height: 4rem;
+        border-radius: 1rem;
+        border:1px solid rgba(216,216,216,1);
+        padding: 0.5rem;
+      }
+      /*照片拍照*/
+      #zhaopian1{
+        margin-top: 0.5rem;
+        position: relative;
+      }
+      #zhaopian1>div{
+        position: absolute;
+        right: 0.8rem;
+        top: 0rem;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      #zhaopian1>div>img{
+        display: block;
+        width: 100%;
+      }
+      .close {
+          width: 1.6rem;
+          height: 1.6rem;
+          background-size: 100%;
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-image: url(../image/MeterManage/Posting/shanchu.png);
+          position: absolute;
+          top: -0.5rem;
+          right: -0.1rem;
+      }
+
+      .ImgOrVideo {
+          width: 80%;
+          display: table !important;
+      }
+      .ImgOrVideo .imgDiv{
+        width: 3rem!important;
+        height: 3rem;
+        margin-left: 0.5rem;
+        margin-bottom: 1.2rem;
+      }
+      .ImgOrVideo img {
+          width: 4rem!important;
+          height: 4rem;
+      }
+
+      .ImgOrVideo .aui-col-xs-4 {
+          margin-bottom: 0.5rem;
+      }
+
+      /*.closeHide {
+          display: none;
+      }*/
+
+      .transformed0 {
+          -webkit-transform: rotate(3deg);
+          -moz-transform: rotate(3deg);
+          -ms-transform: rotate(3deg);
+          transform: rotate(3deg);
+      }
+
+      .transformed1 {
+          -webkit-transform: rotate(0deg);
+          -moz-transform: rotate(0deg);
+          -ms-transform: rotate(0deg);
+          transform: rotate(0deg);
+      }
+
+      .transformed2 {
+          -webkit-transform: rotate(357deg);
+          -moz-transform: rotate(357deg);
+          -ms-transform: rotate(357deg);
+          transform: rotate(357deg);
+      }
+      .flex-con-bluer{
+        margin-bottom: 12rem!important;
+      }
+    </style>
+</head>
+
+<body>
+  <div id="wrap" class="flex-wrap flex-vertical">
+      <header class="aui-bar aui-bar-nav" id="header">
+          <div class="aui-pull-left aui-btn" tapmode data-action="back">
+              <span class="aui-iconfont aui-icon-left"></span>
+          </div>
+          <div class="aui-title">张贴停水通知单</div>
+      </header>
+      <div class="aui-info">
+            <div class="aui-info-item">
+                <span class="aui-margin-l-5" >张贴停水通知单</span>
+                </div>
+            <div class="aui-info-item" id="OperatedTime">2015-07-13</div>
+      </div>
+      <div id="main" class="flex-con">
+        <section class="section_one">
+            <div class="aui-card-list">
+                <div class="section_one_box">
+                    <div class="box" id="dataListEdit">
+                      <div class="aui-content aui-margin-b-15">
+                          <ul class="aui-list aui-list-in">
+                              <li class="aui-list-item">
+                                  <div class="aui-list-item-inner">
+                                      <div class="aui-list-item-title">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 注:</div>
+                                  </div>
+                                  <div class="aui-list-item-inner">
+                                      <div class="aui-list-item-title">文静新村22号太阳是光在直接照射你文静新村22号太阳是光在直接照射你</div>
+                                  </div>
+                              </li>
+                              <li class="aui-list-item">
+                                  <div class="aui-list-item-inner">
+                                      <div class="aui-list-item-title">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 注:</div>
+                                  </div>
+                                  <div class="aui-list-item-inner">
+                                      <div class="aui-list-item-title">文静新村22号太阳是光在直接照射你文静新村22号太阳是光在直接照射你</div>
+                                  </div>
+                              </li>
+                          </ul>
+                      </div>
+                    </div>
+                    <div class="box" id="dataListimag">
+                      <div class="textareaBox">
+                        备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 注
+                      </div>
+                      <div class="textareaBox">
+                        <textarea type="text" id="SurveyRequire" placeholder="请输入备注说明" onkeydown="checknum()" onkeyup="checknum()"></textarea>
+                        <div id="in">100</div>
+                      </div>
+                      <div class="textareaBox" id="zhaopian1">
+                        照&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 片
+                        <div tapmode data-action="Photograph"><img src="../image/MeterManage/Posting/zhaopian1.png" alt=""></div>
+                      </div>
+                      <div class="ImgOrVideo" id="ImgOrVideo">
+
+                      </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      </div>
+
+      <div class="footer">
+        <ul>
+          <li><div id="FirstHousehold" tapmode data-action="FirstHousehold">上一户</div></li>
+          <li><div id="submit" tapmode data-action="submitData">完成</div></li>
+          <li><div id="LastHousehold" tapmode data-action="LastHousehold">下一户</div></li>
+        </ul>
+      </div>
+
+  </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/hammer.min.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/template" id="Booksdata">
+  <div parse="{{listdataLst}}" id='CustomerName'>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名 {{listdataLst.CustomerName}}</div>
+  <div>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 号 {{listdataLst.CustomerCode}}</div>
+  <div id="changeAddressSb">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 置 {{listdataLst.Address}}</div>
+  <div>表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 位 {{listdataLst.Location}}</div>
+  <div>用水性质 {{listdataLst.Nature}}</div>
+  <div>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 量 {{listdataLst.Amount}}</div>
+  <div>起&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度 {{listdataLst.BeginScale}}</div>
+  <div>止&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度 {{listdataLst.EndScale}}</div>
+  <div>抄表类型 {{listdataLst.Nature}}</div>
+  <div>欠&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 费 {{listdataLst.ArrearMoney}}</div>
+</script>
+<script type="text/template" id="orderHistoryTpl">
+    {{each items value i}}
+    <div class="aui-col-xs-2 imgDiv">
+        <img src="{{value.imageFileUrl}}" alt="{{value.imageIsNew}}" data-param="{{value.locationSJ}}"   lon="{{value.locationJD}}" lat="{{value.locationWD}}" tapmode data-action="fnOpenFile" class="imgfile">
+        <div class="close closeHide" tapmode data-action="clearImg"></div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    var headerH,db,bMap;
+    var onlineName = []; //图片类型名称数据。
+    var onlineId = []; //图片类型值数据。
+    var UsersDatalis;
+    var UserNumbers = 0;
+    var WorkTypeId,WorkTypeCode,WorkTypeSource,dataListSend;
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        console.log(JSON.stringify(api.pageParam))
+        // api.setWinAttr({
+        //     bounces: false
+        // });
+        db = api.require("db");
+        bMap = api.require("bMap");
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        // center = $api.offset($api.byId('center')).h;
+
+        $('#center').css('margin-top', '' + headerH + 'px');
+        dataListSend = JSON.parse(api.pageParam.data)
+        WorkTypeId = dataListSend.TaskNo;
+        WorkTypeCode = '4'
+        WorkTypeSource = '营销系统'
+        var imageList = dataListSend.Files
+        selectDate()
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err){
+            if( ret ){
+              var imgList = $(".imgfile");
+              var Remark = $("#SurveyRequire").val();
+              if(Remark!=''||imgList.length>0){
+                var TypeNumer = '0'
+                saveDataFun(TypeNumer)
+                // 监听返回
+                api.closeWin({
+                });
+
+              }else {
+                api.closeWin({
+                });
+              }
+            }else{
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+
+    };
+    var actionList = {
+      'back': function() {
+          var imgList = $(".imgfile");
+          var Remark = $("#SurveyRequire").val();
+          if(Remark!=''||imgList.length>0){
+            var TypeNumer = '0'
+            saveDataFun(TypeNumer)
+          }else {
+
+          }
+          api.closeWin({});
+      },
+      'Photograph': function() {
+        var list = $api.domAll('.ImgOrVideo img');
+        $('.section_three').removeClass('section_hidden')
+        if (list.length >= 5) {
+            api.toast({
+                msg: '仅支持五张图片',
+                duration: 2000,
+                location: 'top'
+            });
+        } else {
+          api.actionSheet({
+              buttons: ['拍照', '相册选择']
+          }, function(ret, err) {
+              var index = ret.buttonIndex;
+              if (index == 1) {
+                getCamera("camera", " ");
+              }
+              if (index == 2) {
+                getCamera('album', " ");
+              }
+          });
+        }
+          // 拍照
+
+      },
+      'fnOpenFile': function() {
+          // 图片放大阅览功能
+          var path = $(this).attr('src')
+          api.openWin({
+              name: 'photoBrowser_fram',
+              url: './photoBrowser_fram.html',
+              pageParam: {
+                  src: path
+              }
+          });
+      },
+      'clearImg': function() {
+          // 图片删除
+          var path = $(this).attr('src');
+          var list = $api.domAll('.ImgOrVideo img');
+          var parentList = $(this).parent();
+          var fs = api.require('fs');
+          var db = api.require('db');
+          var photos = db.executeSqlSync({
+              name: 'CBtest',
+              sql: 'delete from POSTING_IMAGE where imageFileUrl="' + path + '"'
+          });
+
+          var list = $api.domAll('.ImgOrVideo img');
+          if (list.length == 1) {
+              parentList.remove();
+              // if ($('img').length == 0) {
+              //     // clearInterval(timer);
+              // }
+              $('.section_three').addClass('section_hidden')
+          } else {
+              parentList.remove();
+              // if ($('img').length == 0) {
+              //     // clearInterval(timer);
+              // }
+          }
+      },
+      'submitData':function(){
+
+          SubimgData()
+
+      },
+      'FirstHousehold':function(){
+        var imgList = $(".imgfile");
+        var Remark = $("#SurveyRequire").val();
+        if(Remark!=''||imgList.length>0){
+          var TypeNumer = '0'
+          saveDataFun(TypeNumer)
+        }else {
+
+        }
+
+        if (UserNumbers < 1) {
+            //UserNumbers==0
+            api.toast({
+                msg: '没有上一户了',
+                duration: 2000,
+                location: 'middle'
+            });
+            return;
+        } else {
+            UserNumbers--;
+            $("#dataListEdit").empty();
+            $("#ImgOrVideo").empty();
+            var dataList = UsersDatalis[UserNumbers];
+            var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+            $('#OperatedTime').text(dataTime.slice(0,10))
+            $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+            handleAnnotData(dataList);
+            DloadPostingData(UsersDatalis[UserNumbers].Id)
+            checknum();
+        }
+      },
+      'LastHousehold':function(){
+        // 修改备注未保存到相应坐标内
+        var imgList = $(".imgfile");
+        var Remark = $("#SurveyRequire").val();
+        if(Remark!=''||imgList.length>0){
+          var TypeNumer = '0'
+          saveDataFun(TypeNumer)
+
+        }else {
+
+        }
+
+
+        if (UserNumbers == UsersDatalis.length - 1) {
+            api.toast({
+                msg: '没有下一户了',
+                duration: 2000,
+                location: 'middle'
+            });
+            return;
+        } else {
+            UserNumbers++;
+            $("#dataListEdit").empty();
+            $("#ImgOrVideo").empty();
+            var dataList = UsersDatalis[UserNumbers];
+            var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+            $('#OperatedTime').text(dataTime.slice(0,10))
+            $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+            handleAnnotData(dataList);
+            DloadPostingData(UsersDatalis[UserNumbers].Id)
+            checknum();
+          }
+      }
+    }
+    // 限制文本框输入
+    function checknum(){
+       var nMax = 100;
+       var textDom =  document.getElementById("SurveyRequire");
+       var len =textDom.value.length;
+       if(len>nMax){
+           textDom.value = textDom.value.substring(0,nMax);
+           return;
+       }
+       $('#in').text("你还可以输入"+(nMax-len)+"个字");
+     }
+    // 聚焦事件
+    $('#SurveyRequire').focus(function(){
+      $('#ImgOrVideo').addClass('flex-con-bluer')
+    })
+    $('#SurveyRequire').blur(function(){
+      $('#ImgOrVideo').removeClass('flex-con-bluer')
+    })
+    function handleAnnotData(dataList) {
+        var list = {
+            listdataLst: dataList
+        }
+        var str = template('Booksdata', list)
+        $api.append($api.byId('dataListEdit'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+    function handImageData(dataList) {
+        var list = {
+            list: dataList
+        }
+        var str = template('Imagedata', list)
+        $api.append($api.byId('ImageList'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+    // 拍照功能
+    function getCamera(id, name) {
+        api.getPicture({
+            sourceType: id,
+            encodingType: 'jpg',
+            mediaValue: 'pic',
+            destinationType: 'url',
+            allowEdit: true,
+            quality: 50,
+            targetWidth: 2000,
+            targetHeight: 2000,
+            saveToPhotoAlbum: false,
+            preview: true
+        }, function(ret, err) {
+            if (ret) {
+                //console.log(JSON.stringify(ret));
+                if (ret.data != '') {
+                    var list = ret.data;
+
+                    // var photodata = db.executeSqlSync({
+                    //     name: 'CBtest',
+                    //     sql: 'INSERT INTO MRM_PHOTOS_BEAN(ID,CBCH,YHBH,ZPMC,ZPLJ,ZPLX,ZPLXMC,SFSC,CBRQ) VALUES ("' + $api.getStorage('cbOperatorId') + '",' +
+                    //         '"' + cbch + '",' +
+                    //         '"' + yhbh + '",' +
+                    //         '"' + zpmc + '",' +
+                    //         '"' + zplj + '",' +
+                    //         '"' + id + '",' +
+                    //         '"' + name + '",' +
+                    //         '"0",' +
+                    //         '"' + dataTime() + '")'
+                    // });
+                    if (api.connectionType != 'none') {
+                      bMap.getLocation({
+                          accuracy: '100m',
+                          autoStop: true,
+                          filter: 1
+                      }, function(ret, err) {
+                          if (ret.status) {
+                              var lon = ret.lon;
+                              var lat = ret.lat;
+                              var londata = lon+','+lat;
+                              $api.append($api.domAll('.ImgOrVideo')[0], '<div class="aui-col-xs-2 imgDiv">' +
+                                  '<img src="' + list + '" alt="'+londata+'" lon="'+lon+'" lat="'+lat+'" data-param="" class="imgfile" tapmode data-action="fnOpenFile">' +
+                                  '<div class="close closeHide" tapmode data-action="clearImg"></div>' +
+                                  '</div>');
+                              // operationDom();
+                              // longpress();
+                              // // openDetail();
+                              // addEvenImgOther();
+                              api.parseTapmode();
+                              operationDom();
+                          } else {
+                              lon = " ";
+                              lat = " ";
+                              // saveData()
+                                  //  console.log(err.code);
+                          }
+                      });
+                    }else {
+                      var lon = '';
+                      var lat = '';
+                      var londata = lon+','+lat;
+                      $api.append($api.domAll('.ImgOrVideo')[0], '<div class="aui-col-xs-2 imgDiv">' +
+                          '<img src="' + list + '" alt="'+londata+'" lon="'+lon+'" lat="'+lat+'" data-param="{{value}}" class="imgfile" tapmode data-action="fnOpenFile">' +
+                          '<div class="close closeHide" tapmode data-action="clearImg"></div>' +
+                          '</div>');
+                      operationDom();
+                      longpress();
+                      // openDetail();
+                      addEvenImgOther();
+                      api.parseTapmode();
+                      operationDom();
+                    }
+
+
+                }
+            } else {
+
+            }
+        });
+    }
+    var timer;
+    // 照片删除
+    // function longpress() {
+    //     var list = $api.domAll('.ImgOrVideo img');
+    //
+    //     for (var i = 0; i < list.length; i++) {
+    //         var hammer = new Hammer(list[i]);
+    //         hammer.get('press').set({
+    //             time: 300
+    //         });
+    //         hammer.on("press", function(e) {
+    //             $('.close').show();
+    //             var dom = $(e.target);
+    //             direction = 1; // 1, -1
+    //             state = 1; // 0,1,2
+    //             oldClass = "";
+    //             clearInterval(timer);
+    //             timer = setInterval(function() {
+    //                 $('.ImgOrVideo img').parent().removeClass(oldClass);
+    //                 if (state + direction > 2 || state + direction < 0) {
+    //                     direction = -direction;
+    //                 }
+    //                 state = state + direction;
+    //                 newClass = "transformed" + state;
+    //                 // console.log("set new class to " + newClass);
+    //                 $('.ImgOrVideo img').parent().addClass(newClass);
+    //                 $('.ImgOrVideo img').parent().innerText = newClass;
+    //                 oldClass = newClass;
+    //             }, 85);
+    //         });
+    //
+    //     }
+    // }
+    // 照片删除
+    // function addEvenImgOther() {
+    //     var imgDiv = $api.domAll('.imgDiv');
+    //     for (var i = 0; i < imgDiv.length; i++) {
+    //         $api.addEvt(imgDiv[i], 'touchstart', function(event) {
+    //             event = event || window.event;
+    //             event.stopPropagation();
+    //         });
+    //     }
+    //     //  监听图片外的单击
+    //     document.addEventListener('touchstart', function() {
+    //         $('.close').hide();
+    //         clearInterval(timer);
+    //         $('.ImgOrVideo img').parent().removeClass('transformed0 transformed1 transformed2');
+    //     });
+    //
+    // }
+
+    // 照片渲染
+    function DloadPostingData(CustomerCode){
+      db.selectSql({
+        name: 'Wsdatabase',
+        sql: 'SELECT * FROM POSTING_IMAGE where Id = "'+CustomerCode+'"'
+      }, function(ret, err){
+          if( ret.status ){
+            if (ret.data.length > 0) {
+              // console.log( JSON.stringify( ret ) );
+              var dataList = ret.data
+              var items = {
+                  items: ret.data
+              }
+              var str = template('orderHistoryTpl', items)
+              $api.html($api.byId('ImgOrVideo'), str);
+              // operationDom();
+              // longpress();
+              // addEvenImgOther();
+              api.parseTapmode();
+              operationDom();
+            }
+
+          }else{
+              // console.log( JSON.stringify( err ) );
+          }
+      });
+
+    }
+    // 数据完成提交或保存本地
+    function SubimgData(){
+      var FileUrl = "";
+      var FileType = "";
+      var FilesUrlArr = [];//图片
+      var LodataType = '';//图片位置
+      var Remark = $("#SurveyRequire").val();
+      var PostingList = $('#CustomerName').attr("parse")
+      var PostingListdata = JSON.parse(PostingList)//id
+      // if ($("#SurveyRequire").val() == "") {
+      //   alert("请填写备注");
+      //   return;
+      // }
+
+      var imgList = $(".imgfile");
+      for (var i = 0; i < imgList.length; i++) {
+        if(imgList.length>0){
+          LodataType+=imgList[i].alt+'|';
+        }else {
+          LodataType=imgList[i].alt
+        }
+        if (i == (imgList.length - 1)) {
+          FileUrl += imgList[i].src.substring(7, imgList[i].src.length);
+          FileType += imgList[i].src.slice(imgList[i].src.lastIndexOf("."));
+        } else {
+          FileUrl += imgList[i].src.substring(7, imgList[i].src.length) + "|";
+          FileType += imgList[i].src.slice(imgList[i].src.lastIndexOf(".")) + "|";
+        }
+        FilesUrlArr.push(imgList[i].src.substring(7, imgList[i].src.length));
+      }
+      if(imgList.length>0){
+        var lastlocton = LodataType.slice(0, LodataType.lastIndexOf('|'))
+        var firstLoction = lastlocton.substr(0)
+        LodataType=firstLoction
+      }else {
+        LodataType=LodataType.substr(0)
+      }
+      if (FilesUrlArr.length <1) {
+        api.toast({
+            msg: '请拍摄照片',
+            duration: 2000,
+            location: 'middle'
+        });
+
+        return;
+      }
+      var dataTimeNew = $(".imgfile").attr('data-param')
+      var Time;
+      if(dataTimeNew==''){
+        Time=dataTime()
+      }else {
+        Time=dataTimeNew
+      }
+      api.showProgress({
+          style: 'default',
+          animationType: 'fade',
+          title: '努力加载中...',
+          modal: true
+      });
+
+      // 判断是否联网
+      if (api.connectionType != 'none') {
+        api.confirm({
+            title: '提示',
+            msg: '确认提交吗？',
+            buttons: ['确定', '取消']
+        }, function(ret, err){
+            if( ret ){
+              var index = ret.buttonIndex;
+              if(index==1){
+                var data = {
+                      "Id": PostingListdata.Id,
+                      "OperatedTime": Time,
+                      "Status":'',
+                      "Remark": Remark,
+                      "FileLocation": LodataType,
+                      "Type": ""
+                  }
+                api.ajax({
+                  url: $api.getStorage("bwapipath")+'/api/waterMeters/info',
+                  method: 'post',
+                  dataType:"json",
+                  data: {
+                      values:{
+                          Method: "MMS006",
+                          UserName:$api.getStorage("bwUserName"), //"01012"
+                          Password:$api.getStorage("bwPassWord"),// "g6OuZomFp3E="
+                          SerialNo: '11111111',
+                          KeyCode:'', //营业
+                          Parameter: JSON.stringify(data)
+                      },
+                      files: {
+                          "file": FilesUrlArr
+                      }
+                  }
+                },function(ret, err){
+                  api.hideProgress();
+                  if(ret){
+                    if (ret.Status == '0') {
+                      api.sendEvent({
+                          name: 'SuccessEvent',
+                          extra: {
+                              key1: PostingListdata.TaskNo,
+                          }
+                      });
+                      // 查询是否只有一户把时间和数量传给张贴列表页面
+                      var selectSqlret = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'SELECT * FROM POSTING_LIST WHERE TaskNo="'+PostingListdata.TaskNo+'"'
+                      });
+                      if(selectSqlret.status){
+                        if(selectSqlret.data.length==1){
+                          if(UsersDatalis.length>0){
+                            $api.setStorage('contentNumer',UsersDatalis[UserNumbers].NotSubmit);
+                            $api.setStorage('contentDate',UsersDatalis[UserNumbers].OperatedTime);
+                          }else {
+
+                          }
+
+                        }
+                      }
+                      // 提交成功删除本地数据库
+                      var imgret = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'DELETE FROM POSTING_IMAGE WHERE Id="'+PostingListdata.Id+'"'
+                      });
+                      var listret = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'DELETE FROM POSTING_LIST WHERE Id="'+PostingListdata.Id+'"'
+                      });
+                      if(listret.status){
+                        api.toast({
+                            msg: '数据上传成功',
+                            duration: 2000,
+                            location: 'middle'
+                        });
+
+                        db.selectSql({
+                          name: 'Wsdatabase',
+                          sql: 'SELECT * FROM POSTING_LIST WHERE TaskNo="'+PostingListdata.TaskNo+'"'
+                        }, function(ret, err){
+                            if( ret.status ){
+                              if(ret.data.length>0){
+                                //保存成功删除数组里面这条记录
+                                // alert(UsersDatalis.length+'wo')//3被删除后UsersDatalis就少了一个UserNumber
+                                // // 还是一三个，
+                                // alert(UserNumbers+'wo1')//2
+                                UsersDatalis.splice(UsersDatalis[UserNumbers], 1)
+                                // alert(UsersDatalis.length+'ni')//2UsersDatalis.length和UserNumbers
+                                // 是不会相等的，直到最后一个相等了UserNumbers就会比2UsersDatalis多一个
+                                // alert(UserNumbers+'ni1')//2
+                                if(UsersDatalis.length>0){
+
+                                  if(UsersDatalis.length==UserNumbers){//点击最后一户时会报错情况解决
+                                      // UserNumbers--
+                                      api.sendEvent({
+                                          name: 'SuccessEvent',
+                                          extra: {
+                                              key1: PostingListdata.TaskNo,
+                                              key2: 'value2'
+                                          }
+                                      });
+                                      window.location.reload();
+                                  }else {
+                                    $("#dataListEdit").empty();
+                                    $("#ImgOrVideo").empty();
+                                    var dataList = UsersDatalis[UserNumbers];
+                                    var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+                                    $('#OperatedTime').text(dataTime.slice(0,10))
+                                    $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+                                    handleAnnotData(dataList);
+                                    DloadPostingData(UsersDatalis[UserNumbers].Id)
+                                    api.sendEvent({
+                                        name: 'SuccessEvent',
+                                        extra: {
+                                            key1: PostingListdata.TaskNo,
+                                            key2: 'value2'
+                                        }
+                                    });
+                                  }
+
+
+                                }
+
+                              }else{
+                                api.sendEvent({
+                                    name: 'refreshCloudMyTask',
+                                    extra: {
+                                        key1: PostingListdata.TaskNo,
+                                        key2: 'value2'
+                                    }
+                                });
+                                api.sendEvent({
+                                    name: 'LastEvent',
+                                    extra: {
+                                        key1: $api.getStorage('contentNumer'),
+                                        key2: $api.getStorage('contentDate')
+
+                                    }
+                                });
+                                alert("任务已全部处理完成")
+                                api.closeWin({
+                                });
+                              }
+
+                            }else{
+                                // alert( JSON.stringify( err ) );
+                            }
+                        });
+
+                      }
+                    }else {
+                      api.toast({
+                          msg: ret.Message,
+                          duration: 2000,
+                          location: 'middle'
+                      });// saveDataFun()
+                    }
+                  }else {
+                    api.toast({
+                        msg: JSON.stringify(err),
+                        duration: 2000,
+                        location: 'middle'
+                    });
+
+                  }
+
+                });
+              }else {
+                api.hideProgress();
+              }
+            }else{
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+
+
+        // fnPost('MMS006', body, 'application/json', false, false, function(ret, err){
+        //     if (ret && ret.Status == '0') {
+        //       api.sendEvent({
+        //           name: 'SuccessEvent',
+        //           extra: {
+        //               key1: PostingListdata.TaskNo,
+        //           }
+        //       });
+        //       // 提交成功删除本地数据库
+        //       var imgret = db.executeSqlSync({
+        //         name: 'Wsdatabase',
+        //         sql: 'DELETE FROM POSTING_IMAGE WHERE Id="'+PostingListdata.Id+'"'
+        //       });
+        //       var listret = db.executeSqlSync({
+        //         name: 'Wsdatabase',
+        //         sql: 'DELETE FROM POSTING_LIST WHERE Id="'+PostingListdata.Id+'"'
+        //       });
+        //       if(listret.status){
+        //         api.toast({
+        //             msg: '数据上传成功',
+        //             duration: 2000,
+        //             location: 'bottom'
+        //         });
+        //         db.selectSql({
+        //           name: 'Wsdatabase',
+        //           sql: 'SELECT * FROM POSTING_LIST WHERE TaskNo="'+PostingListdata.TaskNo+'"'
+        //         }, function(ret, err){
+        //             if( ret.status ){
+        //               if(ret.data.length>0){
+        //
+        //               }else {
+        //                 api.sendEvent({
+        //                     name: 'refreshCloudMyTask',
+        //                     extra: {
+        //                         key1: PostingListdata.TaskNo,
+        //                         key2: 'value2'
+        //                     }
+        //                 });
+        //                 alert("任务已全部处理完成")
+        //                 api.closeWin({
+        //                 });
+        //
+        //               }
+        //             }else{
+        //                 // alert( JSON.stringify( err ) );
+        //             }
+        //         });
+        //       }
+        //
+        //
+        //
+        //
+        //       //保存成功删除数组里面这条记录
+        //       UsersDatalis.splice(UsersDatalis[UserNumbers], 1)
+        //     }else {
+        //       api.toast({
+        //           msg: '任务已经提交过了',
+        //           duration: 2000,
+        //           location: 'middle'
+        //       });
+        //
+        //       // saveDataFun()
+        //     }
+        // },files)
+      }else{
+          var TypeNumer = '1'
+          saveDataFun(TypeNumer)
+        }
+
+    }
+    function saveDataFun(TypeNumer){
+      var imgList = $(".imgfile");
+      var Remark = $("#SurveyRequire").val();
+      var PostingList = $('#CustomerName').attr("parse");
+      var PostingListdata = JSON.parse(PostingList)//id
+      if(TypeNumer=='1'){
+        api.toast({
+            msg: '提交失败，保存本地',
+            duration: 2000,
+            location: 'middle'
+        });
+      }
+      api.showProgress({
+          style: 'default',
+          animationType: 'fade',
+          title: '正在保存...',
+          modal: false
+      });
+
+      // 失败存储到本地数据库
+      var UpdateList = db.executeSqlSync({
+        name: 'Wsdatabase',
+        sql: 'UPDATE POSTING_LIST SET Remark="'+Remark+'",NotSave="1"  WHERE Id="'+PostingListdata.Id+'"'
+      });
+      // alert(JSON.stringify(UpdateList))
+      // 查询图片表这个id如果有全部删除再插入，没有则插入
+      var chaxunIMG = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: 'SELECT * FROM POSTING_IMAGE where Id="'+PostingListdata.Id+'"'
+      });
+      if(chaxunIMG.data.length>0){
+        var DeleteData = db.executeSqlSync({
+          name: 'Wsdatabase',
+          sql: 'DELETE FROM POSTING_IMAGE where Id="'+PostingListdata.Id+'"'
+        });
+        for (var i = 0; i < imgList.length; i++) {
+
+          var locationJD = $(imgList[i]).attr('lon')
+          var imageFileUrl =  $(imgList[i]).attr('src')
+          var locationWD = $(imgList[i]).attr('lat')
+          var imageIsNew = $(imgList[i]).attr('alt')
+          var sqlimg = 'INSERT INTO POSTING_IMAGE(Id,CustomerCode,imageId,'+
+            'imageType,'+
+            'imageTypeName,'+
+            'imageFileName,'+
+            'imageFileUrl,'+
+            'imageAnnexType,'+
+            'imageAnnexTypeName,'+
+            'imageOrderNo,'+
+            'imageIsNew,'+
+            'imageOperatorName,'+
+            'imageOperatedTime,'+
+            'TaskNo,'+
+            'locationJD,'+
+            'locationWD,'+
+            'locationSJ,'+
+            'NotSubmit) VALUES ("' + PostingListdata.Id + '","' + PostingListdata.CustomerCode + '","",' +
+                '"",'+
+                '"",'+
+                '"",'+
+                '"' + imageFileUrl + '",'+
+                '"",'+
+                '"",'+
+                '"",'+
+                '"'+imageIsNew+'",'+
+                '"",'+
+                '"",'+
+                '"' + PostingListdata.TaskNo + '",'+
+                '"' + locationJD + '",'+
+                '"' + locationWD + '",'+
+                '"' + dataTime() + '",'+
+                '"0")';
+                var Postingimgdata = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: sqlimg
+                });
+              // alert(JSON.stringify(Postingimgdata))
+          }
+          api.hideProgress();
+          if(TypeNumer=='1'){
+            api.toast({
+                msg: '保存成功',
+                duration: 1000,
+                location: 'middle'
+            });
+          }
+
+      }else {
+        for (var i = 0; i < imgList.length; i++) {
+
+          var locationJD = $(imgList[i]).attr('lon')
+          var imageFileUrl =  $(imgList[i]).attr('src')
+          var locationWD = $(imgList[i]).attr('lat')
+          var imageIsNew = $(imgList[i]).attr('alt')
+          var sqlimg = 'INSERT INTO POSTING_IMAGE(Id,CustomerCode,imageId,'+
+            'imageType,'+
+            'imageTypeName,'+
+            'imageFileName,'+
+            'imageFileUrl,'+
+            'imageAnnexType,'+
+            'imageAnnexTypeName,'+
+            'imageOrderNo,'+
+            'imageIsNew,'+
+            'imageOperatorName,'+
+            'imageOperatedTime,'+
+            'TaskNo,'+
+            'locationJD,'+
+            'locationWD,'+
+            'locationSJ,'+
+            'NotSubmit) VALUES ("' + PostingListdata.Id + '","' + PostingListdata.CustomerCode + '","",' +
+                '"",'+
+                '"",'+
+                '"",'+
+                '"' + imageFileUrl + '",'+
+                '"",'+
+                '"",'+
+                '"",'+
+                '"'+imageIsNew+'",'+
+                '"",'+
+                '"",'+
+                '"' + PostingListdata.TaskNo + '",'+
+                '"' + locationJD + '",'+
+                '"' + locationWD + '",'+
+                '"' + dataTime() + '",'+
+                '"0")';
+                var Postingimgdata = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: sqlimg
+                });
+              // alert(JSON.stringify(Postingimgdata))
+          }
+          api.hideProgress();
+          api.toast({
+              msg: '保存成功',
+              duration: 2000,
+              location: 'middle'
+          });
+      }
+      if(UsersDatalis.length>0){
+        if(UsersDatalis.length==UserNumbers){
+
+        }else{
+          UsersDatalis[UserNumbers].OperatedTime=PostingListdata.OperatedTime
+          UsersDatalis[UserNumbers].Remark=Remark
+        }
+
+      }else {
+
+      }
+    }
+    // 离线数据查询渲染列表
+    function selectDate(){
+        var ret = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: 'SELECT * FROM POSTING_LIST where TaskNo = "'+WorkTypeId+'" and Status ="7"'
+        });
+        UsersDatalis = ret.data
+        // 循环匹配UsersDatalis的数据对应UserNumbers
+        for (var i = 0; i < UsersDatalis.length; i++) {
+            if (dataListSend.Id == UsersDatalis[i].Id) {
+                UserNumbers = i;
+                break;
+            }
+        }
+        var dataList = UsersDatalis[UserNumbers]
+        var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+        $('#OperatedTime').text(dataTime.slice(0,10))
+        $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+        // $("#OperatedTime").text(dataList.OperatedTime)
+        handleAnnotData(dataList)
+        DloadPostingData(UsersDatalis[UserNumbers].Id)
+        checknum()
+
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,1468 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>统计图</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/swiper.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/home.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+
+        .aui-refresh-pull-arrow {
+            top: 20% !important;
+        }
+
+        .aui-bar-nav {
+            z-index: 1;
+            background-color: #fff;
+            color: #333333;
+            font-size:0.9rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn {
+            height: 2.2rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333333;
+            font-weight: 900;
+        }
+
+        header .left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 58%;
+            height: 2.2rem;
+            line-height: 2.2rem;
+            padding: 0 0.75rem;
+            font-size:0.9rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            color: #333333;
+        }
+
+        header .right {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 42%;
+            height: 2.2rem;
+            line-height: 2.2rem;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: flex-end;
+            justify-content: flex-end;
+            padding: 0 0.73rem 0 0;
+        }
+
+        .left .orgName {
+            width: calc( 100% - 1.5rem);
+            height: 2.2rem;
+            line-height: 2.2rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            text-align: left;
+        }
+
+        .left .orgNameSingle {
+            width: 100%;
+            height: 2.2rem;
+            line-height: 2.2rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            text-align: left;
+        }
+
+        header .left .arrowDiv {
+            position: absolute;
+            bottom: 0;
+            right: 0.75rem;
+            width: 1.5rem;
+            height: 2.2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header .left .arrow {
+            width: 0.7rem;
+            height: 0.38rem;
+            -webkit-transition: 200ms;
+            transition: 200ms;
+            pointer-events: none;
+        }
+
+        .active {
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .active_hide {
+            -webkit-transform: rotate(-180deg);
+            transform: rotate(-180deg);
+        }
+
+        header .right .list {
+            float: right;
+            width: auto;
+            height: 0.83rem;
+            margin-right: 1.13rem;
+        }
+
+        header .right .list:last-child {
+            margin-right: 0;
+        }
+
+        header .right .list img {
+            width: auto;
+            height: 0.83rem;
+        }
+
+        .aui-card-list-header {
+            color: #999999;
+            font-size:0.8rem !important;
+            padding: 0.6rem;
+        }
+
+        .aui-font-size-18 {
+            font-size:0.8rem !important;
+        }
+
+        .aui-card-list-header:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-bottom: 1px solid #e6e6e6;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 200%;
+            height: 200%;
+            -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+            -webkit-transform-origin: left top;
+            transform-origin: left top;
+            pointer-events: none;
+        }
+
+        .aui-card-list-header #ddImg {
+            width: 0.93rem;
+            height: 0.18rem;
+            /*margin: 0 15px 0 7px;*/
+            display: inline-block;
+        }
+
+        .aui-card-list-header .downArrow {
+            width: 0.7rem;
+            height: 0.38rem;
+            display: inline-block;
+            -webkit-transition: 200ms;
+            transition: 200ms;
+        }
+
+        .aui-card-list-header .imgDiv {
+            min-height: 1.2rem;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .aui-card-list-header .imgDiv:first-child {
+            margin-right: 1.13rem;
+        }
+
+        .aui-row.aui-row-padded .aui-col-xs-3 img {
+            width: 30px;
+            height: 30px;
+            margin: 0 auto;
+            margin-bottom: 0.5rem
+        }
+
+        .aui-row.aui-row-padded .aui-col-xs-3 {
+            font-size:0.7rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            padding: 0 !important;
+            margin-bottom: 1.02rem;
+        }
+
+        .aui-row {
+            padding: 1.02rem 0.83rem 0rem 0.83rem !important;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .aui-list {
+            background-image: none !important;
+        }
+
+        .aui-list .aui-list-item:last-child {
+            background-image: none !important;
+        }
+
+        .aui-list .aui-list-item-text {
+            font-size:0.8rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            color: #333333;
+        }
+
+        .icon-z {
+            width: 0.7rem;
+            height: 0.7rem;
+            display: inline-block;
+            background: url('../../image/main_frame/tongzhi.jpg')no-repeat;
+            background-size: 100%;
+        }
+
+        .moreDiv {
+            width: calc(27% - 0.7rem);
+            text-align: right;
+        }
+
+        .title_small {
+            height: 2.5rem;
+        }
+
+        .content_borderContent {
+            width: 100%;
+            height: 40rem;
+            margin-top: -0.8rem;
+            overflow: hidden;
+            /*ios滑动添加此样式*/
+            -webkit-overflow-scrolling: touch;
+            overflow-y: scroll;
+            padding-bottom: 6rem;
+
+        }
+
+        .ICON_Hide {
+            width: 0.8rem;
+            height: 0.8rem;
+            background: url('../../image/main_frame/hide.jpg')no-repeat;
+            background-size: 0.8rem 0.8rem;
+            position: absolute;
+            margin: 0.6rem 0;
+            right: 0
+        }
+
+        .ICON_Show {
+            width: 0.8rem;
+            height: 0.8rem;
+            background: url('../../image/main_frame/show.jpg')no-repeat;
+            background-size: 0.8rem 0.8rem;
+            position: absolute;
+            margin: 0.6rem 0;
+            right: 0
+        }
+
+        .noData {
+            width: 100%;
+            height: 60vw;
+            line-height: 53vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size:0.7rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0vw;
+            color: #0c9ff4;
+            text-align: cnt;
+            text-align: center;
+        }
+
+        .headerLine {
+            width: 0.1rem;
+            height: 0.8rem;
+            margin-right: 0.3rem;
+            background-color: #4f79e8;
+            display: inline-block;
+        }
+
+        .headerDiv {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size:0.8rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            color: #999999;
+        }
+
+        .interval {
+            height: 0.75rem;
+            width: 100%;
+            background: #f0f0f0;
+        }
+
+        .content_borderContent .aui-content-padded {
+            margin-top: 0rem !important;
+        }
+
+        .oAfont {
+            font-size: 0.7rem!important;
+        }
+
+        .aui-list .aui-list-item-media {
+            width: 1rem;
+            padding: 0;
+            margin-right: 0.65rem;
+        }
+
+        .aui-media-list .aui-list-item-inner {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            padding-right: 0.75rem;
+        }
+
+        #body ul li:last-child .aui-list-item-inner {
+            justify-content: flex-end;
+        }
+
+        .fixBox {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixBox">
+        <header class="aui-bar aui-bar-nav aui-border-b" id="navHeader">
+            <div class="aui-pull-left aui-btn" tapmode data-action="back">
+
+            </div>
+            <div class="aui-title">统计图</div>
+            <div class="aui-pull-right add open-win" win='creatContacts'>
+            </div>
+        </header>
+
+        <!-- 决策应用开始 -->
+        <div class="content_borderContent aui-show" id="Content_marigin">
+            <!-- OA系统开始 -->
+            <div class="aui-content-padded common aui-hide" data-productId='WaterStarOne-OA-S8'>
+                <div class='interval'></div>
+                <div class="common_Header">
+                    <li class="aui-list-item aui-coll-header aui-padded-b-5 aui-border-b liheight" tapmode>
+                        <div class="aui-list-item-inner aui-row ">
+                            <div class=" aui-col-xs-9 A-title aui-font-size-18 aui-boder-l">OA系统</div>
+                            <div class="aui-col-xs-2" data-action='Show_hide'>
+                                <i class="aui-iconfont aui-icon-top aui-collapse-arrow "></i>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="content_show content_coll_content aui-show">
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row aui-border-b">
+                                        <div class="aui-col-xs-1 commonimg_icon">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">未读协作</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1'>
+
+                                            <div class="ICON ICON_Show"></div>
+
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show" id='OAUnreadDemo'>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item" tapmode>
+                                    <div class="aui-list-item-inner aui-row aui-border-b">
+                                        <div class="aui-col-xs-1 commonimg_icon">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">最新会议</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show" id="OAnewMeetDemo" style="height:auto">
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="content">
+                <div class="content_header">
+                  <li class="aui-list-item " tapmode>
+                      <div class="aui-list-item-inner aui-row aui-border-b">
+                          <div class="aui-col-xs-1 commonimg_icon">
+                          </div>
+                          <div class="aui-list-item-title aui-col-xs-8 header_font">绩效考核</div>
+                          <div class="aui-col-xs-2" data-action='Show_hide1'>
+                              <i class="aui-iconfont aui-icon-top aui-collapse-arrow"></i>
+                          </div>
+                      </div>
+
+                  </li>
+                </div>
+                <div class="content_contanines aui-show">
+                  <li class="aui-list-item aui-padded-l-15 aui-border-b autoLi">
+                      <div class="aui-list-item-inner">
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_Y"></span></div>
+                          <div class="aui-col-xs-4"><span class="header_font aui-font-size-18">考核提醒</span></div>
+
+                        </div>
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                          <div class="aui-col-xs-3"><span class="header_font">考核提醒:</span></div>
+                          <div class="aui-col-xs-8">2018-12-17</div>
+                        </div>
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                          <div class="aui-col-xs-3"><span class="header_font">考核提醒:</span></div>
+                          <div class="aui-col-xs-8">2018-12-17</div>
+                        </div>
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                          <div class="aui-col-xs-3"><span class="header_font">考核提醒:</span></div>
+                          <div class="aui-col-xs-8">2018-12-17</div>
+                        </div>
+
+
+                      </div>
+                  </li>
+                  <li class="aui-list-item aui-padded-l-15 aui-border-b autoLi">
+                      <div class="aui-list-item-inner">
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_Y"></span></div>
+                          <div class="aui-col-xs-4"><span class="header_font aui-font-size-18">历史绩效</span></div>
+
+                        </div>
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                          <div class="aui-col-xs-3"><span class="header_font">历史绩效:</span></div>
+                          <div class="aui-col-xs-8">2018-12-17</div>
+                        </div>
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                          <div class="aui-col-xs-3"><span class="header_font">历史绩效:</span></div>
+                          <div class="aui-col-xs-8">2018-12-17</div>
+                        </div>
+                        <div class="aui-row">
+                          <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                          <div class="aui-col-xs-3"><span class="header_font">历史绩效:</span></div>
+                          <div class="aui-col-xs-8">2018-12-17</div>
+                        </div>
+                      </div>
+                  </li>
+
+                    <li class="aui-list-item aui-padded-r-15  open-win" win='../work/OA_UnRead' param='3'>
+                        <div class="aui-list-item-inner">
+                            <a href="#">查看详情 <i class="aui-iconfont aui-icon-right aui-collapse-arrow"></i></a>
+                        </div>
+                    </li>
+                </div>
+              </div> -->
+                        <!-- <div class="content">
+                    <div class="content_header">
+                        <li class="aui-list-item " tapmode>
+                            <div class="aui-list-item-inner aui-row aui-border-b">
+                                <div class="aui-col-xs-1 commonimg_icon">
+                                </div>
+                                <div class="aui-list-item-title aui-col-xs-8 header_font">通讯录</div>
+                                <div class="aui-col-xs-2" data-action='Show_hide1'>
+                                    <div class="ICON ICON_Show"></div>
+                                </div>
+                            </div>
+
+                        </li>
+                    </div>
+                    <div class="content_contanines aui-show" id="OAContactsDemo">
+                      <div class="noData aui-show">
+                          暂无数据！
+                      </div>
+                    </div>
+                </div> -->
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- OA系统结束 -->
+            <!-- 营销系统开始 -->
+
+            <div class="aui-content-padded common aui-hide " data-productId='WaterStarOne-OSM-S8' data-option='MarketingSystem'>
+                <div class='interval'></div>
+                <div class="common_Header">
+                    <li class="aui-list-item aui-coll-header aui-padded-b-5 aui-border-b liheight" tapmode>
+                        <div class="aui-list-item-inner aui-row ">
+                            <div class=" aui-col-xs-9 A-title aui-font-size-18 aui-boder-l">营销系统</div>
+                            <div class="aui-col-xs-2" data-action='Show_hide'>
+                                <i class="aui-iconfont aui-icon-top aui-collapse-arrow "></i>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="content_show content_coll_content aui-show">
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月各代收单位代收费用</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='option1'>
+                                            <div class="ICON ICON_Show"></div>
+
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show aui-show">
+                                <div id="EchartMain" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row ">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月回收率</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='YCollback'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="EchartCallBack" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月营业情况</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='option2'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="EchartOption2" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">近半年营收情况趋势</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='option3'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="EchartOptionThree" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 营销系统结束 -->
+            <!-- 客户系统开始 -->
+
+            <div class="aui-content-padded common aui-hide " data-productId='WaterStarOne-CRM-S8' data-option='CustomerSystem'>
+                <div class='interval'></div>
+                <div class="common_Header">
+                    <li class="aui-list-item aui-coll-header aui-padded-b-5 aui-border-b liheight" tapmode>
+                        <div class="aui-list-item-inner aui-row ">
+                            <div class=" aui-col-xs-9 A-title aui-font-size-18 aui-boder-l">客服系统</div>
+                            <div class="aui-col-xs-2" data-action='Show_hide'>
+                                <i class="aui-iconfont aui-icon-top aui-collapse-arrow "></i>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="content_show content_coll_content aui-show">
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月服务满意度</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='CustomerService1'>
+                                            <div class="ICON ICON_Show"></div>
+
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="CustomerService1" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月客服服务反应情况</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='CustomerService2'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="CustomerService2" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月受理回复及时率</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='CustomerService3'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="CustomerService3" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row ">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">近半年受理回复及时率</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='CustomerService4'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="Customer" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 客户系统结束 -->
+            <!-- 抄表平台 -->
+
+            <div class="aui-content-padded common aui-hide" data-productId='WaterStarOne-MRP-S8' data-option='MeetingSystem'>
+                <div class='interval'></div>
+                <div class="common_Header">
+                    <li class="aui-list-item aui-coll-header aui-padded-b-5 aui-border-b liheight" tapmode>
+                        <div class="aui-list-item-inner aui-row ">
+                            <div class=" aui-col-xs-9 A-title aui-font-size-18 aui-boder-l">抄表平台</div>
+                            <div class="aui-col-xs-2" data-action='Show_hide'>
+                                <i class="aui-iconfont aui-icon-top aui-collapse-arrow "></i>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="content_show content_coll_content aui-show">
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月小组抄表完成量</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='MeterReadingOne'>
+                                            <div class="ICON ICON_Show"></div>
+
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="MeterReadingOne" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row ">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月抄表完成情况</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='MeterReadingTwo'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="MeterReadingTwo" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月总计抄表完成率</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='MeterReadingThree'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="MeterReadingThree" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">近半年营收情况趋势</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='MeterReadingFour'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="MeterReadingFour" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!--抄表平台结束  -->
+            <!-- SCADA开始 -->
+
+            <div class="aui-content-padded common aui-hide" data-productId='WaterStarOne-SCADA-S8' data-option='ScadaSystem'>
+                <div class='interval'></div>
+                <div class="common_Header">
+                    <li class="aui-list-item aui-coll-header aui-padded-b-5 aui-border-b liheight" tapmode>
+                        <div class="aui-list-item-inner aui-row ">
+                            <div class=" aui-col-xs-9 A-title aui-font-size-18 aui-boder-l">SCADA</div>
+                            <div class="aui-col-xs-2" data-action='Show_hide'>
+                                <i class="aui-iconfont aui-icon-top aui-collapse-arrow "></i>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="content_show content_coll_content aui-show">
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月耗能</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='ScadaThree'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="ScadaThree" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月取供水量</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='ScadaOne'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="ScadaOne" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月水质合格率</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='ScadaFour'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="ScadaFour" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">近半年压力趋势</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='ScadaTwo'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="ScadaTwo" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SCADA结束 -->
+            <!-- DMA开始 -->
+
+            <div class="aui-content-padded common aui-hide" data-productId='10120' data-option='DMASystem'>
+                <div class='interval'></div>
+                <div class="common_Header">
+                    <li class="aui-list-item aui-coll-header aui-padded-b-5 aui-border-b liheight" tapmode>
+                        <div class="aui-list-item-inner aui-row ">
+                            <div class=" aui-col-xs-9 A-title aui-font-size-18 aui-boder-l">DMA</div>
+                            <div class="aui-col-xs-2" data-action='Show_hide'>
+                                <i class="aui-iconfont aui-icon-top aui-collapse-arrow "></i>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="content_show content_coll_content aui-show">
+
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">本月漏损率、产销差率</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='DMAOne'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines aui-show">
+                                <div id="DMAOne" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <div class="content_header">
+                                <li class="aui-list-item " tapmode>
+                                    <div class="aui-list-item-inner aui-row">
+                                        <div class="aui-col-xs-1 commonimg_icon1">
+                                        </div>
+                                        <div class="aui-list-item-title aui-col-xs-8 header_font">近半年营收情况趋势</div>
+                                        <div class="aui-col-xs-2" data-action='Show_hide1' data-option='DMATwo'>
+                                            <div class="ICON ICON_Show"></div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                            </div>
+                            <div class="content_contanines">
+                                <div id="DMATwo" style="width:350px;"></div>
+                                <div class="noData aui-show">
+                                    暂无数据！
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- DMA结束 -->
+        </div>
+
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/diy/public.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/diy/template.js"></script>
+<script type="text/javascript" src="../../script/homeEchart.js"></script>
+<script type="text/javascript" src="../../script/echarts.min.js"></script>
+<script type="text/javascript" src="../../script/aui-collapse.js"></script>
+<script type="text/template" id='OAUnreadList'>
+    {{each list value i}}
+    <li class="aui-list-item aui-margin-l-20 open-win" win='../work/OA_UnRead' param='{{value}}'>
+        <div class="aui-list-item-inner">
+            <div class="aui-list-item-title oAfont">{{i+1}}、{{value.subjectTitle.substring(0,10)}}-{{value.subjectTime.substring(0,10)}}</div>
+        </div>
+    </li>
+    {{/each}}
+    <li class="aui-list-item aui-padded-r-15 aui-border-t open-win" win='../work/OA_UnRead' id="appMoreUrl1">
+        <div class="aui-list-item-inner">
+            <a href="#" class="oAfont">查看详情 <i class="aui-iconfont aui-icon-right aui-collapse-arrow"></i></a>
+        </div>
+    </li>
+</script>
+<script type="text/template" id='OAnewMeetList'>
+    {{each list value i}}
+    <li class="aui-list-item aui-padded-l-15 aui-border-b autoLi">
+        <div class="aui-list-item-inner">
+            <div class="aui-row">
+                <div class="aui-col-xs-1"><span class="Dot_Y"></span></div>
+                <div class="aui-col-xs-3"><span class="header_font">会议名称:</span></div>
+                <div class="aui-col-xs-8">{{value.meetingSubject}}</div>
+            </div>
+            <div class="aui-row">
+                <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                <div class="aui-col-xs-3 OAconcent"><span class="header_font ">会议地点:</span></div>
+                <div class="aui-col-xs-8 ">{{value.roomName}}</div>
+            </div>
+            <div class="aui-row">
+                <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                <div class="aui-col-xs-3"><span class="header_font">会议时间:</span></div>
+                <div class="aui-col-xs-8">{{ value.meetingBeginTim.substring(0,10)}}</div>
+            </div>
+        </div>
+    </li>
+    {{/each}}
+    <li class="aui-list-item aui-padded-r-15  open-win" win='../work/OA_UnRead' param='2'>
+        <div class="aui-list-item-inner">
+            <a href="#" class="oAfont">查看详情 <i class="aui-iconfont aui-icon-right aui-collapse-arrow"></i></a>
+        </div>
+    </li>
+</script>
+<script type="text/template" id='OAContactsList'>
+    {{each list value i}}
+    <li class="aui-list-item aui-padded-l-15 aui-border-b autoLi">
+        <div class="aui-list-item-inner">
+            <div class="aui-row">
+                <div class="aui-col-xs-1"><span class="Dot_Y"></span></div>
+                <div class="aui-col-xs-4"><span class="header_font aui-font-size-18">最近</span></div>
+
+            </div>
+            <div class="aui-row">
+                <div class="aui-col-xs-1"><span class="Dot_no"></span></div>
+                <div class="aui-col-xs-11"><span class="header_font oAfont">{{value.name}}[部门:{{value.classify}}  电话:{{value.phoneNum}}]</span></div>
+            </div>
+        </div>
+    </li>
+    {{/each}}
+    <li class="aui-list-item aui-padded-r-15  open-win" win='../work/OA_UnRead' param='4'>
+        <div class="aui-list-item-inner">
+            <a href="#" class="oAfont">查看详情 <i class="aui-iconfont aui-icon-right aui-collapse-arrow"></i></a>
+        </div>
+    </li>
+</script>
+
+<script type="text/javascript">
+    var frame = "";
+    var moduleView = "";
+    var moduleHide = "";
+    var applicationsView = "";
+    var applicationsHide = "";
+    var winH;
+    var FNScanner;
+    var isSHowContent = true;
+    var Number_i = 0;
+    var HasLoad = 0;
+    var LoadNumber = 0;
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('navHeader');
+
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+
+        // 计算header和nav元素的高度
+        headerH = $api.offset(header).h;
+        fnReady();
+        fnReadyOpenWin();
+        // 监听是否修改了服务器地址
+        api.addEventListener({
+            name: 'changeApiUrl'
+        }, function(ret, err) {
+            if (ret) {
+                location.reload();
+            }
+        });
+        // 首页展示系统第三方显示权限
+        if(api.connectionType!='none'){
+              GetProductThirdParty();
+        }
+        operationDom();
+    };
+
+    function Scroll() {
+        if (isScroll) {
+            // 监听是否滚动底部，显示信息
+            api.addEventListener({
+                name: 'scrolltobottom',
+                extra: {
+                    threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
+                }
+            }, function(ret, err) {
+                var LoadDatas = $api.getStorage('PowerShow');
+                var sectionIds = $('.content_borderContent .common');
+                // Number_i = sectionIds.length;
+                if (LoadDatas != null || LoadDatas != undefined) {
+                    if (HasLoad == 0) {
+                        var BoydIdHeigh = $('#body').height();
+                        $('#Content_marigin').removeClass('aui-hide').addClass('aui-show');
+                        HasLoad = 1;
+                    }
+                    if (Number_i != LoadDatas.length) {
+                        var ProjectId = $(sectionIds[Number_i]).attr('data-productId');
+                        for (var i = 0; i < LoadDatas.length; i++) {
+                            if (LoadDatas[i].productCoding == ProjectId) {
+                                $(sectionIds[Number_i]).removeClass('aui-hide').addClass('aui-show');
+                                if (ProjectId == 'WaterStarOne-OA-S8') {
+                                    getOADatas();
+                                    break;
+                                } else {
+                                    var System = $(sectionIds[Number_i]).attr('data-option');
+                                    getEchart(System);
+                                    break;
+                                }
+                            }
+                        }
+                        Number_i++;
+                    } else {
+                        api.toast({
+                            msg: '没有更多数据了',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                    }
+                } else {
+                    api.toast({
+                        msg: '没有更多数据了',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+
+            });
+        } else {
+            api.addEventListener({
+                name: 'scrolltobottom',
+                extra: {
+                    threshold: 50 //设置距离底部多少距离时触发，默认值为0，数字类型
+                }
+            }, function(ret, err) {
+                if (ret) {
+                    api.toast({
+                        msg: '没有更多数据了',
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+            });
+
+        }
+    }
+
+
+
+
+    var actionList = {
+        'Show_hide': function() {
+            if ($(this).parent().parent().siblings('.content_show').hasClass('aui-show')) {
+                //显示时,调用接口
+                // if($(this).attr('data-option')){
+                //   var option = $(this).attr('data-option');
+                //   getEchart(option);
+                // }
+                $(this).parent().parent().siblings('.content_show').removeClass('aui-show').addClass('aui-hide');
+                $(this).children().removeClass('aui-icon-top').addClass('aui-icon-down');
+            } else {
+                $(this).parent().parent().siblings('.content_show').removeClass('aui-hide').addClass('aui-show');
+                $(this).children().removeClass('aui-icon-down').addClass('aui-icon-top');
+            }
+        },
+        'Show_hide1': function() {
+            if ($(this).parent().parent().parent().siblings('.content_contanines').hasClass('aui-show')) {
+                $(this).parent().parent().parent().siblings('.content_contanines').removeClass('aui-show').addClass('aui-hide');
+                $(this).children().removeClass('ICON_Show').addClass('ICON_Hide');
+            } else {
+                $(this).parent().parent().parent().siblings('.content_contanines').removeClass('aui-hide').addClass('aui-show');
+                $(this).children().removeClass('ICON_Hide').addClass('ICON_Show');
+            }
+        },
+
+    }
+
+
+
+
+    function fnOpenApp(data) {
+        // var appData = {
+        //     username: '',
+        //     password: ''
+        // };
+        if (data.openMobile) {
+            if ((data.iosPackage != "" && data.iosPackage != null) || (data.androidPackage != "" && data.androidPackage != null)) {
+                if (data.iosPackage != "" && data.iosPackage != null) {
+                    if (api.systemType == 'ios') {
+                        api.openApp({
+                            iosUrl: data.iosPackage,
+                            appParam: {},
+                        }, function(ret, err) {
+
+                        });
+                    }
+                } else if (data.androidPackage != "" && data.androidPackage != null) {
+                    //异步返回结果：
+                    api.appInstalled({
+                        appBundle: data.androidPackage
+                    }, function(ret, err) {
+                      api.hideProgress();
+                        if (ret.installed) {
+                            // fnGet('services/app/BindAccount/GetUserBindAccountAsync?ProductId=' + productId + '', {}, false, function(ret, err) {
+                            //     if (ret) {
+                            //         if (ret.success) {
+                            //             if (ret.result != null) {
+                            //                 appData.username = ret.result.bindUserName;
+                            //                 appData.password = ret.result.bindPassWord;
+                            //             }
+                            //
+                            //         }
+                            //     }
+                            // });
+                            api.openApp({
+                                androidPkg: data.androidPackage,
+                                appParam: {},
+                            }, function(ret, err) {
+
+                            });
+
+                        } else {
+                            //应用未安装
+                            api.toast({
+                                msg: '应用未安装',
+                                duration: 2000,
+                                location: 'top'
+                            });
+                        }
+                    });
+                }
+            } else if (data.mobileWebUrl != "" && data.mobileWebUrl != null) {
+                if (data.mobileWebUrl.indexOf('http') != -1) {
+                    api.openWin({
+                        name: 'OA',
+                        url: './OA.html',
+                        pageParam: {
+                            url: data.mobileWebUrl,
+                            productId: data.productId
+                        }
+                    });
+                } else {
+                    var winName = data.mobileWebUrl;
+                    var index = winName.lastIndexOf('/');
+                    var index2 = winName.indexOf('.html');
+                    if (index != -1 && index2 != -1) {
+                        winName = winName.substring(index + 1, index2);
+                    }
+                    api.openWin({
+                        name: winName,
+                        url: data.mobileWebUrl,
+                        pageParam: {
+                            productId: data.productId
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+
+
+
+    // 折叠菜单开始
+    var collapse = new auiCollapse({
+        autoHide: true //是否自动隐藏已经展开的容器
+    });
+
+    function getEchart(option) {
+        if (option == 'MarketingSystem') {
+            EchartOption1();
+            EchartYCollback();
+            EchartOption2();
+            EchartOption3();
+        } else if (option == 'CustomerSystem') {
+            CustomerServiceOne();
+            CustomerServiceTwo();
+            CustomerServiceThree();
+            CustomerServiceFour();
+        } else if (option == 'MeetingSystem') {
+            MeterReadingOne();
+            MeterReadingTwo();
+            MeterReadingThree();
+            MeterReadingFour();
+        } else if (option == 'ScadaSystem') {
+            ScadaOne();
+            ScadaTwo();
+        } else if (option == 'DMASystem') {
+            DMAOne();
+            DMATwo();
+
+        }
+    }
+    // OA开始
+    function getOADatas() {
+        fnGet('services/Report/Eoffice/GetCooperationSubjectAsync', {}, false, function(ret, err) {
+          api.hideProgress();
+            if (ret) {
+                if (ret.success && ret.result.cooperationSubjects != null) {
+                    $('#OAUnreadDemo').children('.noData').removeClass('aui-show').addClass('aui-hide');
+                    var datas = {
+                        list: ret.result.cooperationSubjects,
+                        appMoreUrl: ret.result.appMoreUrl
+                    };
+                    var str = template('OAUnreadList', datas);
+                    $('#OAUnreadDemo').append(str);
+                    var param = {};
+                    param.type = 1;
+                    param.appUrlMore = ret.result.appMoreUrl;
+                    param = JSON.stringify(param);
+                    $('#appMoreUrl1').attr('param', param);
+                    fnReadyOpenWin();
+                }
+            }
+        });
+        fnGet('services/Report/Eoffice/GetMeetingAsync?AutoFixPage=1&Limit=3&Page=1', {}, false, function(ret, err) {
+          api.hideProgress();
+            if (ret) {
+                if (ret.success && ret.result.meetingOutputDtos != null) {
+                    $('#OAnewMeetDemo').children('.noData').removeClass('aui-show').addClass('aui-hide');
+                    var htmlContent = "";
+                    // var datas = {
+                    //     list: ret.result
+                    // };
+                    // var str = template('OAnewMeetList',htmlContent);
+                    var datas = ret.result.meetingOutputDtos;
+                    for (var i = 0; i < datas.length; i++) {
+                        var time1 = (datas[i].meetingBeginTime).substr(0, 10) + ' ' + (datas[i].meetingBeginTime).substr(11, 5);
+                        htmlContent +=
+                            '<li class="aui-list-item aui-padded-l-15 aui-border-b autoLi"><div class="aui-list-item-inner"><div class="aui-row"><div class="aui-col-xs-1"><span class="Dot_Y"></span></div><div class="aui-col-xs-3"><span class="header_font">会议名称:</span></div><div class="aui-col-xs-8">' +
+                            datas[i].meetingSubject +
+                            '</div></div><div class="aui-row"><div class="aui-col-xs-1"><span class="Dot_no"></span></div><div class="aui-col-xs-3"><span class="header_font">会议地点:</span></div><div class="aui-col-xs-8">' + datas[i].roomName +
+                            '</div></div><div class="aui-row"><div class="aui-col-xs-1"><span class="Dot_no"></span></div><div class="aui-col-xs-3"><span class="header_font">会议时间:</span></div><div class="aui-col-xs-8">' + time1 +
+                            '</div></div></div></li>';
+                    }
+
+                    htmlContent +=
+                        '<li class="aui-list-item aui-padded-r-15 open-win" win="../work/OA_UnRead" id="appMoreUrl2"><div class="aui-list-item-inner"><a href="#">查看详情 <i class="aui-iconfont aui-icon-right aui-collapse-arrow"></i></a></div></li>';
+                    $('#OAnewMeetDemo').append(htmlContent);
+                    var param = {};
+                    param.type = 2;
+                    param.appUrlMore = ret.result.appMoreUrl;
+                    param = JSON.stringify(param);
+                    $('#appMoreUrl2').attr('param', param);
+                    fnReadyOpenWin();
+
+                }
+            }
+        });
+        // fnGet('services/Report/Eoffice/GetPhoneBookAsync?AutoFixPage=1&Limit=3&Page=1', {}, false, function(ret, err) {
+        //     if (ret) {
+        //         if (ret.success && ret.result != null) {
+        //             $('#OAContactsDemo').children('.noData').removeClass('aui-show').addClass('aui-hide');
+        //             var datas = {
+        //                 list: ret.result
+        //             };
+        //             var str = template('OAContactsList', datas);
+        //             $('#OAContactsDemo').append(str);
+        //             fnReadyOpenWin();
+        //
+        //         }
+        //     }
+        // });
+
+    }
+    var isScroll = false;
+    // 第三方系统显示权限
+    function GetProductThirdParty() {
+        fnGet('services/app/Product/GetProductThirdParty', {}, false, function(ret, err) {
+          api.hideProgress();
+            if (ret) {
+                if (ret.success && ret.result != null) {
+                    var datas = ret.result;
+                    var sectionIds = $('.content_borderContent .common');
+                    for (var i = 0; i < datas.length; i++) {
+                        datas[i].show = 0;
+                    }
+                    $api.setStorage('PowerShow', datas);
+                    isScroll = true;
+                    // 监听是否滚动到底部
+                    Scroll();
+                }
+            }
+        });
+    }
+</script>
+
+</html>

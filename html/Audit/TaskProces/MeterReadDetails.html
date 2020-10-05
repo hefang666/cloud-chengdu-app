@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>抄表质量复核任务详情</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #F3F3F3;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      #header {
+        position: fixed;
+      }
+
+      .aui-title {
+        font-size: 1.18rem;
+      }
+
+      .info-title {
+        width: 100%;
+        background-color: #FFFFFF;
+      }
+
+      .info-title-cont {
+        width: 96%;
+        line-height: 57.5px;
+        margin: 0px 2%;
+      }
+
+      .title-cont-title {
+        color: #1F1F1F;
+        font-size: 18px;
+        display: inline-block;
+      }
+
+      .title-cont-time {
+        color: #C5C5C5;
+        font-size: 14px;
+        display: inline-block;
+        float: right;
+      }
+
+      #footer {
+        width: 100%;
+        height: 5rem;
+        border-top: 1px solid #CCCCCC;
+        box-sizing: border-box;
+        padding: 2%;
+      }
+
+      .footer-title {
+        width: 100%;
+        text-align: left;
+      }
+
+      .footer-title-text {
+        font-size: 18px;
+        color: #1F1F1F;
+      }
+
+      .footer-title-cont {
+        font-size: 18px;
+        color: #626262;
+      }
+
+      .task-main {
+        width: 96%;
+        height: auto;
+        background: #FFFFFF;
+        border-radius:0.75rem;
+        margin: 1rem 2% 6rem 2%;
+        padding: 1rem 1.625rem 1rem 1.625rem;
+        box-sizing: border-box;
+      }
+
+      .task-info {
+        width: 100%;
+        height: auto;
+      }
+
+      .info-item {
+        /*margin-bottom: 0.6rem;*/
+        width: 100%;
+        /*box-sizing: border-box;*/
+        line-height: 2rem;
+        border-bottom: 1px solid #F2F2F2;
+      }
+
+      .task-title {
+        font-size: 18px;
+        font-weight: 400;
+        color: #1F1F1F;
+        width: 28%;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .task-cont {
+        font-size: 18px;
+        font-weight: 400;
+        color: #626262;
+        width: 68%;
+        display: inline-block;
+      }
+      .w2{
+        letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+        margin-right:-2em; /*同上*/
+      }
+
+      .img-list {
+        width: 100%;
+        height: auto;
+      }
+
+      .img-item {
+        width: 30%;
+        height: 2.8rem;
+        margin-right: 5%;
+        margin-top: 0.5rem;
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .img-item-last {
+        margin-right: 0;
+      }
+
+      .img-item img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .progress-text {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .submit-text {
+        display: inline-block;
+        float: left;
+        text-align: left;
+      }
+
+      .examine-text {
+        text-align: left;
+      }
+
+      .end-text {
+        display: inline-block;
+        float: right;
+        text-align: left;
+      }
+
+      .footer-time {
+        font-size: 10px;
+        color: #ACACAC;
+      }
+
+      .activityStatus {
+        color: #00C45D;
+      }
+
+      .aui-progress-bar{
+        width: 50%; background-image: linear-gradient(to right, #6DE5A5 , #00D665);border-radius: 7px;
+      }
+
+      .addressIcon {
+          background: url(./image/dingwei.png) no-repeat 0 0;
+          background-size: 100% 100%;
+          width: .6rem;
+          height: .7rem;
+          display: inline-block;
+          /*vertical-align: text-bottom;*/
+      }
+
+      .textColor {
+          color: #2045FF;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='wrap' class="flex-wrap flex-vertical" v-swipeleft="openUserDetails">
+      <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+          <div class="aui-pull-left aui-btn">
+              <span class="aui-iconfont aui-icon-left"></span>
+          </div>
+          <div class="aui-title">任务详情</div>
+      </header>
+      <header class="aui-bar aui-bar-nav" id="header">
+          <div class="aui-pull-left aui-btn" tapmode @click='back'>
+              <span class="aui-iconfont aui-icon-left"></span>
+          </div>
+          <div class="aui-title">任务详情</div>
+      </header>
+
+      <div class="info-title">
+        <div class="info-title-cont">
+          <span class="title-cont-title">{{taskTypeName}}</span>
+          <span class="title-cont-time">{{taskTypeTime}}</span>
+        </div>
+      </div>
+
+      <div class="task-main">
+          <div class="task-info">
+              <div class="info-item">
+                <div class="task-title">
+                  <span class="w2">户号</span>:
+                </div>
+                <div class="task-cont">
+                  <span class="" id="accountnumber">{{CustomerCode}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span class="w2">户名</span>:
+                </div>
+                <div class="task-cont">
+                  <span class="" id="accountname">{{CustomerName}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span>用户地址</span>:
+                </div>
+                <div class="task-cont">
+                  <span class="" id="address">{{Address}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span>水表位置</span>:
+                </div>
+                <div class="task-cont">
+                  <span class="" id="wmlocation">{{Location}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span>用水性质</span>:
+                </div>
+                <div class="task-cont">
+                  <span class="" id="nature">{{Nature}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span class="w2">口径</span>:
+                </div>
+                <div class="task-cont">
+                  <span class="" id="caliber">{{Caliber}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span>稽核止度</span>:
+                </div>
+                <div class="task-cont">
+                  <span id="jhendscale">{{AuditReadScale}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span>稽核状态</span>:
+                </div>
+                <div class="task-cont">
+                  <span id="jhstatus">{{AuditStatus}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title">
+                  <span class="w2">备注</span>:
+                </div>
+                <div class="task-cont">
+                  <span class="" id="remark">{{Remark}}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <div class="task-title" style="width: 100%;">
+                  <span>处理照片</span>
+                </div>
+                <div class="task-cont" style="margin_top: 10px; width: 100%;">
+                  <div class="img-list">
+                    <div class='img-item img-item-last' v-for="(item,index) in pic" v-if="(index+1)%3 == 0">
+                      <img class='imgfile' :src='item' @click='previewImg(index)'>
+                    </div>
+                    <div class='img-item' v-else>
+                      <img class='imgfile' :src='item' @click='previewImg(index)'>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p style="margin-top: 0.6rem;">
+                  <i class="addressIcon"></i>
+                  <span class="textColor">{{AppAddress}}</span>
+              </p>
+          </div>
+      </div>
+
+      <footer class="aui-bar aui-bar-tab" id="footer">
+          <div class="footer-title">
+            <span class="footer-title-text">任务进度：</span>
+            <span class="footer-title-cont">{{taskProgress}}</span>
+          </div>
+          <div class="aui-progress aui-progress-xs" style="margin-top: 10px;margin-bottom:5px;">
+            <div class="aui-progress-bar" ref='progressbg'></div>
+          </div>
+          <div class="progress-text">
+            <span class="submit-text">
+              <span>提交</span>
+              <div class="footer-time submit-time">{{submitTime}}</div>
+            </span>
+            <span class="examine-text">
+              <span :class="{activityStatus:taskStatus==true}">审核中</span>
+              <div class="footer-time examine-time" :class="{activityStatus:taskStatus==true}">{{examineTime}}</div>
+            </span>
+            <span class="end-text">
+              <span :class="{activityStatus:taskStatus==false}">已结束</span>
+              <div class="footer-time end-time" :class="{activityStatus:taskStatus==false}">{{endTime}}</div>
+            </span>
+          </div>
+      </footer>
+    </div>
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/moment.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+  <script type="text/javascript">
+    var Longitude = Latitude = "";
+    apiready = function(){
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        var hideheader = $api.byId('hideheader');
+        $api.fixStatusBar(hideheader);
+
+        fnReady();
+        fnReadyOpenWin();
+
+        bMap = api.require("bMap");
+        bMap.getLocation({
+            accuracy: '10m',
+            autoStop: true,
+        }, function(ret, err) {
+            if (ret.status) {
+                Longitude = ret.lon;
+                Latitude = ret.lat;
+            } else {
+                // alert(err.code);
+            }
+        });
+
+        infoData = api.pageParam.data;
+        taskType = api.pageParam.type;
+
+        //home键监听
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+          if (taskType == 'handle') { //任务处理 返回事件
+            api.sendEvent({
+                name: 'refreshCloudMyTask',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'MyTask'
+            });
+          } else if (taskType == 'claimTask') { //任务领用 返回事件
+            api.sendEvent({
+                name: 'refreshCloudClaim',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'ClaimTask'
+            });
+          }  else {  //代办列表进入详情
+            api.closeWin();
+          }
+        });
+
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+
+    function fnIntVue() {
+      window.FilterVue = new Vue({
+        el: '#wrap',
+        data: {
+          taskTypeName: '',      //任务类型名称
+          taskTypeTime: '',      //任务办理时间
+
+          CustomerCode: '',      //户号
+          CustomerName: '',      //户名
+          Address: '',           //地址
+          Location: '',          //表位
+          Nature: '',            //用水性质
+          Caliber: '',           //水表口径
+          AuditReadScale: '',    //稽核止度
+          AuditStatus: '',       //稽核状态
+          Remark: '',            //备注
+
+          pic: [],               //图片
+
+          AppAddress: '',        //APP提交地址
+          taskProgress: '',      //任务进度
+          submitTime: '',        //提交时间
+          examineTime: '',       //审核时间
+          endTime: '',           //结束时间
+
+          taskStatus: true,        //任务状态
+
+        },
+        computed: {
+
+        },
+        methods: {
+          back() { //返回上一个页面
+            if (taskType == 'handle') { //任务处理 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudMyTask',
+                  extra: {
+                      type: '1'
+                  }
+              });
+              api.closeToWin({
+                  name: 'MyTask'
+              });
+            } else if (taskType == 'claimTask') { //任务领用 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudClaim',
+                  extra: {
+                      type: '1'
+                  }
+              });
+              api.closeToWin({
+                  name: 'ClaimTask'
+              });
+            } else {  //代办列表进入详情
+              api.closeWin();
+            }
+          },
+          getTaskDetail(){
+            var _that = this;
+            api.showProgress({
+                title: '加载中',
+                text:'',
+                modal: false
+            });
+            api.ajax({
+              url: $api.getStorage("jhapipath") + 'waterMeters/info',
+              method: 'post',
+              dataType: 'json',
+              data: {
+                values: {
+                  "UserName": $api.getStorage("jhUserName"),
+                  "Password": $api.getStorage("jhPassWord"),
+                  "SerialNo": dataTime(),
+                  "Method": "MMS002",
+                  "Longitude": Longitude,
+                  "Latitude": Latitude,
+                  "Parameter": "{'Id': '" + infoData.thirdTaskId + "', 'Code':'45', 'Status':'', 'Source':'', 'BookId':'', 'ReaderId':'', 'CustomerCode':'', 'BeginTime':'', 'EndTime':''}"
+                }
+              }
+            }, function(ret, err) {
+              if (ret) {
+                api.hideProgress();
+                if (ret.Status == '0') {
+                  console.log(JSON.stringify(ret));
+                  var allList = JSON.parse(ret.Data);
+                  _that.showHtml(allList[0]);
+                }
+              } else {
+                console.log(JSON.stringify(err));
+                api.toast({
+                    msg: err.msg,
+                    duration: 2000,
+                    location: 'top'
+                });
+              }
+            });
+          },
+          showHtml(taskDetail) {
+            this.taskTypeName = taskDetail.Name;
+            this.taskTypeTime = taskDetail.HandleTime.substring(0,10);
+
+            this.CustomerCode = taskDetail.CustomerCode;
+            this.CustomerName = taskDetail.CustomerName;
+            this.Address = taskDetail.Address;
+            this.Location = taskDetail.Location;
+            this.Nature = taskDetail.Nature;
+            this.Caliber = taskDetail.Caliber;
+            this.AuditReadScale = taskDetail.AuditReadScale;
+            if (taskDetail.AuditStatus == '0') {
+              this.AuditStatus = '异常';
+            } else if(taskDetail.AuditStatus == '1') {
+              this.AuditStatus = '正常';
+            } else if(taskDetail.AuditStatus == '5') {
+              this.AuditStatus = '未见表';
+            }
+            this.Remark = taskDetail.Handles[0].Remark;
+
+            if (taskDetail.Coordinates.length > 0) {
+              this.AppAddress = taskDetail.Coordinates[0].Address;
+            }
+
+            this.submitTime = taskDetail.HandleTime.substring(0,10);
+
+            if (taskDetail.Status == '2') {
+              //待审核
+              this.taskProgress = '待审核';
+
+              this.taskStatus = true;
+              this.$refs.progressbg.style.width = "50%";
+
+              this.examineTime = taskDetail.Handles[0].OperatedTime.substring(0,10);
+              this.endTime = '';
+            } else {
+              //已结束
+              this.taskProgress = '已结束(' + taskDetail.StatusName + ')';
+
+              this.taskStatus = false;
+              this.$refs.progressbg.style.width = "100%";
+
+              this.examineTime = taskDetail.Handles[1].OperatedTime.substring(0,10);
+              this.endTime = taskDetail.Handles[0].OperatedTime.substring(0,10);
+            }
+
+            for (var i = 0; i < taskDetail.Files.length; i++) {
+              this.pic.push("http://" + $api.getStorage('apiUrl') + taskDetail.Files[i].Path);
+            }
+          },
+          previewImg(index) {  //图片预览
+            api.openWin({
+                name: 'pictureBrowser',
+                url: '../pictureBrowser.html',
+                pageParam: {
+                    images: FilterVue.pic,
+                    index: index
+                },
+                animation:{
+                    type: "fade", //动画类型（详见动画类型常量）
+                    duration: 300 //动画过渡时间，默认300毫秒
+                }
+            });
+          },
+          openUserDetails() {  //打开用户详情界面
+            api.showProgress({
+                title: '加载中',
+                text:'',
+                modal: false
+            });
+            api.ajax({
+              url: $api.getStorage("jhapipath") + 'waterMeters/info',
+              method: 'post',
+              dataType: 'json',
+              data: {
+                values: {
+                  "UserName": $api.getStorage("jhUserName"),
+                  "Password": $api.getStorage("jhPassWord"),
+                  "SerialNo": dataTime(),
+                  "Method": "OSM002",
+                  "Longitude": Longitude,
+                  "Latitude": Latitude,
+                  "Parameter": "{'BookId':'', 'ReaderId':'', 'Code':'"+this.CustomerCode+"', 'BeginTime':'', 'EndTime':'', 'Obscure':'','isWater':'isWater'}"
+                }
+              }
+            },function(ret, err){
+              if(ret && ret.Status == 0) {
+                var data = JSON.parse(ret.Data);
+                if (data.length > 0 && data.length == 1) {
+                    var result = JSON.parse(JSON.stringify(data[0]));
+                    api.openWin({
+                        name: 'CustomerDetails',
+                        url: '../CustomerSearch/CustomerDetails.html',
+                        pageParam: result,
+                        allowEdit: true
+                    });
+                    api.hideProgress();
+                } else {
+                  api.hideProgress();
+                  vant.Toast("用户查询失败");
+                }
+              } else {
+                api.hideProgress();
+                vant.Toast("用户查询失败");
+              }
+            });
+          }
+        },
+        mounted: function() {
+          this.getTaskDetail();
+        }
+
+      });
+    }
+  </script>
+</html>

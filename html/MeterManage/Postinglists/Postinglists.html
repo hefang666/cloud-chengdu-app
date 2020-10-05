@@ -1,0 +1,1820 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>张贴列表</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .footer {
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+        }
+
+        .footer .van-button {
+            width: 13.98rem;
+            height: 2.23rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+            background-color: #377EFF;
+        }
+
+        .aui-tab {
+            width: 100%;
+        }
+
+        .aui-tab-item {
+            font-size: 0.95rem;
+            color: #363636;
+            padding: 1.5rem 0 1.25rem 0;
+            line-height: normal;
+            height: auto;
+        }
+
+        .aui-tab-item:active {
+            background: #f9f4f4;
+        }
+
+        .aui-tab-item:first-child:after {
+            content: '';
+            position: absolute;
+            left: auto;
+            top: 1.7rem;
+            bottom: 0;
+            right: 0;
+            height: 1.85rem;
+            width: 0.03rem;
+            background-color: pink;
+        }
+
+        .aui-tab-item:nth-child(2):after {
+            content: '';
+            position: absolute;
+            left: auto;
+            top: 1.7rem;
+            bottom: 0;
+            right: 0;
+            height: 1.85rem;
+            width: 0.03rem;
+            background-color: #DCDCDC;
+        }
+
+        .number1,
+        .number2,
+        .number3 {
+            font-size: 1.6rem;
+            height: 1.35rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title1,
+        .title2,
+        .title3 {
+            font-size: 0.75rem;
+            height: 0.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .number1,
+        .title1 {
+            color: #167CFB;
+        }
+
+        .number2,
+        .title2 {
+            color: #FFBF03;
+        }
+
+        .number3,
+        .title3 {
+            color: rgba(19, 201, 122, 1);
+        }
+        /*搜索*/
+
+        .aui-searchbar {
+            background-color: #fff;
+            height: auto!important;
+        }
+
+        .aui-searchbar .aui-searchbar-input {
+            position: relative;
+            height: 2rem;
+            background: pink;
+            margin: 0 1.25rem;
+            background-color: #fff;
+            border: 0.03rem solid #C4C4C4;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .aui-searchbar .aui-searchbar-input #search-input {
+            height: 100%;
+        }
+
+        .aui-searchbar .aui-searchbar-input .search_suer {
+            position: absolute;
+            right: 1rem;
+            top: 0.4rem;
+            width: 1rem;
+            height: 1rem;
+            background: url("../image/MeterManage/Posting/sousuo.png") no-repeat center;
+            background-size: 0.83rem 0.83rem;
+        }
+
+        .aui-searchbar .aui-searchbar-input .search_shanchu {
+            position: absolute;
+            right: 4rem;
+            top: 0.4rem;
+            width: 1rem;
+            height: 1rem;
+            background: url("../image/MeterManage/shanchu.png") no-repeat center;
+            background-size: 0.83rem 0.83rem;
+        }
+
+        .aui-searchbar .aui-searchbar-input .search_shu {
+            position: absolute;
+            right: 3rem;
+            top: 0.4rem;
+            width: 1px;
+            height: 1rem;
+            background: #C4C4C4;
+        }
+        /*待处理选择*/
+
+        .filterAndDownload {
+            background: #fff;
+            width: 100%;
+            padding: 0 1rem;
+            margin: 0.3rem auto;
+        }
+
+        .filterAndDownload-mian {
+            display: flex;
+            width: 100%;
+            flex-flow: row;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            padding-left: 0.3rem;
+            padding-right: 0rem;
+        }
+
+        .filterAndDownload-mian li {
+            flex: 1;
+        }
+
+        .filterAndDownload-mian li:nth-child(2) {
+            text-align: left;
+        }
+
+        .filterAndDownload-mian li:nth-child(3) {
+            /*text-align: right;
+        color: #167CFB;*/
+            position: relative;
+            border-radius: 0.5rem;
+        }
+
+        .filterAndDownload-mian li:nth-child(3)>div {
+            position: absolute;
+            text-align: center;
+            ;
+            color: #FFF;
+            /*background: #167CFB;*/
+            border-radius: 0.5rem;
+            background: #167CFB;
+            width: 80%;
+            right: 0.3rem;
+            top: -0.2rem;
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+        }
+
+        .filterAndDownload-mian li:nth-child(3)>div:active {
+            background: #039be5;
+        }
+        /*.filterAndDownload-mian li:nth-child(1){
+        flex: 20%!important;
+      }
+
+      .filterAndDownload-mian li:nth-child(3){
+        flex: 40%!important;
+      }
+      .filterAndDownload-mian li:nth-child(4){
+        flex: 30%!important;
+      }*/
+        /*列表*/
+
+        .aui-list .aui-list-item {
+            border-bottom: none;
+        }
+
+        .content-mian {
+            background: #f3f3f3;
+            /*overflow: hidden;*/
+        }
+
+        .content-mian .clearData {
+            width: 100%;
+            height: 20;
+            background: pink;
+        }
+
+        .content-mian .clearData img {
+            width: 100%;
+        }
+
+        .content-mian .aui-list-item {
+            background: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .content-mian .aui-card-list:active {
+            background: #f3f3f3;
+        }
+
+        @media screen and (-webkit-min-device-pixel-ratio: 1.5) .aui-border-b {
+            background-image: none;
+            /*background-image: -webkit-linear-gradient(90deg,#dddddd,#dddddd 50%,transparent 50%); */
+        }
+
+        .aui-list-item-arrow:before {
+            border-color: #A2A2A2 !important;
+        }
+
+        .aui-list-item-arrow.change:before {
+            border-color: #A2A2A2 !important;
+            right: 0.6rem !important;
+            margin-top: -0.3rem !important;
+        }
+
+        .aui-list:after {
+            border: none !important;
+        }
+
+        .aui-list-buttons {
+            padding-left: 0 !important;
+            padding: 0.55rem 1.85rem !important;
+            display: flex !important;
+        }
+
+        .aui-card-list {
+            padding: 0rem 0 0rem 1.3rem;
+            background: #fff;
+            width: 100%;
+            margin-bottom: 0rem!important;
+            /*box-sizing: border-box;*/
+            /*border-radius: 0.6rem;
+          box-shadow: 0rem 0.3rem 0.5rem 0rem rgba(227, 227, 227, 0.68);*/
+        }
+
+        .style-circle {
+            width: 0.3rem;
+            height: 0.3rem;
+            background: #FFBF03;
+            display: inline-block;
+            position: absolute;
+            border-radius: 0.5rem;
+            top: 0.95rem;
+            right: 3.5rem;
+        }
+
+        .aui-card-list-content-padded {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .approver-color {
+            position: absolute;
+            right: 0.6rem;
+            top: 2.5rem;
+            color: #FFBF03;
+        }
+
+        .aui-list-item-text:first-child {
+            color: rgba(28, 28, 28, 1);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .aui-list-item-text {
+            width: 80%;
+            color: rgba(141, 141, 141, 1);
+            font-size: 0.8rem;
+        }
+
+        .aui-list-item-text:nth-child(5) {
+            position: relative;
+        }
+
+        .aui-list-item-text:nth-child(5) img {
+            top: 0.2rem;
+            width: 0.6rem;
+            position: absolute;
+        }
+
+        .aui-list-item-text:nth-child(5) span {
+            margin-left: 1rem;
+        }
+
+        .style-color {
+            color: #7164F9;
+        }
+
+        .aui-list {
+            border: none;
+        }
+
+        .aui-card-list-header,
+        .aui-card-list-footer {
+            padding: 0;
+        }
+
+        .aui-content {
+            height: 100%;
+            /*overflow: auto;
+        -webkit-overflow-scrolling: touch;*/
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode data-action="back">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">张贴列表</div>
+            <div class="aui-pull-right aui-btn" tapmode data-action="CodeScanning">
+                <img src="../image/MeterManage/Posting/saoma.png" alt="">
+            </div>
+        </header>
+
+        <div class="aui-tab">
+            <div class="aui-tab-item checkbok" id="change1" onclick="dianji(this);" value="{{value.CBCH}}">
+                <div class="number1" id="number1">0</div>
+                <div class="title1">
+                    <img src="../image/MeterManage/Posting/daizhangtie.png" alt="" style="width:0.8rem;padding-left:0.2rem"> &nbsp;&nbsp;待张贴
+                </div>
+            </div>
+            <div class="aui-tab-item" id="change4" onclick="saveOld(this);" value="{{value.CBCH}}">
+                <div class="number3" id="number4">0</div>
+                <div class="title3">
+                    <img src="../image/MeterManage/Posting/yitijiao.png" alt="" style="width:0.8rem;padding-left:0.2rem"> &nbsp;&nbsp;已保存
+                </div>
+            </div>
+            <div class="aui-tab-item" id="change2" onclick="SubmitOld(this);" value="{{value.CBCH}}">
+                <div class="number2" id="number2">0</div>
+                <div class="title2">
+                    <img src="../image/MeterManage/Posting/ytj.png" alt="" style="width:0.8rem;padding-left:0.2rem"> &nbsp;&nbsp;已提交
+                </div>
+            </div>
+            <div class="aui-tab-item checkbok" id="dairen" onclick="dairen(this);" value="{{value.CBCH}}">
+                <div class="number1" id="number3">0</div>
+                <div class="title1">
+                    <img src="../image/MeterManage/Posting/daizhangtie.png" alt="" style="width:0.8rem;padding-left:0.2rem"> &nbsp;&nbsp;待认领
+                </div>
+            </div>
+        </div>
+        <div class="aui-searchbar" id="search">
+            <div class="aui-searchbar-input aui-border-radius">
+
+                <input type="search" placeholder="请输入户号搜索" id="search-input" tapmode data-oninput="focusing">
+                <div class="aui-searchbar-clear-btn">
+                    <i class="shu aui-iconfont aui-icon-close"></i>
+                </div>
+                <div class="search_shanchu aui-hide" id="search_shanchu" tapmode data-action="delete"></div>
+                <div class="search_shu"></div>
+                <div class="search_suer" tapmode data-action="search"></div>
+            </div>
+            <div class="aui-searchbar-btn">取消</div>
+        </div>
+        <div class="filterAndDownload">
+            <ul class="filterAndDownload-mian">
+                <li>张贴总数:<span id="postingNumer">0</span></li>
+                <li id="postingData" style="color:rgba(170, 170, 170, 1);font-size:0.8rem;line-height:1.3rem;">(0000/00/00)</li>
+                <li id="ClaimTask" class="aui-hide">
+                    <div tapmode data-action="ClaimTask">认 领</div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="main" class="flex-con">
+            <div class="aui-content">
+                <ul class="content-mian" id="dataListUser">
+                  <!-- <li class="aui-list-item aui-list-item-middle" tapmode onclick="openDetails(this)" parse="{{value}}" parsedata="{{value.Status}}">
+                      <div class="aui-card-list">
+                          <div class="aui-card-list-content-padded">
+                              <div class="aui-list-item-text">
+                                  CustomerCode
+                              </div>
+                              <div class="aui-list-item-text">
+                                  工单号:value.TaskNo
+                              </div>
+                              <div class="aui-list-item-text">
+                                  户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名:value.CustomerName
+                              </div>
+                              <div class="aui-list-item-text aui-ellipsis-1">
+                                  欠费金额:{{value.ArrearMoney}}
+                              </div>
+                              <div class="aui-list-item-text">
+                                  <img src="../image/MeterManage/Posting/dingwei.png" alt="">
+                                  <span>{{value.Address}}</span>
+                              </div>
+                              <span class="approver-color aui-padded-r-15" style="color: rgba(19, 201, 122, 1);">已保存</span>
+                          </div>
+
+                      </div>
+                  </li> -->
+
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footer">
+
+
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../script/meterManageLocalData.js"></script>
+<script type="text/javascript" src="../../public/script/hammer.min.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/template" id="Booksdata">
+    {{each list value i}}
+    <li class="aui-list-item aui-list-item-middle" tapmode onclick="openDetails(this)" parse="{{value}}" parsedata="{{value.Status}}">
+        <div class="aui-card-list">
+            <div class="aui-card-list-content-padded">
+                <div class="aui-list-item-text">
+                    {{value.CustomerCode}}
+                </div>
+                <div class="aui-list-item-text">
+                    工单号:{{value.TaskNo}}
+                </div>
+                <div class="aui-list-item-text">
+                    户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名:{{value.CustomerName}}
+                </div>
+                {{if value.ArrearMoney==""||value.ArrearMoney==" "}}
+                <div>欠费金额 0</div>
+                {{else}}
+                <div class="aui-list-item-text aui-ellipsis-1">
+                    欠费金额:{{value.ArrearMoney}}
+                </div>
+                {{/if}}
+
+                <div class="aui-list-item-text">
+                    <img src="../image/MeterManage/Posting/dingwei.png" alt="">
+                    <span>{{value.Address}}</span>
+                </div>
+                {{if value.NotSave=='1'}}
+                <span class="approver-color aui-padded-r-15" style="color: rgba(19, 201, 122, 1);">已保存</span> {{else if value.AuditTimes=='0'}}
+                <span class="approver-color aui-padded-r-15">{{value.StatusName}}</span> {{else}}
+                <span class="approver-color aui-padded-r-15" style="color:red">{{value.StatusName}}</span> {{/if}}
+            </div>
+        </div>
+    </li>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    var headerH, db, PostingId, PostingName, userName;
+    var WorkTypeId, WorkTypeCode, WorkTypeSource; //任务认领传过来的任务id ,任务的类型id，任务的类型名字
+    var openPage //0代表没认领在线打开处理页面，1代表离线打开，传到处理页面识别是否可以编辑提交
+    apiready = function() {
+        userName = $api.getStorage('loginData').userName;
+        db = api.require("db");
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+
+                changeFontSize();
+            }
+        });
+        // api.setWinAttr({
+        //     bounces: false
+        // });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        // center = $api.offset($api.byId('center')).h;
+        $('#center').css('margin-top', '' + headerH + 'px');
+        WorkTypeId = api.pageParam.data.taskCode;
+        WorkTypeCode = api.pageParam.data.id;
+        WorkTypeSource = '营销系统';
+        api.addEventListener({
+            name: 'SuccessEvent'
+        }, function(ret, err) {
+            if (ret) {
+                $("#dataListUser").empty();
+                DloadPostingData()
+                    //  alert( JSON.stringify( ret ) );
+            } else {
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+        api.addEventListener({
+            name: 'LastEvent'
+        }, function(ret, err) {
+            if (ret) {
+                $("#dataListUser").empty();
+                $("#number2").text(ret.value.key1)
+                $("#postingNumer").text(ret.value.key1)
+                    // $("#postingNumer").text()
+                $('#postingData').text("(" + ret.value.key2.slice(0, 10) + ")")
+            } else {
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+
+        // api.pageParam.type="handle"//处理页面跳的
+        // api.pageParam.type="claimTask"//认领页面跳的
+
+        if (api.pageParam.type != "handle") {
+            // 1、如果从认领页面跳的显示认领，在线加载不可处理
+
+            $('#ClaimTask').removeClass('aui-hide'); //显示认领按钮
+            openPage = 0 //没认领
+            onlineTask()
+        } else {
+            openPage = 1 //认领了
+            $('#postingData').css("text-align", "right")
+            $('#dairen').addClass('aui-hide')
+            PostingList()
+        }
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            if (ret) {
+                api.closeWin();
+            } else {
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+        // 监听任务是否结束如果结束刷新列表此时没有待处理项
+        api.addEventListener({
+            name: 'reFlashPostingTask'
+        }, function(ret, err) {
+            if (ret) {
+                $("#dataListUser").empty();
+                PostingList()
+            } else {
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+        api.addEventListener({
+            name: 'reFlashPosting'
+        }, function(ret, err) {
+            if (ret) {
+                $("#dataListUser").empty();
+                PostingList();
+                SubmitCha()
+            } else {
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+        api.addEventListener({
+            name: 'ReflashSave'
+        }, function(ret, err) {
+            $("#dataListUser").empty();
+            if ($("#number4").hasClass('NotOclick')) {
+                console.log("#NotOclick")
+                saveDataybc();
+            } else {
+                dianjiData()
+            }
+        });
+
+   stopTouchendPropagationAfterScroll();
+    };
+
+
+
+    var actionList = {
+        'back': function() {
+            api.closeWin();
+        },
+        'search': function() {
+            serchdata()
+
+        },
+        'delete': function() {
+            $('#search-input').val('')
+            $("#dataListUser").empty();
+            $('#search_shanchu').addClass("aui-hide")
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: 'SELECT * FROM POSTING_LIST where TaskNo = "' + WorkTypeId + '" AND NotUploader ="0" AND userName = "' + userName + '"'
+            }, function(ret, err) {
+                if (ret.status) {
+                    if (ret.data.length > 0) {
+                        DloadPostingData() //点删除，待处理有展示待处理
+                    } else {
+                        if (openPage == 0) {
+                            onlineTask() //没认领删除展示没认领数据
+                        } else {
+                            SubmitCha() //展示提交的数据
+                        }
+                    }
+                } else {
+
+
+
+                }
+            });
+            // DloadPostingData()
+        },
+        'CodeScanning': function() { //扫描
+            var userCode
+            var FNScanner = api.require('FNScanner');
+            FNScanner.open({
+                autorotation: true
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.eventType == 'success') {
+                        userCode = ret.content;
+                        $("#dataListUser").empty();
+                        if (api.connectionType != "none") {
+                            var body = {
+                                // TaskNo:WorkTypeId, //搜索全部  2020-05-24 zlx
+                                CustomerCode: userCode,
+                                Status:"7"
+                            }
+                            fnPost('MMS002', body, 'application/json', false, false, function(ret, err) {
+                                api.hideProgress();
+
+                                if (ret && ret.Status == '0') {
+                                    var dataList = JSON.parse(ret.Data);
+                                    handleAnnotData(dataList)
+                                } else {
+                                    api.toast({
+                                        msg: ret.Message,
+                                        duration: 2000,
+                                        location: 'top'
+                                    });
+                                }
+
+                            })
+
+                        } else {
+                            db.selectSql({
+                                name: 'Wsdatabase',
+                                sql: 'SELECT * FROM POSTING_LIST where CustomerCode = "' + userCode + '" AND NotUploader ="0" AND userName = "' + userName + '"'
+                            }, function(ret, err) {
+                                if (ret.status) {
+                                    if (ret.data == '') {
+                                        api.toast({
+                                            msg: '无待处理项',
+                                            duration: 2000,
+                                            location: 'middle'
+                                        });
+
+                                    } else {
+                                        var dataList = ret.data
+                                        handleAnnotData(dataList)
+                                    }
+
+                                } else {
+                                    // alert( JSON.stringify( err ) );
+                                }
+                            });
+                        }
+
+                    } else {
+                        // alert(11)
+                    }
+                } else {
+                    api.toast({
+                        msg: ret.Message,
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+            });
+        },
+        'ClaimTask': function() {
+            onlineClaimTask()
+        }
+
+
+    }
+    var oninputList = {
+        'focusing': function() {
+            $('#search_shanchu').removeClass("aui-hide")
+            if ($('#search-input').val() == '') {
+                $('#search_shanchu').addClass("aui-hide")
+                $("#dataListUser").empty();
+                db.selectSql({
+                    name: 'Wsdatabase',
+                    sql: 'SELECT * FROM POSTING_LIST where TaskNo = "' + WorkTypeId + '" AND NotUploader ="0" AND userName = "' + userName + '"'
+                }, function(ret, err) {
+                    if (ret.status) {
+                        if (ret.data.length > 0) {
+                            DloadPostingData() //点删除，待处理有展示待处理
+                        } else {
+                            if (openPage == 0) {
+                                onlineTask() //没认领删除展示没认领数据
+                            } else {
+                                SubmitCha() //展示提交的数据
+                            }
+                        }
+                    } else {
+
+
+
+                    }
+                });
+
+            }
+        }
+    }
+    $(".keyword").on('keypress', function(e) {
+            var keycode = e.keyCode;
+            var searChname = $(this).val();
+            if (keycode == '13') {
+                e.preventDefault();
+                serchdata()
+                    // GetAnnotData('','','','',searChname)
+            }
+        })
+        // 待处理选择
+    function dianji(that) {
+        $("#number1").addClass("NotOclick")
+        $("#number4").removeClass("NotOclick")
+        $("#dataListUser").empty();
+        dianjiData()
+    }
+    function dianjiData(){
+      db.selectSql({
+          name: 'Wsdatabase',
+          sql: 'SELECT * FROM POSTING_LIST where Status ="7" and TaskNo = "' + WorkTypeId + '" AND NotUploader ="0" AND userName = "' + userName + '"'
+      }, function(ret, err) {
+          if (ret.status) {
+            var dataList = ret.data
+
+              var saveData = [];
+
+              for (var i = 0; i < dataList.length; i++) {
+                  if (dataList[i].NotSave == "1") {
+                      saveData.push(dataList[i])
+                  }
+              }
+              var NotSaveData = [];
+              for (var i = 0; i < dataList.length; i++) {
+                  if (dataList[i].NotSave == "0") {
+                      NotSaveData.push(dataList[i])
+                  }
+              }
+              $("#number4").text(saveData.length)
+              if (NotSaveData.length >0) {
+
+                $("#number1").text(NotSaveData.length)
+                    // var dataTime = dataList[0].DispatchTime;
+                    // $('#postingData').text("("+dataTime.slice(0,10)+")")
+                handleAnnotData(NotSaveData)
+              } else {
+                api.toast({
+                    msg: '无待处理列表',
+                    duration: 2000,
+                    location: 'middle'
+                });
+                var html = '<div style="background:#fff;color:#ccc;text-align:center;line-height:2rem;width:100%">没有待处理数据</div>'
+                $("#dataListUser").html(html)
+                $("#number1").text("0")
+
+              }
+
+
+
+          } else {
+              // alert( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    // 没有认领的时候在线加载处理列表
+    function onlineTask() {
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_LIST where Status ="7" and TaskNo = "' + WorkTypeId + '" AND NotUploader ="0" AND userName = "' + userName + '"'
+        }, function(ret, err) {
+            if (ret.status) {
+              var dataList = ret.data
+
+                var saveData = [];
+
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].NotSave == "1") {
+                        saveData.push(dataList[i])
+                    }
+                }
+                var NotSaveData = [];
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].NotSave == "0") {
+                        NotSaveData.push(dataList[i])
+                    }
+                }
+                $("#number4").text(saveData.length)
+                $("#number1").text(NotSaveData.length)
+            } else {
+                // alert( JSON.stringify( err ) );
+            }
+        });
+        var body = {
+            TaskNo: WorkTypeId,
+        }
+        fnPost('MMS002', body, 'application/json', false, false, function(ret, err) {
+            api.hideProgress();
+            if (ret && ret.Status == '0') {
+                var dataList = JSON.parse(ret.Data);
+                var dataBaseDC = []; //待处理
+                var dataBaseYC = []; //已提交
+                var dataBaseCL = []; //处理中
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status == "1") {
+                        dataBaseDC.push(dataList[i])
+                    }
+                }
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status == "7") {
+                        dataBaseCL.push(dataList[i])
+                    }
+                }
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status != "7" && dataList[i].Status != "0" && dataList[i].Status != "1") {
+                        dataBaseYC.push(dataList[i])
+                    }
+                }
+                // $("#number1").text(dataBaseCL.length)
+                $("#number2").text(dataBaseYC.length)
+                $("#number3").text(dataBaseDC.length)
+                $("#postingNumer").text(dataBaseCL.length + dataBaseDC.length + dataBaseYC.length);
+                var dataTime = dataList[0].DispatchTime;
+                $('#postingData').text("(" + dataTime.slice(0, 10) + ")")
+                handleAnnotData(dataBaseDC)
+            } else {
+                api.toast({
+                    msg: ret.Message,
+                    duration: 2000,
+                    location: 'middle'
+                });
+
+
+            }
+
+        })
+
+
+    }
+    // 在线认领任务
+    function onlineClaimTask() {
+        api.showProgress({
+            style: 'default',
+            animationType: 'fade',
+            title: '努力加载中...',
+            modal: true
+        });
+
+        var bMap = api.require("bMap");
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                var lon = ret.lon;
+                var lat = ret.lat;
+                var body = {
+                    // alert(WorkTypeId)
+                    body: JSON.stringify({
+                        taskCode: WorkTypeId, // 云平台传的taskCode 修改id 为 taskCode 20200807 15:24 zxf
+                        lng: lon,
+                        lat: lat,
+                        account: $api.getStorage("bwUserName"),
+                        passWord: $api.getStorage("bwPassWord")
+                    })
+                };
+                api.ajax({
+                    url: 'http://' + $api.getStorage('apiUrl') + '/api/services/app/WorkFlow/ConfirmTaskById',
+                    method: 'post',
+                    dataType: "json",
+                    returnAll: false,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": $api.getStorage('loginInfo')
+                    },
+                    data: body
+                }, function(ret, err) {
+                    api.hideProgress();
+                    if (ret) {
+                        if (ret.success) {
+                            $('#postingData').css("text-align", "right")
+                            $('#ClaimTask').addClass('aui-hide');
+                            $('#dairen').addClass('aui-hide')
+                            api.toast({
+                                msg: '任务认领成功',
+                                duration: 2000,
+                                location: 'middle'
+                            });
+                            api.sendEvent({
+                                name: 'refreshCloudClaim',
+                                extra: {
+                                    key1: 'value1',
+                                    key2: 'value2'
+                                }
+                            });
+                             updateMyTaskSheets(ret.result); //添加数据到云平台我的任务本地数据 2020810 11:08 zxf
+                            // 认领成功下载数据
+                            $("#dataListUser").empty();
+                            openPage = 1 //认领了变成1
+                            PostingList()
+                        }else{
+                          if(ret.error!=''){
+                            api.toast({
+                                msg: ret.error.message,
+                                duration: 2000,
+                                location: 'middle'
+                            });
+                          }
+                        }
+                    } else {
+                        // console.log( JSON.stringify( err ) );
+                    }
+                });
+
+
+
+
+            } else {
+                // alert(err.code);
+            }
+        });
+
+    }
+    // 已经提交
+    function SubmitOld(that) {
+        $("#dataListUser").empty();
+        SubmitCha()
+
+    }
+
+    function SubmitCha() {
+        var body = {
+            TaskNo: WorkTypeId,
+        }
+        fnPost('MMS002', body, 'application/json', false, false, function(ret, err) {
+            api.hideProgress();
+            if (ret && ret.Status == '0') {
+                var dataList = JSON.parse(ret.Data);
+                var dataBaseDC = []; //待处理
+                var dataBaseYC = []; //已提交
+                var dataBaseCL = []; //处理中
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status == "1") {
+                        dataBaseDC.push(dataList[i])
+                    }
+                }
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status == "7") {
+                        dataBaseCL.push(dataList[i])
+                    }
+                }
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status != "7" && dataList[i].Status != "0" && dataList[i].Status != "1") {
+                        dataBaseYC.push(dataList[i])
+                    }
+                }
+                var Yzhongzhi = [] //
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status == "3") {
+                        Yzhongzhi.push(dataList[i])
+                    }
+                }
+                for (var i = 0; i < Yzhongzhi.length; i++) {
+                    var DeleteData = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'DELETE FROM POSTING_LIST where Id = "' + Yzhongzhi[i].Id + '" AND userName = "' + userName + '"'
+                    });
+                }
+                // $("#number1").text(dataBaseCL.length)
+                $("#number2").text(dataBaseYC.length)
+                $("#number3").text(dataBaseDC.length)
+                if(openPage==0){
+                  $("#postingNumer").text(dataBaseCL.length + dataBaseDC.length + dataBaseYC.length);
+                }else {
+                  $("#postingNumer").text(dataBaseCL.length + dataBaseYC.length);
+                }
+
+                var dataTime = dataList[0].DispatchTime;
+                $('#postingData').text("(" + dataTime.slice(0, 10) + ")")
+                handleAnnotData(dataBaseYC)
+                if (dataBaseYC.length > 0) {
+
+                } else {
+                  var html = '<div style="background:#fff;color:#ccc;text-align:center;line-height:2rem;width:100%">没有已提交数据</div>'
+                  $("#dataListUser").html(html)
+                    api.toast({
+                        msg: '无相关数据',
+                        duration: 1000,
+                        location: 'middle'
+                    });
+
+                }
+            } else {
+                api.toast({
+                    msg: ret.Message,
+                    duration: 2000,
+                    location: 'middle'
+                });
+
+
+            }
+
+        })
+    }
+
+    function saveOld(that) {
+        $("#number4").addClass("NotOclick");
+        $("#number1").removeClass("NotOclick")
+        $("#dataListUser").empty();
+        saveDataybc()
+
+    }
+
+    function saveDataybc() {
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_LIST where Status ="7" AND NotUploader ="0" and TaskNo = "' + WorkTypeId + '" AND userName = "' + userName + '"'
+        }, function(ret, err) {
+            var saveData = [];
+            for (var i = 0; i < ret.data.length; i++) {
+                if (ret.data[i].NotSave == "1") {
+                    saveData.push(ret.data[i]);
+                }
+            }
+            var NotSaveData = [];
+            for (var i = 0; i < ret.data.length; i++) {
+                if (ret.data[i].NotSave == "0") {
+                    NotSaveData.push(ret.data[i])
+                }
+            }
+            $("#number1").text(NotSaveData.length)
+            console.log(saveData.length)
+            if (saveData.length>0) {
+
+                $("#number4").text(saveData.length)
+                    // var dataTime = dataList[0].DispatchTime;
+                    // $('#postingData').text("("+dataTime.slice(0,10)+")")
+                handleAnnotData(saveData)
+
+            } else {
+              api.toast({
+                  msg: '无已保存列表',
+                  duration: 2000,
+                  location: 'middle'
+              });
+              var html = '<div style="background:#fff;color:#ccc;text-align:center;line-height:2rem;width:100%">没有已保存数据</div>'
+              $("#dataListUser").html(html)
+              $("#number4").text("0")
+            }
+
+        })
+    }
+
+    function dairen(that) {
+        $("#dataListUser").empty();
+        var body = {
+            TaskNo: WorkTypeId,
+        }
+        fnPost('MMS002', body, 'application/json', false, false, function(ret, err) {
+            api.hideProgress();
+            if (ret && ret.Status == '0') {
+                var dataList = JSON.parse(ret.Data);
+                var dataBaseDC = []; //待处理
+                var dataBaseYC = []; //已提交
+                var dataBaseCL = []; //处理中
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status == "1") {
+                        dataBaseDC.push(dataList[i])
+                    }
+                }
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status == "7") {
+                        dataBaseCL.push(dataList[i])
+                    }
+                }
+                for (var i = 0; i < dataList.length; i++) {
+                    if (dataList[i].Status != "7" && dataList[i].Status != "0" && dataList[i].Status != "1") {
+                        dataBaseYC.push(dataList[i])
+                    }
+                }
+
+
+                // $("#number1").text(dataBaseCL.length)
+                $("#number2").text(dataBaseYC.length)
+                $("#postingNumer").text(dataBaseCL.length + dataBaseDC.length + dataBaseYC.length);
+                var dataTime = dataList[0].DispatchTime;
+                $('#postingData').text("(" + dataTime.slice(0, 10) + ")")
+                handleAnnotData(dataBaseDC)
+                if (dataBaseDC.length > 0) {
+
+                } else {
+                    var html = '<div style="background:#fff;color:#ccc;text-align:center;line-height:2rem;width:100%">没有待张贴数据</div>'
+                    $("#dataListUser").html(html)
+                    api.toast({
+                        msg: '无相关数据',
+                        duration: 1000,
+                        location: 'middle'
+                    });
+
+                }
+            } else {
+                api.toast({
+                    msg: ret.Message,
+                    duration: 2000,
+                    location: 'middle'
+                });
+
+
+            }
+
+        })
+    }
+    // 待认领
+    function serchdata() {
+        var CodeNumer = $('#search-input').val()
+        if (CodeNumer == "") {
+            api.toast({
+                msg: '请输入户号',
+                duration: 2000,
+                location: 'top'
+            });
+
+        } else {
+            $("#dataListUser").empty();
+            if (api.connectionType != "none") {
+                var body = {
+                    // TaskNo:WorkTypeId,  //搜索全部  2020-05-24 zlx
+                    CustomerCode: CodeNumer,
+                    Status:"7"
+                }
+                fnPost('MMS002', body, 'application/json', false, false, function(ret, err) {
+                    api.hideProgress();
+                    if (ret && ret.Status == '0') {
+                        var dataList = JSON.parse(ret.Data);
+                        handleAnnotData(dataList)
+                    } else {
+                        api.toast({
+                            msg: ret.Message,
+                            duration: 2000,
+                            location: 'middle'
+                        });
+                    }
+
+                })
+
+            } else {
+                db.selectSql({
+                    name: 'Wsdatabase',
+                    sql: 'SELECT * FROM POSTING_LIST where CustomerCode = "' + CodeNumer + '" AND NotUploader ="0" AND userName = "' + userName + '"'
+                }, function(ret, err) {
+                    if (ret.status) {
+                        if (ret.data == '') {
+                            api.toast({
+                                msg: '无待处理列表',
+                                duration: 2000,
+                                location: 'middle'
+                            });
+
+                        } else {
+                            var dataList = ret.data
+                            handleAnnotData(dataList)
+                        }
+
+                    } else {
+                        // alert( JSON.stringify( err ) );
+                    }
+                });
+            }
+            // db.selectSql({
+            //     name: 'Wsdatabase',
+            //     sql: 'SELECT * FROM POSTING_LIST where CustomerName LIKE "%' + CodeNumer + '%"'
+            // }, function(ret, err){
+            //     if( ret.status ){
+            //         if(ret.data == ''){
+            //           api.toast({
+            //               msg: '无相关数据',
+            //               duration: 2000,
+            //               location: 'middle'
+            //           });
+            //
+            //         }else {
+            //           var dataList = ret.data
+            //           handleAnnotData(dataList)
+            //         }
+            //
+            //     }else{
+            //         // alert( JSON.stringify( err ) );
+            //     }
+            // });
+
+        }
+    }
+
+    function handleAnnotData(dataList) {
+        var list = {
+            list: dataList
+        }
+        var str = template('Booksdata', list)
+        $api.append($api.byId('dataListUser'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+    // 第一次进去查询本地是否有相关认领任务的数据，如果没有就下载然后加载出来
+    // 验证是否有网，有网情况下每次访问接口将本地已有数据保存，没有保存图片数据的删除重新下载
+    function PostingList() {
+
+        var resultSelect = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: 'SELECT * FROM POSTING_LIST where Status ="7" AND NotUploader ="0" and TaskNo = "' + WorkTypeId + '" AND userName = "' + userName + '"'
+        });
+        if (resultSelect.status) {
+          if (resultSelect.data.length > 0) {
+            var allArr = resultSelect.data;
+            for (let i = 0; i < allArr.length; i++) {
+              for (let j = i + 1; j < allArr.length; j++) {
+                if (allArr[i].Id == allArr[j].Id && allArr[i].CustomerCode == allArr[j].CustomerCode && allArr[i]._id != allArr[j]._id) {
+                  var deleteRet = db.executeSqlSync({
+                      name: 'Wsdatabase',
+                      sql: "DELETE FROM POSTING_LIST WHERE _id = '"+allArr[j]._id+"'"
+                  });
+                  allArr.splice(j,1);
+                  j--;
+                  console.log(JSON.stringify(deleteRet));
+                  break;
+                }
+              }
+            }
+          }
+        }
+        console.log(1);
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_LIST where Status ="7" AND NotUploader ="0" and TaskNo = "' + WorkTypeId + '" AND userName = "' + userName + '"'
+        }, function(ret, err) {
+            if (ret.status) {
+                if (ret.data.length > 0) {
+                    var dataBase = ret.data;
+                    // 1查询待处理
+                    // 判断是否有网
+                    if (api.connectionType != 'none') {
+
+                        var dataBaseDC = []; //将离线待处理的循环处理出来
+                        for (var i = 0; i < dataBase.length; i++) {
+                            if (dataBase[i].Status == "7") {
+                                dataBaseDC.push(dataBase[i])
+                            }
+                        }
+                        console.log(JSON.stringify(dataBaseDC.length))
+                        var body = {
+                            TaskNo: WorkTypeId
+                        }
+                        fnPost('MMS002', body, 'application/json', false, false, function(ret, err) {
+                            api.hideProgress();
+                            if (ret && ret.Status == '0') {
+
+
+                                var AllData = JSON.parse(ret.Data)
+                                    // 已提交
+                                var dataBaseYC = []; //已提交
+                                for (var j = 0; j < AllData.length; j++) {
+                                    if (AllData[j].Status != "7" && AllData[j].Status != "0" && AllData[j].Status != "1") {
+                                        dataBaseYC.push(AllData[j])
+                                    }
+                                }
+
+
+                                var datalist = [] //将在线待处理的数据将其循环出来
+                                for (var i = 0; i < AllData.length; i++) {
+                                    if (AllData[i].Status == "7") {
+                                        datalist.push(AllData[i])
+                                        if (AllData[i].CustomerCode == "0101018598") {
+                                            console.log(JSON.stringify(AllData[i]))
+                                        }
+                                    }
+                                }
+                                // alert(111)
+
+                                // 循环在线已终止
+                                var Yzhongzhi = [] //
+                                for (var i = 0; i < AllData.length; i++) {
+                                    if (AllData[i].Status == "3") {
+                                        Yzhongzhi.push(AllData[i])
+                                    }
+                                }
+                                console.log(JSON.stringify(Yzhongzhi))
+                                for (var i = 0; i < Yzhongzhi.length; i++) {
+                                    var DeleteData = db.executeSqlSync({
+                                        name: 'Wsdatabase',
+                                        sql: 'DELETE FROM POSTING_LIST where Id = "' + Yzhongzhi[i].Id + '" AND userName = "' + userName + '"'
+                                    }); //
+                                    console.log(JSON.stringify(DeleteData))
+                                }
+
+                                // 每次刷新改变张贴总数
+                                var AllDataNumer = datalist.length + dataBaseYC.length;
+                                var UpdateList = db.executeSqlSync({
+                                    name: 'Wsdatabase',
+                                    sql: 'UPDATE POSTING_LIST SET NotSubmit="' + AllDataNumer + '"  WHERE TaskNo = "' + WorkTypeId + '" AND userName = "' + userName + '"'
+                                });
+
+
+                                // 判断在线待处理和离线待处理长度是否一样不一样重新下载
+                                if (datalist.length == dataBaseDC.length) {
+                                    DloadPostingData()
+                                    var ytjret = db.selectSqlSync({
+                                        name: 'Wsdatabase',
+                                        sql: 'SELECT * FROM POSTING_LIST where Status ="7" AND NotUploader ="0" and TaskNo = "' + WorkTypeId + '" AND userName = "' + userName + '"'
+                                    });
+                                    if (ytjret.data.length > 0) {
+
+                                    } else {
+                                        $("#number2").text(dataBaseYC.length)
+                                    }
+                                } else {
+                                    // 将离线在线数据进行比较将不同的数据提取出来
+                                    // 1、数据比较定义一个比较函数
+                                    // 判读是否有新的数据
+                                    var Booksdata = [];
+                                    for (var i = 0; i < datalist.length; i++) {
+                                        var float = true;
+                                        for (var j = 0; j < dataBaseDC.length; j++) {
+
+                                            if (datalist[i].CustomerCode == dataBaseDC[j].CustomerCode) {
+                                                float = false;
+                                                break;
+                                            } else {
+                                                float = true; //不相等单出去
+
+                                            }
+
+                                        }
+                                        if (float) {
+                                            Booksdata.push(datalist[i])
+                                        }
+                                    }
+                                    console.log(JSON.stringify(Booksdata.length))
+                                        // Booksdata是比较后的数组将其插入
+                                    for (var i in Booksdata) {
+                                        var sql = 'INSERT INTO POSTING_LIST(Id, Source, Code, Name, StatusName, Status, CustomerCode, CustomerName, Address, Location,' +
+                                            'Nature,' +
+                                            'SubNature,' +
+                                            'Caliber,' +
+                                            'Nameplate,' +
+                                            'MeterType,' +
+                                            'StampNo,' +
+                                            'LastScale,' +
+                                            'BeginScale,' +
+                                            'EndScale,' +
+                                            'Amount,' +
+                                            'ArrearMoney,' +
+                                            'Description,' +
+                                            'Remark,' +
+                                            'RemarkText,' +
+                                            'OperatorId,' +
+                                            'OperatedTime,' +
+                                            'TaskNo,' +
+                                            'DispatchTime,' +
+                                            'RecordBeginScale,' +
+                                            'RecordEndScale,' +
+                                            'RecordAmount,' +
+                                            'RecordTypdId,' +
+                                            'RecordTypdName,' +
+                                            'LastReadScale,' +
+                                            'AuditReadScale,' +
+                                            'AuditTime,' +
+                                            'AuditStatus,' +
+                                            'HandleTime,' +
+                                            'AuditTimes,' +
+                                            'UseTime,' +
+                                            'NotSave,' +
+                                            'Files,' +
+                                            'TaskId,' +
+                                            'StatusUser,' +
+                                            'NotUploader,' +
+                                            'userName,' +
+                                            'NotSubmit) VALUES ("' + Booksdata[i].Id + '",' +
+                                            '"' + Booksdata[i].Source + '",' +
+                                            '"' + Booksdata[i].Code + '",' +
+                                            '"' + Booksdata[i].Name + '",' +
+                                            '"' + Booksdata[i].StatusName + '",' +
+                                            '"' + Booksdata[i].Status + '",' +
+                                            '"' + Booksdata[i].CustomerCode + '",' +
+                                            '"' + Booksdata[i].CustomerName + '",' +
+                                            '"' + Booksdata[i].Address + '",' +
+                                            '"' + Booksdata[i].Location + '",' +
+                                            '"' + Booksdata[i].Nature + '",' +
+                                            '"' + Booksdata[i].SubNature + '",' +
+                                            '"' + Booksdata[i].Caliber + '",' +
+                                            '"' + Booksdata[i].Nameplate + '",' +
+                                            '"' + Booksdata[i].MeterType + '",' +
+                                            '"' + Booksdata[i].StampNo + '",' +
+                                            '"' + Booksdata[i].LastScale + '",' +
+                                            '"' + Booksdata[i].BeginScale + '",' +
+                                            '"' + Booksdata[i].EndScale + '",' +
+                                            '"' + Booksdata[i].Amount + '",' +
+                                            '"' + Booksdata[i].ArrearMoney + '",' +
+                                            '"' + Booksdata[i].Description + '",' +
+                                            '"",' +
+                                            '"' + Booksdata[i].Remark + '",' +
+                                            '"' + Booksdata[i].OperatorId + '",' +
+                                            '"' + Booksdata[i].OperatedTime + '",' +
+                                            '"' + Booksdata[i].TaskNo + '",' +
+                                            '"' + Booksdata[i].DispatchTime + '",' +
+                                            '"' + Booksdata[i].RecordBeginScale + '",' +
+                                            '"' + Booksdata[i].RecordEndScale + '",' +
+                                            '"' + Booksdata[i].RecordAmount + '",' +
+                                            '"' + Booksdata[i].RecordTypdId + '",' +
+                                            '"' + Booksdata[i].RecordTypdName + '",' +
+                                            '"' + Booksdata[i].LastReadScale + '",' +
+                                            '"' + Booksdata[i].AuditReadScale + '",' +
+                                            '"' + Booksdata[i].AuditTime + '",' +
+                                            '"' + Booksdata[i].AuditStatus + '",' +
+                                            '"' + Booksdata[i].HandleTime + '",' +
+                                            '"' + Booksdata[i].AuditTimes + '",' +
+                                            '"' + Booksdata[i].UseTime + '",' +
+                                            '"0",' +
+                                            '"",' +
+                                            '"' + WorkTypeId + '",' +  //WorkTypeCode 改为 WorkTypeId 20200807 15:30 zxf
+                                            '"0",' +
+                                            '"0",' +
+                                            '"' + userName + '",' +
+                                            '"' + AllDataNumer + '")';
+                                        var PostingListret = db.executeSqlSync({
+                                            name: 'Wsdatabase',
+                                            sql: sql
+                                        });
+                                        // console.log(JSON.stringify(PostingListret))
+                                    }
+                                    var ytjret = db.selectSqlSync({
+                                        name: 'Wsdatabase',
+                                        sql: 'SELECT * FROM POSTING_LIST where Status ="7" AND NotUploader ="0" and TaskNo = "' + WorkTypeId + '" AND userName = "' + userName + '"'
+                                    });
+                                    if (ytjret.data.length > 0) {
+
+                                    } else {
+                                        $("#number2").text(dataBaseYC.length)
+                                    }
+
+                                    // 插入成功调数据
+                                    DloadPostingData()
+                                }
+
+                            } else {
+
+                                api.toast({
+                                    msg: ret.Message,
+                                    duration: 2000,
+                                    location: 'middle'
+                                });
+                                DloadPostingData()
+                            }
+
+                        })
+
+                    } else {
+                        DloadPostingData()
+                    }
+                } else {
+                    // 第一次下载数据
+                    oneOnlienData()
+                }
+            } else {
+                // console.log( JSON.stringify( err ) );
+            }
+        });
+    }
+    // 第一次下载待处理任务
+    function oneOnlienData() {
+        var body = {
+            TaskNo: WorkTypeId,
+        }
+        fnPost('MMS002', body, 'application/json', false, false, function(ret, err) {
+            api.hideProgress();
+
+            if (ret && ret.Status == '0') {
+                var Booksdata = [];
+                var dataList = JSON.parse(ret.Data);
+                var dataBaseDC = []; //待处理
+                var dataBaseYC = []; //已提交
+                var dataBaseCL = []; //处理中
+                for (var j = 0; j < dataList.length; j++) {
+                    if (dataList[j].Status == "1") {
+                        dataBaseDC.push(dataList[j])
+                    }
+                }
+                for (var j = 0; j < dataList.length; j++) {
+                    if (dataList[j].Status == "7") {
+                        dataBaseCL.push(dataList[j])
+                        Booksdata.push(dataList[j])
+                    }
+                }
+                for (var j = 0; j < dataList.length; j++) {
+                    if (dataList[j].Status != "7" && dataList[j].Status != "0" && dataList[j].Status != "1") {
+                        dataBaseYC.push(dataList[j])
+                    }
+                }
+                var numerCtent = dataBaseCL.length + dataBaseYC.length;
+                // 循环数据下载
+                for (var i in Booksdata) {
+                    var sql = 'INSERT INTO POSTING_LIST(Id, Source, Code, Name, StatusName, Status, CustomerCode, CustomerName, Address, Location,' +
+                        'Nature,' +
+                        'SubNature,' +
+                        'Caliber,' +
+                        'Nameplate,' +
+                        'MeterType,' +
+                        'StampNo,' +
+                        'LastScale,' +
+                        'BeginScale,' +
+                        'EndScale,' +
+                        'Amount,' +
+                        'ArrearMoney,' +
+                        'Description,' +
+                        'Remark,' +
+                        'RemarkText,' +
+                        'OperatorId,' +
+                        'OperatedTime,' +
+                        'TaskNo,' +
+                        'DispatchTime,' +
+                        'RecordBeginScale,' +
+                        'RecordEndScale,' +
+                        'RecordAmount,' +
+                        'RecordTypdId,' +
+                        'RecordTypdName,' +
+                        'LastReadScale,' +
+                        'AuditReadScale,' +
+                        'AuditTime,' +
+                        'AuditStatus,' +
+                        'HandleTime,' +
+                        'AuditTimes,' +
+                        'UseTime,' +
+                        'NotSave,' +
+                        'Files,' +
+                        'TaskId,' +
+                        'StatusUser,' +
+                        'NotUploader,' +
+                        'userName,' +
+                        'NotSubmit) VALUES ("' + Booksdata[i].Id + '",' +
+                        '"' + Booksdata[i].Source + '",' +
+                        '"' + Booksdata[i].Code + '",' +
+                        '"' + Booksdata[i].Name + '",' +
+                        '"' + Booksdata[i].StatusName + '",' +
+                        '"' + Booksdata[i].Status + '",' +
+                        '"' + Booksdata[i].CustomerCode + '",' +
+                        '"' + Booksdata[i].CustomerName + '",' +
+                        '"' + Booksdata[i].Address + '",' +
+                        '"' + Booksdata[i].Location + '",' +
+                        '"' + Booksdata[i].Nature + '",' +
+                        '"' + Booksdata[i].SubNature + '",' +
+                        '"' + Booksdata[i].Caliber + '",' +
+                        '"' + Booksdata[i].Nameplate + '",' +
+                        '"' + Booksdata[i].MeterType + '",' +
+                        '"' + Booksdata[i].StampNo + '",' +
+                        '"' + Booksdata[i].LastScale + '",' +
+                        '"' + Booksdata[i].BeginScale + '",' +
+                        '"' + Booksdata[i].EndScale + '",' +
+                        '"' + Booksdata[i].Amount + '",' +
+                        '"' + Booksdata[i].ArrearMoney + '",' +
+                        '"' + Booksdata[i].Description + '",' +
+                        '"",' +
+                        '"' + Booksdata[i].Remark + '",' +
+                        '"' + Booksdata[i].OperatorId + '",' +
+                        '"' + Booksdata[i].OperatedTime + '",' +
+                        '"' + Booksdata[i].TaskNo + '",' +
+                        '"' + Booksdata[i].DispatchTime + '",' +
+                        '"' + Booksdata[i].RecordBeginScale + '",' +
+                        '"' + Booksdata[i].RecordEndScale + '",' +
+                        '"' + Booksdata[i].RecordAmount + '",' +
+                        '"' + Booksdata[i].RecordTypdId + '",' +
+                        '"' + Booksdata[i].RecordTypdName + '",' +
+                        '"' + Booksdata[i].LastReadScale + '",' +
+                        '"' + Booksdata[i].AuditReadScale + '",' +
+                        '"' + Booksdata[i].AuditTime + '",' +
+                        '"' + Booksdata[i].AuditStatus + '",' +
+                        '"' + Booksdata[i].HandleTime + '",' +
+                        '"' + Booksdata[i].AuditTimes + '",' +
+                        '"' + Booksdata[i].UseTime + '",' +
+                        '"0",' +
+                        '"",' +
+                        '"' + WorkTypeId + '",' +     //WorkTypeCode 改为 WorkTypeId 20200807 15:30 zxf
+                        '"0",' +
+                        '"0",' +
+                        '"' + userName + '",' +
+                        '"' + numerCtent + '")';
+                    var PostingListret = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    });
+                    // console.log(JSON.stringify(PostingListret))
+
+                }
+                // 插入成功调数据
+                $('#ClaimTask').addClass('aui-hide');
+                DloadPostingData()
+
+            } else {
+                api.toast({
+                    msg: ret.Message,
+                    duration: 2000,
+                    location: 'middle'
+                });
+
+            }
+
+        })
+
+    }
+
+    // 张贴列表数据渲染，
+    var numerdataBase
+
+    function DloadPostingData() {
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_LIST where Status ="7" AND NotUploader ="0" and TaskNo = "' + WorkTypeId + '" AND userName = "' + userName + '"'
+        }, function(ret, err) {
+            var time = new Date()
+                // console.log(JSON.stringify(ret.data))
+            if (ret.status) {
+                if (ret.data.length == '') {
+                    api.toast({
+                        msg: '无相关数据',
+                        duration: 2000,
+                        location: 'middle'
+                    });
+                    $('#postingData').text("(0000/00/00)")
+                    $("#number1").text("0")
+                    $("#number4").text("0")
+                        // $("#number2").text('0')
+                    $("#postingNumer").text('0')
+                } else {
+                    var dataList = ret.data
+
+                        // 渲染已保存
+                    var saveData = [];
+
+                    for (var i = 0; i < dataList.length; i++) {
+                        if (dataList[i].NotSave == "1") {
+                            saveData.push(dataList[i])
+                        }
+                    }
+                    var NotSaveData = [];
+                    for (var i = 0; i < dataList.length; i++) {
+                        if (dataList[i].NotSave == "0") {
+                            NotSaveData.push(dataList[i])
+                        }
+                    }
+                    if(NotSaveData.length>0){
+
+                    }else {
+                      var html = '<div style="background:#fff;color:#ccc;text-align:center;line-height:2rem;width:100%">没有待张贴数据</div>'
+                      $("#dataListUser").html(html)
+                    }
+                    handleAnnotData(NotSaveData)
+                    $("#number4").text(saveData.length)
+                    var dataTime = dataList[0].DispatchTime;
+                    $('#postingData').text("(" + dataTime.slice(0, 10) + ")")
+                    $("#number1").text(NotSaveData.length)
+                    var numerA = ret.data[0].NotSubmit
+                    var numerD = ret.data.length;
+
+                    var numerY = Number(numerA) - Number(numerD)
+                    numerdataBase = numerY
+                    $("#number2").text(numerY)
+                    $("#postingNumer").text(numerA)
+                        // $("#number2").text(numerY)
+                }
+
+            } else {
+                // alert( JSON.stringify( err ) );
+            }
+        });
+    }
+
+
+
+     function openDetails(that) {
+      if(that!=null){
+        var StatusNamedata = $(that).attr("parse")
+        var parsedata = $(that).attr("parsedata")
+            // api.openWin({
+            //     name: 'Postinglists_edit',
+            //     url: './Postinglists_edit.html',
+            //     pageParam: StatusNamedata
+            // });
+        if (parsedata != "7") {
+            api.openWin({
+                name: 'Postinglists_detalis',
+                url: './Postinglists_Details.html',
+                pageParam: JSON.parse(StatusNamedata)
+            });
+        } else {
+            var pageNameCode
+            if ($("#number4").hasClass('NotOclick')) { //判断是什么选择点进去处理的
+                pageNameCode = 1 //已保存
+            } else {
+                pageNameCode = 0 //待张贴
+            }
+            api.openWin({
+                name: 'Postinglists_edit',
+                url: './Postinglists_edit.html',
+                pageParam: {
+                    data: StatusNamedata,
+                    Identification: openPage,
+                    TaskId: WorkTypeId,  //WorkTypeCode 改为WorkTypeId 20200807 15:30 zxf
+                    pageNameCode: pageNameCode
+                }
+            });
+        }
+      }
+    }
+
+    // 滚动时禁止单击 zxf 5-28
+        function stopTouchendPropagationAfterScroll() {
+            var locked = false;
+            window.addEventListener('touchmove', function(ev) {
+                locked || (locked = true, window.addEventListener('touchend', stopTouchendPropagation, true));
+            }, true);
+            function stopTouchendPropagation(ev) {
+                ev.stopPropagation();
+                window.removeEventListener('touchend', stopTouchendPropagation, true);
+                openDetails(null);
+                api.parseTapmode();
+                locked = false;
+            }
+        }
+</script>
+
+</html>

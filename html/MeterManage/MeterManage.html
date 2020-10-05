@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>表务管理主界面</title>
+    <link rel="stylesheet" type="text/css" href="../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            /*overflow: scroll;
+            -webkit-overflow-scrolling: touch;*/
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: hidden;;
+            /*-webkit-overflow-scrolling: touch;*/
+            background-color: #F5F5F5;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-content: flex-start;
+        }
+
+        .card {
+            width: 49.33vw;
+            height: 53.07vw;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.34vw;
+        }
+
+        .card:active {
+            opacity: 0.7;
+        }
+
+        .card:nth-last-child(1),
+        .card:nth-last-child(2) {
+            margin-bottom: 0;
+        }
+
+        .title {
+            font-size: 1rem;
+            color: #606060;
+            margin-top: 0.98rem;
+        }
+
+        .ApplyTask {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("./image/MeterManage/ApplyTask.png") no-repeat center;
+            background-size: 3.5rem 4rem;
+        }
+
+        .MeterNo {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("./image/MeterManage/MeterNo.png") no-repeat center;
+            background-size: 3.38rem 3.38rem;
+        }
+
+        .Scan {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("./image/MeterManage/Scan.png") no-repeat center;
+            background-size: 3.85rem 3.85rem;
+        }
+
+        .CustomerSearch {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("./image/MeterManage/Search.png") no-repeat center;
+            background-size: 3.53rem 3.53rem;
+        }
+
+        .Log {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("./image/MeterManage/Log.png") no-repeat center;
+            background-size: 2.9rem 3.7rem;
+        }
+
+        .Upload {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("./image/MeterManage/Upload.png") no-repeat center;
+            background-size: 3.85rem 2.88rem;
+        }
+
+        .backScan {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("./image/MeterManage/backScan.png") no-repeat center;
+            background-size: 3.85rem 3.85rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">表务工作</div>
+        </header>
+
+        <div id="main" class="flex-con">
+
+            <div class="card" @click="openWin('ApplyTask')">
+                <div class="ApplyTask">
+
+                </div>
+                <div class="title">
+                    任务申请
+                </div>
+            </div>
+
+            <!-- <div class="card" @click="openWin('MeterNo')"> -->
+              <!-- <div class="card" @click="openWin('MeterNo_New')">
+                <div class="MeterNo">
+
+                </div>
+                <div class="title">
+                    表号维护
+                </div>
+            </div> -->
+
+            <div class="card" @click="openWin('scanCode')">
+                <div class="Scan">
+
+                </div>
+                <div class="title">
+                    出库扫码
+                </div>
+            </div>
+
+            <div class="card" @click="openWin('CustomerSearch')">
+                <div class="CustomerSearch">
+
+                </div>
+                <div class="title">
+                    用户查询
+                </div>
+            </div>
+            <div class="card" @click="openWin('goBackScan')">
+                <div class="backScan">
+
+                </div>
+                <div class="title">
+                    退库扫码
+                </div>
+            </div>
+
+
+
+            <div class="card" @click="openWin('uploadData')">
+                <div class="Upload">
+
+                </div>
+                <div class="title">
+                    数据上传
+                </div>
+            </div>
+            <div class="card" @click="openWin('Log')">
+                <div class="Log">
+
+                </div>
+                <div class="title">
+                    日志
+                </div>
+            </div>
+
+            <!-- <div class="card" @click="openTem(0)">
+                <div class="backScan">
+
+                </div>
+                <div class="title">
+                    表务任务(临时)
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../public/script/api.js"></script>
+<script type="text/javascript" src="../public/script/common.js"></script>
+<script type="text/javascript" src="../public/script/remote.js"></script>
+<script type="text/javascript" src="../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.MainVue = new Vue({
+            el: '#wrap',
+            data: {
+                name: "",
+                url: ""
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                openWin(win) {
+                    this.name = win;
+                    if (win != "") {
+                        this.url = "./" + win + "/" + win + ".html";
+                        if(win == 'MeterNo_New'){
+                            this.url = "./MeterNo/" + win + ".html";
+                        }
+                        api.openWin({
+                            name: this.name,
+                            url: this.url,
+                        });
+                    }
+                },
+                // openTem(type) { //临时打开表务任务列表入口
+                //     api.openWin({
+                //         name: 'MyTask',
+                //         url: './tableTask/temporary.html',
+                //         pageParam: {
+                //             type: type
+                //         }
+                //     });
+                // },
+
+                deleteLogSheetData() {
+                    var db = api.require('db');
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: 'SELECT * FROM Logsheet order by time asc limit 1'
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            if (ret.data.length != 0) {
+                                var data = ret.data[0];
+                                var nowDate = new Date();
+                                var dataTime = new Date(data.time);
+                                var days = nowDate.getTime() - dataTime.getTime(); 
+                                var day = parseInt(days / (1000 * 60 * 60 * 24));  
+                                if(day > 10){
+                                  db.executeSqlSync({
+                                      name: 'Wsdatabase',
+                                      sql: 'delete FROM  Logsheet'
+                                  },function(ret,err){
+                                    if(ret.status){
+                                      // console.log(JSON.stringify(ret));
+                                    }
+                                  });
+                                }
+                            }
+                        }
+                    });
+
+                }
+            },
+            mounted: function() {
+                this.deleteLogSheetData();
+            }
+        })
+    }
+</script>
+
+</html>

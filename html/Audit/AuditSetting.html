@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>稽核设置</title>
+    <link rel="stylesheet" type="text/css" href="../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .van-cell {
+          border-bottom: 1px solid #CCC;
+        }
+
+        .van-cell__title {
+          font-size: 16px;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+      <header class="aui-bar aui-bar-nav" id="header">
+          <div class="aui-pull-left aui-btn" tapmode @click='back'>
+              <span class="aui-iconfont aui-icon-left"></span>
+          </div>
+          <div class="aui-title">稽核设置</div>
+      </header>
+
+      <div class="aui-content mine_List">
+        <van-cell center title="稽核工单数据及照片是否单独上传">
+          <template #right-icon>
+            <van-switch v-model="photoUpload" size="24" @change='switchUpload()'/>
+          </template>
+        </van-cell>
+
+        <van-cell center title="稽核照片是否保存在本地">
+          <template #right-icon>
+            <van-switch v-model="photoSave" size="24" @change='switchSave()'/>
+          </template>
+        </van-cell>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="../public/script/api.js"></script>
+  <script type="text/javascript" src="../public/script/vue/fastclick.min.js"></script>
+  <script type="text/javascript" src="../public/script/vue/vue.min.js"></script>
+  <script type="text/javascript" src="../public/script/vue/vant.min.js"></script>
+  <script type="text/javascript" src="../public/script/vue/vueTouch.js"></script>
+
+  <script>
+    var db;
+    apiready = function() {
+      api.parseTapmode();
+      var header = $api.byId('header');
+      $api.fixStatusBar(header);
+      headerH = $api.offset(header).h;
+
+      db = api.require('db');
+
+      fnIntVue();
+      Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+
+    function fnIntVue() {
+      window.SetVue = new Vue({
+        el: '#wrap',
+        data: {
+          photoUpload: true,
+          photoSave: true
+        },
+        methods: {
+          back() {
+            api.closeWin();
+          },
+          switchUpload() {
+            var auditImgsUpload = 0;
+            if (this.photoUpload) {
+              auditImgsUpload = 1;
+            }
+            $api.setStorage('auditImgsUpload',auditImgsUpload);
+          },
+          switchSave() {
+            var auditSaveLocation = 0;
+            if (this.photoSave) {
+              auditSaveLocation = 1;
+            }
+            $api.setStorage('auditSaveLocation',auditSaveLocation);
+          },
+          initSetMeter() {
+            var auditImgsUpload = $api.getStorage('auditImgsUpload');
+            if (auditImgsUpload == 1) {
+              this.photoUpload = true;
+            } else {
+              this.photoUpload = false;
+            }
+
+            var auditSaveLocation = $api.getStorage('auditSaveLocation');
+            if (auditSaveLocation == 1) {
+              this.photoSave = true;
+            } else {
+              this.photoSave = false;
+            }
+          },
+        },
+        mounted: function() {
+          this.initSetMeter();
+        }
+      });
+    }
+  </script>
+</html>

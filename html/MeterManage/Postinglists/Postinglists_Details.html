@@ -1,0 +1,624 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>张贴列表任务详情</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" ef="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            height: 100%;
+            overflow: hidden;
+            background-color: #F3F3F3;
+            width: 92%;
+            margin: 0 auto;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        /*.footer .van-button {
+          width: 13.98rem;
+          height: 2.23rem;
+          line-height: normal;
+          font-size: 0.95rem;
+          color: #fff;
+          background-color: #377EFF;
+      }*/
+        /*标题*/
+
+        .aui-info {
+            background: #fff;
+            height: 3rem;
+        }
+
+        .aui-info .aui-info-item:first-child {
+            padding-left: 1rem;
+        }
+
+        .aui-info .aui-margin-l-5 {
+            font-size: 1rem;
+            font-family: Source Han Sans SC;
+            font-weight: 400;
+            color: #000;
+        }
+
+        .aui-info .aui-info-item:last-child {
+            padding-right: 1rem;
+            font-size: 0.8rem;
+        }
+        /*列表*/
+
+        .section_one {
+            height: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            /*border-radius: 1rem;*/
+            padding: 0.8rem 1.25rem;
+            background: white;
+            padding-bottom: 0.3rem;
+        }
+
+        .aui-card-list .section_one_box .box>div {
+            padding: 0.2rem 0;
+            font-size: 1rem;
+            font-family: Source Han Sans SC;
+            font-weight: 400;
+            color: rgba(80, 80, 80, 1);
+            background-size: 100% 1px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-image: linear-gradient(0, #eee, #eee 50%, transparent 50%);
+            background-image: -webkit-linear-gradient(90deg, #eee, #eee 50%, transparent 50%);
+        }
+      .aui-card-list .section_one_box .box>div:last-child{
+        border: none;
+        background-image: none;
+      }
+        .aui-card-list .section_one_box .box>div:first-child {
+            padding-top: 0rem;
+        }
+
+        .aui-card-list .section_one_box .box>div:before {
+            content: "";
+            display: table;
+        }
+
+        .aui-card-list .section_one_box .box>div:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        /*.aui-card-list .section_one_box .box>div>span:nth-child(1) {
+            overflow: hidden;
+            float: left;
+            text-align: left;
+            width: 50%;
+        }
+
+        .aui-card-list .section_one_box .box>div>span:nth-child(1)>span {
+            position: relative;
+            bottom: -2px;
+            width: 49%;
+            line-height: 0.8rem;
+            display: inline-block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .aui-card-list .section_one_box .box>div>span:nth-child(2) {
+            overflow: hidden;
+            float: right;
+            text-align: left;
+            width: 50%;
+        }
+
+        .aui-card-list .section_one_box .box>div>span:nth-child(2)>span {
+            position: relative;
+            bottom: -2px;
+            width: 49%;
+            line-height: 0.8rem;
+            display: inline-block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }*/
+
+        .section_two {
+            border-radius: 0.5rem;
+            margin: 0.71rem 0.25rem;
+        }
+
+        .section_two .box>div:first-child {
+            padding-bottom: 0.5rem;
+        }
+
+        .section_two .box>div:first-child span:nth-child(1) {
+            width: 20%!important;
+            line-height: 2rem;
+        }
+
+        .section_two .box>div:first-child span:nth-child(2) {
+            width: 80%!important;
+        }
+
+        .imgbox {
+            width: 100%;
+        }
+
+        .imgbox>img {
+            float: left;
+            display: block;
+            width: 30%;
+            height: 5rem;
+            margin-left: 3%;
+            margin-bottom: 0.3rem;
+        }
+
+        .footer {
+            width: 100vw;
+            height: auto;
+            background: #fff;
+            /*justify-content: center;*/
+        }
+
+        .footer .footer-title {
+            width: 94%;
+            margin: 0 auto;
+            color: #000;
+            padding: 0.5rem 0;
+            font-size: 1rem;
+            font-family: Source Han Sans SC;
+            font-weight: 400;
+        }
+
+        .footer .string {
+            width: 94%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .footer .string .aui-progress {
+            border-radius: 0.8rem;
+        }
+
+        .footer .string .aui-progress .aui-progress-bar {
+            background: linear-gradient(90deg, rgba(109, 229, 165, 1), rgba(0, 214, 101, 1));
+        }
+
+        .footer ul {
+            display: flex;
+            flex-flow: row;
+            width: 94%;
+            margin: 0 auto;
+            padding-top: 0.3rem;
+            padding-bottom: 1rem;
+        }
+
+        .footer ul li {
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer ul li div {
+            width: 100%;
+            text-align: center;
+            color: rgba(172, 172, 172, 1);
+        }
+        span.title{
+          color: #666;
+          padding-left: 0.3rem;
+          font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode data-action="back">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">任务详情</div>
+            <!-- <div class="aui-pull-right aui-btn" tapmode data-action="CodeScanning">
+              <img src="../image/MeterManage/Posting/saoma.png" alt="">
+          </div> -->
+        </header>
+        <div class="aui-info">
+            <div class="aui-info-item">
+                <span class="aui-margin-l-5">张贴停水通知单</span>
+            </div>
+            <div class="aui-info-item" id="OperatedTime">2015-07-13</div>
+        </div>
+        <div id="main" class="flex-con">
+          <!-- <section class="section_one">
+              <div class="aui-card-list">
+                  <div class="section_one_box">
+                      <div class="box">
+                          <div><span>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名:</span>  <span class="title">{{listdataLst.CustomerName}}</span> </div>
+                          <div><span>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 号:</span>  <span class="title">{{listdataLst.CustomerCode}}</span></div>
+                          <div id="changeAddressSb"><span> 地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 置:</span><span class="title">{{listdataLst.Address}}</span> </div>
+                          <div><span>表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 位:</span>  <span class="title">{{listdataLst.Location}}</span></div>
+                          <div><span>用水性质:</span> <span class="title">{{listdataLst.Nature}}</span> </div>
+                          <div><span>口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 径:</span> <span class="title">{{listdataLst.Nature}}</span> </div>
+                          <div><span>起&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度:</span> <span class="title">{{listdataLst.BeginScale}}</span> </div>
+                          <div><span>止&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度:</span> <span class="title">{{listdataLst.EndScale}}</span> </div>
+                          <div><span>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 量:</span>  <span class="title">{{listdataLst.Amount}}</span></div>
+                          {{if listdataLst.ArrearMoney==""||listdataLst.ArrearMoney==" "}}
+                          <div><span>欠费金额:</span> <span class="title">0</span> </div>
+                          {{else}}
+                          <div><span>欠费金额:</span>  <span class="title">{{listdataLst.ArrearMoney}}</span></div>
+                          {{/if}}
+                          <div><span> 处理图片:</span>
+                              <div class="imgbox ImgOrVideo" id="ImageList">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </section> -->
+
+        </div>
+
+        <div class="footer" id="footer">
+            <!-- <div class="footer-title">任务进度 <span>处理中</span></div>
+        <div class="string">
+          <div class="aui-progress aui-progress-sm">
+            <div class="aui-progress-bar" style="width: 100%;"></div>
+          </div>
+        </div>
+        <ul>
+          <li>发起<div>2019-11-14</div></li>
+          <li>处理中<div>2019-11-14</div></li>
+          <li>审核中<div>2019-11-14</div></li>
+          <li>已完成<div>2019-11-14</div></li>
+        </ul> -->
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/hammer.min.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/template" id="Booksdata">
+    <section class="section_one">
+        <div class="aui-card-list">
+            <div class="section_one_box">
+                <div class="box">
+                    <div><span>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名:</span>  <span class="title">{{listdataLst.CustomerName}}</span> </div>
+                    <div><span>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 号:</span>  <span class="title">{{listdataLst.CustomerCode}}</span></div>
+                    <div id="changeAddressSb"><span> 地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 置:</span><span class="title">{{listdataLst.Address}}</span> </div>
+                    <div><span>表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 位:</span>  <span class="title">{{listdataLst.Location}}</span></div>
+                    <div><span>用水性质:</span> <span class="title">{{listdataLst.Nature}}</span> </div>
+                    <div><span>口&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 径:</span> <span class="title">{{listdataLst.Nature}}</span> </div>
+                    <div><span>起&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度:</span> <span class="title">{{listdataLst.BeginScale}}</span> </div>
+                    <div><span>止&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度:</span> <span class="title">{{listdataLst.EndScale}}</span> </div>
+                    <div><span>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 量:</span>  <span class="title">{{listdataLst.Amount}}</span></div>
+                    {{if listdataLst.ArrearMoney==""||listdataLst.ArrearMoney==" "}}
+                    <div><span>欠费金额:</span> <span class="title">0</span> </div>
+                    {{else}}
+                    <div><span>欠费金额:</span>  <span class="title">{{listdataLst.ArrearMoney}}</span></div>
+                    {{/if}}
+                    <div><span> 处理图片:</span>
+                        <div class="imgbox ImgOrVideo" id="ImageList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</script>
+<script type="text/template" id="Imagedata">
+    {{if list.length>0}} {{each list value i}}
+    <img src="{{value.Path}}" alt="" tapmode data-action="fnOpenFile"> {{/each}} {{else}}
+    <div>暂无</div>
+    {{/if}}
+</script>
+<script type="text/template" id="Speeddata">
+    {{if item.Status == '1'}}
+    <div class="footer-title">任务进度 <span>发起</span></div>
+    <div class="string">
+        <div class="aui-progress aui-progress-sm">
+            <div class="aui-progress-bar" style="width: 15%;"></div>
+        </div>
+        <!-- / AuditTime":"",已完成时间
+    // "HandleTime":"",审核时间
+    // UseTime:领用时间相对于处理时间
+    // "AuditTimes":"0",任务提交次数
+    // "DispatchTime"发起时间 -->
+    </div>
+    <ul>
+        <li>发起
+            <div>{{item.DispatchTime}}</div>
+        </li>
+        <li>处理中
+            <div>{{item.UseTime}}</div>
+        </li>
+        <li>审核中
+            <div>{{item.HandleTime}}</div>
+        </li>
+        <li>已完成
+            <div>{{item.AuditTime}}</div>
+        </li>
+    </ul>
+    {{else if item.Status == '3'||item.Status == '4'||item.Status == '5'||item.Status == '6'}} {{if item.Status == '3'}}
+    <div class="footer-title">任务进度 <span>已终止</span></div>
+    {{else if item.Status == '4'}}
+    <div class="footer-title">任务进度 <span>已完成</span></div>
+    {{else if item.Status == '5'}}
+    <div class="footer-title">任务进度 <span>已转办</span></div>
+    {{else}}
+    <div class="footer-title">任务进度 <span>已撤销</span></div>
+    {{/if}}
+    <div class="string">
+        <div class="aui-progress aui-progress-sm">
+            <div class="aui-progress-bar" style="width: 100%;"></div>
+        </div>
+        <!-- / AuditTime":"",已完成时间
+    // "HandleTime":"",审核时间
+    // UseTime:领用时间相对于处理时间
+    // "AuditTimes":"0",任务提交次数
+    // "DispatchTime"发起时间 -->
+    </div>
+    <ul>
+        <li>发起
+            <div>{{item.DispatchTime}}</div>
+        </li>
+        <li>处理中
+            <div>{{item.UseTime}}</div>
+        </li>
+        <li>审核中
+            <div>{{item.HandleTime}}</div>
+        </li>
+        {{if item.Status == '3'}}
+        <li>已终止
+            <div>{{item.AuditTime}}</div>
+        </li>
+        {{else if item.Status == '4'}}
+        <li>已完成
+            <div>{{item.AuditTime}}</div>
+        </li>
+        {{else if item.Status == '5'}}
+        <li>已转办
+            <div>{{item.AuditTime}}</div>
+        </li>
+        {{else}}
+        <li>已撤销
+            <div>{{item.AuditTime}}</div>
+        </li>
+        {{/if}}
+
+    </ul>
+    {{else}}
+    <div class="footer-title">任务进度 <span>审核中</span></div>
+    <div class="string">
+        <div class="aui-progress aui-progress-sm">
+            <div class="aui-progress-bar" style="width: 65%;"></div>
+        </div>
+        <!-- / AuditTime":"",已完成时间
+    // "HandleTime":"",审核时间
+    // UseTime:领用时间相对于处理时间
+    // "AuditTimes":"0",任务提交次数
+    // "DispatchTime"发起时间 -->
+    </div>
+    <ul>
+        <li>发起
+            <div>{{item.DispatchTime}}</div>
+        </li>
+        <li>处理中
+            <div>{{item.UseTime}}</div>
+        </li>
+        <li>审核中
+            <div>{{item.HandleTime}}</div>
+        </li>
+        <li>已完成
+            <div>{{item.AuditTime}}</div>
+        </li>
+    </ul>
+    {{/if}}
+</script>
+<script type="text/javascript">
+    var headerH;
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        // center = $api.offset($api.byId('center')).h;
+        console.log(JSON.stringify(api.pageParam))
+        $("#OperatedTime").text(api.pageParam.OperatedTime)
+        $('#center').css('margin-top', '' + headerH + 'px');
+        var dataList = api.pageParam;
+        var imageList1 = api.pageParam.Files;
+        var imageList = []
+        for (var i = 0; i < imageList1.length; i++) {
+            var obj = {}
+            obj.Path = 'http://' + $api.getStorage('apiUrl') + imageList1[i].Path;
+            console.log(JSON.stringify(obj))
+            imageList.push(obj)
+        }
+        // console.log
+        handleAnnotData(dataList)
+
+        if (dataList.Status == "3") {
+            api.alert({
+                title: '任务已终止',
+                msg: "终止原因：" + api.pageParam.Handles[0].Remark,
+            }, function(ret, err) {
+                if (ret) {
+                    //  alert( JSON.stringify( ret ) );
+                } else {
+                    //  alert( JSON.stringify( err ) );
+                }
+            });
+        }
+        handImageData(imageList)
+        handSpoodData(dataList)
+    };
+    var actionList = {
+        'back': function() {
+            api.closeWin();
+        },
+        'fnOpenFile': function() {
+            // 图片放大阅览功能
+            var index;
+            var list = $api.domAll('.ImgOrVideo img');
+            var data = []
+            for (var i = 0; i < list.length; i++) {
+                var img = $(list[i]).attr('src')
+                data.push(img)
+                if ($(this).attr('src') == $(list[i]).attr('src')) {
+                    index = i
+                }
+            }
+            pBrowserPicture(index, data)
+        },
+        // 'CodeScanning': function() {//扫描
+        //     var userCode
+        //     var FNScanner = api.require('FNScanner');
+        //     FNScanner.open({
+        //         autorotation: true
+        //     }, function(ret, err) {
+        //         if (ret) {
+        //             if (ret.eventType == 'success') {
+        //                 userCode = ret.content;
+        //                 $("#dataListUser").empty();
+        //                   var body = {
+        //                     TaskNo:WorkTypeId,
+        //                     CustomerCode:userCode
+        //                     // Status:Status
+        //                   }
+        //                   fnPost('MMS002', body, 'application/json', false, false, function(ret, err){
+        //                     if (ret && ret.Status == '0'){
+        //                       console.log(JSON.stringify(ret.Data))
+        //                       var dataList = JSON.parse(ret.Data);
+        //                       // handleAnnotData(dataList)
+        //                       alert("终止原因")
+        //
+        //                     }else {
+        //                       api.toast({
+        //                         msg:ret.Message,
+        //                         duration: 2000,
+        //                         location: 'top'
+        //                     });
+        //                     }
+        //
+        //                   })
+        //
+        //             }else{
+        //
+        //             }
+        //         } else {
+        //           api.toast({
+        //                   msg:ret.Message,
+        //                   duration: 2000,
+        //                   location: 'bottom'
+        //               });
+        //         }
+        //     });
+        // }
+    }
+
+    function handleAnnotData(dataList) {
+        var list = {
+            listdataLst: dataList
+        }
+        var str = template('Booksdata', list)
+        $api.append($api.byId('main'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+
+    function handImageData(dataList) {
+        var list = {
+            list: dataList
+        }
+        var str = template('Imagedata', list)
+        $api.append($api.byId('ImageList'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+
+    function handSpoodData(dataList) {
+        var list = {
+            item: dataList
+        }
+        var str = template('Speeddata', list)
+        $api.append($api.byId('footer'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+    // 任务进度
+
+    // function PostingSpeed(){
+    //   var body = {
+    //     // Id:WorkTypeId,
+    //     Code:"4",
+    //     // CustomerCode:ReqCode,
+    //     // Status:Status
+    //   }
+    //   fnPost('MMS002', body, 'application/json', false, false, function(ret, err){
+    //
+    //   })
+    // }
+</script>
+
+</html>

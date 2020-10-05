@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>地图详情</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+
+            width: 280px;
+            height: 180px;
+            background-color: #F3F3F3;
+        }
+        .ri{
+          float: right
+        }
+        .le{
+          float: left;
+        }
+        .cl{
+          clear:both;
+        }
+
+        .userTable{
+          /*background: #fff;*/
+          padding: 15px 20px;
+          background-color: #F6DB46;
+          border-radius: 6px;
+          color: #333333;
+        }
+        .userRow{
+
+        }
+        .userLabel{
+
+        }
+        .userSpan{
+
+        }
+        .hide{
+          display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical">
+
+      <div id="userTable" class="userTable">
+        <p class="userRow">
+          <label class="userLabel" for="">户名：</label>
+          <span class="userSpan">环球广场</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">户号：</label>
+          <span class="userSpan">101248</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">地址：</label>
+          <span class="userSpan">重庆市上清寺环球大厦</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">表位：</label>
+          <span class="userSpan">1#靠消防通道</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">用水性质：</label>
+          <span class="userSpan">经营用水</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">口径：</label>
+          <span class="userSpan">100</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">原因描述：</label>
+          <span class="userSpan">这里显示用户上报时填写的任务描述</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">任务状态：</label>
+          <span class="userSpan">开启</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">经度：</label>
+          <span class="userSpan">101</span>
+        </p>
+        <p class="userRow">
+          <label class="userLabel" for="">纬度：</label>
+          <span class="userSpan">111</span>
+        </p>
+      </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.parseTapmode();
+
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    fnIntVue();
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                value: '',
+                showPicker: false,
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+            },
+            mounted: function() {
+
+            }
+        })
+    }
+</script>
+
+</html>

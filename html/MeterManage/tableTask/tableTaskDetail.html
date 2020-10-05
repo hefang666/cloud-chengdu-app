@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>任务详情-换表/移改提/校表</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: calc(100% - .53rem);
+            background-color: #F3F3F3;
+        }
+        .ri{
+          float: right
+        }
+        .le{
+          float: left;
+        }
+        .cl{
+          clear:both;
+        }
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.9rem;
+            color: #626262;
+        }
+
+        .unusualTypePicker.van-cell {
+            padding: 0 1.3rem;
+            height: 2.87rem;
+            line-height: 2.87rem;
+        }
+
+        .aui-list-item , .aui-list-item-middle{
+          border: none !important
+        }
+        .footer{
+          width: 100%;
+          background-color: #fff;
+          padding: .8rem 0 1.2rem 0;
+          bottom: 0;
+          position:fixed;
+
+          /*width: 100vw;
+          height: 6.08rem;
+          background-color: #fff;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 1.35rem;
+          bottom: 0;*/
+        }
+        .footer-title{
+          margin-left: 1rem;
+          font-size: .9rem;
+        }
+        .footer-title label{
+          color: #656265;
+        }
+        .progressDiv{
+          width: calc(100% - 2rem);
+          height: .35rem;
+          margin: .8rem 1rem .5rem 1rem;
+          background-color: #A5A5A5 ;
+          border-radius: 4px;
+        }
+        .progress{
+          width: 50%;
+          height: .35rem;
+          background-image: linear-gradient(to right, #6DE5A5 0, #00D665 50%);
+          border-radius: 4px;
+        }
+        .progressHalf{
+          width: 50% ;
+          background-image: linear-gradient(to right, #6DE5A5 0, #00D665 50%);
+        }
+        .progressText{
+          margin: .5rem 1rem 0 1rem;
+        }
+        .progressText>div{
+          display: inline-block;
+          /*width: 33.33%;*/
+        }
+        .progressText>div p{
+          color: #6C6C6C;
+        }
+        .progressText>div span{
+          font-size: .5rem;
+          color: #ACACAC;
+          position: relative;
+          top: -9px;
+        }
+        .progressText>div:nth-child(2){
+          margin: 0 3.3rem 0 3.9rem;
+        }
+        .progressActive{
+          color: #00C45D !important;
+        }
+
+        .content{
+          min-height: 125vw;
+
+          margin: .8rem 1rem 7.8rem 1rem;
+          background-color: #fff;
+          border-radius: 0.8rem;
+          padding-top: .7rem;
+          padding-bottom: 0.9rem;
+        }
+
+        .row{
+          /*margin: 15px 25px 0 25px;*/
+          margin: 0rem 25px 0rem 25px;
+          line-height: 2rem;
+          border-bottom: 1px solid #F2F2F2;
+        }
+        .text-left{
+          font-size: 0.9rem;
+          color: #000;
+          display: inline-block;
+          width: 36%;
+          letter-spacing: -1px;
+        }
+        .text-right{
+          margin-left: 0px;
+          font-size: 0.9rem;
+          color: #656265;
+          display: inline-block;
+          width: calc(60% - 0px);
+          text-overflow:ellipsis;
+           white-space:nowrap;
+           overflow:hidden;
+           vertical-align: top;
+        }
+        .text-two{
+          letter-spacing: 1.65rem;
+        }
+        .textColor{
+          color: #2045FF;
+        }
+
+        .photoList{
+          margin-top: 8px;
+          margin-bottom: 14px;
+        }
+        .phont{
+          width: 3.6rem;
+          height: 2.8rem;
+          position: relative;
+          display: inline-block;
+          margin-right: .7rem;
+        }
+        .phont img{
+          width: 100%;
+          height: 100%;
+        }
+        .addressIcon{
+          background: url(../image/MeterManage/dingwei.png) no-repeat 0 0;
+          background-size: 100% 100%;
+          width: .6rem;
+          height: .7rem;
+          display: inline-block;
+          /*vertical-align: text-bottom;*/
+        }
+
+        .content-head{
+          background-color: #fff;
+          height: 2.9rem;
+          line-height: 2.9rem;
+        }
+        .content-head span{
+          margin-left: 0.9rem;
+          float: left;
+          font-size: 1.0rem;
+          color: #000;
+        }
+        .content-head label{
+          margin-right: 0.9rem;
+          float: right;
+          font-size: 0.7rem;
+          color: #C5C5C5;
+        }
+        .cause{
+            white-space: inherit !important;
+        }
+        .fj-item{
+          display:inline-block;
+          width: 30%;
+          text-align: center;
+          font-size: 0.8rem;
+          color: #707070;
+          position: relative;
+        }
+
+        .video-div{
+          margin-right: 5%;
+        }
+
+        .w2{
+          letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+          margin-right:-2em; /*同上*/
+        }
+
+        .a-text-left{
+          color: blue;
+          text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-swipeleft="openUserDetails" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">任务详情</div>
+        </header>
+
+
+
+        <div id="main" class="aui-content">
+            <div class="content-head">
+              <span>{{projectName}}</span>
+              <label for="">{{DispatchTime}}</label>
+            </div>
+
+            <div class="content" >
+                <div class="row">
+                  <div class="text-left">
+                    <!-- <label for="">户号</label> -->
+                    <span class="w2">户号</span>:
+                  </div>
+                  <div class="text-right ">
+                    <span>{{CustomerCode}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left">
+                    <!-- <label for="">户名</label> -->
+                    <span class="w2">户名</span>:
+                  </div>
+                  <div class="text-right cause">
+                    <span>{{CustomerName}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left ">
+                    <!-- <label for=""></label> -->
+                    <span class="">用户地址</span>:
+                  </div>
+                  <div class="text-right cause">
+                    <span>{{Address}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left ">
+                    <!-- <label for=""></label> -->
+                    <span class="">水表位置</span>:
+                  </div>
+                  <div class="text-right cause">
+                    <span>{{tableLocation}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left ">
+                    <!-- <label for=""></label> -->
+                    <span class="">用水性质</span>:
+                  </div>
+                  <div class="text-right">
+                    <span>{{Nature}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left">
+                    <!-- <label for="">口径</label> -->
+                    <span class="w2">口径</span>:
+                  </div>
+                  <div class="text-right">
+                    <span>{{Caliber}}</span>
+                  </div>
+                </div>
+
+                <!-- 移改提 -->
+                <div class="" v-if="ygt">
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for=""></label> -->
+                      <span class="">申请原因</span>:
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{ygtObj.Description}}</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="text-left a-text-left" @click="pBrowserPicture(0,applyPic)">
+                          申请照片
+                      </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for=""></label> -->
+                      <span class="w2">备注</span>:
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{ygtObj.Remark}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">处理照片</label> -->
+                      <span class="">处理照片</span>
+                    </div>
+                    <div class="photoList">
+                        <div class="phont" v-for="(item,index) in pic">
+                          <img :src="item" @click="pBrowserPicture(index,pic)" alt="">
+                        </div>
+                    </div>
+
+                  </div>
+                  <div class="row" style="border-bottom:none;">
+                    <p @click="openMap">
+                      <i class="addressIcon"></i>
+                      <span class="textColor" >{{ygtObj.AppAddress}}</span>
+                    </p>
+                  </div>
+                </div>
+                <!-- 移改提 -->
+
+                <!-- 换表 -->
+                <div class="" v-if="hb">
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">申请原因</label> -->
+                      <span class="">申请原因</span>:
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{hbObj.Description}}</span>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <div class="text-left a-text-left" @click="pBrowserPicture(0,applyPic)">
+                          申请照片
+                      </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">旧表止度</label> -->
+                      <span class="">旧表止度</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{hbObj.EndScale}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">新表表号</label> -->
+                      <span class="">新表表号</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{hbObj.StampNo}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left text-two">
+                      <!-- <label for="">铭牌</label> -->
+                      <span class="w2">铭牌</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{hbObj.Nameplate}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">新表起度</label> -->
+                      <span class="">新表起度</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{hbObj.BeginScale}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">新表口径</label> -->
+                      <span class="">新表口径</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{hbObj.Caliber}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">备注</label> -->
+                      <span class="w2">备注</span>:
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{hbObj.Remark}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <label for="">处理照片</label>
+                    </div>
+                    <div class="photoList" >
+                        <div class="phont" v-for="(item,index) in pic">
+                          <img :src="item" @click="pBrowserPicture(index,pic)" alt="">
+                        </div>
+                        <!-- <div class="phont">
+                          <img src="../image/MeterManage/test.png" alt="">
+                        </div>
+                        <div class="phont">
+                          <img src="../image/MeterManage/test.png" alt="">
+                        </div> -->
+                    </div>
+
+                  </div>
+                  <div class="row" style="border-bottom: none;">
+                    <p @click="openMap">
+                      <i class="addressIcon"></i>
+                      <span class="textColor" >{{hbObj.AppAddress}}</span>
+                    </p>
+                  </div>
+                </div>
+                <!-- 换表 -->
+
+                <!-- 校表 -->
+                <div class="" v-if="xb">
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">申请原因</label> -->
+                      <span class="">申请原因</span>:
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{xbObj.Description}}</span>
+                    </div>
+                  </div>
+                  <!-- <div class="row" >
+                    <div class="text-left textColor" @click="openTaskDetail">
+                      <label for="">查看换表信息</label>
+                    </div>
+                    <div class="text-right">
+                      <span></span>
+                    </div>
+                  </div> -->
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">备注</label> -->
+                      <span class="w2">备注</span>:
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{xbObj.Remark}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">处理照片</label> -->
+                      <span class="">处理照片</span>
+                    </div>
+                    <div class="photoList">
+                        <div class="phont" v-for="(item,index) in pic">
+                          <img :src="item" @click="pBrowserPicture(index,pic)" alt="">
+                        </div>
+
+                    </div>
+
+                  </div>
+                  <div class="row" style="border-bottom: none;">
+                    <p  @click="openMap">
+                      <i class="addressIcon"></i>
+                      <span class="textColor">{{xbObj.AppAddress}}</span>
+                    </p>
+                  </div>
+                </div>
+                <!-- 校表 -->
+
+                <!-- 三来工单 -->
+                <div class="" v-if="sl">
+                  <!-- <div class="row" >
+                    <div class="text-left">
+                      <label for="">问题描述</label>
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{slObj.problemDescription}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <label for="">延期次数</label>
+                    </div>
+                    <div class="text-right">
+                      <span>{{slObj.postponeNum.num}}</span>
+                    </div>
+                  </div> -->
+
+
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">信息来源</label> -->
+                      <span class="">信息来源</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{slObj.messageSource}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">紧急情况</label> -->
+                      <span class="">紧急情况</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{slObj.critical}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">完成时限</label> -->
+                      <span class="">完成时限</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{slObj.disposeRank}} /天</span>
+                    </div>
+                  </div>
+                  <div class="row" v-if="isRepair">
+                      <div class="text-left a-text-left" @click="pBrowserPicture(0,applyPic)">
+                          申请照片
+                      </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">联系电话</label> -->
+                      <span class="">联系电话</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{slObj.phone}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">完成时间</label> -->
+                      <span class="">完成时间</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{slObj.accomplishTime}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">处理结果</label> -->
+                      <span class="">处理结果</span>:
+                    </div>
+                    <div class="text-right cause">
+                      <span>{{slObj.disResult}}</span>
+                    </div>
+                  </div>
+                  <div class="row" >
+                    <div class="text-left ">
+                      <!-- <label for="">处理照片</label> -->
+                      <span class="">处理照片</span>
+                    </div>
+                    <div class="photoList">
+                        <div class="phont" v-for="(item,index) in pic">
+                          <img :src="item" @click="pBrowserPicture(index,pic)" alt="">
+                        </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="text-left">
+                        查看附件
+                    </div>
+                    <div class="photoList">
+                      <div class="fj-item video-div" @click='playVideo' v-if='showVideoDiv'>
+                          <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                            <img src="../image/MeterManage/video.png" style="width: 50%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-25%;" alt=""/>
+                          </div>
+                          视频文件
+                      </div>
+                      <div class="fj-item audio-div" @click='playAudio' v-if='showAudioDiv'>
+                          <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                            <img src="../image/MeterManage/audio.png" style="width: 25%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-12.5%;" alt=""/>
+                          </div>
+                          音频文件
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="row" style="border-bottom: none;">
+                    <p @click="openMap">
+                      <i class="addressIcon"></i>
+                      <span class="textColor" >{{slObj.AppAddress}}</span>
+                    </p>
+                  </div>
+                </div>
+                <!-- 三来工单 -->
+
+            </div>
+
+        </div>
+
+        <footer id="footer" class="footer">
+          <div class="footer-title">
+            <span>任务进度:</span>
+            <label for="">{{EndStutaName}}({{EndStutas}})</label>
+          </div>
+          <div class="progressDiv">
+            <div class="progress" ref='progressbg' :class="{progressHalf:taskStatus==true}"></div>
+          </div>
+          <div class="progressText">
+            <div class="le">
+              <p>提交</p>
+              <span>{{submitTime}}</span>
+            </div>
+            <div class="">
+              <p :class="{progressActive:taskStatus==false}">审核中</p>
+              <span :class="{progressActive:taskStatus==false}">{{auditTime}}</span>
+            </div>
+            <div class="ri ">
+              <p :class="{progressActive:taskStatus==true}">已结束</p>
+              <span :class="{progressActive:taskStatus==true}">{{finishTime}}</span>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        dataObj = api.pageParam.data,
+        taskType = api.pageParam.type;
+        // console.log(JSON.stringify(dataObj)+','+getTaskType);
+
+        //3换表 13移改提 14校表 15三来工单 16其他工单 停水通知单4 通水任务42 通水任务(先通水)41 停水办理2 ServiceTypeId
+
+
+        api.parseTapmode();
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        photoBrowser = api.require('photoBrowser');
+
+        //home键监听
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+          if (taskType == 'handle') { //任务处理 返回事件
+            api.sendEvent({
+                name: 'refreshCloudMyTask',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'MyTask'
+            });
+          } else if (taskType == 'claimTask') { //任务领用 返回事件
+            api.sendEvent({
+                name: 'refreshCloudClaim',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'ClaimTask'
+            });
+          } else {  //代办列表进入详情
+            api.closeWin();
+          }
+        });
+
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                dataObj:dataObj,
+                projectName:'',
+                Id:dataObj.id,
+                hb:false,
+                ygt:false,
+                xb:false,
+                sl:false,
+
+                DispatchTime:'',//分派时间
+                CustomerCode:'',//户号
+                CustomerName:'',//户名
+                Address:'',//用户地址
+                tableLocation:'',//水表位置
+                Nature:'',//用水性质
+                Caliber:'',//口径
+                taskStatus:false,//任务进度状态 true-已结束  false-审核中
+                submitTime:'',
+                auditTime:'',
+                finishTime:'',
+
+                hbObj:{
+                  Description:'',//申请原因
+                  EndScale:'',//旧表止度
+                  StampNo:'',//新表表号
+                  Nameplate:'',//水表铭牌
+                  BeginScale:'',//新表起度
+                  Caliber:'',//新表口径
+                  Remark:'',//备注
+                },
+                ygtObj:{
+                  Description:'',//申请原因
+                  Remark:'',//备注
+                },
+                xbObj:{
+                  Description:'',//原因
+                  Remark:'',//备注
+                },
+                slObj:{
+                  problemDescription:'',//问题描述
+                  postponeNum:{//延期次数
+                    num:0,
+                    postponeArray:[],
+                  },
+                  messageSource:'',//信息来源
+                  critical:'',//紧急情况
+                  disposeRank:'',//处理级别
+                  phone:'',//联系电话
+                  accomplishTime:'',//完成时间
+                  disResult:'',//处理结果
+                  Address:'',//地址
+                },
+                userInfoMationObj:{},
+                pic: [],
+                videoPath: '',
+                audioPath: '',
+                showVideoDiv: false,
+                showAudioDiv: false,
+                EndStutas: '',
+                EndStutaName: '',
+                applyPic: [], //申请任务时候的图片  zxf 20200619
+
+                isRepair: false, //维修工单显示申请图片
+
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                  console.log(taskType);
+                  if (taskType == 'handle') { //任务处理 返回事件
+                    api.sendEvent({
+                        name: 'refreshCloudMyTask',
+                        extra: {
+                            type: '1'
+                        }
+                    });
+                    api.closeToWin({
+                        name: 'MyTask'
+                    });
+                  } else if (taskType == 'claimTask') { //任务领用 返回事件
+                    api.sendEvent({
+                        name: 'refreshCloudClaim',
+                        extra: {
+                            type: '1'
+                        }
+                    });
+                    api.closeToWin({
+                        name: 'ClaimTask'
+                    });
+                  } else {  //代办列表进入详情
+                    api.closeWin();
+                  }
+                },
+                openTaskDetail(name){//打开查看换表信息页面
+                  api.openWin({
+                      name: 'tableMessageDetail',
+                      url: './tableMessageDetail.html',
+                      pageParam: {
+                          typeName: name
+                      }
+                  });
+                },
+                getDetail(){//获取详情信息
+                    //3换表 13移改提 14校表 15三来工单 16其他工单 停水通知单4 通水任务42 通水任务(先通水)41 停水办理2
+                    var body = {
+                        'ReqCode': this.dataObj.taskCode,//流程编号
+                        'TypeId':2
+                    };
+                    fngetmmsPost('MMS104', body, 'application/json', true, false, (ret, err)=>{
+                        api.hideProgress();
+                        console.log(JSON.stringify(ret));
+                        if (ret && ret.Status == 0) {
+                            var data = JSON.parse(ret.Data);
+                            this.userInfoMationObj = data[0];
+                            if (data[0].Files != '' || data[0].Files != null) { //20200619 zxf
+                                var files = data[0].Files;
+                                files.forEach((item, index) => {
+                                    if (item.AttachmentType == 1) {
+                                      // this.applyPic.push($api.getStorage("bwapipath") + item.Path);
+                                      this.applyPic.push("http://" + $api.getStorage('apiUrl') + item.Path);
+                                    }
+                                });
+                            }
+                            if(data[0].ServiceTypeId == 3){
+                              this.hb = true;
+                            } else if (data[0].ServiceTypeId == 13) {
+                              this.ygt = true;
+                            }else if (data[0].ServiceTypeId == 14) {
+                              if (data[0].ActivityCode == '11') { //节点Id为11是换表处理
+                                this.hb = true;
+                              } else if (data[0].ActivityCode == '03') {//节点Id为03是校表处理
+                                this.xb = true;
+                              }
+                            }else if(data[0].ServiceTypeId == 15 || data[0].ServiceTypeId == 16 || data[0].ServiceTypeId == 17){
+                              this.sl = true;
+                              if (data[0].ServiceTypeId == 16) {
+                                this.isRepair = true;
+                              }
+                            }
+
+                            this.projectName = data[0].TypeName;
+                            this.CustomerCode = data[0].CustomerCode;//户号
+                            this.CustomerName = data[0].CustomerName;//户名
+                            this.Address = data[0].Address;//用户地址
+                            this.tableLocation = data[0].Location;//水表位置
+                            this.Nature = data[0].NatureName;//用水性质
+                            this.Caliber = data[0].Caliber;//口径
+                            this.DispatchTime = data[0].CreateTime; //创建时间
+
+                            this.submitTime = moment(data[0].CreateTime).format('YYYY-MM-DD');//分派时间
+
+                            if(data[0].IsEnd == 1){//已结束
+                              this.taskStatus = true;
+                              this.$refs.progressbg.style.width = "100%";
+                              if (data[0].EndStutas == 0) {
+                                this.EndStutas = '已办理';
+                              } else {
+                                this.EndStutas = '已终止';
+                              }
+                              this.EndStutaName = '已结束';
+                            }else if(data[0].IsEnd == 0){//处理中
+                              this.taskStatus = false;
+                              this.$refs.progressbg.style.width = "50%";
+                              this.EndStutas = '待审核';
+                              this.EndStutaName = '审核中';
+                            }
+
+                            for (var i = 0; i < data[0].Files.length; i++) {
+                              var fileType = data[0].Files[i].Path.substring(data[0].Files[i].Path.lastIndexOf('.'));
+                              if (data[0].Files[i].AttachmentType != 1) {
+                                if (fileType == '.jpg' || fileType == '.png') {
+                                  this.pic.push("http://" + $api.getStorage('apiUrl') + data[0].Files[i].Path);
+                                } else if (fileType == '.mp4' || fileType == '.avi' || fileType == '.mov') {
+                                  this.videoPath = "http://" + $api.getStorage('apiUrl') + data[0].Files[i].Path;
+                                  this.showVideoDiv = true;
+                                } else {
+                                  this.showAudioDiv = true;
+                                  this.audioPath = "http://" + $api.getStorage('apiUrl') + data[0].Files[i].Path;
+                                }
+                              }
+
+                            }
+
+                            if(this.hb){
+                              this.hbObj.Description = data[0].MeterRemark;//申请原因
+                              // this.hbObj.EndScale = data[0].LastScale;//旧表止度
+                              // this.hbObj.StampNo = data[0].StampNo;//新表表号
+                              // this.hbObj.Nameplate = data[0].Nameplate;//水表铭牌
+                              // this.hbObj.BeginScale = data[0].BeginScale;//新表起度
+                              // this.hbObj.Caliber = data[0].Caliber;//新表口径
+                              this.hbObj.Remark = data[0].Remark == 'null' ? '' : data[0].Remark;//备注
+
+                              this.hbObj.AppAddress = data[0].AppAddress;//地址
+
+                              for (var i = 0; i < data[0].ParameterInfo.length; i++) {
+                                var item = data[0].ParameterInfo[i];
+                                if (item.Code == 'P_OLD_END_SCALE') { //旧表止度
+                                  this.hbObj.EndScale = item.Value;
+                                }else if (item.Code == 'P_STAMP_NO') { //新表表号
+                                  this.hbObj.StampNo = item.Value;
+                                } else if (item.Code == 'P_NAME_PLATE_ID') { //新表名牌
+                                  this.hbObj.Nameplate = item.Value;
+                                } else if (item.Code == 'P_NEW_BEGIN_SCALE') { //新表起度
+                                  this.hbObj.BeginScale = item.Value;
+                                } else if (item.Code == 'P_CALIBER') {  //新表口径
+                                  this.hbObj.Caliber = item.Value;
+                                }
+                              }
+                            }
+
+                            if(this.ygt){
+                              this.ygtObj.Description = data[0].MeterRemark;//申请原因
+                              this.ygtObj.Remark = data[0].Remark == null ? '' : data[0].Remark;//备注
+                              // this.ygtObj.pic = data[0].Path.split(",");//图片
+                              this.ygtObj.AppAddress = data[0].AppAddress;//地址
+                            }
+
+                            if(this.xb){
+                              // this.xbObj.Description = data[0].MeterRemark;//原因
+                              this.xbObj.Remark = data[0].Remark == null ? '' : data[0].Remark;//备注
+                              // this.xbObj.pic = data[0].Path.split(",");//照片
+                              this.xbObj.AppAddress = data[0].AppAddress;//地址
+                            }
+
+                             if(this.sl){
+                              //  this.slObj.problemDescription = '';//问题描述
+                              //  this.slObj.postponeNum = {//延期次数
+                              //    num:0,
+                              //    postponeArray:[],
+                              //  },
+                               this.slObj.messageSource = data[0].SourceName;//信息来源
+                               this.slObj.critical = data[0].UsgentText;//紧急情况
+                               this.slObj.disposeRank = data[0].Processinglevelid;//处理级别
+                               this.slObj.phone = data[0].Phone;//联系电话
+                               this.slObj.accomplishTime = data[0].EndTime;//完成时间
+                               this.slObj.disResult = data[0].Remark == null ? '' : data[0].Remark;//处理结果
+                              //  this.slObj.pic = data[0].Path.split(",");//处理照片
+                               this.slObj.AppAddress = data[0].AppAddress;//地址
+                             }
+
+                        }
+
+                    });
+                },
+                openMap(){//打开地图页
+                  if (this.isClaim) {
+                    return
+                  }
+                  api.openWin({
+                      name: 'mapLocation',
+                      url: './mapLocation.html',
+                      pageParam: {
+                          dataObj: this.userInfoMationObj
+                      }
+                  });
+                },
+                playVideo() {
+                  var _that = this;
+                  api.openVideo({
+                      url: _that.videoPath
+                  });
+                },
+                playAudio() {
+                  var _that = this;
+                  var audioStreamer = api.require('audioStreamer');
+                  audioStreamer.openPlayer({
+                      path: _that.audioPath,
+                  }, function(ret) {
+                      if (ret.status) {
+                        console.log(JSON.stringify(ret));
+                      }
+                  });
+                },
+                openUserDetails() {  //打开用户详情界面
+                  var body = {
+                      BookId: '',
+                      ReaderId: '',
+                      Code: this.CustomerCode,
+                      BeginTime: '',
+                      EndTime: '',
+                      Obscure: '',
+                      isWater: '',
+                  };
+
+                  fnPost('OSM002', body, 'application/json', false, false, (ret, err) => {
+                    if(ret && ret.Status == 0) {
+                      var data = JSON.parse(ret.Data);
+                      if (data.length > 0 && data.length == 1) {
+                          var result = JSON.parse(JSON.stringify(data[0]));
+                          api.openWin({
+                              name: 'CustomerDetails',
+                              url: '../CustomerSearch/CustomerDetails.html',
+                              pageParam: result,
+                              allowEdit: true
+                          });
+                          api.hideProgress();
+                      } else {
+                        api.hideProgress();
+                        vant.Toast("用户查询失败");
+                      }
+                    } else {
+                      api.hideProgress();
+                      vant.Toast("用户查询失败");
+                    }
+                  });
+                }
+
+            },
+            mounted: function() {
+                this.getDetail();
+            }
+        })
+    }
+</script>
+
+</html>

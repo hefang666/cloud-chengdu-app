@@ -1,0 +1,2684 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>转办</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+            overflow-y: hidden;
+            display: flex;
+            flex-flow: column;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 3;
+            background-color: #fff;
+            color: #333333;
+            font-size: 0.85rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            border: none;
+            background-size: 100% 1px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-image: linear-gradient(0, #dddddd, #dddddd 50%, transparent 50%);
+            background-image: -webkit-linear-gradient(90deg, #dddddd, #dddddd 50%, transparent 50%);
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333;
+            font-weight: 900;
+            width: 0.6rem;
+            height: 1.05rem;
+        }
+        /*顶部导航栏*/
+
+        #header {
+            position: fixed;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+        }
+
+        .aui-bar-nav .aui-title {
+            color: #fff;
+        }
+
+        .aui-icon-left:before {
+            color: #fff;
+        }
+
+        #header .add {
+            width: 1rem;
+            height: 1rem;
+            background: url('../../image/Customer/mail-add.png');
+            background-size: 1rem 1rem;
+            position: absolute;
+            right: 0.9rem;
+            bottom: 0.7rem;
+        }
+
+        #header .aui-bar-nav,
+        .aui-bar.aui-bar-light {
+            background-image: none;
+        }
+
+        #center {
+            flex: 1;
+            overflow: scroll;
+            background-color: #F4F4F4;
+            margin-bottom: 100px;
+            -webkit-overflow-scrolling: touch; //移动端滑动流畅设置。
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background-color: #ffffff;
+        }
+
+        .dv1 {
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #F3F3FF;
+            font-size: 0.8rem;
+            padding-left: 8%;
+            padding-right: 10%;
+            margin-top: 20px;
+        }
+
+        .dv2 {
+            margin-bottom: 20px;
+        }
+
+        .image {
+            float: left;
+            width: 10px;
+            height: 10px;
+            margin-top: 20px;
+        }
+
+        .sp {
+            margin-top: 0.7rem;
+            margin-left: 5px;
+        }
+
+        .sp-no {
+            margin-top: 0.7rem;
+            float: right;
+            margin-right: 10px;
+        }
+
+        .aui-checkbox-1 {
+            margin-top: 0.7rem;
+            float: right;
+        }
+
+        .aui-checkbox {
+            float: right;
+        }
+
+        .dv {
+            width: 80%;
+            height: 40px;
+            display: flex;
+            border-bottom: 1px solid #F3F3FF;
+            margin-left: 10%;
+        }
+
+        .dv-1 {
+            flex: 2;
+            margin-top: 0.5rem;
+        }
+
+        .dv-2 {
+            flex: 3;
+            margin-top: 0.5rem;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .dv-3 {
+            flex: 3;
+            margin-top: 0.5rem;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .dv-4 {
+            margin-top: 0.5rem;
+        }
+
+        .dv-5 {
+            width: 1px;
+            height: 16px;
+            margin-top: 13px;
+            background-color: #000;
+        }
+
+        .gundongBox {
+            width: 300px;
+            height: 30px;
+            margin: 200px auto;
+            position: relative;
+            overflow: hidden;
+            background: pink;
+        }
+
+        .gundongList {
+            position: absolute;
+            animation: geiwogun 12s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes geiwogun {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(0, 0);
+            }
+        }
+
+        #btn {
+            width: 80%;
+            height: 50px;
+            margin-left: 10%;
+            margin-top: 20px;
+            border-radius: 20px;
+            background-color: #377EFF;
+            color: #fff;
+            text-align: center;
+            line-height: 50px;
+            font-size: 18px;
+        }
+
+        .header_right {
+            position: relative;
+            float: right;
+            width: 50px;
+            height: 45px;
+        }
+
+        .image2 {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            margin-top: 15px;
+        }
+
+        .badge2 {
+            position: absolute;
+            height: 20px;
+            margin-left: 10px;
+            z-index: 10;
+            background-color: #FF3024;
+            border-radius: 10px;
+            line-height: 20px;
+        }
+
+        .badge2 span {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .box {
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .content p {
+            display: inline-block;
+            font-size: 15px;
+            color: #000000;
+        }
+
+        .content p.padding {
+            padding-right: 50px;
+        }
+
+        .aui-list-item-arrow {
+            color: #C2C2C2;
+            font-size: 18px;
+            height: 40px;
+        }
+
+        .center_dv {
+            margin: 20px;
+            border-radius: 20px;
+            background-color: #ffffff;
+            padding: 10px;
+        }
+
+        .center_dv1_span {
+            margin-left: 5px;
+            color: #2F7CF5;
+            font-size: 18px;
+        }
+
+        .center_dv1_checkbox {
+            float: right;
+            margin-right: 10px;
+        }
+
+        .center_dv2 {
+            height: 2px;
+            background-color: #DEDEDE;
+            margin-top: 10px;
+        }
+
+        .center_dv3 {
+            margin-top: 10px;
+        }
+
+        .center_dv3_dv {
+            background-color: #F4F4F4;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .dv_top {
+            display: flex;
+        }
+
+        .dv_bottom {
+            margin-top: 10px;
+            display: flex;
+        }
+
+        .dv_top_dv1 {
+            flex: 1;
+            color: #000000;
+            overflow: scroll;
+            font-size: 18px;
+            flex-direction: row;
+            white-space: nowrap;
+        }
+
+        .dv_top_dv2 {}
+
+        .dv_bottom_dv1 {
+            flex: 1;
+            text-align: left;
+            flex-direction: row;
+            white-space: nowrap;
+            overflow: scroll;
+            color: #6D6D6D;
+        }
+
+        .dv_bottom_dv2 {
+            flex: 1;
+            text-align: left;
+            flex-direction: row;
+            white-space: nowrap;
+            overflow: scroll;
+            color: #6D6D6D;
+        }
+
+        .aui-checkbox:checked,
+        .aui-checkbox.aui-checked {
+            background-color: #377EFF;
+            border: solid 1px #377EFF;
+            text-align: center;
+            background-clip: padding-box;
+        }
+
+        .meter-handle-time {
+            box-sizing: border-box;
+            padding-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+  <header class="aui-bar aui-bar-nav aui-bar-light" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action="back">
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <!-- <div class="aui-pull-left aui-btn" tapmode data-action="back">
+
+        </div> -->
+        <div class="aui-title">数据上传</div>
+        <div class="aui-pull-right add open-win" win='creatContacts'>
+        </div>
+    </header>
+
+    <div id="center">
+        <div class="aui-content mine_List">
+            <ul class="aui-list">
+                <li class="aui-list-item open-win" tapmode data-action="openloaderData">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-inner aui-list-item-arrow">
+                            失败列表
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div id="allupload">
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">预停水任务数据及照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-1" onclick="setAllNo(1)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="positionList">
+                    <!--
+                    <div class="center_dv3_dv">
+                        <div class="dv_top">
+                            <div class="dv_top_dv1">
+                                2019/11/30
+                            </div>
+                            <div class="dv_top_dv2">
+                                <input name="Fruit" type="checkbox" value="12345678" class="aui-checkbox" onclick="setOthers(1)" />
+                            </div>
+                        </div>
+
+                        <div class="dv_bottom">
+                            <div class="dv_bottom_dv1">已张贴：1</div>
+                            <div class="dv_bottom_dv2">已上传：3</div>
+                        </div>
+                    </div>
+                    <div class="center_dv3_dv">
+                        <div class="dv_top">
+                            <div class="dv_top_dv1">
+                                2019/11/30
+                            </div>
+                            <div class="dv_top_dv2">
+                                <input name="Fruit" type="checkbox" value="12345678" class="aui-checkbox" onclick="setOthers(1)" />
+                            </div>
+                        </div>
+
+                        <div class="dv_bottom">
+                            <div class="dv_bottom_dv1">已张贴：1</div>
+                            <div class="dv_bottom_dv2">已上传：3</div>
+                        </div>
+                    </div>
+-->
+                </div>
+            </div>
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">表号维护数据上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-2" onclick="setAllNo(2)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="books">
+
+                    <div class="center_dv3_dv">
+                        <div class="dv_top">
+                            <div class="dv_top_dv1">
+                                表1
+                            </div>
+                            <div class="dv_top_dv2">
+                                <input name="Fruit2" type="checkbox" value="{{value.BookId}}" class="aui-checkbox" onclick="setOthers(2)" />
+                            </div>
+                        </div>
+
+                        <div class="dv_bottom">
+                            <div class="dv_bottom_dv1">已扫码：3</div>
+                            <div class="dv_bottom_dv2">已上传：2</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">工单申请照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-3" onclick="setAllNo(3)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="applyimages">
+                </div>
+            </div>
+            <!-- <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">预停水任务照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-6" onclick="setAllNo(6)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="postingImages">
+
+                </div>
+            </div> -->
+            <!-- <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">水表维护照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-4" onclick="setAllNo(4)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="meterNoImages">
+
+                </div>
+            </div> -->
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">表务办理数据及照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-7" onclick="setAllNo(7)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="reviewUpload">
+
+                </div>
+            </div>
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">表务办理照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-5" onclick="setAllNo(5)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="meterimages">
+
+                </div>
+            </div>
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">停复水办理数据及照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-8" onclick="setAllNo(8)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="stopOpen">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div id="btn" onclick="upload()">上&nbsp;&nbsp;传</div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/hammer.min.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/template" id='postingList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.DATE}}张贴任务
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit" type="checkbox" value="{{value.DATE}}" class="aui-checkbox" onclick="setOthers(1)" />
+            </div>
+        </div>
+
+        <div class="dv_bottom">
+            <div class="dv_bottom_dv1">已张贴：{{value.SUM}}</div>
+            <div class="dv_bottom_dv2">已上传：{{value.YSC}}/{{value.SUM}}</div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='BookList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.cloudTaskCode}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit2" type="checkbox" value="{{value.cloudTaskCode}}" class="aui-checkbox" onclick="setOthers(2)" />
+            </div>
+        </div>
+
+        <div class="dv_bottom">
+            <div class="dv_bottom_dv1">已扫码：{{value.YSM}}</div>
+            <div class="dv_bottom_dv2">未上传：{{value.YSC}}</div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='ApplyList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.CustomerCode}}
+            </div>
+            <div class="dv_top_dv1">
+                {{value.TaskTypeName}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit3" type="checkbox" value="{{value}}" class="aui-checkbox" onclick="setOthers(3)" />
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='meterNoList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.CustomerCode}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit4" type="checkbox" value="{{value}}" class="aui-checkbox" onclick="setOthers(4)" />
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='postingImageList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.TaskNo}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit6" type="checkbox" value="{{value}}" class="aui-checkbox" onclick="setOthers(6)" />
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='MeterHandleList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.ReqCode}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit5" type="checkbox" value="{{value}}" class="aui-checkbox" onclick="setOthers(5)" />
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='MeterDataImg'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.SaveTime}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit7" type="checkbox" value="{{value}}" class="aui-checkbox" onclick="setOthers(7)" />
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='StopOpenWater'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1">
+                {{value.SaveTime}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit8" type="checkbox" value="{{value}}" class="aui-checkbox" onclick="setOthers(8)" />
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    var headerH;
+    var CurentUserName = "";
+    apiready = function() {
+        CurentUserName = $api.getStorage('loginData').userName;
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        // api.setWinAttr({
+        //     bounces: false
+        // });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        // center = $api.offset($api.byId('center')).h;
+        $('#center').css('margin-top', '' + headerH + 'px');
+
+        api.addEventListener({
+            name: 'refreshList'
+        }, function(ret, err){
+          initListView();
+          initListView2();
+          initListView3();
+          initListView5();
+          initListView7();
+          initListView8();
+        });
+
+        initListView();
+        initListView2();
+        initListView3();
+        // initListView4(); //5/15 zxf
+        initListView5();
+        // initListView6();
+        initListView7();
+        initListView8();
+    };
+
+    var actionList = {
+        'back': function() {
+            api.closeWin();
+        },
+        'openloaderData': function() {
+            api.openWin({
+                name: 'uploadDataerr',
+                url: './uploadDataerr.html',
+                pageParam: {
+                    name: 'test'
+                }
+            });
+        }
+    }
+
+    //全选
+    function setAllNo(index) {
+
+        var box = document.getElementById("checkbox-" + index + "");
+        if (index == 1) {
+            var loves = document.getElementsByName("Fruit");
+        } else {
+            var loves = document.getElementsByName("Fruit" + index + "");
+        }
+        if (box.checked == false) {
+            for (var i = 0; i < loves.length; i++) {
+                loves[i].checked = false;
+            }
+        } else {
+            for (var i = 0; i < loves.length; i++) {
+                loves[i].checked = true;
+            }
+        }
+    }
+
+    //勾选抄表册
+    var meterNoCheckedNumber = 0,
+        postingImagesCheckedNumber = 0; //5/15 zxf
+    function setOthers(index) {
+        if (index == 1) {
+            var loves = document.getElementsByName("Fruit");
+        } else {
+            var loves = document.getElementsByName("Fruit" + index + "");
+        }
+        for (var i = 0; i < loves.length; i++) {
+            if (loves[i].checked == false) {
+                var box = document.getElementById("checkbox-" + index + "");
+                box.checked = false;
+                return;
+            }
+        }
+    }
+
+    var postingList = []; //预停水分类数组。
+    var postingListCheckeds = []; //选中的预停水分类数组。
+    var qbPosting = []; //当前要上传的预停水任务的所有数据。
+
+    var bookList = []; //抄表册分类数组。
+    var bookListCheckeds = []; //选中的预停水分类数组。
+    var qbUsers = []; //当前要上传的预停水任务的所有数据。
+
+    var aiCheckeds = []; //选中的工单申请照片数组
+    var aiAllData = []; //全部工单申请照片
+    var aiNowUploadIndex = 0;
+
+    var meterCheckeds = []; //选中的表务办理照片数组
+    var meterAllData = []; //全部表务办理照片
+    var checkArr = [];
+    var meterNowUploadIndex = 0;
+
+    var postingListUploadIndex = 0; //正在上传的预停水分类数组
+    var bookListUploadIndex = 0; //正在上传的抄表册分类数组
+
+    var mPageSize = 100; //分页数。
+    var mPageNo = 1; //页码。
+    var Index = 0;
+
+    var meterNoCheckeds = []; //选中的水表维护照片数组
+    var meterNoAllData = []; //全部水表维护照片
+
+    var postingImagesCheckeds = []; //选中的水表维护照片数组
+    var postingImagesAll = []; //选中的所有贴单照片
+    var postingimgsTaskNoCode = ''; //选中的贴单照片的所属任务编号
+    // var aiNowUploadIndex = 0;
+
+    var reviewDataImgChecked = '';//选中的表务办理数据及照片
+    var reviewDataImgArr = [];//选中的表务办理数据及照片数据
+    var uploadReviewIndex = 0;//上传的表务办理数据及照片数据下标
+
+    var stopAndOpenChecked = '';
+    var stopAndOpenArr = [];
+    var stopAndOpenIndex = 0;
+
+    //渲染预停水任务数据
+    function initListView() {
+        var box = document.getElementById("checkbox-1");
+        box.checked = false;
+        postingList = [];
+
+        var db = api.require('db');
+        var postdata = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'select substr(OperatedTime,1,10) date,count(1) sum from POSTING_LIST where NotSave="1" and NotUploader="0" and Files="" and userName="' + CurentUserName + '" group by substr(OperatedTime,1,10)'
+        });
+        if (postdata.status) {
+            if (postdata.data.length > 0) {
+                for (var i = 0; i < postdata.data.length; i++) {
+                    //已上传数
+                    var YSCdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select count(*) as YSC from POSTING_LIST where NotSave="1" and NotUploader="1" and userName="' + CurentUserName + '" and substr(OperatedTime,1,10)="' + postdata.data[i].date + '"'
+                    });
+                    //总数
+                    var SUMdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select count(*) as SUM from POSTING_LIST where NotSave="1" and NotUploader="0" and Files="" and userName="' + CurentUserName + '" and substr(OperatedTime,1,10)="' + postdata.data[i].date + '"'
+                    });
+
+                    postingList.push({
+                        DATE: postdata.data[i].date,
+                        YSC: YSCdata.data[0].YSC,
+                        SUM: SUMdata.data[0].SUM,
+                    });
+                }
+
+                if (postingList.length > 0) {
+                    var datas = {
+                        datas: postingList
+                    }
+
+                    var str = template('postingList', datas);
+                    //console.log(JSON.stringify(str));
+                    $('#positionList div').remove();
+                    $('#positionList').append(str);
+                    fnReady();
+                    // operationDom();
+                    operationDom();
+                    api.hideProgress();
+                } else {
+                    var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                    $('#positionList div').remove();
+                    $('#positionList').append(str);
+                }
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#positionList div').remove();
+                $('#positionList').append(str);
+            }
+        }
+    }
+
+    //上传数据。
+    function upload() {
+        if(api.connectionType == 'none'){
+          api.toast({
+              msg: '网络连接错误,请检查网络是否连接',
+              duration: 2000,
+              location: 'bottom'
+          });
+          return
+        }
+        postingListCheckeds = [];
+        postingListUploadIndex = 0;
+
+        var loves = document.getElementsByName("Fruit"); //获取抄表数据
+
+        for (var i = 0; i < loves.length; i++) {
+            if (loves[i].checked == true) {
+                postingListCheckeds.push(loves[i].value);
+            }
+        }
+
+        bookListCheckeds = [];
+        bookListUploadIndex = 0;
+
+        var loves2 = document.getElementsByName("Fruit2"); //获取抄表数据
+
+        for (var i = 0; i < loves2.length; i++) {
+            if (loves2[i].checked == true) {
+                bookListCheckeds.push(loves2[i].value);
+            }
+        }
+        aiCheckeds = [];
+        aiNowUploadIndex = 0;
+        var loves3 = document.getElementsByName("Fruit3"); //获取抄表数据
+        for (var i = 0; i < loves3.length; i++) {
+            if (loves3[i].checked == true) {
+                aiCheckeds.push(JSON.parse(loves3[i].value));
+            }
+        }
+        // zxf 5/15
+        var loves4 = document.getElementsByName("Fruit4"); //获取抄表数据
+        for (var i = 0; i < loves4.length; i++) {
+            if (loves4[i].checked == true) {
+                meterNoCheckeds.push(JSON.parse(loves4[i].value));
+            }
+        }
+        var loves6 = document.getElementsByName("Fruit6"); //获取抄表数据
+        for (var i = 0; i < loves6.length; i++) {
+            if (loves6[i].checked == true) {
+                postingimgsTaskNoCode += "'" + JSON.parse(loves6[i].value).TaskNo + "',";
+                // postingImagesCheckeds.push(JSON.parse(loves6[i].value));
+            }
+        }
+        if (postingimgsTaskNoCode != '') {
+            postingimgsTaskNoCode = postingimgsTaskNoCode.substring(0, (postingimgsTaskNoCode.length - 1));
+        }
+
+        meterCheckeds = [];
+        meterNowUploadIndex = 0;
+        var loves5 = document.getElementsByName("Fruit5"); //获取抄表数据
+        for (var i = 0; i < loves5.length; i++) {
+            if (loves5[i].checked == true) {
+                meterCheckeds.push(JSON.parse(loves5[i].value));
+            }
+        }
+
+
+        reviewDataImgChecked = '';
+        reviewDataImgArr = [];
+        uploadReviewIndex = 0;
+
+        var loves7 = document.getElementsByName("Fruit7"); //获取抄表数据
+        for (var i = 0; i < loves7.length; i++) {
+            if (loves7[i].checked == true) {
+                reviewDataImgChecked += "'" + JSON.parse(loves7[i].value).SaveTime + "',";
+            }
+        }
+        if (reviewDataImgChecked != '') {
+            reviewDataImgChecked = reviewDataImgChecked.substring(0, (reviewDataImgChecked.length - 1));
+        }
+
+        stopAndOpenChecked = '';
+        stopAndOpenArr = [];
+        stopAndOpenIndex = 0;
+        var loves8 = document.getElementsByName("Fruit8"); //获取抄表数据
+        for (var i = 0; i < loves8.length; i++) {
+            if (loves8[i].checked == true) {
+                stopAndOpenChecked += "'" + JSON.parse(loves8[i].value).SaveTime + "',";
+            }
+        }
+        if (stopAndOpenChecked != '') {
+            stopAndOpenChecked = stopAndOpenChecked.substring(0, (stopAndOpenChecked.length - 1));
+        }
+        if (postingListCheckeds.length > 0) {
+            resetQueryBuilder(); //获取当前抄表册所有要上传的用户数据。
+            continueUpdateData(); //获取当前上传的抄表数据。
+        } else if (bookListCheckeds.length > 0) {
+            resetQueryBuilder2(); //获取当前抄表册所有要上传的用户数据。
+            continueUpdateData2(); //获取当前上传的抄表数据。
+        } else if (aiCheckeds.length > 0) {
+            api.showProgress({
+                title: '正在上传',
+                text: '',
+                modal: false
+            });
+            uploadApplyImage();
+        } else if (meterNoCheckeds.length > 0) {
+            api.showProgress({
+                title: '正在上传',
+                text: '',
+                modal: false
+            });
+            handleMeterNoImage();
+        } else if (postingimgsTaskNoCode.length > 0 && postingimgsTaskNoCode != '') {
+            api.showProgress({
+                title: '正在上传',
+                text: '',
+                modal: false
+            });
+            handlePostingImages();
+        } else if (meterCheckeds.length > 0) {
+            api.showProgress({
+                title: '正在上传',
+                text: '',
+                modal: false
+            });
+            getCheckMeterHandle();
+        } else if (reviewDataImgChecked != '') {
+            api.showProgress({
+                title: '正在上传',
+                text: '',
+                modal: false
+            });
+            getReviewUploadData();
+        } else if (stopAndOpenChecked != '') {
+            api.showProgress({
+                title: '正在上传',
+                text: '',
+                modal: false
+            });
+            getStopOpenData();
+        }
+    }
+
+    //获取当前抄表册所有要上传的用户数据。
+    function resetQueryBuilder() {
+        mPageNo = 1; //将页码重新置为1
+        Index = 0;
+
+        var db = api.require('db');
+        var postingdata = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: "select * from POSTING_LIST where NotSave='1' and NotUploader ='0' and Files='' and userName='" + CurentUserName + "' and substr(OperatedTime,1,10)='" + postingListCheckeds[postingListUploadIndex] + "'"
+        });
+        qbPosting = postingdata.data;
+    }
+
+    //获取当前上传的抄表数据。
+    function continueUpdateData() {
+        var Posting = qbPosting[Index];
+
+        var db = api.require('db');
+        var postingImageData = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: "select * from POSTING_IMAGE where Id='" + Posting.Id + "' and NotSubmit=0 and userName='" + CurentUserName + "'"
+        });
+        var FileLocation = "";
+        var FileType = "";
+        var FileUrlArr = [];
+        var postingImages = [];
+        if (postingImageData.status) {
+            if (postingImageData.data.length > 0) {
+                postingImages = postingImageData.data;
+                for (var i = 0; i < postingImageData.data.length; i++) {
+                    if (FileLocation == "") {
+                        FileLocation = postingImageData.data[i].locationJD + "," + postingImageData.data[i].locationWD;
+                    } else {
+                        FileLocation += "|" + postingImageData.data[i].locationJD + "," + postingImageData.data[i].locationWD;
+                    }
+
+                    var startIndex = postingImageData.data[i].imageFileUrl.lastIndexOf(".");
+                    if (startIndex != -1) {
+                        var lx = postingImageData.data[i].imageFileUrl.substring(startIndex + 1, postingImageData.data[i].imageFileUrl.length).toLowerCase();
+                        if (FileType == "") {
+                            FileType = lx;
+                        } else {
+                            FileType = "|" + lx;
+                        }
+                    } else {
+
+                    }
+                    FileUrlArr.push(postingImageData.data[i].imageFileUrl);
+                }
+            }
+        }
+      if(Posting.ArrearMoney !=0 && Posting.ArrearMoney !="" && Posting.ArrearMoney !="0"){
+        if(FileUrlArr.length <2){
+          api.confirm({
+              title: '提示',
+              msg: ''+Posting.CustomerCode+'用户照片未达两张',
+              buttons: ['确定', '取消']
+          }, function(ret, err){
+              if( ret ){
+
+              }
+          });
+          Index++;
+          if (Index < qbPosting.length) {
+            continueUpdateData();
+            return;
+            }else{
+              api.hideProgress();
+              initListView();
+              initListView2();
+              initListView3();
+              //initListView4();
+              initListView5();
+              // initListView6();
+              initListView7();
+              initListView8();
+            return
+            }
+        }
+      }
+        var body = {
+            "Id": Posting.Id,
+            "OperatedTime": dataTime(),
+            "Remark": Posting.Remark,
+            "FileLocation": FileLocation,
+            "Type": ""
+        }
+        var files = {
+            file: FileUrlArr
+        };
+
+        fnPost('MMS006', body, 'application/json', false, false, (ret, err) => {
+            if (ret) {
+                var db = api.require('db');
+                if (ret.Status == 0) {
+                    //alert("预停水上传成功：" + JSON.stringify(ret));
+                    //成功后删除数据
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'update POSTING_LIST set NotUploader="1",NotSave="1" where Id="' + Posting.Id + '" and userName="' + CurentUserName + '"'
+                    });
+                    for (var i = 0; i < postingImages.length; i++) {
+                        var postingimagedata = db.executeSqlSync({
+                            name: 'Wsdatabase',
+                            sql: 'update POSTING_IMAGE set NotSubmit="1" where _id="' + postingImages[i]._id + '" and userName="' + CurentUserName + '"'
+                        });
+                    }
+                } else {
+                    //alert("预停水上传失败：" + JSON.stringify(ret));
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'update POSTING_LIST set Files="' + ret.Message + '" where Id="' + Posting.Id + '" and userName="' + CurentUserName + '"'
+                    });
+                }
+            } else {
+                //alert(JSON.stringify(err));
+                api.toast({
+                    msg: JSON.stringify(err),
+                    duration: 3000,
+                    location: 'bottom'
+                });
+                api.hideProgress();
+                initListView();
+                initListView2();
+                initListView3();
+                //initListView4();
+                initListView5();
+                // initListView6();
+                initListView7();
+                initListView8();
+                return;
+            }
+            Index++;
+            if (Index < qbPosting.length) {
+                setTimeout(continueUpdateData(), 3000);
+            } else {
+                postingListUploadIndex++;
+                postingListCheckeds[postingListUploadIndex]
+                if (postingListUploadIndex + 1 <= postingListCheckeds.length) {
+                    resetQueryBuilder(); //获取当前抄表册所有要上传的用户数据。
+                    continueUpdateData(); //获取当前上传的抄表数据。
+                } else {
+                    //抄表册上传完毕
+                    postingListCheckeds = [];
+                    if (bookListCheckeds.length > 0) {
+                        resetQueryBuilder2(); //获取当前抄表册所有要上传的用户数据。
+                        continueUpdateData2(); //获取当前上传的抄表数据。
+                    } else if (aiCheckeds.length > 0) {
+                        uploadApplyImage();
+                    } else if (meterNoCheckeds.length > 0) {
+                        handleMeterNoImage();
+                    } else if (postingimgsTaskNoCode.length > 0 && postingimgsTaskNoCode != '') {
+                        handlePostingImages();
+                    } else if (meterCheckeds.length > 0) {
+                        getCheckMeterHandle();
+                    } else if (reviewDataImgChecked != '') {
+                      getReviewUploadData();
+                    } else if (stopAndOpenChecked != '') {
+                      getStopOpenData();
+                    } else {
+                        //alert("上传完成");
+                        api.toast({
+                            msg: "上传完成",
+                            duration: 3000,
+                            location: 'bottom'
+                        });
+                        api.hideProgress();
+                        initListView();
+                        initListView2();
+                        initListView3();
+                        //initListView4();
+                        initListView5();
+                        // initListView6();
+                        initListView7();
+                        initListView8();
+                    }
+                }
+
+            }
+        }, files);
+    }
+
+    //渲染表号维护数据
+    function initListView2() {
+        var box = document.getElementById("checkbox-2");
+        box.checked = false;
+        bookList = [];
+        var db = api.require('db');
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'select cloudTaskCode from meterNoSheets where userName="' + CurentUserName + '" GROUP BY cloudTaskCode'
+        });
+        if (ret.status) {
+            if (ret.data.length > 0) {
+                for (var i = 0; i < ret.data.length; i++) {
+                    //已抄数
+                    var YSMdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select * from meterNoSheets where StampNo!="" and isSaveLocal=1 and isUpload=0  and UploadErrMsg="" and userName="' + CurentUserName + '" and cloudTaskCode=' + ret.data[i].cloudTaskCode + ''
+                    });
+                    var YSCdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select * from meterNoSheets where StampNo!="" and UploadErrMsg="" and userName="' + CurentUserName + '" and isSaveLocal=1 and isUpload=0 and cloudTaskCode=' + ret.data[i].cloudTaskCode + ''
+                    });
+
+                    if (YSMdata.data.length > 0) {
+                        bookList.push({
+                            cloudTaskCode: ret.data[i].cloudTaskCode,
+                            YSM: YSMdata.data.length,
+                            YSC: YSCdata.data.length
+                        });
+                    }
+                }
+
+                if (bookList.length > 0) {
+                    var datas = {
+                        datas: bookList
+                    }
+
+                    var str = template('BookList', datas);
+                    //console.log(JSON.stringify(str));
+                    $('#books div').remove();
+                    $('#books').append(str);
+                    fnReady();
+                    // operationDom();
+                    operationDom();
+                    api.hideProgress();
+                } else {
+                    var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                    $('#books div').remove();
+                    $('#books').append(str);
+                }
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#books div').remove();
+                $('#books').append(str);
+            }
+        }
+    }
+
+    //获取当前抄表册所有要上传的用户数据。
+    function resetQueryBuilder2() {
+        mPageNo = 1; //将页码重新置为1
+        Index = 0;
+
+        var db = api.require('db');
+        var userdata = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'select * from meterNoSheets where StampNo!="" and UploadErrMsg="" and userName="' + CurentUserName + '" and cloudTaskCode=' + bookListCheckeds[bookListUploadIndex] + ''
+        });
+        qbUsers = userdata.data;
+    }
+
+    //获取当前上传的抄表数据。
+    function continueUpdateData2() {
+        var user = qbUsers[Index];
+        var meterManageSaveLocation= $api.getStorage('meterManageSaveLocation');
+
+        //组装要上传的数据
+        var body = {
+            "TaskId": user.taskId,
+            "CustomerCode": user.CustomerCode,
+            "StampNo": user.StampNo,
+            "Longitude": user.waterLon,
+            "Latitude": user.waterlat,
+            "Location": user.Location,
+            "FileLocation": "",
+            "Remark": ""
+        };
+
+        // 获取要上传的图片数据
+        var imagePath = [];
+        var db = api.require('db');
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'Select * from meterNoImageSheets where CustomerCode="' + user.CustomerCode + '"'
+        });
+        if (ret.status) {
+            if (ret.data.length > 0) {
+                for (var i = 0; i < ret.data.length; i++) {
+                    imagePath.push(ret.data[i].url);
+                }
+            }
+        }
+        var files = {
+            "file": imagePath
+        };
+
+        // var body = {
+        //     CustomerCode: user.CustomerCode,
+        //     AreaId: user.AreaId,
+        //     OrganizationCode: user.OrganizationCode,
+        //     StampNo: user.StampNo,
+        //     Longitude: user.Longitude != "" ? user.Longitude : user.Longitude,
+        //     Latitude: user.Latitude != "" ? user.Latitude : user.Latitude,
+        //     Remark: user.Remark
+        // }
+        //
+        // var imagePath = [];
+        // if (user.ImageUrl.length != 0) {
+        //     var imgArray = user.ImageUrl.split(",");
+        //     imgArray.forEach(e => {
+        //         imagePath.push(url);
+        //     })
+        // } else {
+        //     imagePath = [];
+        // }
+        //
+        // var files = {
+        //     file: imagePath
+        // };
+        fnPost('OSM004', body, 'application/json', true, false, function(ret, err) {
+            if (ret) {
+                var db = api.require('db');
+                if (ret.Status == 0) {
+                    //alert("表号维护上传成功：" + JSON.stringify(ret));
+                    //删除用户
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'update meterNoSheets set isUpload =1,Status="4" where CustomerCode="' + user.CustomerCode + '" and cloudTaskCode="' + user.cloudTaskCode + '" and userName="' + CurentUserName + '"'
+                    });
+                    //删除图片
+                    if(meterManageSaveLocation == 0){
+                      for (var i = 0; i < imagePath.length; i++) {
+                          var fs = api.require('fs');
+                          fs.remove({
+                              path: imagePath[i]
+                          }, function(ret, err) {
+                              if (ret.status) {
+                                  //alert("表号维护图片删除成功：" + JSON.stringify(ret));
+                              } else {
+                                  //alert("表号维护图片删除失败：" + JSON.stringify(err));
+                              }
+                          });
+                      }
+                    }
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'update meterNoImageSheets set isUpload = 1 where CustomerCode="' + user.CustomerCode + '" and userName="' + CurentUserName + '"'
+                    });
+                } else {
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'UPDATE meterNoSheets SET UploadErrMsg="' + ret.Message + '" where CustomerCode="' + user.CustomerCode + '" and cloudTaskCode="' + user.cloudTaskCode + '" and userName="' + CurentUserName + '"'
+                    });
+                    api.toast({
+                        msg: ret.Message,
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+            } else {
+                api.toast({
+                    msg: err.msg,
+                    duration: 3000,
+                    location: 'bottom'
+                });
+                api.hideProgress();
+                initListView();
+                initListView2();
+                initListView3();
+                //initListView4();
+                initListView5();
+                // initListView6();
+                initListView7();
+                initListView8();
+                return;
+            }
+
+            Index++;
+            if (Index < qbUsers.length) {
+                setTimeout(continueUpdateData2(), 3000);
+            } else {
+                var logId = "123456";
+                db.executeSql({
+                    name: 'Wsdatabase',
+                    sql: 'INSERT into Logsheet (userName,Id,content,time) values ("' + CurentUserName + '",' + logId + ',"表号维护数据上传成功","' + dataTime() + '")'
+                }, function(ret, err) {
+                    if (ret.status) {
+                        //  console.log( "日志添加成功");
+                    } else {
+                        console.log(JSON.stringify(err));
+                    }
+                });
+                bookListUploadIndex++;
+                bookListCheckeds[bookListUploadIndex]
+                if (bookListUploadIndex + 1 <= bookListCheckeds.length) {
+                    //继续执行上传
+                    resetQueryBuilder2(); //获取当前抄表册所有要上传的用户数据。
+                    continueUpdateData2(); //获取当前上传的抄表数据。
+                } else {
+                    //抄表册上传完毕
+                    bookListCheckeds = [];
+                    if (aiCheckeds.length > 0) {
+                        // resetQueryBuilder(); //获取当前抄表册所有要上传的用户数据。
+                        // continueUpdateData(); //获取当前上传的抄表数据。
+                        uploadApplyImage();
+                    } else if (meterCheckeds.length > 0) {
+                        getCheckMeterHandle();
+                    } else if (reviewDataImgChecked != '') {
+                      getReviewUploadData();
+                    } else if (stopAndOpenChecked != '') {
+                      getStopOpenData();
+                    } else {
+                        api.toast({
+                            msg: "上传完成",
+                            duration: 3000,
+                            location: 'bottom'
+                        });
+                        api.hideProgress();
+                        initListView();
+                        initListView2();
+                        initListView3();
+                        //initListView4();
+                        initListView5();
+                        // initListView6();
+                        initListView7();
+                        initListView8();
+                    }
+                }
+            }
+        },files);
+    }
+
+    //2020-05-09创建 - zlx
+    function initListView3() {
+        var box = document.getElementById("checkbox-3");
+        box.checked = false;
+        var db = api.require('db');
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM APPLY_TASK_IMAGES_S where userName="' + CurentUserName + '"'
+        });
+        if (ret.status) {
+            if (ret.data.length > 0) {
+                aiAllData = ret.data;
+                var datas = {
+                    datas: aiAllData
+                }
+                var str = template('ApplyList', datas);
+                $('#applyimages div').remove();
+                $('#applyimages').append(str);
+                fnReady();
+                operationDom();
+                api.hideProgress();
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#applyimages div').remove();
+                $('#applyimages').append(str);
+            }
+        } else {
+            var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+            $('#applyimages div').remove();
+            $('#applyimages').append(str);
+        }
+    }
+    //上传工单申请图片
+    function uploadApplyImage() {
+        var nowUpload = aiCheckeds[aiNowUploadIndex];
+        var imgList = JSON.parse(nowUpload.FilePath);
+        var fileTypeId = filePath = '';
+        for (var i = 0, len = imgList.length; i < len; i++) {
+            fileTypeId += imgList[i].substr(imgList[i].lastIndexOf(".") + 1) + "|";
+            filePath += imgList[i] + "|";
+        }
+        if (fileTypeId != '') {
+            fileTypeId = fileTypeId.substring(0, fileTypeId.length - 1);
+        }
+        if (filePath != '') {
+            filePath = filePath.substring(0, filePath.length - 1);
+        }
+
+        api.ajax({
+            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+            method: 'post',
+            data: {
+                values: {
+                    Method: 'MMS100',
+                    UserName: $api.getStorage("bwUserName"),
+                    Password: $api.getStorage("bwPassWord"),
+                    SerialNo: '',
+                    KeyCode: '',
+                    Parameter: "{'ReqCode':'" + nowUpload.ReqCode + "', 'TypeId':'" + fileTypeId + "', 'filePath':'" + filePath + "', 'AttachmentType':'1'}"
+                },
+                files: {
+                    file: imgList
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.Status == 0) {
+                    var db = api.require('db');
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'DELETE FROM APPLY_TASK_IMAGES_S where ReqCode="' + nowUpload.ReqCode + '" and userName="' + CurentUserName + '"'
+                    });
+                    if ($api.getStorage('meterManageSaveLocation') != 1) {
+                      meterNoDeleteLocalImage(imgList);
+                    }
+                    console.log(JSON.stringify(postinglistdata));
+                } else {
+                    var db = api.require('db');
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'UPDATE APPLY_TASK_IMAGES_S SET isFail = "1", FailRemark = "' + ret.Message + '" where ReqCode="' + nowUpload.ReqCode + '" and userName="' + CurentUserName + '"'
+                    });
+                    console.log(JSON.stringify(postinglistdata));
+                }
+            } else {
+                var db = api.require('db');
+                var postinglistdata = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: 'UPDATE APPLY_TASK_IMAGES_S SET isFail = "1", FailRemark = "' + err.msg + '" where ReqCode="' + nowUpload.ReqCode + '" and userName="' + CurentUserName + '"'
+                });
+                console.log(JSON.stringify(postinglistdata));
+            }
+            if (aiCheckeds.length == parseInt(aiNowUploadIndex) + 1) {
+                aiNowUploadIndex = 0;
+                if (meterCheckeds.length > 0) {
+                    getCheckMeterHandle();
+                } else if (reviewDataImgChecked != '') {
+                    getReviewUploadData();
+                } else if (stopAndOpenChecked != '') {
+                  getStopOpenData();
+                } else {
+                    api.hideProgress();
+                    api.toast({
+                        msg: "上传完成",
+                        duration: 3000,
+                        location: 'bottom'
+                    });
+
+                    initListView();
+                    initListView2();
+                    initListView3();
+                    //initListView4();
+                    initListView5();
+                    // initListView6();
+                    initListView7();
+                    initListView8();
+                }
+            } else {
+                aiNowUploadIndex++;
+                uploadApplyImage();
+            }
+        });
+
+    }
+
+    //2020-05-09创建 - zlx
+    function initListView4() {  //isUpload
+        var box = document.getElementById("checkbox-4");
+        box.checked = false;
+        var db = api.require('db');
+        var CurentUserName = $api.getStorage('loginData').userName;
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM meterNoImageSheets where userName="'+CurentUserName+'" and isUpload = 0'
+        });
+        if (ret.status) {
+            if (ret.data.length > 0) {
+                var AllData = [];
+                var data = [];
+                ret.data.forEach(function(item, index) {
+                    if (data.indexOf(item.taskId) == -1) {
+                        data.push(item.taskId);
+                        AllData.push(item);
+                    }
+                })
+                var datas = {
+                    datas: AllData
+                }
+                var str = template('meterNoList', datas);
+                $('#meterNoImages div').remove();
+                $('#meterNoImages').append(str);
+                fnReady();
+                operationDom();
+                api.hideProgress();
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#meterNoImages div').remove();
+                $('#meterNoImages').append(str);
+            }
+        } else {
+            var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+            $('#meterNoImages div').remove();
+            $('#meterNoImages').append(str);
+        }
+    }
+    var uploadMeterNoNumber = 0;
+
+    function handleMeterNoImage() {
+        var db = api.require("db");
+        var uploadData = meterNoCheckeds;
+        var files = [];
+        var FileLocation = "";
+        var selectNumber = 0;
+        var CurentUserName = $api.getStorage('loginData').userName;
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM meterNoImageSheets where taskId = "' + uploadData[uploadMeterNoNumber].taskId + '" and CustomerCode = "' + uploadData[uploadMeterNoNumber].CustomerCode + '" and userName = "'+CurentUserName+'" and isUpload = 0'
+        }, function(ret, err) {
+          console.log(JSON.stringify(ret))
+            if (ret.status) {
+                if (ret.data.length > 0) {
+                    var selectData = ret.data;
+                    for (let n = 0; n < selectData.length; n++) {
+                        selectNumber++;
+                        files.push(selectData[n].url);
+                        FileLocation += selectData[n].imageLon + ',' + selectData[n].imageLat + "|";
+                        if (selectNumber == selectData.length) {
+                            FileLocation = FileLocation.substring(0, FileLocation.length - 1);
+                            var options = {
+                                taskId: uploadData[uploadMeterNoNumber].taskId,
+                                CustomerCode:uploadData[uploadMeterNoNumber].CustomerCode,
+                                files: files,
+                                FileLocation: FileLocation
+                            }
+                            uploadMeterNoImage1(options);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function uploadMeterNoImage1(options) {
+      var CurentUserName = $api.getStorage('loginData').userName;
+      var meterManageSaveLocation= $api.getStorage('meterManageSaveLocation');
+        api.ajax({
+            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+            method: 'post',
+            data: {
+                values: {
+                    Method: 'MMS011',
+                    UserName: $api.getStorage("bwUserName"),
+                    Password: $api.getStorage("bwPassWord"),
+                    SerialNo: '',
+                    KeyCode: '',
+                    Parameter: "{'Id':'" + options.taskId + "', 'FileLocation':'" + options.FileLocation + "','Type':''}"
+                },
+                files: {
+                    file: options.files
+                }
+            }
+        }, function(ret, err) {
+            api.hideProgress();
+            if (ret) {
+                if (ret.Status == 0) {
+                    if (meterNoCheckeds.length == parseInt(uploadMeterNoNumber) + 1) {
+                          uploadMeterNoNumber = 0;
+                          api.toast({
+                              msg: "上传完成",
+                              duration: 3000,
+                              location: 'bottom'
+                          });
+                          var db = api.require('db');
+                          var postinglistdata = db.executeSqlSync({
+                              name: 'Wsdatabase',
+                              sql: 'update meterNoImageSheets set isUpload = 1 where taskId="' + options.taskId + '" and userName = "'+CurentUserName+'" and CustomerCode ="'+options.CustomerCode+'"'
+                          });
+                          if(meterManageSaveLocation == 0){
+                              meterNoDeleteLocalImage(options.files);
+                          }
+                          initListView();
+                          initListView2();
+                          initListView3();
+                          //initListView4();
+                          initListView5();
+                          // initListView6();
+                          initListView7();
+                          initListView8();
+                          if(postingimgsTaskNoCode.length > 0  && postingimgsTaskNoCode != ''){
+                            handlePostingImages();
+                        }
+                        if (meterCheckeds.length > 0) {
+                            getCheckMeterHandle();
+                          }
+                      } else {
+
+                        if(meterManageSaveLocation == 0){
+                            meterNoDeleteLocalImage(options.files);
+                        }
+                          uploadMeterNoNumber++;
+                          handleMeterNoImage();
+                          var db = api.require('db');
+                          var postinglistdata = db.executeSqlSync({
+                              name: 'Wsdatabase',
+                              sql: 'update meterNoImageSheets set isUpload = 1 where taskId="' + options.taskId + '" and userName = "'+CurentUserName+'" and CustomerCode ="'+options.CustomerCode+'"'
+                          });
+                      }
+                } else {
+                    api.toast({
+                        msg: ret.Message,
+                        duration: 3000,
+                        location: 'bottom'
+                    });
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    function meterNoDeleteLocalImage(files) {
+        var fs = api.require("fs");
+        var files = files;
+        for (let i = 0; i < files.length; i++) {
+            fs.remove({
+                path: files[i]
+            }, function(ret, err) {
+                if (ret.status) {}
+            })
+        }
+    }
+
+    //表务办理照片上传 2020-05-18 zlx
+    function initListView5() {
+        var db = api.require('db');
+        var result = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: "SELECT * FROM Review_TASK_HANDLED_LIST WHERE ReqCode NOT IN(SELECT ReqCode FROM Review_TASK_BASIC_LIST WHERE isUploadAndSave = '2' AND userName = '"+ CurentUserName +"') and filePath != '' and isUpload != '1'  and userName='" + CurentUserName + "' GROUP BY ReqCode"
+        });
+        console.log(JSON.stringify(result));
+        if (result.status) {
+            if (result.data.length > 0) {
+                meterAllData = result.data;
+                var datas = {
+                    datas: meterAllData
+                }
+                var str = template('MeterHandleList', datas);
+                $('#meterimages div').remove();
+                $('#meterimages').append(str);
+                fnReady();
+                operationDom();
+                api.hideProgress();
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#meterimages div').remove();
+                $('#meterimages').append(str);
+            }
+        } else {
+            var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+            $('#meterimages div').remove();
+            $('#meterimages').append(str);
+        }
+    }
+
+    function getCheckMeterHandle() { //获取选中的表务办理图片
+        meterNowUploadIndex = 0;
+        console.log(JSON.stringify(meterCheckeds));
+        var checkType = '';
+        for (var i = 0; i < meterCheckeds.length; i++) {
+            checkType += "'" + meterCheckeds[i].ReqCode + "',"
+        }
+        checkType = checkType.substring(0, checkType.length - 1);
+        console.log(checkType);
+        var db = api.require('db');
+        var checkResult = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM Review_TASK_HANDLED_LIST WHERE ReqCode IN (' + checkType + ') and userName="' + CurentUserName + '"'
+        });
+        if (checkResult.status) {
+            console.log(JSON.stringify(checkResult.data));
+            checkArr = checkResult.data;
+            uploadMeterImage();
+        }
+    }
+
+    function uploadMeterImage() {
+        var db = api.require('db');
+
+        var fileList = checkArr[meterNowUploadIndex].filePath.split("|");
+        var fileTypeId = checkArr[meterNowUploadIndex].TypeId; //文件后缀
+        var filePath = checkArr[meterNowUploadIndex].filePath;
+        api.ajax({
+            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+            method: 'post',
+            dataType: 'json',
+            returnAll: false,
+            timeout: 60,
+            headers: 'application/json',
+            data: {
+                values: {
+                    Method: 'MMS100',
+                    UserName: $api.getStorage("bwUserName"), //"01012"
+                    Password: $api.getStorage("bwPassWord"), // "g6OuZomFp3E="
+                    SerialNo: '',
+                    KeyCode: '', //营业
+                    Parameter: "{'ReqCode':'" + checkArr[meterNowUploadIndex].ReqCode + "', 'TypeId':'" + fileTypeId + "', 'filePath':'" + filePath + "', 'AttachmentType': '4'}"
+                },
+                files: {
+                    file: fileList
+                }
+            }
+        }, function(ret, err) {
+            var Sql = '';
+            console.log(JSON.stringify(ret));
+            if (ret) {
+                if (ret.Status == 0) {
+                    Sql = "UPDATE Review_TASK_HANDLED_LIST SET isUpload = '1' WHERE ReqCode = '" + checkArr[meterNowUploadIndex].ReqCode + "' and userName='" + CurentUserName + "'";
+                    var resultData = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: Sql
+                    });
+                    if ($api.getStorage('meterManageSaveLocation') != 1) {
+                      meterNoDeleteLocalImage(fileList);
+                    }
+                }
+            } else {
+                console.log(JSON.stringify(err));
+            }
+
+            if (checkArr.length == (meterNowUploadIndex + 1)) {
+                api.hideProgress();
+                api.toast({
+                    msg: "上传完成",
+                    duration: 3000,
+                    location: 'bottom'
+                });
+                initListView();
+                initListView2();
+                initListView3();
+                //initListView4();
+                initListView5();
+                // initListView6();
+                initListView7();
+                initListView8();
+
+            } else {
+                meterNowUploadIndex++;
+                uploadMeterImage();
+            }
+        });
+    }
+
+    function initListView6() {
+        var box = document.getElementById("checkbox-6");
+        box.checked = false;
+        var db = api.require('db');
+        var Sql = "SELECT * FROM POSTING_IMAGE where Id NOT IN(SELECT Id FROM POSTING_LIST WHERE NotSave='1' and Files='') and NotSubmit=0 and userName='" + CurentUserName + "' GROUP BY TaskNo";
+        var dataComparison = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: Sql
+        });
+        console.log(JSON.stringify(dataComparison));
+        if (dataComparison.status) {
+            if (dataComparison.data.length > 0) {
+                var AllData = [];
+                var data = [];
+                AllData = dataComparison.data;
+                var datas = {
+                    datas: AllData
+                }
+                var str = template('postingImageList', datas);
+                $('#postingImages div').remove();
+                $('#postingImages').append(str);
+                fnReady();
+                operationDom();
+                api.hideProgress();
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#postingImages div').remove();
+                $('#postingImages').append(str);
+            }
+        } else {
+            var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+            $('#postingImages div').remove();
+            $('#postingImages').append(str);
+        }
+    }
+    var uploadPostImageNumber = 0;
+
+    function handlePostingImages() {
+        var db = api.require("db");
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: "SELECT * FROM POSTING_IMAGE WHERE TaskNo IN (" + postingimgsTaskNoCode + ") and NotSubmit=0 and userName='" + CurentUserName + "' GROUP BY Id"
+        }, function(ret, err) {
+            if (ret.status) {
+                // console.log(JSON.stringify(ret));
+                if (ret.data.length > 0) {
+                    var checkedArr = ret.data;
+                    for (let i = 0; i < checkedArr.length; i++) {
+                        var location = '';
+                        var FileUrl = [];
+                        db.selectSql({
+                            name: 'Wsdatabase',
+                            sql: 'SELECT * FROM POSTING_IMAGE WHERE Id = "' + checkedArr[i].Id + '" and NotSubmit=0 and userName="' + CurentUserName + '"'
+                        }, function(ret, err) {
+                            if (ret.status) {
+                                console.log(JSON.stringify(ret));
+                                for (let j = 0; j < ret.data.length; j++) {
+                                    location += ret.data[j].locationJD + ',' + ret.data[j].locationWD + '|';
+                                    FileUrl.push(ret.data[j].imageFileUrl);
+                                }
+                                if (location != '') {
+                                    location = location.substring(0, (location.length - 1));
+                                }
+                                postingImagesAll.push({
+                                    Id: ret.data[0].Id,
+                                    location: location,
+                                    FileUrl: FileUrl
+                                });
+                                console.log(i);
+                                if (postingImagesAll.length > 0 && i == (checkedArr.length - 1)) {
+                                    console.log(JSON.stringify(postingImagesAll));
+                                    uploadPostingImags();
+                                }
+                            } else {
+                                console.log(JSON.stringify(err));
+                            }
+                        });
+                    }
+                }
+            } else {
+                console.log(JSON.stringify(err));
+            }
+        });
+        return;
+
+
+
+        var db = api.require("db");
+        var uploadData = postingImagesCheckeds;
+        var files = [];
+        var FileLocation = "";
+        var selectNumber = 0;
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_IMAGE where Id = "' + uploadData[uploadPostImageNumber].Id + '" and CustomerCode = "' + uploadData[uploadPostImageNumber].CustomerCode + '" and NotSubmit=0 and userName="' + CurentUserName + '"'
+        }, function(ret, err) {
+            if (ret.status) {
+                if (ret.data.length > 0) {
+                    var selectData = ret.data;
+                    for (let n = 0; n < selectData.length; n++) {
+                        selectNumber++;
+                        files.push(selectData[n].imageFileUrl);
+                        FileLocation += selectData[n].locationJD + ',' + selectData[n].locationWD + "|";
+                        if (selectNumber == selectData.length) {
+                            FileLocation = FileLocation.substring(0, FileLocation.length - 1);
+                            var options = {
+                                taskId: uploadData[uploadPostImageNumber].Id,
+                                files: files,
+                                FileLocation: FileLocation
+                            }
+                            uploadMeterNoImage(options);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function uploadPostingImags() {
+        api.ajax({
+            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+            method: 'post',
+            data: {
+                values: {
+                    Method: 'MMS011',
+                    UserName: $api.getStorage("bwUserName"),
+                    Password: $api.getStorage("bwPassWord"),
+                    SerialNo: '',
+                    KeyCode: '',
+                    Parameter: "{'Id':'" + postingImagesAll[uploadPostImageNumber].Id + "', 'FileLocation':'" + postingImagesAll[uploadPostImageNumber].location + "', 'Type':''}"
+                },
+                files: {
+                    file: postingImagesAll[uploadPostImageNumber].FileUrl.join(',')
+                }
+            }
+        }, function(ret, err) {
+            var db = api.require("db");
+            if (ret) {
+                if (ret.Status == 0) {
+                    var result = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'update POSTING_IMAGE set NotSubmit="1" where Id="' + postingImagesAll[uploadPostImageNumber].Id + '" and userName="' + CurentUserName + '"'
+                    });
+                    console.log(JSON.stringify(result));
+                } else {
+                    api.toast({
+                        msg: ret.Message,
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+            } else {
+                api.toast({
+                    msg: err.msg,
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            }
+
+            if (postingImagesAll.length == (parseInt(uploadPostImageNumber) + 1)) {
+                api.hideProgress();
+                uploadPostImageNumber = 0;
+                api.toast({
+                    msg: "上传完成",
+                    duration: 3000,
+                    location: 'bottom'
+                });
+                initListView();
+                initListView2();
+                initListView3();
+                //initListView4();
+                initListView5();
+                //  initListView6();
+                initListView7();
+                initListView8();
+                if (meterCheckeds.length > 0) {
+                    getCheckMeterHandle();
+                } else if (reviewDataImgChecked != '') {
+                  getReviewUploadData();
+                } else if (stopAndOpenChecked != '') {
+                  getStopOpenData();
+                }
+            } else {
+                uploadPostImageNumber++;
+                uploadPostingImags();
+            }
+        });
+
+    }
+
+
+    function uploadMeterNoImage(options) {
+        api.ajax({
+            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+            method: 'post',
+            data: {
+                values: {
+                    Method: 'MMS011',
+                    UserName: $api.getStorage("bwUserName"),
+                    Password: $api.getStorage("bwPassWord"),
+                    SerialNo: '',
+                    KeyCode: '',
+                    Parameter: "{'Id':'" + options.taskId + "', 'FileLocation':'" + options.FileLocation + "','Type':''}"
+                },
+                files: {
+                    file: options.files
+                }
+            }
+        }, function(ret, err) {
+            api.hideProgress();
+            if (ret) {
+                if (ret.Status == 0) {
+                    if (postingImagesCheckeds.length == parseInt(uploadPostImageNumber) + 1) {
+                        uploadPostImageNumber = 0;
+                        api.toast({
+                            msg: "上传完成",
+                            duration: 3000,
+                            location: 'bottom'
+                        });
+                        var db = api.require('db');
+                        var postinglistdata = db.executeSqlSync({
+                            name: 'Wsdatabase',
+                            sql: 'update POSTING_IMAGE set NotSubmit="1" where Id="' + options.taskId + '" and userName="' + CurentUserName + '"'
+                        });
+                        initListView();
+                        initListView2();
+                        initListView3();
+                        //initListView4();
+                        initListView5();
+                        //  initListView6();
+                        initListView7();
+                        initListView8();
+                        if (meterCheckeds.length > 0) {
+                            getCheckMeterHandle();
+                        } else if (reviewDataImgChecked != '') {
+                          getReviewUploadData();
+                        } else if (stopAndOpenChecked != '') {
+                          getStopOpenData();
+                        }
+                    } else {
+                        uploadPostImageNumber++;
+                        handlePostingImages();
+                        var db = api.require('db');
+                        var postinglistdata = db.executeSqlSync({
+                            name: 'Wsdatabase',
+                            sql: 'update POSTING_IMAGE set NotSubmit="1" where Id="' + options.taskId + '" and userName="' + CurentUserName + '"'
+                        });
+                    }
+                } else {
+                    api.toast({
+                        msg: ret.Message,
+                        duration: 3000,
+                        location: 'bottom'
+                    });
+                }
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    //渲染表务办理 - 数据及照片数据   2020-06-03  zlx
+    function initListView7() {
+      var db = api.require("db");
+      var box = document.getElementById("checkbox-7");
+      box.checked = false;
+      var result = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM Review_TASK_BASIC_LIST WHERE isUploadAndSave = '2' AND userName = '"+ CurentUserName +"' GROUP BY SaveTime"
+      });
+      console.log(JSON.stringify(result));
+      if (result.status) {
+        if (result.data.length > 0) {
+          var datas = {
+              datas: result.data
+          }
+          var str = template('MeterDataImg', datas);
+          $('#reviewUpload div').remove();
+          $('#reviewUpload').append(str);
+          fnReady();
+          operationDom();
+          api.hideProgress();
+        } else {
+          var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+          $('#reviewUpload div').remove();
+          $('#reviewUpload').append(str);
+        }
+      } else {
+        var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+        $('#reviewUpload div').remove();
+        $('#reviewUpload').append(str);
+      }
+    }
+
+    //获取上传的数据
+    function getReviewUploadData() {
+      var db = api.require("db");
+      var result = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM Review_TASK_BASIC_LIST WHERE SaveTime IN ("+ reviewDataImgChecked +") AND isUploadAndSave = '2' AND userName = '"+ CurentUserName +"'"
+      });
+      if (result.status) {
+        if (result.data.length > 0) {
+          reviewDataImgArr = result.data;
+          uploadReviewDataImg();
+        }
+      }
+
+    }
+
+    function uploadReviewDataImg() {
+      var db = api.require("db");
+      var uploadItem = reviewDataImgArr[uploadReviewIndex];
+      var result = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM Review_TASK_HANDLED_LIST WHERE ReqCode = '"+ uploadItem.ReqCode +"' AND isUpload = '0' AND userName = '"+ CurentUserName +"'"
+      });
+      var handledItem = {};
+      if (result.status) {
+        if (result.data.length > 0) {
+          handledItem = result.data[0];
+        }
+      }
+      console.log(JSON.stringify(handledItem));
+      var body = {};
+      var MethodType = 'MMS105';
+      if (uploadItem.ServiceTypeId == 13) {
+        //移改提
+        body = {
+          'Longitude': handledItem.Longitude,        //经度
+          'Latitude': handledItem.Latitude,          //纬度
+          'Location': handledItem.Location,          //定位地址
+          'ReqCode': uploadItem.ReqCode,               //流程Code
+          'WorkflowId': uploadItem.WorkflowId,       //流程Id
+          'ActivityId': uploadItem.ActivityId,       //节点Id
+          'StepId': uploadItem.StepId,               //指向Id
+          'TypeId': uploadItem.ServiceTypeId,        //流程类型
+          'CustomerCode': uploadItem.CustomerCode,   //用户编号
+          'ClientId': api.deviceId,                  //手机MEI
+          'deviceName': api.deviceName,              //手机名称
+          'Remark': handledItem.Remark,              //处理结果
+        };
+      } else if (uploadItem.ServiceTypeId == 14) {
+        //校表
+        if (uploadItem.ActivityCode == '11') {
+          //节点Id为11是换表处理
+          if (handledItem.LastReadScale == '' ||
+              handledItem.BeginScale == '' ||
+              handledItem.OriginalScale == '' ||
+              handledItem.OldAmount == '' ||
+              handledItem.StampNo == '' ||
+              handledItem.ComputeTypeId == '' ||
+              handledItem.Caliber == '' ||
+              handledItem.MeterTypeId == '' ||
+              handledItem.NamePlateId == '') {
+                api.toast({
+                    msg: '请完善换表信息',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                return;
+          }
+          body = {
+            'ReqCode': uploadItem.ReqCode,                   //流程编号
+            'CustomerCode': uploadItem.CustomerCode,          //用户编号
+            'CauseId': '',                                    //换表原因
+            'Remark': handledItem.Remark,                     //处理结果
+            'TypeId': uploadItem.ServiceTypeId,               //流程类型
+            'ClientId': api.deviceId,                         //手机MEI
+            'ClientName': api.deviceName,                     //手机名称
+            'Longitude': handledItem.Longitude,               //经度
+            'Latitude': handledItem.Latitude,                 //纬度
+            'Location': handledItem.Location,                 //定位地址
+            'BeginScale': handledItem.LastReadScale,          //旧表止度
+            'LastReadScale': handledItem.BeginScale,          //旧表随后抄表止度
+            'OriginalScale': handledItem.OriginalScale,       //新表起度
+            'OldAmount': handledItem.OldAmount,               //换表水量
+            'StampNo': handledItem.StampNo,                   //水表表号
+            'ComputeTypeId': handledItem.ComputeTypeId,       //计费时间即换表水量计算方式
+            'Caliber': handledItem.Caliber,                   //水表口径
+            'MeterTypeId': handledItem.MeterTypeId,           //水表类型
+            'NamePlateId': handledItem.NamePlateId,           //水表铭牌
+            'SealNo': '',                                     //水表铅封号
+            'Zhf': '',                                        //止回阀
+            'Jyf': '',                                        //减压阀
+            'ModelId': handledItem.ModelId == '' ? "":handledItem.ModelId,   //水表型号
+            'InstallationModeId': handledItem.InstallationModeId == '' ? '' : handledItem.InstallationModeId, //安装方式
+            'WorkflowId': uploadItem.WorkflowId,               //流程Id
+            'ActivityId': uploadItem.ActivityId,               //节点Id
+            'StepId': uploadItem.StepId,                       //指向Id
+            'ConcreteScale': handledItem.ConcreteScale,        //实际表码
+          };
+          MethodType = 'MMS106';
+        } else if (uploadItem.ActivityCode == '03') {
+          //节点Id为03是校表处理
+          body = {
+            'Longitude': handledItem.Longitude,        //经度
+            'Latitude': handledItem.Latitude,          //纬度
+            'Location': handledItem.Location,          //定位地址
+            'ReqCode': uploadItem.ReqCode,             //流程Code
+            'WorkflowId': uploadItem.WorkflowId,       //流程Id
+            'ActivityId': uploadItem.ActivityId,       //节点Id
+            'StepId': uploadItem.StepId,               //指向Id
+            'TypeId': uploadItem.ServiceTypeId,        //流程类型
+            'CustomerCode': uploadItem.CustomerCode,   //用户编号
+            'Remark': handledItem.Remark,              //处理结果
+            'ClientId': api.deviceId,                  //手机MEI
+            'deviceName': api.deviceName,              //手机名称
+          };
+        }
+      } else if (uploadItem.ServiceTypeId == 15 || uploadItem.ServiceTypeId == 16 || uploadItem.ServiceTypeId == 17) {
+        //三来、维修、热线
+        body = {
+          'Longitude': handledItem.Longitude,         //经度
+          'Latitude': handledItem.Latitude,           //纬度
+          'Location': handledItem.Location,           //定位地址
+          'ReqCode': uploadItem.ReqCode,              //流程Code
+          'WorkflowId': uploadItem.WorkflowId,        //流程Id
+          'ActivityId': uploadItem.ActivityId,        //节点Id
+          'StepId': uploadItem.StepId,                //指向Id
+          'TypeId': uploadItem.ServiceTypeId,         //流程类型
+          'CustomerCode': uploadItem.CustomerCode,    //用户编号
+          'Remark': handledItem.Remark,               //备注
+          'ClientId': api.deviceId,                   //手机MEI
+          'deviceName': api.deviceName,               //手机名称
+        };
+
+      } else if (uploadItem.ServiceTypeId == 3) {
+        //换表
+        if (handledItem.LastReadScale == '' ||
+            handledItem.BeginScale == '' ||
+            handledItem.OriginalScale == '' ||
+            handledItem.OldAmount == '' ||
+            handledItem.StampNo == '' ||
+            handledItem.ComputeTypeId == '' ||
+            handledItem.Caliber == '' ||
+            handledItem.MeterTypeId == '' ||
+            handledItem.NamePlateId == '') {
+              api.toast({
+                  msg: '请完善换表信息',
+                  duration: 2000,
+                  location: 'bottom'
+              });
+              return;
+        }
+        body = {
+          'ReqCode': uploadItem.ReqCode,                   //流程编号
+          'CustomerCode': uploadItem.CustomerCode,          //用户编号
+          'CauseId': '',                                    //换表原因
+          'Remark': handledItem.Remark,                     //处理结果
+          'TypeId': uploadItem.ServiceTypeId,               //流程类型
+          'ClientId': api.deviceId,                         //手机MEI
+          'ClientName': api.deviceName,                     //手机名称
+          'Longitude': handledItem.Longitude,               //经度
+          'Latitude': handledItem.Latitude,                 //纬度
+          'Location': handledItem.Location,                 //定位地址
+          'BeginScale': handledItem.LastReadScale,          //旧表止度
+          'LastReadScale': handledItem.BeginScale,          //旧表随后抄表止度
+          'OriginalScale': handledItem.OriginalScale,       //新表起度
+          'OldAmount': handledItem.OldAmount,               //换表水量
+          'StampNo': handledItem.StampNo,                   //水表表号
+          'ComputeTypeId': handledItem.ComputeTypeId,       //计费时间即换表水量计算方式
+          'Caliber': handledItem.Caliber,                 //水表口径
+          'MeterTypeId': handledItem.MeterTypeId,           //水表类型
+          'NamePlateId': handledItem.NamePlateId,           //水表铭牌
+          'SealNo': '',                                     //水表铅封号
+          'Zhf': '',                                        //止回阀
+          'Jyf': '',                                        //减压阀
+          'ModelId': handledItem.ModelId == '' ? "":handledItem.ModelId,   //水表型号
+          'InstallationModeId': handledItem.InstallationModeId == '' ? '' : handledItem.InstallationModeId, //安装方式
+          'WorkflowId': uploadItem.WorkflowId,               //流程Id
+          'ActivityId': uploadItem.ActivityId,               //节点Id
+          'StepId': uploadItem.StepId,                       //指向Id
+          'ConcreteScale': handledItem.ConcreteScale,        //实际表码
+        };
+        MethodType = 'MMS106';
+      }
+
+      var fileUrls = handledItem.filePath;
+      var fileTypeId = handledItem.TypeId;
+      if (fileUrls == '') {
+        api.confirm({
+            title: '提示',
+            msg: '任务：'+uploadItem.ReqCode+'没有附件',
+            buttons: ['确定', '取消']
+        }, function(ret, err){
+            if( ret ){
+
+            }
+        });
+        if ((stopAndOpenArr.length - 1) == stopAndOpenIndex) {
+          stopAndOpenIndex = 0;
+          api.hideProgress();
+          api.toast({
+              msg: '上传完成',
+              duration: 2000,
+              location: 'bottom'
+          });
+          initListView();
+          initListView2();
+          initListView3();
+          //initListView4();
+          initListView5();
+          initListView7();
+          initListView8();
+          return;
+        } else {
+          stopAndOpenIndex++;
+          uploadStopOpenData();
+          return;
+        }
+      }
+      var bodys = {
+          body: JSON.stringify({
+              Method: MethodType,
+              UserName: $api.getStorage("bwUserName"),
+              Password: $api.getStorage("bwPassWord"),
+              SerialNo: '',
+              KeyCode: '', //营业
+              Parameter: JSON.stringify(body)
+          })
+      };
+      console.log("编号：" + uploadItem.ReqCode);
+      console.log( JSON.stringify( bodys ) );
+      api.ajax({
+          url: $api.getStorage("bwapipath") + '/webapi/request/postmms',
+          method: 'post',
+          timeout: 30,
+          dataType: 'json',
+          returnAll: false,
+          headers: {"Content-Type":"application/json", "Authorization":$api.getStorage("bwHeaders")},
+          data: bodys
+      },function(ret, err){
+          console.log( JSON.stringify( ret ) );
+          if (ret) {
+
+              if (ret.Status == 0) {
+                var submitRet = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: "UPDATE Review_TASK_BASIC_LIST SET isUploadAndSave = '1' WHERE ReqCode = '"+ uploadItem.ReqCode +"' AND userName = '"+ CurentUserName +"'"
+                });
+                console.log(JSON.stringify(submitRet));
+                var resultData = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: "DELETE FROM myTaskSheet WHERE taskCode='" + uploadItem.ReqCode + "'"
+                });
+                console.log(JSON.stringify(resultData));
+                if (fileUrls != '') {
+                  var fileArr = fileUrls.split("|");
+                  console.log("文件数量：" + fileArr.length);
+                  api.ajax({
+                      url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+                      method: 'post',
+                      dataType: 'json',
+                      returnAll: false,
+                      timeout: 60,
+                      headers: 'application/json',
+                      data: {
+                          values: {
+                              Method: 'MMS100',
+                              UserName: $api.getStorage("bwUserName"), //"01012"
+                              Password: $api.getStorage("bwPassWord"), // "g6OuZomFp3E="
+                              SerialNo: '',
+                              KeyCode: '', //营业
+                              Parameter: "{'ReqCode':'" + uploadItem.ReqCode + "', 'TypeId':'" + fileTypeId + "', 'filePath':'" + fileUrls + "', 'AttachmentType': '4'}"
+                          },
+                          files: {
+                              file: fileArr
+                          }
+                      }
+                  },function(ret, err){
+                      console.log( JSON.stringify( ret ) );
+                      if (ret) {
+                          if (ret.Status == 0) {
+                            var fileRet = db.executeSqlSync({
+                                name: 'Wsdatabase',
+                                sql: "UPDATE Review_TASK_HANDLED_LIST SET isUpload = '1' WHERE ReqCode = '"+ uploadItem.ReqCode +"' AND userName = '"+ CurentUserName +"'"
+                            });
+                            console.log(JSON.stringify(fileRet));
+
+
+                            var fs = api.require("fs");
+                            if ($api.getStorage('meterManageSaveLocation') != 1) {
+                              meterNoDeleteLocalImage(fileArr);
+                            }
+
+                            if (uploadReviewIndex == (reviewDataImgArr.length - 1)) {
+                              uploadReviewIndex = 0;
+                              api.hideProgress();
+                              api.toast({
+                                  msg: '上传完成',
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                              initListView();
+                              initListView2();
+                              initListView3();
+                              //initListView4();
+                              initListView5();
+                              initListView7();
+                              initListView8();
+                            } else {
+                              uploadReviewIndex++;
+                              uploadReviewDataImg();
+                            }
+
+                          } else {
+                            api.toast({
+                                msg: ret.Message,
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            if (uploadReviewIndex == (reviewDataImgArr.length - 1)) {
+                              uploadReviewIndex = 0;
+                              api.toast({
+                                  msg: '上传完成',
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                              api.hideProgress();
+                              initListView();
+                              initListView2();
+                              initListView3();
+                              //initListView4();
+                              initListView5();
+                              initListView7();
+                              initListView8();
+                            } else {
+                              uploadReviewIndex++;
+                              uploadReviewDataImg();
+                            }
+                          }
+                      } else {
+                          if (uploadReviewIndex == (reviewDataImgArr.length - 1)) {
+                            uploadReviewIndex = 0;
+                            api.toast({
+                                msg: '上传完成',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            api.hideProgress();
+                            initListView();
+                            initListView2();
+                            initListView3();
+                            //initListView4();
+                            initListView5();
+                            initListView7();
+                            initListView8();
+                          } else {
+                            uploadReviewIndex++;
+                            uploadReviewDataImg();
+                          }
+                          console.log( JSON.stringify( err ) );
+                      }
+                  });
+                }
+
+              } else {
+                if (uploadReviewIndex == (reviewDataImgArr.length - 1)) {
+                  uploadReviewIndex = 0;
+                  api.hideProgress();
+                  api.toast({
+                      msg: '上传完成',
+                      duration: 2000,
+                      location: 'bottom'
+                  });
+                  initListView();
+                  initListView2();
+                  initListView3();
+                  //initListView4();
+                  initListView5();
+                  initListView7();
+                  initListView8();
+                } else {
+                  uploadReviewIndex++;
+                  uploadReviewDataImg();
+                }
+              }
+          } else {
+              console.log( JSON.stringify( err ) );
+              if (uploadReviewIndex == (reviewDataImgArr.length - 1)) {
+                uploadReviewIndex = 0;
+                api.hideProgress();
+                api.toast({
+                    msg: '上传完成',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                initListView();
+                initListView2();
+                initListView3();
+                //initListView4();
+                initListView5();
+                initListView7();
+                initListView8();
+              } else {
+                uploadReviewIndex++;
+                uploadReviewDataImg();
+              }
+          }
+      });
+    }
+
+    //停复水数据及照片上传
+    function initListView8() {
+      var db = api.require("db");
+      var box = document.getElementById("checkbox-8");
+      box.checked = false;
+
+      var result = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM AUDIT_TASK_LIST WHERE userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave = '2' AND Status = '7' GROUP BY SaveTime"
+      });
+      console.log(JSON.stringify(result));
+      if (result.status) {
+        if (result.data.length > 0) {
+            var stopOpenArr = [];
+            for (var i = 0; i < result.data.length; i++) {
+              if (result.data[i].Code == 41 || result.data[i].Code == 42 || result.data[i].Code == 2) {
+                stopOpenArr.push(result.data[i]);
+              }
+            }
+            var datas = {
+                datas: stopOpenArr
+            }
+            var str = template('StopOpenWater', datas);
+            $('#stopOpen div').remove();
+            $('#stopOpen').append(str);
+            fnReady();
+            operationDom();
+            api.hideProgress();
+        } else {
+          var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+          $('#stopOpen div').remove();
+          $('#stopOpen').append(str);
+        }
+      } else {
+        var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+        $('#stopOpen div').remove();
+        $('#stopOpen').append(str);
+      }
+    }
+
+    function getStopOpenData() {
+      var db = api.require("db");
+      db.selectSql({
+        name: 'Wsdatabase',
+        sql: "SELECT * FROM AUDIT_TASK_LIST WHERE SaveTime IN ("+stopAndOpenChecked+") and userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave = '2'"
+      }, function(ret, err){
+          if( ret.status ){
+
+              stopAndOpenArr = ret.data;
+              uploadStopOpenData();
+          }else{
+              console.log( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    function uploadStopOpenData() {
+        var spItem = stopAndOpenArr[stopAndOpenIndex];
+        var FileArr = spItem.FileUrl.split("|");
+        var LocationAddress = spItem.LocationAddress.split(",");
+        var Longitude = LocationAddress[0];
+        var Latitude = LocationAddress[1];
+        var db = api.require("db");
+        api.ajax({
+            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+            method: 'post',
+            dataType: 'json',
+            data: {
+                values: {
+                  UserName: $api.getStorage("bwUserName"),
+                  Password: $api.getStorage("bwPassWord"),
+                  SerialNo: '',
+                  Longitude: Longitude,
+                  Latitude: Latitude,
+                  Method: "MMS006",
+                  Parameter:JSON.stringify({
+                    Id:spItem.Id,
+                    Remark:spItem.UserRemark,
+                    AuditStatus:spItem.AuditStatus,
+                    OperatedTime:spItem.OperatedTime
+                  })
+                },
+                files: {
+                    file: FileArr
+                }
+            }
+        },function(ret, err){
+          api.hideProgress();
+            if (ret) {
+                console.log(JSON.stringify(ret));
+                if (ret.Status == 0) {
+                  var result = db.executeSqlSync({
+                      name: 'Wsdatabase',
+                      sql: "UPDATE AUDIT_TASK_LIST SET isUploadAndSave = '1' WHERE Id='"+ spItem.Id +"' AND userName = '"+ $api.getStorage('loginData').userName +"'"
+                  });
+                  var resultData2 = db.executeSqlSync({
+                      name: 'Wsdatabase',
+                      sql: "DELETE FROM myTaskSheet WHERE taskCode='" + spItem.TaskNo + "'"
+                  });
+                  console.log(JSON.stringify(result));
+                  if ($api.getStorage('meterManageSaveLocation') != 1) {
+                    meterNoDeleteLocalImage(FileArr)
+                  }
+                } else {
+                  Sql = "UPDATE AUDIT_TASK_LIST SET isFail = '1', FailRemark='"+ ret.Message +"' WHERE Id = '"+ spItem.Id +"' AND userName = '"+ $api.getStorage('loginData').userName +"'";
+                  var resultData = db.executeSqlSync({
+                      name: 'Wsdatabase',
+                      sql: Sql
+                  });
+                  console.log(JSON.stringify(resultData));
+                }
+                if ((stopAndOpenArr.length - 1) == stopAndOpenIndex) {
+                  api.hideProgress();
+                  stopAndOpenIndex = 0;
+                  api.toast({
+                      msg: '上传完成',
+                      duration: 2000,
+                      location: 'bottom'
+                  });
+                  initListView();
+                  initListView2();
+                  initListView3();
+                  //initListView4();
+                  initListView5();
+                  initListView7();
+                  initListView8();
+                } else {
+                  stopAndOpenIndex++;
+                  uploadStopOpenData();
+                }
+            } else {
+                Sql = "UPDATE AUDIT_TASK_LIST SET isFail = '1', FailRemark='"+ err.msg +"' WHERE Id = '"+ spItem.Id +"' AND userName = '"+ $api.getStorage('loginData').userName +"'";
+                var resultData = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: Sql
+                });
+                if ((stopAndOpenArr.length - 1) == stopAndOpenIndex) {
+                  stopAndOpenIndex = 0;
+                  api.hideProgress();
+                  api.toast({
+                      msg: '上传完成',
+                      duration: 2000,
+                      location: 'bottom'
+                  });
+                  initListView();
+                  initListView2();
+                  initListView3();
+                  //initListView4();
+                  initListView5();
+                  initListView7();
+                  initListView8();
+                } else {
+                  stopAndOpenIndex++;
+                  uploadStopOpenData();
+                }
+                console.log(JSON.stringify(resultData));
+                console.log( JSON.stringify( err ) );
+            }
+        });
+    }
+
+</script>
+
+</html>

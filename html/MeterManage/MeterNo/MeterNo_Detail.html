@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>表号维护界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.75rem;
+            color: #999999;
+            border-right: 0.03rem solid #BBBBBB;
+            padding-right: 1.3rem;
+        }
+
+        .van-search {
+            padding: 1rem 1.25rem 1.05rem 1.25rem;
+        }
+
+        .van-search__content--round {
+            background-color: #fff;
+            border: 0.03rem solid #C4C4C4;
+            border-radius: 1rem;
+            padding-left: 0.93rem;
+        }
+
+        .van-search .van-cell {
+            padding: 0.3rem 0.83rem 0.3rem 0;
+        }
+
+        .van-field__right-icon {
+            padding-left: 0.83rem;
+            padding-right: 0.3rem;
+        }
+
+        .searchIcon {
+            width: 1rem;
+            height: 1rem;
+            background: url("../image/MeterManage/sousuo2.png") no-repeat center;
+            background-size: 0.83rem 0.83rem;
+        }
+
+        .van-field__clear {
+            position: absolute;
+            padding: 0 0.3rem;
+            right: 2.1rem;
+        }
+
+        .total {
+            width: 4rem;
+            height: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.7rem;
+            color: #AAAAAA;
+        }
+
+        .c-aui-row {
+            width: 100%;
+            height: 2.55rem;
+            line-height: 2.55rem;
+            border-bottom: 0.15rem solid rgba(243, 243, 243, 1);
+            background: #fff;
+        }
+
+        .totalNumber {
+            display: inline-block;
+            padding-left: 0.45rem;
+        }
+
+        .totalNumberUnit {
+            display: inline-block;
+            font-size: 0.6rem;
+            color: #999;
+            padding-left: 0.2rem;
+        }
+
+        .c-aui-row .aui-col-xs-12 {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+        }
+
+        .c-body-content {
+            width: 100%;
+        }
+
+        .c-body-content .aui-row {
+            width: 100%;
+            height: 4.43rem;
+            padding: 0.3rem 0.73rem;
+            background: #fff;
+            border-bottom: 0.33rem solid #F3F3F3;
+            position: relative;
+        }
+
+        .c-body-content .aui-row:first-child {
+            border-top: 0.15rem solid #F3F3F3;
+        }
+
+        .c-body-content .aui-row:last-child {
+            border-bottom: none;
+        }
+
+        .c-body-content .aui-row .aui-col-xs-12 {
+            color: #8D8D8D;
+            font-size: 0.7rem;
+        }
+
+        .c-body-content .aui-row .aui-col-xs-12:first-child {
+            color: #1C1C1C;
+            font-size: 0.9rem;
+        }
+
+        .c_account_Name {
+            width: 4rem;
+            width: 2.5rem;
+            display: inline-block;
+            text-align: justify;
+            text-align-last: justify;
+        }
+
+        .c_account_Name::after {
+            content: "";
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .c-location-img {
+            width: 0.53rem;
+            height: 0.7rem;
+            background: url("../image/MeterManage/Posting/dingwei.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            top: 0.12rem;
+        }
+
+        .c-address {
+            display: inline-block;
+            padding-left: 0.8rem;
+        }
+        .c-status-handle {
+            font-size: 0.7rem;
+            color: #03D77B;
+            display: inline-block;
+            float: right;
+        }
+        .c-body-content .aui-row:active{
+          background: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">表号维护</div>
+        </header>
+        <van-search v-model="searchValue" placeholder="请输入内容" left-icon="" shape="round" @clear="onClear" @search='onSearch'>
+            <div class="searchIcon" slot="right-icon" @click='onSearch'></div>
+        </van-search>
+        <div id="main" class="flex-con">
+            <div class="c-body-content">
+              <div v-if='UserInfoDatas.length>0' class="aui-row" v-for='(item,index) in UserInfoDatas' :key='index' @click='openMeterNoScan(item)'>
+                  <div class="aui-col-xs-12">{{item.CustomerCode}}</div>
+                  <div class="aui-col-xs-12"><span class='c_account_Name'>户名</span>:{{item.CustomerName}} <span class='c-status-handle'>{{item.StatusName}}</span></div>
+                  <div class="aui-col-xs-12"><span class='c-location-img'></span><span class='c-address'>{{item.Address}}</span></div>
+              </div>
+            </div>
+            <div class="aui-row c-aui-row" v-show='showSearchResult'>
+                <div class="aui-col-xs-12">没有更多的搜索结果!</div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+    };
+
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.MeterNoVue = new Vue({
+            el: '#wrap',
+            data: {
+                searchValue: "",
+                showSearchResult: false, //搜索时显示没有数据的时候
+                UserInfoDatas:[],
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                onClear() {
+                 this.searchValue = "";
+                 this.getMeterNoData();
+                },
+                onSearch() {
+                this.getMeterNoData();
+                },
+                openMeterNoScan(data) {
+                    api.openWin({
+                        name: 'MeterNoScanSingDetail',
+                        url: './MeterNoScanSingDetail.html',
+                        pageParam: data
+                    });
+                },
+                getMeterNoData() {
+                  var _this = this;
+                  var Parameter = {
+                      TaskNo: api.pageParam.data.taskCode, //api.pageParam.data.taskCode
+                      Status: "4,3,6",
+                      CustomerCode: this.searchValue
+                  };
+                  fnPost('MMS002', Parameter, "application/json", true, false, (ret, err) => {
+                      if (ret) {
+                          if (ret.Status == 0) {
+                              api.hideProgress();
+                              // Data
+                              if (ret.Data.length == 0) {
+                                  _this.showSearchResult = true;
+                              } else {
+                                  _this.showSearchResult = false;
+                              }
+                              var data = JSON.parse(ret.Data);
+                                  _this.UserInfoDatas = [];
+                                  _this.UserInfoDatas = data;
+                          } else {
+                              _this.UserInfoDatas = [];
+                              _this.showSearchResult = true;
+                              api.hideProgress();
+                          }
+                      }
+                  });
+                }
+
+            },
+            mounted: function() {
+                this.getMeterNoData();
+            }
+        })
+    }
+</script>
+
+</html>

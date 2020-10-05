@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>稽核任务领取</title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" href="../../../css/aui.css">
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #F3F3F3;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      #header {
+        position: fixed;
+      }
+
+      .aui-title {
+        font-size: 1.18rem;
+      }
+
+      #footer {
+        width: 100%;
+        height: 5rem;
+        border-top: 1px solid #CCCCCC;
+      }
+
+      .footer-btn {
+        border-radius: 1rem;
+        font-size: 1.04rem;
+        padding-left: 1.3rem;
+        padding-right: 1.3rem;
+      }
+
+      .task-main {
+        width: 96%;
+        height: auto;
+        background: #FFFFFF;
+        border-radius:0.75rem;
+        margin: 1rem 2% 6rem 2%;
+        padding: 1.875rem 1.625rem 1.875rem 1.625rem;
+        box-sizing: border-box;
+      }
+
+      .task-info {
+        width: 100%;
+        height: auto;
+      }
+
+      .info-item {
+        margin-bottom: 1.4rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .task-title {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #1F1F1F;
+        width: 30%;
+        display: inline-block;
+      }
+      .task-cont {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #626262;
+        width: 68%;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .w2{
+        letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+        margin-right:-2em; /*同上*/
+      }
+      .img-list {
+        width: 100%;
+        height: auto;
+      }
+
+      .img-item {
+        width: 30%;
+        margin-right: 2%;
+        display: inline-block;
+        position: relative;
+      }
+
+      .img-delete {
+        position: absolute;
+        right: -8px;
+        top: -8px;
+      }
+
+      .img-item img {
+        width: 100%;
+      }
+
+      .img-type {
+        font-size: 0.55rem;
+        color: #707070;
+        margin-top: 0.25rem;
+      }
+
+      .ul-state {
+        width: 100%;
+        height: auto;
+        max-height: 2rem;
+        position: absolute;
+        /*top: 27px;*/
+        top: 28px;
+        opacity: 0;
+        display: none;
+        background-color: #FFFFFF;
+        box-sizing: border-box;
+        border: 1px solid #CCCCCC;
+        border-top: none;
+        overflow-y: auto;
+        transition: all 0.5s;
+      }
+
+      .ul-state li{
+        width: 100%;
+        height: 30px;
+        box-sizing: border-box;
+        padding: 2px 6px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务处理</div>
+    </header>
+    <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务处理</div>
+    </header>
+
+    <div class="task-main">
+        <div class="task-info">
+            <div class="info-item">
+              <div class="task-title">
+                <span>任务类型</span>
+              </div>
+              <div class="task-cont">
+                <span class="task-type"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户名</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountname"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户号</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountnumber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">地址</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="address"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">表位</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="wmlocation"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>用水性质</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="nature"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">口径</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="caliber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>稽核止度</span>
+              </div>
+              <div class="task-cont" style="border-bottom: 1px solid #D8D8D8;">
+                <input readonly id="jhendscale" style="width: 100%; height: 27px;" type="text" value="请填写止度" />
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>稽核状态</span>
+              </div>
+              <div class="task-cont" style="width: 53%;border-bottom: 1px solid #D8D8D8;position: relative;">
+                <input id="reviewstate" readonly style="width: 100%; height: 27px;" type="text" value="请选择"/>
+                <i class="aui-iconfont aui-icon-down" style="position: absolute;right: 0;top: 20%;"></i>
+                <ul class="ul-state">
+                </ul>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="display: block;">
+                <span class="w2">备注</span>
+              </div>
+              <div class="task-cont" style="margin_top: 11px; width: 100%;">
+                <textarea readonly id="" style="width: 100%; height: 59px; border-radius:6px; border: 1px solid #D8D8D8;">
+                </textarea>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: 100%;height: 1.5rem;">
+                <span class="w2">照片</span>
+                <img src="./image/zhaopian.png" style="float: right; width: 1.05rem; height: 0.85rem;margin-top: 0.2rem;">
+              </div>
+              <div class="task-cont" style="margin_top: 11px; width: 100%;">
+                <div class="img-list" id="imgList">
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="aui-bar aui-bar-tab" id="footer">
+      <div class="aui-bar-tab-item" tapmode>
+          <div class="aui-btn aui-btn-primary footer-btn" tapmode onclick="TaskReturn()">退回</div>
+      </div>
+      <div class="aui-bar-tab-item" tapmode>
+          <div class="aui-btn aui-btn-warning footer-btn" onclick="ClaimOk()">认领</div>
+      </div>
+    </footer>
+  </body>
+  <script type="text/javascript" src="../../../script/api.js"></script>
+  <script type="text/javascript" src="../../../script/zepto.js"></script>
+  <script type="text/javascript" src="../../../script/diy/public.js"></script>
+  <script type="text/javascript" src="../../../script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../../script/common.js"></script>
+  <script type="text/javascript" src="../../../script/remote.js"></script>
+  <script type="text/javascript" src="./js/auidialog.js"></script>
+  <script type="text/javascript">
+    var TaskData = [];
+    var Longitude = "";
+    var Latitude = "";
+    apiready = function(){
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        var hideheader = $api.byId('hideheader');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(hideheader);
+
+        fnReady();
+        fnReadyOpenWin();
+
+        TaskData = api.pageParam.data;
+        $(".task-type").html(TaskData[0].Name);
+        $("#accountname").html(TaskData[0].CustomerName);
+        $("#accountnumber").html(TaskData[0].CustomerCode);
+        $("#wmlocation").html(TaskData[0].Location);
+        $("#nature").html(TaskData[0].Nature);
+        $("#caliber").html(TaskData[0].Caliber);
+        $("#address").html(TaskData[0].Address);
+
+        bMap = api.require("bMap");
+        bMap.getLocation({
+            accuracy: '10m',
+            autoStop: true,
+        }, function(ret, err) {
+            if (ret.status) {
+                Longitude = ret.lon;
+                Latitude = ret.lat;
+            } else {
+                // alert(err.code);
+            }
+        });
+    };
+
+    var actionList = {
+        'back': function() {
+            api.closeWin();
+        },
+        'scanner': function() {
+            var FNScanner = api.require('FNScanner');
+            FNScanner.open({
+                autorotation: true
+            }, function(ret, err) {
+              console.log(JSON.stringify(ret));
+            });
+
+        },
+    }
+
+    //认领
+    function ClaimOk() {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+        url: $api.getStorage("jhapipath") + 'waterMeters/info',
+        method: 'post',
+        dataType: 'json',
+        data: {
+          values: {
+            "UserName": $api.getStorage("jhUserName"),
+            "Password": $api.getStorage("jhPassWord"),
+            "SerialNo": "1111111111111",
+            "Method": "MMS008",
+            "Longitude": Longitude,
+            "Latitude": Latitude,
+            "Parameter": "{'Id': '"+ TaskData[0].Id +"', 'Remark': ''}"
+          }
+        }
+      },function(ret, err){
+          api.hideProgress();
+          if (ret) {
+            if (ret.Status == '0') {
+              api.toast({
+                  msg: "认领成功",
+                  duration: 2000,
+                  location: 'top'
+              });
+              api.sendEvent({
+                  name: 'goClaim'
+              });
+              setTimeout(function(){
+                api.closeWin();
+              }, 1000);
+            } else {
+              api.toast({
+                  msg: ret.Message,
+                  duration: 2000,
+                  location: 'top'
+              });
+            }
+          } else {
+              api.toast({
+                  msg: err.msg,
+                  duration: 2000,
+                  location: 'top'
+              });
+              console.log( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    //退回
+    function TaskReturn() {
+      var dialog = new auiDialog();
+      dialog.prompt({
+          title:"退回",
+          text:'请填写退回原因',
+          input:true,
+          buttons:['取消','确定']
+      },function(ret){
+          if(ret.buttonIndex == 2){
+              api.showProgress({
+                  title: '加载中',
+                  text:'',
+                  modal: false
+              });
+              api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                timeout: '100',
+                dataType: 'json',
+                returnAll: false,
+                // headers: {"Content-Type":"application/json"},
+                data: {
+                  values: {
+                    "UserName": $api.getStorage("jhUserName"),
+                    "Password": $api.getStorage("jhPassWord"),
+                    "SerialNo": "1111111111111",
+                    "Method": "MMS004",
+                    "Longitude": Longitude,
+                    "Latitude": Latitude,
+                    "Parameter": "{'Id': '" + TaskData.Id + "', 'Remark': '" + ret.text + "'}"
+                  },
+                }
+              }, function(ret, err) {
+                api.hideProgress();
+                if(ret){
+                  if (ret.Status == 0) {
+                    api.toast({
+                        msg: "退回成功",
+                        duration: 2000,
+                        location: 'top'
+                    });
+                    api.sendEvent({
+                        name: 'goClaim'
+                    });
+                    setTimeout(function(){
+                      api.closeWin();
+                    }, 1000);
+                  }
+                } else{
+                  api.toast({
+                      msg: err.msg,
+                      duration: 2000,
+                      location: 'top'
+                  });
+                }
+              }
+            );
+          }
+      });
+
+    }
+
+  </script>
+</html>

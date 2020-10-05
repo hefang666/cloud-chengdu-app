@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>表号维护漏扫界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-vertical {
+            max-height: inherit;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+            padding: 0.85rem 0.75rem;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text],
+        .van-field__control[type=search] {
+          height: auto;
+          line-height: inherit;
+          /*width: 55vw;*/
+          font-size: 0.9rem;
+          color: #626262;
+          overflow-x: scroll;
+          -webkit-overflow-scrolling:touch;
+        }
+
+        .footer {
+            width: 100vw;
+            height: 4.08rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.35rem;
+        }
+
+        .footer .van-button {
+            width: 4.82rem;
+            height: 1.86rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .footer .van-button.van-button--info {
+            background-color: #377EFF;
+            border-color: #377EFF;
+        }
+
+        .footer .van-button.van-button--warning {
+            background-color: #FFA836;
+            border-color: #FFA836;
+        }
+
+        .footer .van-button .van-button__text {
+            vertical-align: middle;
+        }
+
+        .card {
+            border-radius: 0.6rem;
+            background-color: #fff;
+            padding: 0.9rem 0 1rem 0;
+        }
+
+        .flex-con .van-search__content,
+        .van-search .van-cell {
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .searchInput {
+            display: flex;
+        }
+
+        .searchLabel {
+            height: 0;
+        }
+
+        .flex-con .searchInput span,
+        .flex-con .van-field__label span {
+            width: 4rem;
+            font-size: 0.9rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+        }
+
+        .flex-con .searchInput span::after,
+        .flex-con .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .flex-con .van-field__label {
+            height: 0;
+        }
+
+        .flex-con .van-cell.formField,
+        .searchInput,
+        .van-form .van-cell.formField,
+        .textAreaLabel,
+        .locationRow {
+            padding: 0.4rem 0.95rem 0.4rem 1.25rem;
+            background-color: transparent;
+        }
+
+        .flex-con .van-search {
+            background-color: transparent;
+            padding: 0;
+            width: calc(100% - 4.6rem);
+        }
+
+        .van-search .van-field__body,
+        .van-form .van-field__body {
+            border-bottom: 0.03rem solid #D8D8D8;
+        }
+
+        .van-form .textareaField .van-field__body {
+            border-bottom: none;
+        }
+
+        .border {
+            height: 0.15rem;
+            background-color: #DEDEDE;
+            flex: 1;
+        }
+
+        .van-form .textAreaLabel span.textLabel,
+        .van-form .van-field__label span {
+            width: 4rem;
+            font-size: 0.8rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+        }
+
+        .van-form .textAreaLabel span.textLabel::after,
+        .van-form .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .van-form .van-field__label {
+            height: 0;
+        }
+
+        .van-form .van-field__control[type=text],
+        .van-form textarea {
+          height: auto;
+          line-height: inherit;
+          width: 55vw;
+          font-size: 0.9rem;
+          color: #626262;
+          overflow-x: scroll;
+          -webkit-overflow-scrolling:touch;
+        }
+
+        .van-form .textareaField .van-field__value {
+            border: 0.03rem solid #D8D8D8;
+            border-radius: 0.1rem;
+        }
+
+        .van-form textarea {
+            padding: 0.5rem 0.6rem;
+        }
+
+        .van-field__word-limit {
+            color: #E2E2E2;
+            font-size: 0.65rem;
+            padding: 0.5rem;
+            margin: 0;
+        }
+
+        .cardHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.4rem 0.93rem 0.4rem 0.5rem;
+        }
+
+        .cardTitle {
+            color: #323232;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+        }
+
+        .dot {
+            width: 0.28rem;
+            height: 0.28rem;
+            border-radius: 50%;
+            background-color: #265CF5;
+            margin-right: 0.55rem;
+        }
+
+        .refresh {
+            width: 0.78rem;
+            height: 0.81rem;
+            background: url("../image/MeterManage/gengxin.png") no-repeat center;
+            background-size: 100% 100%;
+            margin-left: 1.75rem;
+        }
+
+        .formInput .van-field__control[type=text] {
+          height: auto;
+          line-height: inherit;
+          color: #626262;
+          overflow-x: scroll;
+          -webkit-overflow-scrolling:touch;
+          font-size: 0.8rem;
+          border-bottom: 0.03rem solid #E1E1E1;
+        }
+
+        .van-icon__image {
+            width: 0.83rem;
+            height: 0.83rem;
+        }
+
+        .imgContent {
+            padding: 0.4rem 1.3rem;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .meterImg {
+            width: 3.73rem;
+            height: 2.9rem;
+            margin-bottom: 0.75rem;
+            margin-right: 1.13rem;
+        }
+
+        .sousuo {
+            width: 0.78rem;
+            height: 0.78rem;
+            background: url("../image/MeterManage/sousuo.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .popup {
+            max-height: 35vh;
+        }
+
+        .pickerMain {
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .picker {
+            width: 100vw;
+            height: 2.13rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+            border-bottom: 0.03rem solid #EDEDED;
+        }
+
+        .picker:last-child {
+            border-bottom: none;
+        }
+
+        .popupFooter {
+            width: 100vw;
+            height: 2.46rem;
+            border-top: 0.25rem solid #ECECEC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+        }
+
+        .imgDiv {
+            position: relative;
+        }
+
+        .addImg {
+            width: 1.05rem;
+            height: 0.85rem;
+            background: url("../image/MeterManage/paizhao.png") no-repeat center;
+            background-size: 100% 100%;
+            margin-left: 1.48rem;
+        }
+
+        .deleteImg {
+            width: 0.8rem;
+            height: 0.8rem;
+            background: url("../image/MeterManage/shanchu@2x.png") no-repeat center;
+            background-size: 100% 100%;
+            position: absolute;
+            top: -0.4rem;
+            right: 0.73rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak @click="showDelete = false">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">表号维护</div>
+            <div class="aui-pull-right aui-btn" tapmode @click="openSearch">
+                <div class="sousuo"></div>
+            </div>
+        </header>
+
+        <div id="main" class="flex-con">
+            <div class="card">
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>用户信息
+                    </div>
+                    <div class="border"></div>
+                </div>
+                <div class="cardContent">
+                    <van-field class="formField" :border="false" label="户名" :value="customerInfo.CustomerName" readonly></van-field>
+                    <van-field class="formField" :border="false" label="户号" :value="customerInfo.CustomerCode" readonly></van-field>
+                    <van-field class="formField" :border="false" label="地址" :value="customerInfo.Address" readonly></van-field>
+                    <van-field class="formField" :border="false" label="表位" :value="customerInfo.Location" readonly></van-field>
+                    <van-field class="formField" :border="false" label="用水性质" :value="customerInfo.NatureName" readonly></van-field>
+                </div>
+
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>水表信息
+                    </div>
+                    <div class="border"></div>
+                </div>
+                <div class="cardContent">
+                    <van-field class="formField" :border="false" label="口径" :value="customerInfo.Caliber" readonly></van-field>
+                    <van-field class="formField" :border="false" label="水表类型" :value="customerInfo.MeterType" readonly></van-field>
+                    <!-- v-model='customerInfo.StampNo' -->
+                    <van-field class="formField formInput" v-model='customerInfo.StampNo'  :border="false" label="水表表号" :value="customerInfo.StampNo" input-align="center" placeholder="此处显示扫码后的钢印号" right-icon="../image/MeterManage/saoma.png" @click-right-icon="openScan" @blur='loseFocus'></van-field>
+                </div>
+
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>水表位置
+                    </div>
+                    <div class="border"></div>
+                    <div class="refresh" @click="getLocation"></div>
+                </div>
+                <div class="cardContent">
+                    <van-field class="formField" :border="false" label="经度" :value="customerInfo.Longitude" readonly></van-field>
+                    <van-field class="formField" :border="false" label="纬度" :value="customerInfo.Latitude" readonly></van-field>
+                </div>
+
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>表位图片
+                    </div>
+                    <div class="border"></div>
+                    <div class="addImg" @click="showPicker = true"></div>
+                </div>
+                <div class="cardContent imgContent">
+                    <div class="imgDiv" v-for="(image,index) in imagePath" :key="index">
+                        <van-image class="meterImg" :src="image" v-longtap.stop="showDeleteIcon" @click.stop="showPreView(index)">
+                            <template v-slot:loading>
+                          <van-loading type="spinner" size="20"></van-loading>
+                        </template>
+                        </van-image>
+                        <div class="deleteImg" v-show="showDelete" @click.stop="deleteImg(index)"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <van-popup class="popup" v-model="showPicker" position="bottom">
+            <div class="flex-wrap flex-vertical">
+                <div class="flex-con pickerMain">
+                    <div class="picker" @click="getPicture('library')">
+                        手机相册
+                    </div>
+                    <div class="picker" @click="getPicture('camera')">
+                        拍照
+                    </div>
+                </div>
+                <div class="popupFooter" @click="showPicker = false">
+                    取消
+                </div>
+            </div>
+        </van-popup>
+
+        <div class="footer">
+
+            <van-button round block type="info" @click='onGoSearchUser("last")'>
+                上一户
+            </van-button>
+
+            <van-button round block type="warning" @click="saveMeterNo">
+                录入
+            </van-button>
+
+            <van-button round block type="info" @click='onGoSearchUser("next")'>
+                下一户
+            </van-button>
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        bMap = api.require("bMap");
+        FNScanner = api.require('FNScanner');
+        fs = api.require('fs');
+        UIAlbumBrowser = api.require('UIAlbumBrowser');
+        photoBrowser = api.require('photoBrowser');
+        fs = api.require('fs');
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+          if(ret && ret.keyCode == 4){
+             MeterNoScanVue.back();
+          }
+        });
+        api.addEventListener({
+            name: 'SearchResult'
+        }, function(ret, err){
+            if( ret ){
+              var data = ret.value.data;
+              MeterNoScanVue.renderData(data);
+            }
+        });
+
+    };
+    var VmData = {
+            showPicker: false,
+            showDelete: false,
+            customerInfo: {
+                Id: '',
+                BookId: '',
+                CustomerName: "",
+                CustomerCode: "",
+                Address: "",
+                Location: "",
+                NatureName: "",
+                Caliber: 0,
+                MeterType: "",
+                StampNo: "",
+                AreaId: "",
+                OrganizationCode: "",
+                Longitude: "",
+                Latitude: "",
+                Remark: "",
+            },
+            Longitude: "",
+            Latitude: "",
+            imagePath:[],
+            oldStampNo:'',
+        }
+        // fnIntVue();
+
+    function fnIntVue() {
+        window.MeterNoScanVue = new Vue({
+            el: '#wrap',
+            data: VmData,
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                  api.closeWin({});
+                  api.sendEvent({
+                      name: 'RenderCopyList',
+                  });
+                },
+                initData() {
+                    var data = api.pageParam.data;
+                    if (api.pageParam.from == 'button') {
+
+                        // 先对抄表本进行排序，然后根据抄表本，查询用户数据里面的表号是否存在
+                        var db = api.require("db");
+                        db.selectSql({
+                            name: 'Wsdatabase',
+                            sql: 'SELECT * FROM UserInfosheet where StampNo ="" ORDER BY BookId LIMIT 1'
+                        }, (ret, err) => {
+                            if (ret.status) {
+                                // console.log(JSON.stringify(ret.data[0]));
+                                this.renderData(ret.data[0]);
+                            } else {
+                                // console.log(JSON.stringify(err));
+                            }
+                        });
+                    } else {
+                        this.getUserInfo(data);
+                    }
+                },
+                getUserInfo(data) {
+                    var db = api.require("db");
+                    // db.selectSql({
+                    //     name: 'Wsdatabase',
+                    //     sql: 'Select * from UserInfosheet where BookId="'+data.BookId+'"'
+                    //     // sql: 'Select * from UserInfosheet'
+                    // }, function(ret, err){
+                    //     if( ret.status ){
+                    //         console.log( JSON.stringify( ret ) );
+                    //     }else{
+                    //         console.log( JSON.stringify( err ) );
+                    //     }
+                    // });
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: 'Select * from UserInfosheet where BookId="' + data.BookId + '" ORDER BY BookId LIMIT 1'
+                    }, (ret, err) => {
+                        if (ret.status) {
+                            // console.log(JSON.stringify(ret.data[0]));
+                            this.renderData(ret.data[0]);
+                        } else {
+                            console.log(JSON.stringify(err));
+                        }
+                    });
+
+                },
+                renderData(data) {
+                    this.customerInfo.Id = data.Id;
+                    this.customerInfo.BookId = data.BookId;
+                    this.customerInfo.CustomerName = data.CustomerName;
+                    this.customerInfo.CustomerCode = data.CustomerCode;
+                    this.customerInfo.Address = data.Address;
+                    this.customerInfo.Location = data.Location != "null" ? data.Location : "";
+                    this.customerInfo.NatureName = data.NatureName;
+                    this.customerInfo.Caliber = data.Caliber;
+                    this.customerInfo.MeterType = data.MeterType;
+                    this.customerInfo.StampNo = data.StampNo;
+                    this.customerInfo.AreaId = data.AreaId;
+                    this.customerInfo.OrganizationCode = data.OrganizationCode;
+                    this.customerInfo.Longitude = data.Longitude != "" ? data.Longitude : this.Longitude;
+                    this.customerInfo.Latitude = data.Latitude != "" ? data.Latitude : this.Latitude;
+                    this.customerInfo.Remark = data.Remark;
+                    if(data.ImageUrl.length!=0){
+                     var imgArray = data.ImageUrl.split(",");
+                     imgArray.forEach(e=>{
+                       this.imagePath.push(e);
+                     })
+                   } else{
+                       this.imagePath =[];
+                   }
+
+                },
+                onGoSearchUser(type) {
+                    var db = api.require('db');
+
+                    if (type == 'last') {
+                        // 上一户
+                        if (api.pageParam.from == 'button') {
+                            var sql = 'select * from UserInfosheet where Id = (select Id from UserInfosheet where Id < ' + this.customerInfo.Id + ' and StampNo ="" order by Id desc limit 1)';
+                        } else {
+                            var sql = 'select * from UserInfosheet where Id = (select Id from UserInfosheet where Id < ' + this.customerInfo.Id + ' and BookId = "' + this.customerInfo.BookId + '"  order by Id desc limit 1)';
+                        }
+                        db.selectSql({
+                            name: 'Wsdatabase',
+                            sql: sql
+                                // sql: 'Select * from UserInfosheet'
+                        }, (ret, err) => {
+                            if (ret.status) {
+                                if (ret.data.length == 0) {
+                                    api.toast({
+                                        msg: '当前为第一户',
+                                        duration: 2000,
+                                        location: 'top'
+                                    });
+                                } else {
+                                  this.imagePath =[];
+                                    this.renderData(ret.data[0]);
+                                }
+
+                            } else {
+                                console.log(JSON.stringify(err));
+                            }
+                        });
+                    } else {
+                        // 下一户
+                        if (api.pageParam.from == 'button') {
+                            var sql = 'select * from UserInfosheet where Id = (select Id from UserInfosheet where Id > ' + this.customerInfo.Id + ' and StampNo = "" order by Id  asc limit 1) ';
+                        } else {
+                            var sql = 'select * from UserInfosheet where Id = (select Id from UserInfosheet where Id > ' + this.customerInfo.Id + ' and BookId = "' + this.customerInfo.BookId + '"  order by Id asc limit 1)'
+                        }
+                        db.selectSql({
+                            name: 'Wsdatabase',
+                            sql: sql
+                                // sql: 'Select * from UserInfosheet'
+                        }, (ret, err) => {
+                            if (ret.status) {
+                                if (ret.data.length == 0) {
+                                    api.toast({
+                                        msg: '当前为最后一户',
+                                        duration: 2000,
+                                        location: 'top'
+                                    });
+                                } else {
+                                  this.imagePath =[];
+                                  this.renderData(ret.data[0]);
+                                }
+                            } else {
+                                console.log(JSON.stringify(err));
+                            }
+                        });
+                    }
+                },
+                getLocation() {
+                    api.showProgress({
+                        style: 'default',
+                        animationType: 'fade',
+                        title: '重新定位中...',
+                        text: "",
+                        modal: false
+                    });
+                    bMap.getLocation({
+                        accuracy: '10m',
+                        autoStop: true,
+                    }, (ret, err) => {
+                        api.hideProgress();
+                        if (ret.status) {
+                            this.customerInfo.Longitude = ret.lon;
+                            this.customerInfo.Latitude = ret.lat;
+
+                        }
+                    });
+                },
+                loseFocus(){
+                  var _this = this;
+                  if(_this.customerInfo.StampNo == "" || _this.oldStampNo.length!=_this.customerInfo.StampNo.length){
+                    _this.oldStampNo = "";
+                  }
+                },
+                openScan() {
+                    FNScanner.open({
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: api.winWidth,
+                            h: api.winHeight,
+                        },
+                        autorotation: true,
+                        hintText: "扫码获取水表表号",
+                        font: {
+                            lightText: {
+                                size: 13,
+                            }
+                        }
+                    }, (ret, err) => {
+                        if (ret.eventType == 'success') {
+                            var content = ret.content;
+                            if(this.oldStampNo != content){
+                                if(api.connectionType == 'none'){
+                                   var db=api.require('db');
+                                   db.selectSql({
+                                       name: 'Wsdatabase',
+                                       sql: `SELECT * FROM UserInfosheet where StampNo=${this.oldStampNo}`
+                                   }, (ret, err)=>{
+                                       if( ret.status ){
+                                          if(ret.data.length >0){
+                                              vant.Toast('该表号已存在!');
+                                          } else {
+                                            this.customerInfo.StampNo = ret.content;
+                                            this.oldStampNo =ret.content;
+                                          }
+                                       }
+                                   });
+
+                                } else {
+                                  this.customerInfo.StampNo = ret.content;
+                                  this.oldStampNo =ret.content;
+                                }
+
+                            } else {
+                              vant.Toast('该表号已存在!');
+                            }
+
+                        }
+                    });
+                },
+                openSearch() {
+                  // 搜索用户信息
+                    api.openWin({
+                        name: 'MeterNoSearch',
+                        url: './MeterNoSearch.html'
+                    });
+                },
+                getPicture(type) {
+                    this.showPicker = false;
+                    if (type == "camera") {
+                        api.getPicture({
+                            sourceType: 'camera',
+                            encodingType: 'png',
+                            mediaValue: 'pic',
+                            destinationType: 'url',
+                            allowEdit: false,
+                            quality: 80,
+                            saveToPhotoAlbum: false
+                        }, function(ret, err) {
+                            if (ret) {
+                                if (ret.data != "") {
+                                    MeterNoScanVue.imagePath.push(ret.data);
+                                }
+                            }
+                        });
+                    } else {
+                        UIAlbumBrowser.open({
+                            max: 9,
+                            type: 'image',
+                            styles: {
+                                bg: '#fff',
+                                mark: {
+                                    icon: '',
+                                    position: 'bottom_left',
+                                    size: 20
+                                },
+                                nav: {
+                                    bg: 'rgba(0,0,0,0.6)',
+                                    titleColor: '#fff',
+                                    titleSize: 18,
+                                    cancelColor: '#fff',
+                                    cancelSize: 16,
+                                    finishColor: '#fff',
+                                    finishSize: 16
+                                }
+                            },
+                            rotation: true
+                        }, function(ret) {
+                            if (ret) {
+                                if (ret.eventType == 'confirm') {
+                                    ret.list.forEach(function(item) {
+                                        if (api.systemType == 'ios') {
+                                            this.imagePath.forEach(function(item) {
+                                                UIAlbumBrowser.transPath({
+                                                    path: item.path
+                                                }, function(ret, err) {
+                                                    if (ret) {
+                                                        MeterNoScanVue.imagePath.push(ret.path);
+                                                    }
+                                                });
+                                            })
+                                        } else {
+                                            MeterNoScanVue.imagePath.push(item.path);
+                                        }
+                                    })
+                                }
+                            }
+                        });
+                    }
+                },
+                deleteImg(index) {
+                    this.imagePath.splice(index, 1);
+                },
+                showDeleteIcon() {
+                    this.showDelete = true;
+                },
+                showPreView(index) {
+                    photoBrowser.open({
+                        images: this.imagePath,
+                        activeIndex: index,
+                        bgColor: '#000'
+                    }, function(ret, err) {
+                        if (ret) {
+                            if (ret.eventType == 'click') {
+                                photoBrowser.close();
+                            }
+                        }
+                    });
+                },
+                saveMeterNo() {
+                    var db = api.require('db');
+                    // console.log(JSON.stringify(this.imagePath));
+                    if (api.connectionType != 'none') {
+                        if (this.customerInfo.StampNo != "") {
+                            var body ={
+                              CustomerCode: this.customerInfo.CustomerCode,
+                              AreaId: this.customerInfo.AreaId,
+                              OrganizationCode: this.customerInfo.OrganizationCode,
+                              StampNo: this.customerInfo.StampNo,
+                              Longitude: this.customerInfo.Longitude,
+                              Latitude: this.customerInfo.Latitude,
+                              Remark: this.customerInfo.Remark
+                            }
+                            var files = {
+                                file: this.imagePath
+                            };
+
+                            fnPost('OSM004', body,'application/json', false, false, (ret, err) => {
+                                api.hideProgress();
+                                if (ret && ret.Status == 0) {
+                                    vant.Toast('数据保存成功');
+                                      this.imagePath=[];
+                                    // 删除数据开始
+                                    db.executeSql({
+                                        name: 'Wsdatabase',
+                                        sql: 'DELETE FROM UserInfosheet where CustomerCode="' + this.customerInfo.CustomerCode + '" and BookId="' + this.customerInfo.BookId + '"'
+                                    }, (ret, err) => {
+                                        if (ret.status) {
+                                            db.selectSql({
+                                                name: 'Wsdatabase',
+                                                sql: 'SELECT * FROM UserInfosheet where BookId = "' + this.customerInfo.BookId + '"'
+                                            }, (ret, err) => {
+                                                if (ret.status) {
+                                                    var CopyCount = ret.data.length;
+                                                    this.imagePath =[]; //清除图片
+                                                    if (ret.data.length == 0) {
+                                                        // 如果已经抄完表，则删除抄表册
+                                                        db.executeSql({
+                                                            name: 'Wsdatabase',
+                                                            sql: 'DELETE FROM Copyformsheet where BookId="' + this.customerInfo.BookId + '"'
+                                                        }, (ret, err) => {
+                                                            if (ret.status) {}
+                                                        });
+                                                        // 关闭窗口，刷新数据
+                                                      this.back();
+
+                                                    } else {
+                                                      // 删除用户表数据结束
+                                                      this.onGoSearchUser('next');
+                                                      this.getLocation();
+                                                        //没有抄完表，则修改抄表册的数量
+                                                        db.executeSql({
+                                                            name: 'Wsdatabase',
+                                                            sql: 'UPDATE Copyformsheet SET Count=' + CopyCount + ' where BookId="' + this.customerInfo.BookId + '"'
+                                                        }, function(ret, err) {
+                                                            if (ret.status) {
+                                                                // alert( JSON.stringify( ret ) );
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            },files);
+                        } else {
+                            vant.Toast('请输入水表表号');
+                        }
+                    } else {
+                        // 没有网络的时候
+                        //图片保存到fs路径下
+                        var imgArray = [];
+                        var imgnumber = 0;
+                        if (this.imagePath.length != 0) {
+                            this.imagePath.forEach(item => {
+                                fs.copyTo({
+                                    oldPath: item,
+                                    newPath: 'fs://MeterNoPicture'
+                                }, (ret, err) => {
+                                    if (ret.status) {
+                                        imgnumber++;
+                                        var picName = item.substring(item.lastIndexOf("/") + 1);
+                                        var url = api.fsDir + "/MeterNoPicture/" + picName;
+                                        imgArray.push(url);
+                                        if (imgnumber == this.imagePath.length) {
+                                            this.upDateUserSheet(imgArray);
+                                        }
+                                    }
+                                });
+                            })
+                        } else {
+                            this.upDateUserSheet("");
+                        }
+
+                    }
+                },
+                upDateUserSheet(imgArray) {
+                    var db = api.require("db");
+                    if (this.customerInfo.StampNo != "") {
+                      if(this.customerInfo.StampNo != this.oldStampNo){
+                        this.oldStampNo=this.customerInfo.StampNo ;
+                        db.executeSql({
+                            name: 'Wsdatabase',
+                            sql: 'UPDATE UserInfosheet SET StampNo="' + this.customerInfo.StampNo + '",Longitude ="' + this.customerInfo.Longitude + '",Latitude ="' + this.customerInfo.Latitude + '",isUpload=1,ImageUrl="' + imgArray +
+                                '" where CustomerCode="' + this.customerInfo.CustomerCode + '" and BookId="' + this.customerInfo.BookId + '" '
+                        }, (ret, err) => {
+                            if (ret.status) {
+                              api.hideProgress();
+                                vant.Toast("数据保存成功！");
+                                  this.imagePath=[];
+                                db.selectSql({
+                                    name: 'Wsdatabase',
+                                    sql: 'SELECT * FROM UserInfosheet where StampNo!="" and BookId="'+this.customerInfo.BookId+'"'
+                                }, (ret, err)=>{
+                                    if( ret.status ){
+                                      var sweepCodeNum = ret.data.length;
+                                      // 修改抄表册里面一已扫码的数量
+                                      db.executeSql({
+                                          name: 'Wsdatabase',
+                                          sql: 'UPDATE Copyformsheet SET sweepCodeNum = '+sweepCodeNum+' where BookId="'+this.customerInfo.BookId+'"'
+                                      }, (ret, err)=>{
+                                          if( ret.status ){
+                                              // console.log( JSON.stringify( ret ) );
+                                              // db.selectSql({
+                                              //     name: 'Wsdatabase',
+                                              //     sql: 'SELECT * FROM Copyformsheet where BookId="'+this.customerInfo.BookId+'"'
+                                              // }, function(ret, err){
+                                              //     if( ret.status ){
+                                              //         alert( JSON.stringify( ret ) );
+                                              //     }else{
+                                              //         alert( JSON.stringify( err ) );
+                                              //     }
+                                              // });
+
+                                          }
+                                      });
+
+                                    }else{
+                                      console.log( JSON.stringify( err ) );
+                                    }
+                                });
+                                this.onGoSearchUser('next');
+                                this.getLocation();
+
+                            } else {
+                                console.log(JSON.stringify(err));
+                            }
+                        });
+                      } else {
+                         vant.Toast('该表号已存在!');
+                      }
+
+                   }else {
+                       vant.Toast('请输入水表表号');
+                   }
+                },
+            },
+            mounted: function() {
+                this.getLocation();
+                this.initData();
+            }
+        })
+    }
+</script>
+
+</html>

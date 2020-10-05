@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>出库扫码</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .ri {
+            float: right;
+        }
+
+        .le {
+            float: left;
+        }
+
+        .cl {
+            clear: both;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .footer {
+            width: 100vw;
+            height: 4.08rem;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.35rem;
+        }
+
+        .footer .van-button {
+            width: 5.5rem;
+            height: 1.86rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .footer .van-button:first-child {
+            background-color: #377EFF;
+        }
+
+        .footer .van-button:last-child {
+            background-color: #FFA517;
+            border-color: #FFA517;
+        }
+
+        .sweepText {
+            float: right;
+            color: #AAAAAA;
+            font-size: .6rem;
+        }
+
+        .aui-tab {
+            width: 100%;
+        }
+
+        .aui-tab-item {
+            font-size: 0.95rem;
+            color: #363636;
+            padding: 1.5rem 0 1.25rem 0;
+            line-height: normal;
+            height: auto;
+        }
+        /*.aui-tab-item:first-child:after {*/
+
+        .aui-tab-item:nth-child(1)::after,
+        .aui-tab-item:nth-child(2)::after {
+            content: '';
+            position: absolute;
+            left: auto;
+            top: 1.7rem;
+            bottom: 0;
+            right: 0;
+            height: 1.85rem;
+            width: 0.03rem;
+            background-color: #DCDCDC;
+        }
+
+        .number1,
+        .number2,
+        .number3 {
+            font-size: 1.6rem;
+            height: 1.35rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title1,
+        .title2,
+        .title3 {
+            font-size: 0.75rem;
+            height: 0.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .number1,
+        .title1 {
+            color: #167CFB;
+        }
+
+        .number2,
+        .title2 {
+            color: #FF971D;
+        }
+
+        .number3,
+        .title3 {
+            color: #FF3232;
+        }
+
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.75rem;
+            color: #999999;
+            border-right: 0.03rem solid #BBBBBB;
+            padding-right: 1.3rem;
+        }
+
+        .van-search {
+            padding: 0 1.25rem 1.05rem 1.25rem;
+        }
+
+        .van-search__content--round {
+            background-color: #fff;
+            border: 0.03rem solid #C4C4C4;
+            border-radius: 1rem;
+            padding-left: 0.93rem;
+        }
+
+        .van-search .van-cell {
+            padding: 0.3rem 0.83rem 0.3rem 0;
+        }
+
+        .van-field__right-icon {
+            padding-left: 0.83rem;
+            padding-right: 0.3rem;
+        }
+
+        .searchIcon {
+            width: 1rem;
+            height: 1rem;
+            background: url("../../../image/Task/sousuo2.png") no-repeat center;
+            background-size: 0.83rem 0.83rem;
+        }
+
+        .tableList {
+            background: rgba(245, 245, 245, 1);
+            padding: .6rem .3rem;
+            font-size: 1.1rem;
+        }
+
+        .rowNum {}
+
+        .iocn-pic {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: rgba(191, 191, 191, 1);
+            margin-left: .8rem;
+            margin-right: .5rem;
+            position: relative;
+            bottom: .1rem;
+            text-align: left !important;
+        }
+
+        .line1,
+        .line2,
+        .line3 {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
+
+        .line1 {
+            width: 30%;
+            text-align: left;
+        }
+
+        .line2 {
+            width: 15%;
+            text-align: left;
+        }
+
+        .line3 {
+            text-align: left;
+        }
+
+        .checkItem {
+            background-color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">出库扫码</div>
+        </header>
+
+        <div class="aui-tab">
+            <div class="aui-tab-item">
+                <div class="number1">{{sweepNum}}</div>
+                <div class="title1">
+                    待扫数量
+                </div>
+            </div>
+            <div class="aui-tab-item">
+                <div class="number2">{{sweepBatch}}</div>
+                <div class="title2">
+                    待扫批次
+                </div>
+            </div>
+            <div class="aui-tab-item">
+                <div class="number3">{{sweepTableNum}}</div>
+                <div class="title3">
+                    待扫表数
+                </div>
+            </div>
+        </div>
+
+        <van-search v-model="searchVal" placeholder="请输入内容" left-icon="" shape="round">
+            <div @click="getOutBill" class="searchIcon" slot="right-icon"></div>
+        </van-search>
+
+        <div id="main" class="flex-con">
+
+            <van-collapse v-model="activeNames" v-for="(item,index) in sweepNumArray" accordion @change="getBillDetailTotal(index,item)">
+                <van-collapse-item :name="index">
+                    <div slot="title">{{item.Number}} <span class="sweepText">{{item.IsNullCount}}/{{item.count}}(水表数量)</span></div>
+
+                    <div class="tableList" v-if="item.isUnfold">
+                        <!-- <div class="rowNum" v-for="(items,indexs) in item.arrayObj" @click="selectItem(items)" :class='[items.statue ?"checkItem":" "]'> -->
+                        <div class="rowNum" v-for="(items,indexs) in item.arrayObj" @click="selectItem(index,indexs)" :class='[items.statue ? "checkItem":" "]'>
+
+                            <div class="iocn-pic"></div>
+                            <p class="line1">{{items.mart}}</p>
+                            <p class="line2">{{items.num}}</p>
+                            <!-- <p class="line3">{{ StampNos }}</p> -->
+                            <p class="line3">{{ items.tableCode }}</p>
+
+                        </div>
+
+                    </div>
+                </van-collapse-item>
+            </van-collapse>
+
+        </div>
+
+        <div class="footer">
+            <van-button round block type="info" @click="saveFunc">
+                提交
+            </van-button>
+            <van-button round block type="danger" @click="ewSweep">
+                扫码
+            </van-button>
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        // fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    fnIntVue();
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                sweepNum: '0',
+                sweepBatch: '0',
+                sweepTableNum: '0',
+                showUnDownload: false,
+                activeNames: ['1'],
+                activeName: '1',
+                openParent: '',
+                StampNos: true, //选中扫码项
+                parentNum: '',
+                subNum: '',
+                checkItem: 'checkItem',
+                searchVal: '',
+                sweepNumArray: [
+
+                ]
+
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                selectItem(index, indexs) { //点击选中牌
+                    for (let i = 0; i < this.sweepNumArray.length; i++) {
+                        var arrObj = this.sweepNumArray[i].arrayObj;
+                        if (arrObj.length != 0) {
+                            for (let j = 0; j < arrObj.length; j++) {
+                                arrObj[j].statue = false;
+                            }
+                        }
+                    }
+                    this.sweepNumArray[index].arrayObj[indexs].statue = this.StampNos;
+                },
+                getOutBill() { //获取批次列表
+                    var body = {
+                        'BillNo': this.searchVal,
+                    };
+                    fngetmmsPost('MMS113', body, 'application/json', true, false, (ret, err) => {
+                        api.hideProgress();
+                        // console.log(JSON.stringify(ret));
+                        if (ret && ret.Status == 0) {
+                            let data = JSON.parse(ret.Data);
+                            let a = 0;
+                            this.sweepNumArray = [];
+                            for (let i = 0; i < data.length; i++) {
+                                // let isUnfold = data[i].IsNullCount == 0 ? true : false;
+                                let isUnfold = data[i].IsNullCount == 0 ? false : true;
+
+                                this.sweepNumArray.push({
+                                    'Number': data[i].BillNo,
+                                    'code': i,
+                                    isUnfold: isUnfold,
+                                    count: data[i].Count,
+                                    IsNullCount: data[i].IsNullCount,
+                                    arrayObj: [],
+                                });
+                                a += Number(data[i].IsNullCount);
+                            }
+                            this.sweepBatch = data.length; //待扫批次
+                            this.sweepTableNum = a; //待扫表数
+
+                            for (let i = 0; i < this.sweepNumArray.length; i++) {
+                                this.getBillDetail(this.sweepNumArray[i]);
+                            }
+
+                        } else {
+                            this.sweepNumArray = [];
+                        }
+                    });
+
+                },
+                getBillDetail(obj) { //获取表数列表
+                    var body = {
+                        'BillNo': obj.Number,
+                    };
+                    fngetmmsPost('MMS114', body, 'application/json', true, false, (ret, err) => {
+                        api.hideProgress();
+
+                        if (ret && ret.Status == 0) {
+                            let data = JSON.parse(ret.Data);
+
+                            let detailArray = [];
+                            for (var i = 0; i < data.length; i++) {
+                                detailArray.push({
+                                    'mart': data[i].NamePlateName, //铭牌
+                                    'num': data[i].Caliber, //口径
+                                    'MetersId': data[i].MetersId, //水表Id
+                                    'statue': false, //是否选中的状态
+                                    'tableCode': '', //扫码获得的表号
+                                    index: i,
+                                    parentIndex: obj.code
+                                });
+                            }
+                            this.sweepNumArray[obj.code].arrayObj = detailArray;
+                        }
+                    });
+                },
+
+                getBillDetailTotal(index, obj) { //获取单个出库单水表信息
+                    this.sweepNum = obj.IsNullCount; //待扫数量
+                    this.openParent = index;
+                },
+                saveFunc() { //保存提交
+                    if (this.openParent !== "") {
+                        let arraySubmit = this.sweepNumArray[this.openParent].arrayObj;
+                        let str = '';
+                        for (item of arraySubmit) {
+                            if (item.tableCode != '') {
+                                str += item.MetersId + '|' + item.tableCode + ',';
+                            }
+                        }
+                        var body = {
+                            StampNos: str,
+                        };
+                        fngetmmsPost('MMS115', body, 'application/json', true, false, (ret, err) => {
+                            api.hideProgress();
+                            if (ret && ret.Status == 0) {
+                                this.searchVal = "";
+                                this.getOutBill();
+                                api.toast({
+                                    msg: '提交成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                // setTimeout(() => {
+                                //     back();
+                                // }, 300);
+                            } else {
+                                api.toast({
+                                    msg: ret.Message,
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }
+                        })
+                    } else {
+                        vant.Toast('请先选择需要提交的水表!');
+                    }
+                },
+
+                ewSweep() { //二维码扫描
+                    var FNScanner = api.require('FNScanner');
+                    var _sweepNumArray = this.sweepNumArray;
+                    FNScanner.open({
+                        // isDrawQRCodeRect:true,
+                        autorotation: true,
+                        // saveToAlbum: true,
+                        // saveImg:{
+                        //   path: 'fs://a.jpg',  //字符串类型；保存的文件路径；若路径不存在，则创建此路径，只支持fs://协议
+                        //    w: 200,              //（可选项）数字类型；生成图片的宽度，默认：200
+                        //    h: 200
+                        // },
+                    }, (ret, err) => {
+                        FNScanner.closeView();
+                        if (ret) {
+
+                            if (ret.eventType == 'success') { //扫描成功
+                                var tableCode = ret.content;
+                                for (let i = 0; i < _sweepNumArray.length; i++) {
+                                    var arrObj = _sweepNumArray[i].arrayObj;
+                                    var arrObjNumber = arrObj.length;
+                                    var hasTableCodeNum = 0;
+                                    if (arrObj.length != 0) {
+                                        for (let j = 0; j < arrObj.length; j++) {
+                                            if (arrObj[j].tableCode == tableCode) {
+                                                api.toast({
+                                                    msg: '该水表号重复',
+                                                    duration: 2000,
+                                                    location: 'bottom'
+                                                });
+                                                hasTableCodeNum++;
+                                            }
+                                            if (hasTableCodeNum == 0) {
+                                                if (arrObj[j].statue == true) {
+                                                    arrObj[j].tableCode = tableCode;
+
+                                                    (function(j) {
+                                                        var index = arrObj[j].index;
+                                                        var parentIndex = arrObj[j].parentIndex;
+                                                        for (let n = 0; n < arrObj.length; n++) {
+                                                            if (arrObj[n].parentIndex == parentIndex && arrObj[n].index != index && arrObj[n].tableCode == "") {
+                                                                arrObj[index].statue = false;
+                                                                var num = index + 1;
+                                                                if (num < arrObjNumber) {
+                                                                    arrObj[num].statue = true;
+                                                                    arrObj[num].tableCode = "";
+                                                                } else {
+                                                                    for (let m = 0; m < arrObj.length; m++) {
+                                                                        if (arrObj[m].tableCode == "") {
+                                                                            arrObj[m].statue = true;
+                                                                            arrObj[m].tableCode = "";
+                                                                            break
+                                                                        }
+                                                                    }
+                                                                }
+                                                                break;
+                                                            }
+                                                        }
+                                                    })(j);
+                                                    break;
+                                                    //
+                                                    // index:i,
+                                                    // parentIndex:obj.code
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+
+                            return
+
+                            if (ret.eventType == 'cameraError') {
+                                api.toast({
+                                    msg: '请开启app访问手机摄像头权限',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                setTimeout(() => {
+                                    // 关闭扫码器  关闭扫码界面
+                                    back();
+                                }, 300);
+                                return;
+                            }
+                            if (ret.eventType == 'albumError') {
+                                api.toast({
+                                    msg: '请开启app访问手机相册权限',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                setTimeout(() => {
+                                    back();
+                                }, 300);
+                                return;
+                            }
+                            if (ret.eventType == 'fail') {
+                                api.toast({
+                                    msg: '扫码失败,请从新扫码',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                setTimeout(() => {
+                                    back();
+                                }, 300);
+
+                                return;
+                            }
+
+                        } else {
+                            api.toast({
+                                msg: '扫码错误请稍后再试',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            setTimeout(() => {
+                                back();
+                            }, 300);
+                        }
+                    });
+
+                },
+
+            },
+            mounted: function() {
+                this.getOutBill();
+            }
+        })
+    }
+</script>
+
+</html>

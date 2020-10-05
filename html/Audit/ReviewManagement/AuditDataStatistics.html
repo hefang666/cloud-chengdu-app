@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>复核管理界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css"/>
+    <link rel="stylesheet" href="../../public/css/aui.css">
+    <link rel="stylesheet" href="../../public/css/vant.css">
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      .review-main {
+        width: 100%;
+        background-color: #F3F3F3;
+        box-sizing: border-box;
+        padding: 1.15rem 0.75rem;
+        overflow-y: auto;
+      }
+
+      .review-item {
+        width: 100%;
+        height: auto;
+        background-color: #FFFFFF;
+        border-radius: 1rem;
+        box-sizing: border-box;
+        padding: 0.85rem 0.75rem;
+      }
+
+      .task-Statistics {
+        width: 100%;
+        height: auto;
+      }
+
+      .review-title {
+        width: 100%;
+        height: 1.5rem;
+      }
+
+      .title-show {
+        width:0.15rem;
+        height:0.85rem;
+        background-color: #2F8BF9;
+        display: inline-block;
+        font-size: 0.9rem;
+        vertical-align: middle;
+      }
+
+      .title-cont {
+        font-size: 0.9rem;
+        font-weight:400;
+        line-height: 1.5rem;
+        color: #585858;
+        margin-left: 0.5rem;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .statistics-time {
+        width: 100%;
+        height: 1.5rem;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #585858;
+        line-height: 1.5rem;
+      }
+
+      .task-xian {
+        width: 100%;
+        height: 1px;
+        background-color: #D7D7D7;
+      }
+
+      .echartsdlv {
+        width: 100%;
+        height: auto;
+        margin-top: 0.5rem;
+        display: flex;
+      }
+
+      .echarts1 {
+        flex: 1;
+      }
+
+      .echarts1-info {
+        flex: 1;
+        box-sizing: border-box;
+        padding-left: 1.75rem;
+      }
+
+      .ets-info-item {
+        width: 100%;
+        height: auto;
+        line-height: 1.25rem;
+      }
+
+      .dcl {
+        width: 0.65rem;
+        height: 0.65rem;
+        display: inline-block;
+        border-radius: 2px;
+        vertical-align: middle;
+      }
+
+      .info-item-text {
+        color: #585858;
+        font-size: 0.7rem;
+        margin-left: 0.33rem;
+      }
+
+      .info-num {
+        display: inline-block;
+        color: #585858;
+        font-size: 0.7rem;
+        float: right;
+      }
+
+      .echarts2div {
+        width: 100%;
+        height: auto;
+        margin-top: 1.02rem;
+      }
+
+      .db-title {
+        width: 100%;
+        height: 1.25rem;
+      }
+
+      .dian {
+        width: 0.4rem;
+        height: 0.4rem;
+        border-radius: 100%;
+        background-color: #FF5E48;
+      }
+
+      .db-title span {
+        color: #FF5E48;
+        font-size: 0.75rem;
+      }
+
+      .echarts2-info {
+        width: 100%;
+        height: auto;
+        display: flex;
+      }
+
+      .echarts2 {
+        flex: 1;
+        height: auto;
+        min-height: 6.95rem;
+      }
+
+      .echarts2info {
+        flex: 1;
+        width: 100%;
+        height: auto;
+        box-sizing: border-box;
+        padding-left: 1.75rem;
+      }
+
+      .ets2-info-item {
+        width: 100%;
+        height: 50%;
+        position: relative;
+        top: 50%;
+        margin-top: -25%;
+      }
+
+      .now-task-item {
+        flex: 1;
+        height: auto;
+        width: 100%;
+      }
+
+      .now-task-num {
+        font-size: 2rem;
+        font-weight:400;
+        text-align: center;
+      }
+
+      .now-task-footer {
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .task-sum-item {
+        text-align: center;
+        color: #464646;
+        font-size: 0.85rem;
+      }
+
+      /* 任务类型选择和任务时间选择样式 */
+
+      .van-field__label {
+          font-size: 0.85rem;
+          color: #3B3B3B;
+      }
+
+      .pickerField .van-field__control[type=text] {
+          height: auto;
+          line-height: inherit;
+          font-size: 0.85rem;
+          color: #6E6E6E;
+      }
+
+      .pickerField.van-cell {
+          padding: 0 0.78rem 0 0.88rem;
+          height: 2.78rem;
+          line-height: 34px;
+          padding-right: 0;
+      }
+
+      .firstField {
+          margin-bottom: 0.25rem;
+      }
+
+      .pickerField .van-field__left-icon {
+          margin-right: 0.45rem;
+          display: flex;
+          align-items: center;
+      }
+
+      .pickerField .van-field__right-icon {
+          float: right;
+          display: flex;
+          align-items: center;
+          padding-right: 0;
+          margin-right: 0;
+      }
+      /* 任务类型选择和任务时间选择样式 */
+      /* 时间选择组件样式 */
+
+      .timeText .placeholder {
+          font-size: 0.85rem;
+          color: #6E6E6E;
+      }
+
+      .timeText .time {
+          font-size: 0.75rem;
+          color: #6E6E6E;
+      }
+
+      .timeText .text {
+          font-size: 0.8rem;
+          color: #BABABA;
+          margin: 0 0.2rem;
+      }
+
+      .timeType .van-radio-group {
+          display: flex;
+          justify-content: space-between;
+          padding: 1.8rem;
+          font-size: 0.85rem;
+          color: #414141;
+      }
+
+      .van-dialog {
+          border-radius: 0;
+          width: 86vw;
+      }
+
+      .van-dialog .van-button {
+          font-size: 0.95rem;
+          height: 2.75rem;
+          line-height: 2.75rem;
+      }
+
+      .van-dialog__confirm,
+      .van-dialog__confirm:active {
+          color: #2F7DF5;
+      }
+
+      .van-dialog__cancel,
+      .van-dialog__cancel:active {
+          color: #F52F2F;
+      }
+
+      .van-radio__label {
+          margin-left: 0.8rem;
+      }
+
+      .van-radio__icon .van-icon {
+          width: 0.95rem;
+          height: 0.95rem;
+          border: none;
+          background: url("./image/gouxuankuang.png") no-repeat center;
+          background-size: 0.95rem 0.95rem;
+      }
+
+      .van-radio__icon .van-icon::before {
+          display: none;
+      }
+
+      .van-radio__icon--checked .van-icon {
+          background: url("./image/xuanzhong.png") no-repeat center;
+          background-size: 0.95rem 0.95rem;
+      }
+
+      .timeValue .timeField {
+          display: flex;
+          align-items: flex-end;
+          padding: 0 0.9rem;
+      }
+
+      .timeValue .timeField .van-field__control[type=text] {
+          height: auto;
+          line-height: inherit;
+          font-size: 0.75rem;
+          color: #D4D4D4;
+      }
+
+      .timeValue .timeField .active .van-field__control[type=text] {
+          color: #3883FF;
+      }
+
+      .timeValue .timeField .van-cell {
+          padding: 0.5rem 0;
+          border-bottom: 0.03rem solid #C9C9C9;
+      }
+
+      .timeValue .timeField .van-cell.active {
+          border-color: #347CFF
+      }
+
+      .timeValue .timeField span {
+          font-size: 0.75rem;
+          color: #595959;
+          margin: 0 0.98rem;
+      }
+
+      .timeSelect {
+          padding: 2.3rem 0.98rem;
+      }
+      /* 时间选择组件样式 */
+
+    </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav" id="header">
+      <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+          <span class="aui-iconfont aui-icon-left"></span>
+      </div>
+      <div class="aui-title">复核管理</div>
+    </header>
+    <div class="review-main">
+      <div class="review-item">
+        <div class="task-Statistics">
+          <div class="review-title">
+            <span class="title-show"></span>
+            <span class="title-cont">任务统计</span>
+          </div>
+          <div class="statistics-time">
+            <van-field :border="false" style="height: 100%;width: 100%;" class="pickerField" readonly clickable right-icon="./image/rli.png"  @click="showTimePicker = true">
+                <div class="timeText" slot="input">
+                    <span class="placeholder" v-show="beginTime == '' && endTime == '' && timeType == '2'">请选择时间</span>
+                    <span class="placeholder" v-show="timeType == '1' && month == ''">请选择时间</span>
+                    <span v-show="timeType == '1' && month != ''" class="time">{{month}}</span>
+                    <span v-show="timeType == '2' && beginTime != '' && endTime != ''">
+                      <span class="time">{{beginTime}}</span>
+                    <span class="text">至</span>
+                    <span class="time">{{endTime}}</span>
+                    </span>
+                </div>
+            </van-field>
+
+            <van-dialog v-model="showTimePicker" title="" show-cancel-button @close="closePicker" :before-close="beforeClose">
+                <div class="timeType">
+                    <van-radio-group v-model="timeSelectType">
+                        <van-radio name="1" shape="square">按月选择</van-radio>
+                        <van-radio name="2" shape="square">按日选择</van-radio>
+                    </van-radio-group>
+                </div>
+                <div class="timeValue">
+                    <div class="timeField" v-show="timeSelectType == '1'">
+                        <van-field input-align="center" :class="{active:showMonth}" readonly clickable label="" :value="monthPicker" placeholder="选择月份" @click="showMonthPicker"></van-field>
+                    </div>
+                    <div class="timeField" v-show="timeSelectType == '2'">
+                        <van-field input-align="center" :class="{active:showBeginTime}" readonly clickable label="" :value="beginTimePicker" placeholder="开始时间" @click="showBeginTimePicker"></van-field>
+                        <span>至</span>
+                        <van-field input-align="center" :class="{active:showEndTime}" readonly clickable label="" :value="endTimePicker" placeholder="结束时间" @click="showEndTimePicker"></van-field>
+                    </div>
+                </div>
+                <div class="timeSelect">
+                    <van-datetime-picker v-show="showMonth && timeSelectType == '1'" v-model="currentMonth" type="year-month" :show-toolbar="false" :formatter="formatter" item-height="32" visible-item-count="4"></van-datetime-picker>
+                    <van-datetime-picker v-show="showBeginTime && timeSelectType == '2'" v-model="currentBeginDate" type="date" :show-toolbar="false" :formatter="formatter" item-height="32" visible-item-count="4" :min-date="tenYearBefore" :max-date="maxDate"></van-datetime-picker>
+                    <van-datetime-picker v-show="showEndTime && timeSelectType == '2'" v-model="currentEndDate" type="date" :formatter="formatter" :show-toolbar="false" item-height="32" visible-item-count="4" :min-date="minDate" :max-date="tenYearAfter"></van-datetime-picker>
+                </div>
+            </van-dialog>
+          </div>
+
+          <div class="task-xian"></div>
+          <div class="echartsdlv">
+            <div class="echarts1" id="echarts1">
+
+            </div>
+            <div class="echarts1-info">
+              <div class="ets-info-item">
+                <span class="dcl" style="background-color: #B13CF6;"></span>
+                <span class="info-item-text">待处理</span>
+                <span class="info-num dcl-num">0</span>
+              </div>
+              <div class="ets-info-item">
+                <span class="dcl" style="background-color: #3669FF;"></span>
+                <span class="info-item-text">审核中</span>
+                <span class="info-num shz-num">0</span>
+              </div>
+              <div class="ets-info-item">
+                <span class="dcl" style="background-color: #FEC925;"></span>
+                <span class="info-item-text">审核通过</span>
+                <span class="info-num shtg-num">0</span>
+              </div>
+              <div class="ets-info-item">
+                <span class="dcl" style="background-color: #19D876;"></span>
+                <span class="info-item-text">已撤销</span>
+                <span class="info-num ycx-num">0</span>
+              </div>
+              <div class="ets-info-item">
+                <span class="dcl" style="background-color: #2F91FF;"></span>
+                <span class="info-item-text">已终止</span>
+                <span class="info-num yzz-num">0</span>
+              </div>
+              <div class="ets-info-item">
+                <span class="dcl" style="background-color: #FF5D49;"></span>
+                <span class="info-item-text">转办</span>
+                <span class="info-num zb-num">0</span>
+              </div>
+            </div>
+          </div>
+          <div class="echarts2div">
+            <div class="db-title">
+              <span class="dian"></span>
+              <span class="db-title-text" style="margin-left: 0.13rem;">待办</span>
+              <span class="db-title-num" style="margin-left: 0.65rem;">0</span>
+            </div>
+            <div class="echarts2-info">
+              <div class="echarts2" id="echarts2">
+
+              </div>
+              <div class="echarts2info">
+                <div class="ets2-info-item">
+                  <span class="dcl" style="background-color: #FF8071;"></span>
+                  <span class="info-item-text">异常水量复核</span>
+                  <span class="info-num ysjh-num">0</span>
+                </div>
+                <div class="ets2-info-item">
+                  <span class="dcl" style="background-color: #FF5E48;"></span>
+                  <span class="info-item-text">抄表质量复核</span>
+                  <span class="info-num slsh-num">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-item" style="margin-top: 1rem;">
+        <div class="task-Statistics">
+          <div class="review-title">
+            <span class="title-show"></span>
+            <span class="title-cont">当前任务</span>
+          </div>
+          <div class="task-xian"></div>
+          <div class="echartsdlv">
+            <div class="now-task-item" style="color: #136cff;">
+              <div class="now-task-num dclrw-num">
+                0
+              </div>
+              <div class="now-task-footer">
+                <img src="./image/daichulirenwu.png" style="width: 0.85rem; height: 1.13rem; display: inline-block;vertical-align: middle;">
+                <span>待处理任务</span>
+              </div>
+            </div>
+            <div class="now-task-item" style="color: #ff9513;">
+              <div class="now-task-num shzrw-num">
+                0
+              </div>
+              <div class="now-task-footer">
+                <img src="./image/shenhezhongrenwu.png" style="width: 0.85rem; height: 1.13rem; display: inline-block;vertical-align: middle;">
+                <span>审核中任务</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-item" style="margin-top: 1rem;">
+        <div class="task-Statistics">
+          <div class="review-title">
+            <span class="title-show"></span>
+            <span class="title-cont">任务汇总</span>
+          </div>
+          <div class="task-xian"></div>
+          <div class="echartsdlv">
+            <div class="now-task-item">
+              <div class="task-sum-item">
+                抄表质量复核:
+                <span class="slshnum">0</span>
+              </div>
+              <div class="task-sum-item" style="opacity: 0;">
+                水量审核:
+                <span>0</span>
+              </div>
+              <div class="task-sum-item">
+                异常水量复核:
+                <span class="ysjhnum">0</span>
+              </div>
+              <div class="now-task-footer" style="margin-top: 10px;">
+                <img src="./image/shenhetongguo.png" style="width: 0.85rem; height: 1.13rem; display: inline-block;vertical-align: middle;">
+                <span style="color: #02D199;">审核通过任务</span>
+              </div>
+            </div>
+            <div class="now-task-item">
+              <div class="task-sum-item">
+                <span>已撤回:</span>
+                <span class="ychnum">0</span>
+              </div>
+              <div class="task-sum-item">
+                <span>已终止:</span>
+                <span class="yzznum">0</span>
+              </div>
+              <div class="task-sum-item">
+                <span>转<span style="opacity: 0;">办</span>办:</span>
+                <span class="zbnum">0</span>
+              </div>
+              <div class="now-task-footer" style="margin-top: 10px;">
+                <img src="./image/qityuanying.png" style="width: 0.85rem; height: 1.13rem;display: inline-block;vertical-align: middle;">
+                <span  style="color: #FF3332;">其它原因</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/zepto.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/remote.js"></script>
+  <script type="text/javascript" src="../../public/script/echarts.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+  <script type="text/javascript">
+    var Longitude = "";
+    var Latitude = "";
+    var AllData = [];
+    var EchartsOneData = [];
+    var EchartsTwoData = [];
+
+    var all_DCL = all_SHZ = all_SHTG = all_YCX = all_YZZ = all_DB = all_YZB = 0;
+    var zl_YLY = zl_ALL = 0;
+    var sl_YLY = sl_ALL = 0;
+
+    apiready = function(){
+        fnIntVue();
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+
+        //设置主页高度
+        var reviewMainH = api.winHeight - headerH;
+        $(".review-main").height(reviewMainH);
+
+
+        fnReady();
+        fnReadyOpenWin();
+
+        bMap = api.require("bMap");
+        bMap.getLocation({
+            accuracy: '10m',
+            autoStop: true,
+        }, function(ret, err) {
+            if (ret.status) {
+                Longitude = ret.lon;
+                Latitude = ret.lat;
+            } else {
+                // alert(err.code);
+            }
+        });
+
+        getData('', '');
+
+    };
+
+    var actionList = {
+        'back': function() {
+            api.closeWin();
+        },
+        'scanner': function() {
+            var FNScanner = api.require('FNScanner');
+            FNScanner.open({
+                autorotation: true
+            }, function(ret, err) {
+            });
+        },
+    }
+
+    function getData(BeginTime, EndTime) {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+          url: $api.getStorage("jhapipath") + 'waterMeters/info',
+          method: 'post',
+          dataType: 'json',
+          // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+          data: {
+            values: {
+              "UserName": $api.getStorage("jhUserName"),
+              "Password": $api.getStorage("jhPassWord"),
+              "SerialNo": dataTime(),
+              "Longitude": Longitude,
+              "Latitude": Latitude,
+              "Method": "MMS001",
+              "Parameter": "{'Code':'43,45', 'Status':'', 'Source':'', 'BeginTime':'"+ BeginTime +"', 'EndTime':'"+ EndTime +"', 'CustomerCode':''}"
+            }
+          }
+      },function(ret, err){
+          if (ret) {
+              api.hideProgress();
+              AllData = [];
+              EchartsOneData = [];
+              EchartsTwoData = [];
+              all_DCL = all_SHZ = all_SHTG = all_YCX = all_YZZ = all_DB = all_YZB = 0;
+              zl_YLY = zl_ALL = 0;
+              sl_YLY = sl_ALL = 0;
+              if (ret.Status == 0) {
+                if (ret.Data == "") {
+                  api.toast({
+                      msg: "暂无数据",
+                      duration: 2000,
+                      location: 'top'
+                  });
+                  return;
+                }
+                AllData = JSON.parse(ret.Data);
+                for (var i = 0; i < AllData.length; i++) {
+                  if (AllData[i].Status == '已分派' || AllData[i].Status == '已领用') {
+                    all_DCL += parseInt(AllData[i].Count);  //待处理总数
+                    if (AllData[i].Status == '已领用') {
+                      all_DB += parseInt(AllData[i].Count);  //待办总数
+                      if (AllData[i].Code == '45') {
+                        zl_YLY += parseInt(AllData[i].Count);  //抄表质量待办
+                      } else if (AllData[i].Code == '43') {
+                        sl_YLY += parseInt(AllData[i].Count);  //异常水量待办
+                      }
+                    }
+                  } else if (AllData[i].Status == '待审核') {
+                    all_SHZ += parseInt(AllData[i].Count); //审核中
+                  } else if (AllData[i].Status == '已办理') {
+                    all_SHTG += parseInt(AllData[i].Count); //审核通过
+                  } else if (AllData[i].Status == '已撤销') {
+                    all_YCX += parseInt(AllData[i].Count); //已撤销
+                  } else if (AllData[i].Status == '已终止') {
+                    all_YZZ += parseInt(AllData[i].Count); //已终止
+                  } else if (AllData[i].Status == '已转办') {
+                    all_YZB += parseInt(AllData[i].Count); //已转办
+                  }
+
+                  if (AllData[i].Code == '45') {
+                    zl_ALL += parseInt(AllData[i].Count);  //抄表质量复核
+                  } else if (AllData[i].Code == '43') {
+                    sl_ALL += parseInt(AllData[i].Count);  //异常水量稽核
+                  }
+
+                EchartsOneData = [
+                    { value: all_DCL, itemStyle: { color: '#B13CF6' } },
+                    { value: all_SHZ, itemStyle: { color: '#3669FF' } },
+                    { value: all_SHTG, itemStyle: { color: '#FEC925' } },
+                    { value: all_YCX, itemStyle: { color: '#19D876' } },
+                    { value: all_YZZ, itemStyle: { color: '#2F91FF' } },
+                    { value: all_DB, itemStyle: { color: '#FF5D49' } }
+                ];
+
+                EchartsTwoData = [
+                    {value:sl_YLY, itemStyle: { color: '#FF8071' }, selected:true},
+                    {value:zl_YLY, itemStyle: { color: '#FF5E48' }}
+                ];
+                echartsOne(EchartsOneData);
+                echartsTwo(EchartsTwoData);
+
+                showDataInit();
+              }
+            } else {
+              api.toast({
+                  msg: ret.Message,
+                  duration: 2000,
+                  location: 'top'
+              });
+              echartsOne(EchartsOneData);
+              echartsTwo(EchartsTwoData);
+              showDataInit();
+            }
+          } else {
+              api.toast({
+                  msg: err.msg,
+                  duration: 2000,
+                  location: 'top'
+              });
+          }
+      });
+    }
+
+    function showDataInit() {
+        $(".dcl-num").html(all_DCL);
+        $(".shz-num").html(all_SHZ);
+        $(".shtg-num").html(all_SHTG);
+        $(".ycx-num").html(all_YCX);
+        $(".yzz-num").html(all_YZZ);
+        $(".zb-num").html(all_YZB);
+
+        $(".db-title-num").html(all_DB);
+        $(".ysjh-num").html(sl_YLY);
+        $(".slsh-num").html(zl_YLY);
+
+        $(".dclrw-num").html(all_DCL);
+        $(".shzrw-num").html(all_SHZ);
+
+        $(".slshnum").html(zl_ALL);
+        $(".ysjhnum").html(sl_ALL);
+        $(".ychnum").html(all_YCX);
+        $(".yzznum").html(all_YZZ);
+        $(".zbnum").html(all_YZB);
+    }
+
+    function echartsOne(etsOneData) {
+      var option = {
+            series: [
+                {
+                    name: '',
+                    type: 'pie',
+                    center: ['50%', '50%'],
+                    radius: [0, '90%'],
+                    roseType: 'angle',//是否展示成南丁格尔图,'radius' 扇区圆心角展现数据的百分比，半径展现数据的大小,'area' 所有扇区圆心角相同，仅通过半径展现数据大小。
+                    label: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    lableLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
+                    data: etsOneData
+                }
+             ]
+      };
+      var myChart = echarts.init(document.getElementById('echarts1'));
+      myChart.setOption(option, true);
+    }
+
+    function echartsTwo(etsTwoData) {
+      var option = {
+        series: [
+            {
+                name:'',
+                type:'pie',
+                clickable:false,
+                radius: [0, '70%'],
+                label: {
+                    normal: {
+                        show: false
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        show: false
+                    }
+                },
+                data: etsTwoData
+            }
+        ]
+      };
+      var myChart = echarts.init(document.getElementById('echarts2'));
+      myChart.setOption(option, true);
+    }
+
+    function getDaysInMonth(year,month){
+    	month = parseInt(month,10);  //parseInt(number,type)这个函数后面如果不跟第2个参数来表示进制的话，默认是10进制。
+    	var temp = new Date(year,month,0);
+    	return temp.getDate();
+    }
+
+    function fnIntVue(){
+        window.SummaryVue = new Vue({
+            el: '.statistics-time',
+            data: {
+                showTimePicker: false,
+                showBeginTime: false,
+                showEndTime: false,
+                showMonth: false,
+                taskType: {
+                    typeName: "",
+                    typeId: 0
+                },
+                timeType: "1",
+                timeSelectType: "1",
+                beginTime: "",
+                endTime: "",
+                month: "",
+                beginTimePicker: "",
+                endTimePicker: "",
+                monthPicker: "",
+                currentBeginDate: new Date(),
+                currentEndDate: new Date(),
+                currentMonth: new Date()
+            },
+            watch: {
+                currentMonth: function(newVal, oldVal) {
+                    if (this.compareDate(newVal, oldVal)) {
+                        if (this.showTimePicker && this.showMonth) {
+                            this.monthPicker = this.monthFormat(newVal);
+                        }
+                    }
+                },
+                currentBeginDate: function(newVal, oldVal) {
+                    if (this.compareDate(newVal, oldVal)) {
+                        if (this.showTimePicker && this.showBeginTime) {
+                            this.beginTimePicker = this.dayFormat(newVal);
+                        }
+                    }
+                },
+                currentEndDate: function(newVal, oldVal) {
+                    if (this.compareDate(newVal, oldVal)) {
+                        if (this.showTimePicker && this.showEndTime) {
+                            this.endTimePicker = this.dayFormat(newVal);
+                        }
+                    }
+                },
+            },
+            computed: {
+                tenYearBefore: function() {
+                    var date = new Date();
+                    var currentYear = date.getFullYear();
+                    return new Date(currentYear - 10, 0, 1);
+                },
+                tenYearAfter: function() {
+                    var date = new Date();
+                    var currentYear = date.getFullYear();
+                    return new Date(currentYear + 10, 11, 31);
+                },
+                minDate: function() {
+                    if (this.beginTimePicker != "") {
+                        var date = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                    } else {
+                        return this.tenYearBefore;
+                    }
+                },
+                maxDate: function() {
+                    if (this.endTimePicker != "") {
+                        var date = new Date(this.endTimePicker.replace(/-/g, "/"));
+                        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                    } else {
+                        return this.tenYearAfter;
+                    }
+                }
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                showBeginTimePicker() {
+                    if (!this.showBeginTime) {
+                        this.showBeginTime = true;
+                        this.showEndTime = false;
+                        if (this.beginTimePicker == "" && this.endTimePicker != "") {
+                            this.currentBeginDate = new Date(this.endTimePicker.replace(/-/g, "/"));
+                            this.beginTimePicker = this.endTimePicker;
+                        } else if (this.beginTimePicker != "" && this.endTimePicker != "") {
+                            if (new Date(this.beginTimePicker) > new Date(this.endTimePicker.replace(/-/g, "/"))) {
+                                this.currentBeginDate = new Date(this.endTimePicker);
+                                this.beginTimePicker = this.endTimePicker;
+                            } else {
+                                this.currentBeginDate = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                            }
+                        } else if (this.beginTimePicker == "" && this.endTimePicker == "") {
+                            this.beginTimePicker = this.dayFormat(this.currentBeginDate);
+                        }
+                    }
+                },
+                showEndTimePicker() {
+                    if (!this.showEndTime) {
+                        this.showBeginTime = false;
+                        this.showEndTime = true;
+                        if (this.endTimePicker == "" && this.beginTimePicker != "") {
+                            this.currentEndDate = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                            this.endTimePicker = this.beginTimePicker;
+                        } else if (this.endTimePicker != "" && this.beginTimePicker != "") {
+                            if (new Date(this.beginTimePicker) > new Date(this.endTimePicker)) {
+                                this.currentEndDate = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                                this.endTimePicker = this.beginTimePicker;
+                            } else {
+                                this.currentEndDate = new Date(this.endTimePicker.replace(/-/g, "/"));
+                            }
+                        } else if (this.endTimePicker == "" && this.beginTimePicker == "") {
+                            this.endTimePicker = this.dayFormat(this.currentEndDate);
+                        }
+                    }
+                },
+                showMonthPicker() {
+                    if (!this.showMonth) {
+                        this.showMonth = true;
+                        if (this.monthPicker == "") {
+                            this.monthPicker = this.monthFormat(this.currentMonth);
+                        }
+                    }
+                },
+                formatter(type, val) {
+                    if (type === 'year') {
+                        return `${val}年`;
+                    } else if (type === 'month') {
+                        return `${val}月`
+                    } else if (type === 'day') {
+                        return `${val}日`
+                    }
+                    return val;
+                },
+                dayFormat(time) {
+                    var year = time.getFullYear();
+                    var month = time.getMonth() + 1;
+                    var day = time.getDate();
+                    return year + '-' + month + '-' + day;
+                },
+                monthFormat(time) {
+                    var year = time.getFullYear();
+                    var month = time.getMonth() + 1;
+                    return year + '-' + month;
+                },
+                compareDate(date1, date2) {   
+                    var result = false;   
+                    if (date1.getFullYear() != date2.getFullYear()) {      
+                        result = true;   
+                    } else if (date1.getFullYear() ==  date2.getFullYear()) {       
+                        if (date1.getMonth() != date2.getMonth()) {          
+                            result = true;       
+                        } else if (date1.getMonth() ==  date2.getMonth()) {          
+                            if (date1.getDate() != date2.getDate()) {             
+                                result = true;          
+                            }       
+                        }   
+                    }   
+                    return result;
+                },
+                closePicker() {
+                    this.showMonth = false;
+                    this.showBeginTime = false;
+                    this.showEndTime = false;
+                },
+                beforeClose(action, done) {
+                    if (action == "confirm") {
+                        var close = this.confirmPick();
+                        if (close) {
+                            done();
+                        } else {
+                            done(false);
+                        }
+                    } else if (action == 'cancel') {
+                        this.cancelPick();
+                        done();
+                    }
+                },
+                cancelPick() {
+                    this.beginTimePicker = this.endTime == "" ? "" : this.beginTime.toString().replace(new RegExp('/', 'g'), "-");
+                    this.endTimePicker = this.endTime == "" ? "" : this.endTime.toString().replace(new RegExp('/', 'g'), "-");
+                    this.monthPicker = this.month == "" ? "" : this.month.toString().replace(new RegExp('/', 'g'), "-");
+                    this.currentBeginDate = this.beginTime == "" ? new Date() : new Date(this.beginTime);
+                    this.currentEndDate = this.endTime == "" ? new Date() : new Date(this.endTime);
+                    this.currentMonth = this.month == "" ? new Date() : new Date(this.month);
+                    this.timeSelectType = this.timeType;
+                },
+                confirmPick() {
+                    var close = true;
+                    if (this.timeSelectType == '1') {
+                        this.month = this.monthPicker.replace(/-/g, "/");
+                    } else {
+                        if (this.beginTimePicker != "" || this.endTimePicker != "") {
+                            if (this.beginTimePicker != "" && this.endTimePicker == "") {
+                                vant.Toast("请选择结束时间！");
+                                close = false;
+                                return;
+                            } else if (this.beginTimePicker == "" && this.endTimePicker != "") {
+                                vant.Toast("请选择开始时间！");
+                                close = false;
+                                return;
+                            } else {
+                                this.beginTime = this.beginTimePicker.replace(/-/g, "/");
+                                this.endTime = this.endTimePicker.replace(/-/g, "/");
+                            }
+                        }
+                    }
+                    if (this.timeSelectType == '1') {
+                      var year = this.month.substring(0, this.month.indexOf("/"));
+                      var month = this.month.substring(this.month.indexOf("/") + 1, this.month.length);
+                      var getDay = getDaysInMonth(year,month);
+                      if (parseInt(month) < 10) {
+                        month = "0" + month;
+                      }
+                      var BeginTime = year + "-" + month + "-01";
+                      var EndTime = year + "-" + month + "-"+ getDay;
+                      getData(BeginTime, EndTime);
+                    } else if (this.timeSelectType == '2') {
+                      var beginYear = this.beginTime.substring(0, this.beginTime.indexOf("/"));
+                      var beginMonth = this.beginTime.substring(this.beginTime.indexOf("/") + 1, this.beginTime.lastIndexOf("/"));
+                      var beginDay = this.beginTime.substring(this.beginTime.lastIndexOf("/") + 1, this.beginTime.length);
+
+                      var endYear = this.endTime.substring(0, this.endTime.indexOf("/"));
+                      var endMonth = this.endTime.substring(this.endTime.indexOf("/") + 1, this.endTime.lastIndexOf("/"));
+                      var endDay = this.endTime.substring(this.endTime.lastIndexOf("/") + 1, this.endTime.length);
+
+                      if (parseInt(beginMonth) < 10) {
+                        beginMonth = "0" + beginMonth;
+                      }
+                      if (parseInt(beginDay) < 10) {
+                        beginDay = "0" + beginDay;
+                      }
+
+                      if (parseInt(endMonth) < 10) {
+                        endMonth = "0" + endMonth;
+                      }
+                      if (parseInt(endDay) < 10) {
+                        endDay = "0" + endDay;
+                      }
+
+                      var BeginTime = beginYear + "-" + beginMonth + "-" + beginDay;
+                      var EndTime = endYear + "-" + endMonth + "-"+ endDay;
+                      getData(BeginTime, EndTime);
+                    }
+
+                    if (close) {
+                        this.timeType = this.timeSelectType;
+                    }
+                    return close;
+                }
+            },
+            mounted: function() {
+
+            }
+        })
+    }
+  </script>
+</html>

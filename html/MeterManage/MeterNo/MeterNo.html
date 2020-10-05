@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>表号维护界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .aui-tab {
+            width: 100%;
+        }
+
+        .aui-tab-item {
+            font-size: 0.95rem;
+            color: #363636;
+            padding: 1.5rem 0 1.25rem 0;
+            line-height: normal;
+            height: auto;
+        }
+
+        .aui-tab-item:first-child:after,.aui-tab-item:nth-child(2):after,.aui-tab-item:nth-child(3):after{
+            content: '';
+            position: absolute;
+            left: auto;
+            top: 1.7rem;
+            bottom: 0;
+            right: 0;
+            height: 1.85rem;
+            width: 0.03rem;
+            background-color: #DCDCDC;
+        }
+        .number1,
+        .number2,.number3,.number0{
+            font-size: 1.6rem;
+            height: 1.35rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title1,
+        .title2,.title3,.title0 {
+            font-size: 0.75rem;
+            height: 0.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+        .number0,
+        .title0 {
+            color: #FF4141;
+        }
+        .number1,
+        .title1 {
+            color: #FF9320;
+        }
+        .number2,
+        .title2 {
+            color: #07c160;
+        }
+        .number3,
+        .title3 {
+            color: #167CFB;
+        }
+
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.75rem;
+            color: #999999;
+            border-right: 0.03rem solid #BBBBBB;
+            padding-right: 1.3rem;
+        }
+
+        .van-search {
+            padding: 0 1.25rem 1.05rem 1.25rem;
+        }
+
+        .van-search__content--round {
+            background-color: #fff;
+            border: 0.03rem solid #C4C4C4;
+            border-radius: 1rem;
+            padding-left: 0.93rem;
+        }
+
+        .van-search .van-cell {
+            padding: 0.3rem 0.83rem 0.3rem 0;
+        }
+
+        .van-field__right-icon {
+            padding-left: 0.83rem;
+            padding-right: 0.3rem;
+        }
+
+        .searchIcon {
+            width: 1rem;
+            height: 1rem;
+            background: url("../image/MeterManage/sousuo2.png") no-repeat center;
+            background-size: 0.83rem 0.83rem;
+        }
+
+        .van-field__clear {
+            position: absolute;
+            padding: 0 0.3rem;
+            right: 2.1rem;
+        }
+
+        .total {
+            width: 4rem;
+            height: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.7rem;
+            color: #AAAAAA;
+        }
+
+        .c-aui-row {
+            width: 100%;
+            height: 2.55rem;
+            line-height: 2.55rem;
+            border-bottom: 0.15rem solid rgba(243, 243, 243, 1);
+            background: #fff;
+        }
+
+        .c-aui-row .aui-col-xs-7.c-downloaded {
+            color: #505050;
+            font-size: 0.9rem;
+            padding-left: 0.75rem;
+        }
+
+        .c-aui-row .aui-col-xs-5.aui-text-right {
+            color: #AAAAAA;
+            font-size: 0.65rem;
+            padding-right: 0.75rem;
+        }
+
+        .totalNumber {
+            display: inline-block;
+            padding-left: 0.45rem;
+        }
+
+        .totalNumberUnit {
+            display: inline-block;
+            font-size: 0.6rem;
+            color: #999;
+            padding-left: 0.2rem;
+        }
+
+        .c-aui-row .aui-col-xs-12 {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+        }
+
+        .c-body-content {
+            width: 100%;
+            /*height: 30rem;
+            overflow: hidden;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;*/
+            /*padding-bottom: 5.43rem;*/
+        }
+
+        .c-body-content .aui-row {
+            width: 100%;
+            height: 4.43rem;
+            padding: 0.3rem 0.78rem;
+            background: #fff;
+            border-bottom: 0.33rem solid #F3F3F3;
+            position: relative;
+        }
+
+        .c-body-content .aui-row:last-child {
+            border-bottom: none;
+        }
+
+        .c-body-content .aui-row .aui-col-xs-12 {
+            color: #8D8D8D;
+            font-size: 0.7rem;
+        }
+
+        .c-body-content .aui-row .aui-col-xs-12:first-child {
+            color: #1C1C1C;
+            font-size: 0.9rem;
+        }
+
+        .c_account_Name {
+            width: 4rem;
+            width: 2.5rem;
+            display: inline-block;
+            text-align: justify;
+            text-align-last: justify;
+        }
+
+        .c_account_Name::after {
+            content: "";
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .c-location-img {
+            width: 0.53rem;
+            height: 0.7rem;
+            background: url("../image/MeterManage/Posting/dingwei.png");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            top: 0.12rem;
+        }
+
+        .c-address {
+            display: inline-block;
+            padding-left: 0.8rem;
+        }
+
+        .footer {
+            width: 100%;
+            height: 4.08rem;
+            line-height: 4.08rem;
+            position: fixed;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            bottom: 0;
+            background: #fff;
+            padding-top: 1.13rem;
+            z-index: 2;
+        }
+
+        .footer button {
+            width: 5.5rem;
+            height: 1.86rem;
+            line-height: 1.86rem;
+            font-size: 0.95rem;
+            color: #fff;
+            border-radius: 1rem;
+        }
+
+        .footer button:first-child {
+            background: #377EFF;
+            border: 1px solid #377EFF;
+        }
+
+        .footer button:last-child {
+            background: #FF4141;
+            border: 1px solid #FF4141;
+        }
+
+        .c-body-mask {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background: transparent;
+            z-index: 1;
+        }
+
+        .c-status-isSaveLocal,
+        .c-status-pendding,
+        .c-status-handle,.c-status-isTobeCliam{
+            font-size: 0.7rem;
+            display: inline-block;
+            float: right;
+        }
+
+        .c-status-pendding {
+            color: #FF9320;
+        }
+
+        .c-status-handle {
+            color: #03D77B;
+        }
+
+        .c-status-isSaveLocal {
+            color: #167CFB;
+        }
+        .c-status-isTobeCliam{
+           color: #FF4141;
+        }
+
+        .c-aui-row1 {
+            height: 1.5rem;
+            line-height: 1.5rem;
+            padding-left: 0.75rem;
+            font-size: 0.9rem;
+            background-color: #fff
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <div class="c-body-mask" v-show='footerShow'></div>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">表号维护</div>
+        </header>
+
+        <div class="aui-tab">
+          <div class="aui-tab-item" v-show='showBeClaimedNumber'>
+              <div class="number0">{{toBeClaimedNumber}}</div>
+              <div class="title0">
+                  待认领
+              </div>
+          </div>
+            <div class="aui-tab-item" @click='searchValue="";isSaveLocalStatus=false;getMeterNoData(7)'>
+                <div class="number1">{{pendingNumber}}</div>
+                <div class="title1">
+                    待处理
+                </div>
+            </div>
+            <div class="aui-tab-item" @click='searchValue="";isSaveLocalStatus=true;getLocalDatas(true)'>
+                <div class="number3">{{isSaveLocalNumber}}</div>
+                <div class="title3">
+                    已保存
+                </div>
+            </div>
+            <div class="aui-tab-item" @click='searchValue="";isSaveLocalStatus=false;getMeterNoData(4)'>
+                <div class="number2">{{handledNumber}}</div>
+                <div class="title2">
+                    已处理
+                </div>
+            </div>
+        </div>
+        <van-search v-model="searchValue" placeholder="请输入用户编号查询" left-icon="" shape="round" @clear="onClear" @search='onSearch'>
+            <div class="searchIcon" slot="right-icon" @click='onSearch'></div>
+        </van-search>
+        <!-- <div class="aui-row c-aui-row1">
+            <van-checkbox v-show='tabStatus==7 ' v-model="isSaveLocalchecked" @change="onIsSaveLocalchecked">已保存 <span v-show='isSaveLocalNumber!=0'>{{isSaveLocalNumber}}<span class='totalNumberUnit'>(户)</span></span>
+            </van-checkbox>
+        </div> -->
+        <div class="aui-row c-aui-row">
+            <div class="aui-col-xs-7 c-downloaded">水表维护总数:<span class="totalNumber">{{totalNumber}}</span><span class='totalNumberUnit'>(户)</span></div>
+            <div class="aui-col-xs-5 aui-text-right">(&nbsp;{{moment(creationTime).format("YYYY-MM-DD")}}&nbsp;)</div>
+        </div>
+        <div id="main" class="flex-con">
+            <div class="c-body-content">
+                <div v-if='UserInfoDatas.length>0' class="aui-row" v-for='(item,index) in UserInfoDatas' :key='index' @click='openMeterNoScan(item)'>
+                    <div class="aui-col-xs-12">{{item.CustomerCode}}</div>
+                    <div class="aui-col-xs-12"><span class='c_account_Name'>户名</span>:{{item.CustomerName}}
+                       <span v-show='item.Status=="7" && !isSaveLocalStatus' class='c-status-pendding'>{{item.StatusName}}</span>
+                        <span v-show='item.Status=="4"'class='c-status-handle'>{{item.StatusName}}</span>
+                        <span v-show=' item.Status=="7"&&isSaveLocalStatus' class='c-status-isSaveLocal'>已保存</span>
+                        <span v-show='showBeClaimedNumber' class='c-status-isTobeCliam'>待认领</span>
+                    </div>
+                    <div class="aui-col-xs-12"><span class='c-location-img'></span><span class='c-address'>{{item.Address}}</span></div>
+                </div>
+
+            </div>
+            <div class="aui-row c-aui-row" v-show='showSearchResult'>
+                <div class="aui-col-xs-12">没有更多的搜索结果!</div>
+            </div>
+
+
+        </div>
+
+        <div class="footer" v-show='footerShow'>
+            <van-button @click='back'>返回</van-button>
+            <van-button @click='ConfirmTaskById'>认领</van-button>
+        </div>
+    </div>
+
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/javascript"src="../script/meterManageLocalData.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        api.addEventListener({
+            name: 'RenderCopyList'
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.value.hasWaitTask == 1) { //判断是否还有待办数据
+                    var tabStatus = 7;
+                } else {
+                    var tabStatus = 4;
+                }
+               if( MeterNoVue.isSaveLocalStatus ){
+                   MeterNoVue.getLocalDatas(true);
+               }else{
+                   MeterNoVue.getMeterNoData(tabStatus);
+               }
+
+            }
+        });
+        api.addEventListener({
+            name: 'updateMeterList'
+        }, function(ret, err) {
+            if (ret) {
+                MeterNoVue.getMeterNoData(MeterNoVue.tabStatus);
+            }
+        });
+        api.addEventListener({
+            name: 'online'
+        }, function(ret, err) {
+            if (ret) {
+                MeterNoVue.getMeterNoData(7);
+            }
+        });
+        api.addEventListener({
+            name: 'offline'
+        }, function(ret, err) {
+            if (ret) {
+                MeterNoVue.getLocalDatas();
+            }
+        });
+    };
+    // fnIntVue()
+    function fnIntVue() {
+        window.MeterNoVue = new Vue({
+            el: '#wrap',
+            data: {
+                tabStatus: "7",
+                searchValue: "",
+                // pendingNumber: api.connectionType != 'none' ? api.pageParam.data.tbdCount : 0, //待处理
+                // handledNumber: api.connectionType != 'none' ? api.pageParam.data.ybCount : 0, //已处理
+                // totalNumber: api.connectionType != 'none' ? api.pageParam.data.taskCount : 0, //总数
+                pendingNumber:  0, //待处理
+                handledNumber: 0, //已处理
+                totalNumber: api.pageParam.data.taskCount, //总数
+                showSearchResult: false, //搜索时显示没有数据的时候
+                footerShow: false, //底部按钮是否显示
+                UserInfoDatas: [], //用户信息数组
+                creationTime: api.pageParam.data.creationTime,
+                db: api.require('db'),
+                isClaimBtn: false,
+                isSaveLocalchecked: false, //已保存赛选
+                isSaveLocalNumber: 0, //已保存的数量
+                isSaveLocalStatus:false, //是否选择了已保存tab
+                toBeClaimedNumber:api.pageParam.data.unconFirmedCount,//待认领数量
+                showBeClaimedNumber:false,//是否显示认领
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                init() {
+                    var fromPage = api.pageParam.type;
+                    if (fromPage == "handle") {
+                        this.footerShow = false;
+                        this.getMeterNoData(7);
+                    } else {
+                        this.footerShow = true;
+                        this.getMeterNoDataAll();
+                    }
+
+                },
+                ConfirmTaskById() {
+                    // 单个任务认领
+                    var _this = this;
+                    var CurrentLocation = $api.getStorage('CurrentLocation');
+                    api.showProgress({
+                        style: 'default',
+                        animationType: 'fade',
+                        title: '加载中...',
+                        modal: false
+                    });
+                    var body = {
+                        body: JSON.stringify({
+                            taskCode: api.pageParam.data.taskCode, //api.pageParam.data.id
+                            lng: CurrentLocation.lon,
+                            lat: CurrentLocation.lat,
+                            account: $api.getStorage("bwUserName"),
+                            passWord: $api.getStorage("bwPassWord")
+                        })
+                    };
+                    api.ajax({
+                        url: 'http://' + $api.getStorage('apiUrl') + '/api/services/app/WorkFlow/ConfirmTaskById',
+                        method: 'post',
+                        dataType: "json",
+                        returnAll: false,
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": $api.getStorage('loginInfo')
+                        },
+                        data: body
+                    }, function(ret, err) {
+                        api.hideProgress();
+                        if (ret) {
+                            if (ret.success) {
+                                _this.footerShow = false;
+                                _this.showBeClaimedNumber = false;
+                                _this.toBeClaimedNumber=0;
+                                updateMyTaskSheets(ret.result);//更新云平台我的列表本地相应数据
+                                // 认领页面刷新
+                                api.sendEvent({
+                                    name: 'refreshCloudClaim',
+                                });
+                                _this.getMeterNoData(_this.tabStatus);
+
+                            }
+                            // else {
+                            //   vant.Toast(ret.message);
+                            // }
+                        }
+                    });
+                },
+                onClear() {
+                    this.searchValue = "";
+                    this.getMeterNoData(this.tabStatus);
+                },
+                onSearch() {
+                    this.getMeterNoData(this.tabStatus);
+                },
+                openMeterNoScan(data) {
+                    if (data.Status == "7") {
+                        api.openWin({
+                            name: 'MeterNoScan',
+                            url: './MeterNoScan.html',
+                            pageParam: data
+                        });
+                    } else {
+                        api.openWin({
+                            name: 'MeterNoScanSingDetail',
+                            url: './MeterNoScanSingDetail.html',
+                            pageParam: data
+                        });
+                    }
+
+
+                },
+                getMeterNoData(Status) {
+                    var _this = this;
+                    _this.tabStatus = Status;
+                    _this.isSaveLocalchecked = false;
+                    if (Status == 4) {
+                        var Status = '4,3,6';
+                    }
+                    if (api.connectionType != 'none') {
+                        var Parameter = {
+                            TaskNo: api.pageParam.data.taskCode, //
+                            Status: Status,
+                            CustomerCode: this.searchValue
+                        };
+                        fnPost('MMS002', Parameter, "application/json", true, false, (ret, err) => {
+                            if (ret) {
+                                if (ret.Status == 0) {
+                                    api.hideProgress();
+                                    // Data
+                                    if (ret.Data.length == 0) {
+                                        _this.showSearchResult = true;
+                                    } else {
+                                        _this.showSearchResult = false;
+                                    }
+                                    var data = JSON.parse(ret.Data);
+                                    if (_this.isClose) {
+                                        _this.totalNumber = data.length;
+                                    }
+                                    if (_this.tabStatus == "7") {
+                                        _this.UserInfoDatas = [];
+                                        insertMeterNoToLocalDataBase(api.pageParam.data,data,'single',fromPage='meterNo',function(){
+                                          setTimeout(function() {
+                                              _this.getLocalDatas(); //查询数据
+                                          }, 500);
+                                        });
+                                    } else {
+                                        _this.UserInfoDatas = [];
+                                        _this.UserInfoDatas = data;
+                                    }
+                                } else {
+                                    // _this.totalNumber = 0;
+                                    // _this.pendingNumber = 0;
+                                    _this.UserInfoDatas = [];
+                                    _this.showSearchResult = true;
+                                    vant.Toast(ret.Message);
+                                    api.hideProgress();
+                                    if (_this.tabStatus == 7) {
+                                        _this.getLocalDatas();
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        if (_this.tabStatus == 7) {
+                            _this.getLocalDatas();
+                        } else {
+                            _this.UserInfoDatas = [];
+                            vant.Toast('网络连接错误,请检查网络是否连接!');
+                        }
+
+                    }
+
+                },
+                insertLocalDataBase(data) { //插入数据到本地
+                    var _this = this;
+                    var tableId = 0;
+                    var cloudTaskCode = api.pageParam.data.taskCode;
+                    var cloudTasKId = api.pageParam.data.taskCode;
+                    var cloudTasKThirdTaskId = api.pageParam.data.thirdTaskId;
+                    var creationTime = api.pageParam.data.creationTime;
+                    var insertNumbers = 0;
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    _this.db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: 'select id from meterNoSheets order by id desc limit 1'
+                    }, (ret, err) => {
+                        if (ret.status) {
+                            if (ret.data.length > 0) {
+                                tableId = ret.data[0].id;
+                            }
+                        }
+                    });
+                    for (let i = 0; i < data.length; i++) {
+                        (function(i) {
+                            // 保存数据
+                            _this.db.selectSql({
+                                name: 'Wsdatabase',
+                                sql: `SELECT * FROM meterNoSheets where cloudTaskCode ="${cloudTaskCode}" and CustomerCode="${data[i].CustomerCode}" and Status = "7" and userName = "${CurentUserName}"`
+                            }, (ret, err) => {
+                                if (ret.status) {
+                                    if (ret.data.length == 0) {
+                                        tableId++;
+                                        _this.db.executeSql({
+                                            name: 'Wsdatabase',
+                                            sql: `INSERT INTO meterNoSheets (id,cloudTaskCode,cloudTasKId,cloudTasKThirdTaskId,Status,StatusName,CustomerCode,CustomerName,Address,Location,Nature, Caliber,MeterType,StampNo,waterLon,waterlat,taskClaimTime,taskId,isUpload,UploadErrMsg,userName,isSaveLocal) VALUES (${tableId},"${cloudTaskCode}","${cloudTasKId}","${cloudTasKThirdTaskId}","${data[i].Status}","${data[i].StatusName}","${data[i].CustomerCode}","${data[i].CustomerName}","${data[i].Address}","${data[i].Location}","${data[i].Nature}","${data[i].Caliber}","${data[i].MeterType}","${data[i].StampNo}","","","${creationTime}","${data[i].Id}",0,"","${CurentUserName}",0)`
+                                        }, function(ret, err) {
+                                            if (ret.status) {
+                                                insertNumbers++;
+                                                // 插入日志信息
+                                                if (insertNumbers == data.length) {
+                                                    var time = moment().format('YYYY-MM-DD HH:mm:ss');
+                                                    _this.db.executeSql({
+                                                        name: 'Wsdatabase',
+                                                        sql: 'INSERT into Logsheet (Id,content,time,userName) values (' + i + ',"水表维护数据下载成功","' + time + '","' + CurentUserName + '")'
+                                                    }, function(ret, err) {
+                                                        if (ret.status) {
+                                                            //  console.log( "日志添加成功");
+                                                        } else {
+                                                            console.log(JSON.stringify(err));
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    } else {
+                                        // // 删除本地其他状态的数据
+                                        _this.db.executeSql({
+                                            name: 'Wsdatabase',
+                                            sql: `DELETE FROM meterNoSheets WHERE cloudTaskCode = "${cloudTaskCode}" and CustomerCode="${data[i].CustomerCode}" and Status != "7" and userName = "${CurentUserName}"`
+                                        }, function(ret, err) {
+                                            if (ret.status) {}
+                                        });
+                                        _this.db.selectSql({
+                                          name: 'Wsdatabase',
+                                          sql: `SELECT * FROM meterNoSheets where cloudTaskCode ="${cloudTaskCode}" and CustomerCode="${data[i].CustomerCode}" and Status = "7" and userName = "${CurentUserName}" and isUpload=0`
+                                        },function(ret,err){
+                                          if(ret.status){
+                                            _this.db.executeSql({
+                                                name: 'Wsdatabase',
+                                                sql: `UPDATE  meterNoSheets set Status ="${data[i].Status}",StatusName = "${data[i].StatusName}",CustomerName="${data[i].CustomerName}",Address="${data[i].Address}",Location="${data[i].Location}",Nature="${data[i].Nature}", Caliber="${data[i].Caliber}",MeterType="${data[i].MeterType}" where cloudTaskCode ="${cloudTaskCode}" and CustomerCode="${data[i].CustomerCode}" and Status = "7" and userName = "${CurentUserName}"`
+                                            }, function(ret, err) {
+                                                if (ret.status) {}
+                                            });
+                                          }
+                                        })
+
+                                    }
+                                }
+                            });
+                            if (i == data.length - 1) { //输入添加到本地完成
+                                setTimeout(function() {
+                                    _this.getLocalDatas(); //查询数据
+                                }, 500);
+
+                            }
+                        })(i);
+                    }
+
+                },
+                getLocalDatas(isSelectIsSaveLocal = false) { //无网络时，获取本地数据,isSelectIsSaveLocal 为true 表示选择的已保存数据
+                    var _this = this;
+                    if(isSelectIsSaveLocal){
+                      api.showProgress({
+                          style: 'default',
+                          animationType: 'fade',
+                          title: '加载中...',
+                          modal: false
+                      });
+                    }
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    var db = api.require("db");
+                    if(_this.searchValue == ""){
+                    var sql = `SELECT * FROM meterNoSheets where Status = "7" and isSaveLocal=0 and isUpload=0 and cloudTaskCode =${api.pageParam.data.taskCode} and userName = "${CurentUserName}" ORDER BY CustomerCode`;
+                  }else {
+                    var sql = `SELECT * FROM meterNoSheets where Status = "7" and isSaveLocal=0 and isUpload=0 and cloudTaskCode =${api.pageParam.data.taskCode} and userName = "${CurentUserName}" and CustomerCode like "%${_this.searchValue}%" ORDER BY CustomerCode`;
+                  }
+
+
+                    var sql1 = `SELECT * FROM meterNoSheets where cloudTaskCode =${api.pageParam.data.taskCode} and Status = "7" and isSaveLocal=1 and isUpload=0 and userName = "${CurentUserName}" ORDER BY CustomerCode`;
+                    _this.db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    }, function(ret, err) {
+                        if (ret.status) {
+                          api.hideProgress();
+                            _this.showSearchResult = ret.data.length>0?false:true;
+                            _this.UserInfoDatas = [];
+                                _this.db.selectSql({
+                                    name: 'Wsdatabase',
+                                    sql: sql1
+                                }, function(ret1, err) {
+                                    if (ret1.status) {
+                                       if(_this.searchValue == ""){ //输入查询数据，统计数据不跟着改变
+                                         _this.isSaveLocalNumber = ret1.data.length;
+                                         if (isSelectIsSaveLocal) { //保存到本地的数据（已操作保存）
+                                             _this.showSearchResult =ret1.data.length>0?false:true;
+                                             _this.UserInfoDatas = ret1.data;
+                                         } else {
+                                             _this.pendingNumber = ret.data.length;
+                                             _this.UserInfoDatas = ret.data;
+                                             if( _this.pendingNumber + _this.isSaveLocalNumber+_this.toBeClaimedNumber == api.pageParam.data.taskCount){
+                                                _this.handledNumber = 0;
+                                             }else{
+                                               _this.handledNumber = _this.totalNumber - _this.pendingNumber - _this.isSaveLocalNumber-_this.toBeClaimedNumber;
+                                             }
+
+                                         }
+                                       }else{
+                                          _this.UserInfoDatas = ret.data;
+                                       }
+                                    }
+                                });
+                        }
+
+                    });
+                },
+                getMeterNoDataAll() { //认领界面进入后，显示的数据（需要查询所有数据，然后筛选待处理的数据出来）
+                  // this.getLocalDatas();
+                    var _this = this;
+                    _this.showBeClaimedNumber = true;
+                    var db = api.require("db");
+                     _this.getLocalDatas();
+                      var Parameter = {
+                          TaskNo: api.pageParam.data.taskCode, //api.pageParam.data.taskCode
+                      };
+                      fnPost('MMS002', Parameter, "application/json", true, false, (ret, err) => {
+                          api.hideProgress();
+                          if (ret) {
+                              if (ret.Status == 0) {
+                                  var data = JSON.parse(ret.Data);
+                                  _this.showSearchResult = ret.Data.length>0?false:true;
+                                  _this.UserInfoDatas = [];
+                                  var pendingNumber = 0;
+                                  data.forEach(item => {
+                                      if (item.Status == 1) {
+                                          pendingNumber++;
+                                          _this.UserInfoDatas.push(item);
+                                      }
+                                  });
+                                  _this.toBeClaimedNumber = pendingNumber;
+                              }
+                          }
+                      });
+
+                }
+
+            },
+            mounted: function() {
+                this.init();
+            }
+        })
+    }
+</script>
+
+</html>

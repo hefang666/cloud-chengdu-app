@@ -1,0 +1,113 @@
+<widget id="A6093184835886" version="0.0.1">
+    <!-- <content src="tabLayout.json" /> -->
+
+    <name>云平台App</name>
+
+    <description>
+
+        Example For APICloud.
+
+    </description>
+
+    <author email="developer@apicloud.com" href="http://www.apicloud.com">
+
+        Developer
+
+    </author>
+
+    <content src="index.html"/>
+
+    <access origin="*"/>
+
+    <preference name="pageBounce" value="false"/>
+
+    <preference name="appBackground" value="rgba(0,0,0,0.0)"/>
+
+    <preference name="windowBackground" value="rgba(0,0,0,0.0)"/>
+
+    <preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>
+
+    <preference name="hScrollBarEnabled" value="false"/>
+
+    <preference name="vScrollBarEnabled" value="false"/>
+
+    <preference name="autoLaunch" value="true"/>
+
+    <preference name="fullScreen" value="false"/>
+
+    <preference name="autoUpdate" value="false"/>
+
+    <preference name="smartUpdate" value="true"/>
+
+    <preference name="debug" value="true"/>
+
+    <preference name="softInputMode" value="auto"/>
+
+    <preference name="statusBarAppearance" value="true"/>
+
+    <permission name="readPhoneState"/>
+
+    <permission name="camera"/>
+
+    <permission name="record"/>
+
+    <permission name="location"/>
+
+    <permission name="fileSystem"/>
+
+    <permission name="internet"/>
+
+    <permission name="bootCompleted"/>
+
+    <permission name="hardware"/>
+    <!-- ios 判断应用是否安装 -->
+    <preference name="querySchemes" value="weixin,sinaweibo,mqqapi,mqq,alipay,alipayshare,baiduMap,iosaMap,comgooglemaps" />
+
+    <!-- <feature name="ajpush">
+        <param name="app_key" value="fba92a11df6e3122517cd8ed"/>
+        <param name="channel" value="40f8e5c29312ac5e17102699"/>
+    </feature> -->
+
+    <preference name="backgroundMode" value="location"/>
+
+    <feature name="aMapLBS">
+        <param name="android_api_key" value="c1acff7a0adf7f908b1061cda864af6c"/>
+        <param name="ios_api_key" value="1e646f07222aec757fc27cb9eeab8fe5"/>
+    </feature>
+
+    <feature name="aMap">
+        <param name="android_api_key" value="c1acff7a0adf7f908b1061cda864af6c"/>
+        <param name="ios_api_key" value="1e646f07222aec757fc27cb9eeab8fe5"/>
+    </feature>
+
+     <!--修改appkey为公司账号申请  20200727 zxf  -->
+    <feature name="bMap">
+        <param name="android_api_key" value="484tvdU6DNMSpm9ZMfXd8V8kduNTx0Ur"/>
+        <param name="ios_api_key" value="srQzWKi8nHH5lqbG2DMrcVGaetSIGfSI"/>
+    </feature>
+    <!-- <feature name="baiduLocation">
+        <param name="apiKey" value="orQXfEgtZC3WAxuLdQtUjvp7NGX2Kg9K" />
+     </feature> -->
+    <!--极光推送  -->
+    <meta-data name="JPUSH_CHANNEL" value="40f8e5c29312ac5e17102699"/>
+    <meta-data name="JPUSH_APPKEY" value="fba92a11df6e3122517cd8ed"/>
+    <!-- 小米 -->
+    <meta-data name="XIAOMI_APPKEY" value="MI-5241827886920"/>
+    <meta-data name="XIAOMI_APPID" value="MI-2882303761518278920"/>
+    <!--华为  -->
+    <meta-data name="com.huawei.hms.client.appid" value="appid=101470093"></meta-data>
+    <!-- oppo start -->
+    <meta-data name="OPPO_APPKEY" value="OP-f38acd81bba44b838b58b4747d338dd6"/>
+    <meta-data name="OPPO_APPID" value="OP-30228484"/>
+    <meta-data name="OPPO_APPSECRET" value="OP-2d408a334de048658bc852120fe72969"/>
+    <!-- oppo end -->
+     <!-- 魅族 开始-->
+    <meta-data name="MEIZU_APPKEY" value="MZ-b03d7593eb0644f1aa54a3693443b822" />
+     <meta-data name="MEIZU_APPID" value="MZ-129686" />
+     <!-- 魅族 结束 -->
+    <!-- ios -->
+    <feature name="jpushVip">
+        <param name="app_key" value="fba92a11df6e3122517cd8ed"/>
+        <param name="channel" value="40f8e5c29312ac5e17102699"/>
+    </feature>
+</widget>

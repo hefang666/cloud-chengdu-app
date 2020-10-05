@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>表号维护漏扫界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-vertical {
+            max-height: inherit;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+            padding: 0.85rem 0.75rem;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text],
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            /*width: 55vw;*/
+            font-size: 0.9rem;
+            color: #626262;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .footer {
+            width: 100vw;
+            height: 4.08rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.35rem;
+        }
+
+        .footer .van-button {
+            width: 4.82rem;
+            height: 1.86rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .footer .van-button.van-button--info {
+            background-color: #377EFF;
+            border-color: #377EFF;
+        }
+
+        .footer .van-button.van-button--warning {
+            background-color: #FFA836;
+            border-color: #FFA836;
+        }
+
+        .footer .van-button .van-button__text {
+            vertical-align: middle;
+        }
+
+        .card {
+            border-radius: 0.6rem;
+            background-color: #fff;
+            padding: 0.9rem 0 1rem 0;
+        }
+
+        .flex-con .van-search__content,
+        .van-search .van-cell {
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .searchInput {
+            display: flex;
+        }
+
+        .searchLabel {
+            height: 0;
+        }
+
+        .flex-con .searchInput span,
+        .flex-con .van-field__label span {
+            width: 4rem;
+            font-size: 0.9rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+        }
+
+        .flex-con .searchInput span::after,
+        .flex-con .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .flex-con .van-field__label {
+            height: 0;
+        }
+
+        .flex-con .van-cell.formField,
+        .searchInput,
+        .van-form .van-cell.formField,
+        .textAreaLabel,
+        .locationRow {
+            padding: 0.4rem 0.95rem 0.4rem 1.25rem;
+            background-color: transparent;
+        }
+
+        .flex-con .van-search {
+            background-color: transparent;
+            padding: 0;
+            width: calc(100% - 4.6rem);
+        }
+
+        .van-search .van-field__body,
+        .van-form .van-field__body {
+            border-bottom: 0.03rem solid #D8D8D8;
+        }
+
+        .van-form .textareaField .van-field__body {
+            border-bottom: none;
+        }
+
+        .border {
+            height: 0.15rem;
+            background-color: #DEDEDE;
+            flex: 1;
+        }
+
+        .van-form .textAreaLabel span.textLabel,
+        .van-form .van-field__label span {
+            width: 4rem;
+            font-size: 0.8rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+        }
+
+        .van-form .textAreaLabel span.textLabel::after,
+        .van-form .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .van-form .van-field__label {
+            height: 0;
+        }
+
+        .van-form .van-field__control[type=text],
+        .van-form textarea {
+            height: auto;
+            line-height: inherit;
+            width: 55vw;
+            font-size: 0.9rem;
+            color: #626262;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .van-form .textareaField .van-field__value {
+            border: 0.03rem solid #D8D8D8;
+            border-radius: 0.1rem;
+        }
+
+        .van-form textarea {
+            padding: 0.5rem 0.6rem;
+        }
+
+        .van-field__word-limit {
+            color: #E2E2E2;
+            font-size: 0.65rem;
+            padding: 0.5rem;
+            margin: 0;
+        }
+
+        .cardHeader {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.4rem 0.93rem 0.4rem 0.5rem;
+        }
+
+        .cardTitle {
+            color: #323232;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 1rem;
+        }
+
+        .dot {
+            width: 0.28rem;
+            height: 0.28rem;
+            border-radius: 50%;
+            background-color: #265CF5;
+            margin-right: 0.55rem;
+        }
+
+        .refresh {
+            width: 0.78rem;
+            height: 0.81rem;
+            background: url("../image/MeterManage/gengxin.png") no-repeat center;
+            background-size: 100% 100%;
+            margin-left: 1.75rem;
+        }
+
+        .formInput .van-field__control[type=text] {
+            height: auto;
+            line-height: inherit;
+            color: #626262;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+            font-size: 0.8rem;
+            border-bottom: 0.03rem solid #E1E1E1;
+        }
+
+        .van-icon__image {
+            width: 0.83rem;
+            height: 0.83rem;
+        }
+
+        .imgContent {
+            padding: 0.4rem 1.3rem;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .meterImg {
+            width: 3.73rem;
+            height: 2.9rem;
+            margin-bottom: 0.75rem;
+            margin-right: 0.85rem;
+        }
+
+        .sousuo {
+            width: 0.78rem;
+            height: 0.78rem;
+            background: url("../image/MeterManage/sousuo.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .popup {
+            max-height: 35vh;
+        }
+
+        .pickerMain {
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .picker {
+            width: 100vw;
+            height: 2.13rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+            border-bottom: 0.03rem solid #EDEDED;
+        }
+
+        .picker:last-child {
+            border-bottom: none;
+        }
+
+        .popupFooter {
+            width: 100vw;
+            height: 2.46rem;
+            border-top: 0.25rem solid #ECECEC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+        }
+
+        .imgDiv {
+            position: relative;
+        }
+
+        .addImg {
+            width: 1.05rem;
+            height: 0.85rem;
+            background: url("../image/MeterManage/paizhao.png") no-repeat center;
+            background-size: 100% 100%;
+            margin-left: 1.48rem;
+        }
+
+        .deleteImg {
+            width: 0.8rem;
+            height: 0.8rem;
+            background: url("../image/MeterManage/shanchu@2x.png") no-repeat center;
+            background-size: 100% 100%;
+            position: absolute;
+            top: -0.4rem;
+            right: 0.73rem;
+        }
+
+        .cardContent input[type="tel"] {
+            height: 1.2rem;
+            font-size: 0.75rem;
+        }
+
+        .flex-con .van-cell.formField {
+            border: none;
+            background-size: 87% 1px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-image: linear-gradient(0, #eee, #eee 50%, transparent 50%);
+            background-image: -webkit-linear-gradient(90deg, #eee, #eee 50%, transparent 50%);
+            padding: 0.4rem 0.95rem 0rem 1.25rem;
+            height: 2.1rem;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak @click="showDelete = false" v-swipeleft="openUserDetail">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back(false)'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">表号维护</div>
+            <div class="aui-pull-right aui-btn" tapmode @click="openSearch">
+                <div class="sousuo"></div>
+            </div>
+        </header>
+
+        <div id="main" class="flex-con">
+            <div class="card">
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>用户信息
+                    </div>
+                    <div class="border"></div>
+                </div>
+                <div class="cardContent">
+                    <van-field class="formField" :border="false" label="户名:" :value="customerInfo.CustomerName" readonly></van-field>
+                    <van-field class="formField" :border="false" label="户号:" :value="customerInfo.CustomerCode" readonly></van-field>
+                    <van-field class="formField" :border="false" label="地址:" :value="customerInfo.Address" readonly></van-field>
+                    <van-field class="formField" :border="false" label="水表位置:" :value="customerInfo.Location" readonly></van-field>
+                    <van-field class="formField" :border="false" label="用水性质:" :value="customerInfo.NatureName" readonly></van-field>
+                </div>
+
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>水表信息
+                    </div>
+                    <div class="border"></div>
+                </div>
+                <div class="cardContent" id='StampNoBox'>
+                    <van-field class="formField" :border="false" label="口径:" :value="customerInfo.Caliber" readonly></van-field>
+                    <van-field class="formField" :border="false" label="水表类型:" :value="customerInfo.MeterType" readonly></van-field>
+                    <!-- v-model='customerInfo.StampNo' -->
+                    <van-field class="formField formInput" type="digit" v-model='customerInfo.StampNo' :border="false" label="水表表号:" :value="customerInfo.StampNo" input-align="center" placeholder="此处显示扫码后的钢印号" right-icon="../image/MeterManage/saoma.png" @click-right-icon="openScan"
+                        @blur='loseFocus' @focus='inputFocus()'></van-field>
+                </div>
+
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>水表位置
+                    </div>
+                    <div class="border"></div>
+                    <div class="refresh" @click="getLocation"></div>
+                </div>
+                <div class="cardContent">
+                    <van-field class="formField" :border="false" label="经度:" :value="customerInfo.waterLon" readonly></van-field>
+                    <van-field class="formField" :border="false" label="纬度:" :value="customerInfo.waterlat" readonly></van-field>
+                </div>
+
+                <div class="cardHeader">
+                    <div class="cardTitle">
+                        <div class="dot"></div>表位图片
+                    </div>
+                    <div class="border"></div>
+                    <div class="addImg" @click="showPicker = true"></div>
+                </div>
+                <div class="cardContent imgContent">
+                    <div class="imgDiv" v-for="(image,index) in imagePath" :key="index">
+                        <van-image class="meterImg" :src="image" v-longtap.stop="showDeleteIcon" @click.stop="pBrowserPicture(index,imagePath)">
+                            <template v-slot:loading>
+                          <van-loading type="spinner" size="20"></van-loading>
+                        </template>
+                        </van-image>
+                        <div class="deleteImg" v-show="showDelete" @click.stop="deleteImg(index,image)"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <van-popup class="popup" v-model="showPicker" position="bottom">
+            <div class="flex-wrap flex-vertical">
+                <div class="flex-con pickerMain">
+                    <div class="picker" @click="getPicture('pic')">
+                        手机相册
+                    </div>
+                    <div class="picker" @click="getPicture('camera')">
+                        拍照
+                    </div>
+                </div>
+                <div class="popupFooter" @click="showPicker = false">
+                    取消
+                </div>
+            </div>
+        </van-popup>
+
+        <div class="footer">
+
+            <van-button round block type="info" @click='onGoSearchUser("last")'>
+                上一户
+            </van-button>
+
+            <van-button round block :disabled='isSaveMeterNoButton' type="warning" @click="saveMeterNo">
+                完成
+            </van-button>
+
+            <van-button round block type="info" @click='onGoSearchUser("next")'>
+                下一户
+            </van-button>
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        bMap = api.require("bMap");
+        FNScanner = api.require('FNScanner');
+        fs = api.require('fs');
+        UIAlbumBrowser = api.require('UIAlbumBrowser');
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            if (ret && ret.keyCode == 4) {
+                MeterNoScanVue.back();
+            }
+        });
+        api.addEventListener({
+            name: 'SearchResult'
+        }, function(ret, err) {
+            if (ret) {
+                var data = ret.value.data;
+                MeterNoScanVue.initData(data);
+            }
+        });
+
+        api.addEventListener({
+            name: 'online'
+        }, function(ret, err) {
+            if (ret) {
+                MeterNoScanVue.getLocation();
+            }
+        });
+
+
+    };
+    var VmData = {
+        showPicker: false,
+        showDelete: false,
+        Longitude: "",
+        Latitude: "",
+        imagePath: [],
+        imageLoaction: [],
+        oldStampNo: '',
+        UserInfoDatas: [],
+        userInfoNumber: 0,
+        isSaveMeterNoButton: false, //是否可以提交，是否禁用
+
+    }
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.MeterNoScanVue = new Vue({
+            el: '#wrap',
+            data: VmData,
+            computed: {
+                customerInfo: function() {
+                    if (this.UserInfoDatas.length == 0) {
+                        return {};
+                    } else {
+                        var details = this.UserInfoDatas[this.userInfoNumber];
+                        if (details.isUpload == 1) {
+                            this.isSaveMeterNoButton = true;
+                        } else {
+                            this.isSaveMeterNoButton = false;
+                        }
+                        return details;
+                    }
+                }
+            },
+            methods: {
+                back(hasWaitTask = false) { //返回上一个页面
+                    if (hasWaitTask) {
+                        var hasWaitTask = 0;
+                    } else {
+                        var hasWaitTask = 1;
+                    }
+                    api.sendEvent({
+                        name: 'RenderCopyList',
+                        extra: {
+                            hasWaitTask: hasWaitTask
+                        }
+                    });
+                    api.closeWin({});
+
+
+                },
+                initData(data = null) {
+                    var _this = this;
+                    var db = api.require("db");
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: `Select * from meterNoSheets where Status = "7" and cloudTaskCode =${api.pageParam.cloudTaskCode} and userName = "${CurentUserName}" ORDER BY CustomerCode`
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            _this.UserInfoDatas = ret.data;
+                            _this.userInfoNumber = _this.UserInfoDatas.findIndex(function(item) {
+                                return item.CustomerCode == (data == null ? api.pageParam.CustomerCode : data);
+                            });
+                            _this.getLocalImage();
+                        }
+                    });
+
+
+                },
+                getLocalImage() { //获取图片
+                    var _this = this;
+                    var db = api.require("db");
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: `Select * from meterNoImageSheets where CustomerCode = "${this.customerInfo.CustomerCode}" and userName ="${CurentUserName}"`
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            ret.data.forEach(item => {
+                                _this.imagePath.push(item.url);
+                                _this.imageLoaction.push({
+                                    lon: item.imageLon,
+                                    lat: item.imageLat,
+                                })
+                            });
+                        }
+                    });
+                },
+                deleteLocalImage(imageUrl = null) { //保存成功后，删除本地图片，并删除图片数据库里面的图片
+                    var db = api.require("db");
+                    var fs = api.require("fs");
+                    var meterManageSaveLocation = $api.getStorage('meterManageSaveLocation'); //图片上传成功后是否保存在本地  1默然保存，0不保存
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    if (imageUrl != null) {
+                        var sql = `delete from meterNoImageSheets where CustomerCode = "${api.pageParam.CustomerCode}" and url = "${imageUrl}"`
+                    } else {
+                        if (meterManageSaveLocation == 1) {
+                            var sql = `update meterNoImageSheets set isUpload = 1,isSaveLocal = 1 where CustomerCode = "${api.pageParam.CustomerCode}" and userName ="${CurentUserName}"`;
+                        } else {
+                            var sql = `delete from meterNoImageSheets where CustomerCode = "${api.pageParam.CustomerCode}" and userName ="${CurentUserName}"`;
+                        }
+                    }
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    }, function(ret, err) {
+                        if (ret.status) {
+
+                        }
+                    });
+                    if (imageUrl == null) {
+                        if (meterManageSaveLocation == 0) {
+                            var imagePath = this.imagePath;
+                            for (let i = 0; i < imagePath.length; i++) {
+                                fs.exist({
+                                    path: `fs://MeterNoPicture`
+                                }, function(ret, err) {
+                                    if (ret.exist) {
+                                        fs.remove({
+                                            path: imagePath[i]
+                                        }, function(ret, err) {
+                                            if (ret.status) {}
+                                        })
+                                    }
+                                });
+                            }
+                        }
+                    } else {
+                        fs.remove({
+                            path: imageUrl
+                        }, function(ret, err) {
+                            if (ret.status) {}
+                        })
+
+                    }
+                },
+                onGoSearchUser(type) {
+                    var _this = this;
+                    if (type == 'last') {
+                        if (_this.userInfoNumber == 0) {
+                            vant.Toast('没有上一户了');
+                            return
+                        } else {
+                            _this.updateFun();
+                            _this.userInfoNumber--;
+                            _this.getLocalImage();
+
+
+                        }
+                    } else {
+                        if (_this.userInfoNumber < _this.UserInfoDatas.length - 1) {
+                            _this.updateFun();
+                            _this.userInfoNumber++;
+                            _this.getLocalImage();
+
+                        } else {
+                            vant.Toast('没有下一户了');
+                            return
+                        }
+                    }
+                },
+                updateFun() { //刷新方法
+                    this.imagePath = [];
+                    this.imageLoaction = [];
+                    this.getLocation();
+                },
+                saveTips(type) {
+                    var _this = this;
+                    vant.Dialog.confirm({
+                        title: '提示',
+                        message: '当前用户数据尚未保存，是否跳转?'
+                    }).then(() => {
+                        _this.oldStampNo = "";
+                        _this.customerInfo.StampNo = "";
+                        _this.onGoSearchUser(type);
+                    }).catch(() => {
+
+                    });
+                },
+                getLocation(from = null) { //获取定位
+                    var _this = this;
+                    if (api.connectionType == 'none') {
+                        pGetLocation(function(ret, err) {
+                            _this.customerInfo.waterLon = ret.lon;
+                            _this.customerInfo.waterlat = ret.lat;
+                            _this.customerInfo.Location = "";
+                            if (from != null) {
+                                _this.imageLoaction.push({
+                                    lon: ret.lon,
+                                    lat: ret.lat,
+                                });
+                            }
+                        });
+                    } else {
+                        pGetNameFromCoords(function(ret, err) {
+                            if (ret.status) {
+                                _this.customerInfo.waterLon = ret.lon;
+                                _this.customerInfo.waterlat = ret.lat;
+                                _this.customerInfo.Location = ret.address;
+                                if (from != null) {
+                                    _this.imageLoaction.push({
+                                        lon: ret.lon,
+                                        lat: ret.lat,
+                                    });
+                                }
+                            }
+                        });
+                    }
+                },
+                loseFocus() { //表号输入框失去焦点
+                    var _this = this;
+                    if (_this.customerInfo.StampNo == "" || _this.oldStampNo.length != _this.customerInfo.StampNo.length) {
+                        _this.oldStampNo = "";
+                    }
+                },
+                inputFocus() {
+                    var inputHeight = document.getElementById('StampNoBox').clientHeight;
+                    document.getElementById('StampNoBox').style.height = inputHeight + "px";
+                },
+                openScan() { //扫码
+                    FNScanner.open({
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: api.winWidth,
+                            h: api.winHeight,
+                        },
+                        autorotation: true,
+                        hintText: "扫码获取水表表号",
+                        font: {
+                            lightText: {
+                                size: 13,
+                            }
+                        }
+                    }, (ret, err) => {
+                        if (ret.eventType == 'success') {
+                            var content = ret.content;
+                            if (this.oldStampNo != content) {
+                                if (api.connectionType == 'none') {
+                                    var db = api.require('db');
+                                    db.selectSql({
+                                        name: 'Wsdatabase',
+                                        sql: `SELECT * FROM meterNoSheets where StampNo = ${this.oldStampNo}`
+                                    }, (ret, err) => {
+                                        if (ret.status) {
+                                            if (ret.data.length > 0) {
+                                                vant.Toast('该表号已存在!');
+                                            } else {
+                                                this.customerInfo.StampNo = ret.content;
+                                                this.oldStampNo = ret.content;
+                                            }
+                                        }
+                                    });
+
+                                } else {
+                                    this.customerInfo.StampNo = ret.content;
+                                    this.oldStampNo = ret.content;
+                                }
+
+                            } else {
+                                vant.Toast('该表号已存在!');
+                            }
+
+                        }
+                    });
+                },
+                openSearch() { //打开搜索页面
+                    // 搜索用户信息
+                    api.openWin({
+                        name: 'MeterNoSearch',
+                        url: './MeterNoSearch.html'
+                    });
+                },
+                getPicture(type) { //拍照
+                    this.showPicker = false;
+                    var _this = this;
+                    var options = {
+                        type: type,
+                        waterMark: true,
+                        waterMarkData: {
+                            code: this.customerInfo.CustomerCode,
+                        }
+                    }
+                    pGetPicture(options, function(ret, err) {
+                        if (ret.status) {
+                            ret.imgList.forEach(function(item, index) {
+                                _this.getLocation('img');
+                                _this.imagePath.push(item);
+                            })
+                        }
+                    });
+                },
+
+                deleteImg(index, imageUrl) { //删除照片
+                    var _this = this;
+                    vant.Dialog.confirm({
+                        title: '提示',
+                        message: '确定删除图片吗?'
+                    }).then(() => {
+                        _this.showDelete = false;
+                        _this.imagePath.splice(index, 1);
+                        _this.deleteLocalImage(imageUrl);
+                    }).catch(() => {
+                        _this.showDelete = false;
+                    });
+                },
+                showDeleteIcon() { //
+                    this.showDelete = true;
+                },
+                saveMeterNo() { //保存
+                    var _this = this;
+                    pGetLocationGPS(false, function(ret, err) {
+                        if (ret.gps) {
+                            if (_this.customerInfo.isSaveLocal == 1) {
+                                vant.Dialog.confirm({
+                                    title: '提示',
+                                    message: '确定修改已保存的数据吗?'
+                                }).then(() => {
+                                    _this.saveMerterNoData(); //保存数据
+                                }).catch(() => {
+
+                                });
+                            } else {
+                                _this.saveMerterNoData(); //保存数据
+                            }
+
+                        } else {
+                            vant.Toast('请先开始GPS定位!');
+                        }
+                    });
+
+                },
+                saveMerterNoData() {
+                    var db = api.require('db');
+                    var _this = this;
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    var meterManageUploadPicture = $api.getStorage('meterManageUploadPicture'); //1表示开启（有网无网，都保存在本地） 0表示未开启，提交到服务器   并且更具meterManageSaveLocation 判断提交了，是否删除本地图片
+                    if (meterManageUploadPicture == 1) { //开启了数据及图片单独上传，保存数据到本地
+                        _this.onCopyImageToFs();
+                        return;
+                    }
+                    if (api.connectionType != 'none') {
+                        if (_this.customerInfo.StampNo != "") {
+                            var body = {
+                                "TaskId": _this.customerInfo.taskId,
+                                "CustomerCode": _this.customerInfo.CustomerCode,
+                                "StampNo": _this.customerInfo.StampNo,
+                                "Longitude": _this.customerInfo.waterLon,
+                                "Latitude": _this.customerInfo.waterlat,
+                                "Location": _this.customerInfo.Location,
+                                "FileLocation": "",
+                                "Remark": ""
+                            };
+                            var files = {
+                                "file": _this.imagePath
+                            };
+                            var imageLoaction = _this.imageLoaction;
+                            var FileLocation = "";
+                            if (_this.imageLoaction.length > 0) { //下一户的时候，需要清空
+                                var n = 0;
+                                for (let i = 0; i < imageLoaction.length; i++) {
+                                    n++;
+                                    FileLocation += imageLoaction[i].lon + ',' + imageLoaction[i].lat + "|";
+                                    if (n == imageLoaction.length) {
+                                        FileLocation = FileLocation.substring(0, FileLocation.length - 1);
+                                        body.FileLocation = FileLocation;
+                                    }
+                                }
+                            }
+
+                            fnPost('OSM004', body, 'application/json', true, false, function(ret, err) {
+                                api.hideProgress();
+                                if (ret && ret.Status == 0) {
+                                    vant.Toast('数据提交成功');
+                                    api.sendEvent({
+                                        name: 'updateMeterList',
+                                    });
+                                    api.sendEvent({
+                                        name: 'refreshCloudMyTask',
+                                    });
+                                    // 删除数据开始
+                                    _this.deleteLocalImage(); //删除本地保存的图片
+                                    db.executeSql({ //isSaveLocal 是否把修改的数据保存了在本地
+                                        name: 'Wsdatabase',
+                                        sql: 'UPDATE  meterNoSheets set Status = "4",isUpload = 1,isSaveLocal=1 where CustomerCode="' + _this.customerInfo.CustomerCode + '" and cloudTaskCode="' + _this.customerInfo
+                                            .cloudTaskCode +
+                                            '" and userName = "' + CurentUserName + '"'
+                                    }, function(ret, err) {
+                                        if (ret.status) {
+                                            db.selectSql({
+                                                name: 'Wsdatabase',
+                                                sql: 'SELECT * FROM meterNoSheets where cloudTaskCode = "' + _this.customerInfo.cloudTaskCode + '" and userName = "' + CurentUserName +
+                                                    '" and Status="7"'
+                                            }, function(ret, err) {
+                                                // console.log(JSON.stringify(ret))
+                                                if (ret.status) {
+                                                    _this.imagePath = []; //清除图片
+                                                    _this.imageLoaction = [];
+                                                    if (ret.data.length == 0) {
+                                                        // 任务下数据处理完，删除云平台我的任务中的数据
+                                                        db.executeSql({
+                                                            name: 'Wsdatabase',
+                                                            sql: 'DELETE FROM myTaskSheet where taskId="' + _this.customerInfo.cloudTasKId + '" and userName = "' + CurentUserName + '"'
+                                                        }, (ret, err) => {
+                                                            if (ret.status) {
+
+                                                            }
+                                                        });
+                                                        // 关闭窗口，刷新数据
+                                                        _this.back(true);
+                                                    } else {
+                                                        _this.UserInfoDatas.splice(_this.userInfoNumber, 1);
+                                                        _this.userInfoNumber = _this.userInfoNumber - 1;
+                                                        _this.onGoSearchUser('next');
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    vant.Toast(ret.Message);
+                                    _this.onCopyImageToFs();
+                                }
+                            }, files);
+                        } else {
+                            vant.Toast('请输入水表表号');
+                        }
+                    } else {
+                        // 没有网络的时候
+                        //图片保存到fs路径下
+                        _this.onCopyImageToFs();
+
+                    }
+
+                },
+                onCopyImageToFs() {
+                    var imgArray = [];
+                    var imgnumber = 0;
+                    var _this = this;
+                    if (_this.imagePath.length != 0) {
+                        _this.imagePath.forEach(item => {
+                            if (item.indexOf('MeterNoPicture') == -1) {
+                                fs.copyTo({
+                                    oldPath: item,
+                                    newPath: 'fs://MeterNoPicture'
+                                }, (ret, err) => {
+                                    if (ret.status) {
+                                        imgnumber++;
+                                        var picName = item.substring(item.lastIndexOf("/") + 1);
+                                        var url = api.fsDir + "/MeterNoPicture/" + picName;
+                                        imgArray.push(url);
+                                        if (imgnumber == _this.imagePath.length) {
+                                            _this.upDateUserSheet(imgArray);
+                                        }
+                                    }
+                                });
+                            } else {
+                                imgnumber++;
+                                imgArray.push(item);
+                                if (imgnumber == _this.imagePath.length) {
+                                    _this.upDateUserSheet(imgArray);
+                                }
+                            }
+                        })
+                    } else {
+                        _this.upDateUserSheet(imgArray);
+                    }
+                },
+                upDateUserSheet(imgArray) { //更新数据库，数据没了，删除数据任务表中的数据
+                    var db = api.require("db");
+                    var _this = this;
+
+                    if (_this.customerInfo.StampNo != "") {
+                        db.selectSql({ //判断表号是否已经存在
+                            name: 'Wsdatabase',
+                            sql: `SELECT * FROM meterNoSheets where StampNo = "${_this.customerInfo.StampNo}"`
+                        }, function(ret, err) {
+                            if (ret.status) {
+                                if (ret.data.length == 0) {
+                                    _this.updateLocalData();
+                                } else {
+                                    var data = ret.data[0];
+                                    if (data.CustomerCode == _this.customerInfo.CustomerCode) {
+                                        _this.updateLocalData()
+                                    } else {
+                                        vant.Toast('水表表号已存在!');
+                                    }
+                                }
+                            }
+                        });
+                        _this.saveImageToLocal(imgArray);
+
+                    } else {
+                        vant.Toast('请输入水表表号');
+                    }
+                },
+                saveImageToLocal(imgArray) {
+                    var db = api.require("db");
+                    var imgArray = imgArray;
+                    var imageId = 0;
+                    var _this = this;
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    for (let i = 0; i < imgArray.length; i++) {
+                        (function(i) {
+                            db.selectSql({
+                                name: 'Wsdatabase',
+                                sql: 'select id from meterNoImageSheets order by id desc limit 1'
+                            }, (ret, err) => {
+                                if (ret.status) {
+                                    if (ret.data.length > 0) {
+                                        imageId = ret.data[0].id;
+                                    }
+                                }
+                            });
+                            var location = _this.imageLoaction[0];
+                            imageId++;
+                            db.selectSql({
+                                name: 'Wsdatabase',
+                                sql: `SELECT * FROM meterNoImageSheets where CustomerCode = "${_this.customerInfo.CustomerCode}" and url = "${imgArray[i]}" and userName="${CurentUserName}"`
+                            }, function(ret, err) {
+                                if (ret.status) {
+                                    if (ret.data.length == 0) {
+                                        //isSaveLocal 是否保存在本地了
+                                        db.executeSql({
+                                            name: 'Wsdatabase',
+                                            sql: `INSERT INTO meterNoImageSheets (id,CustomerCode,url,imageLon,imageLat,taskId,userName,isUpload,isSaveLocal) VALUES (${imageId},"${_this.customerInfo.CustomerCode}","${imgArray[i]}","${location.lon}","${location.lat}","${_this.customerInfo.taskId}","${CurentUserName}",0,1)`
+                                        }, function(ret, err) {
+                                            if (ret.status) {}
+                                        });
+                                    }
+                                }
+                            });
+
+                        })(i);
+                    }
+                },
+                updateLocalData() {
+                    var db = api.require("db");
+                    var _this = this;
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: `UPDATE  meterNoSheets set Location="${_this.customerInfo.Location}",StampNo="${_this.customerInfo.StampNo}",waterLon="${_this.customerInfo.waterLon}",waterlat="${_this.customerInfo.waterlat}",isSaveLocal=1 where cloudTaskCode ="${_this.customerInfo.cloudTaskCode}" and CustomerCode="${_this.customerInfo.CustomerCode}" and userName ="${CurentUserName}" `
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            vant.Toast('数据保存本地成功!');
+                            _this.getLocation();
+                            _this.onGoSearchUser('next');
+                        }
+                    });
+                },
+                openUserDetail() {
+                    if (api.connectionType !== "none") {
+                        api.openWin({
+                            name: 'CustomerDetails',
+                            url: '../CustomerSearch/CustomerDetails.html',
+                            pageParam: {
+                                CustomerCode: this.customerInfo.CustomerCode
+                            }
+                        });
+                    } else {
+                        vant.Toast('网络无法连接，请检查网络配置');
+                    }
+                }
+            },
+            mounted: function() {
+                this.getLocation();
+                this.initData();
+            }
+        })
+    }
+</script>
+
+</html>

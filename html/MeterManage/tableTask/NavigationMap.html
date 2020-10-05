@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>申请位置-导航</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            flex-flow: column;
+            display: flex;
+        }
+
+        #header {
+            position: fixed;
+            top: 0;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+        }
+
+        #center {
+            flex: 1;
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 80px;
+            background-color: #FFFFFF;
+            display: flex;
+            flex-direction: row;
+            line-height: 80px;
+        }
+
+        #footer div {
+            flex: 1;
+            text-align: center;
+        }
+
+        #footer div button {
+            width: 120px;
+            height: 40px;
+            line-height: 40px;
+            background-color: #2F7FF6;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 18px;
+        }
+    </style>
+</head>
+
+<body id="bd">
+    <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" onclick="api.closeWin()">
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">申请位置</div>
+    </header>
+
+    <div id="center"></div>
+
+    <div id="footer">
+        <div id="footer-dv1"><button onclick="mapNavigation()">第三方导航</button></div>
+    </div>
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/javascript">
+    var headerH;
+    var bodyH, bodyW;
+
+    var ApplyLon, ApplyLat;
+
+    var originJD, originWD;
+    var userbean;
+    apiready = function() {
+        //api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        var body = $api.byId('bd');
+        bodyH = $api.offset(body).h;
+        bodyW = $api.offset(body).w;
+
+        ApplyLon = api.pageParam.ApplyLon,
+            ApplyLat = api.pageParam.ApplyLat,
+
+            bMap = api.require('bMap');
+
+        openmap();
+    };
+
+    function openmap() {
+        bMap.open({
+            rect: {
+                x: 0,
+                y: headerH,
+                w: bodyW,
+                h: bodyH - headerH - 80
+            },
+            center: {
+                lon: ApplyLon,
+                lat: ApplyLat
+            },
+            zoomLevel: 15,
+            showUserLocation: true,
+            fixedOn: api.frameName,
+            fixed: true
+        }, function(ret) {
+            if (ret.status) { //addAnnotations
+                bMap.addAnnotations({
+                    annotations: [{
+                        id: 1,
+                        lon: ApplyLon,
+                        lat: ApplyLat,
+                        size: 15,
+                    }],
+                    icon: 'widget://image/MeterManage/dingwei.png',
+                    draggable: true
+                }, function(ret) {
+                    if (ret) {
+
+                    }
+                });
+            }
+        });
+    }
+
+    //第三方导航
+    function mapNavigation() {
+      var options = {
+          endLon:ApplyLat,
+          endLat:ApplyLat,
+          endAddreesName:'',
+      }
+      pNavigation(options);
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>退库扫码搜索界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-weight: 900;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .van-search__content {
+            padding-left: 0.63rem;
+            background-color: #F3F3F3;
+            border-radius: 0.85rem;
+        }
+
+        .van-field__left-icon {
+            margin-right: 0.7rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .van-field__left-icon .van-icon {
+            min-width: 0.65rem;
+            font-size: 0.7rem;
+        }
+
+        .van-icon__image {
+            width: 0.65rem;
+            height: 0.68rem;
+        }
+
+        .van-search__action {
+            padding: 0 0.7rem 0 0.37rem;
+            color: #2E87F9;
+            font-size: 0.8rem;
+        }
+
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.75rem;
+            color: #999999;
+        }
+
+        .history {
+            display: flex;
+            padding: 0.65rem 1.33rem;
+            align-items: baseline;
+        }
+
+        .historyTitle {
+            font-size: 0.85rem;
+            color: #545454;
+            margin-right: 0.88rem;
+        }
+
+        .tip {
+            font-size: 0.7rem;
+            color: #ADADAD;
+        }
+
+        .historyLabel {
+            padding: 0 1.33rem;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .aui-label {
+            font-size: 0.8rem;
+            border-radius: 0;
+            padding: 0.6rem 1rem;
+            margin-bottom: 0.5rem;
+            margin-right: 0.7rem;
+            background-color: #fff;
+            color: #333;
+            min-width: 5vw;
+            border-radius: 0.3rem;
+        }
+
+        .noResult {
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        .delete {
+            width: 0.7rem;
+            height: 0.7rem;
+            background: url("../image/MeterManage/shanchu.png") no-repeat center;
+            background-size: 100% 100%;
+            position: absolute;
+            right: 0.1rem;
+            top: 0.1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">搜索</div>
+        </header>
+
+        <van-search v-model="value" @clear="showHistory=true;showNoResult = false" show-action placeholder="请输入仓库名或者退库单号进行查询" left-icon="../image/Task/sousuo2.png" @search="onSearch">
+            <div slot="action" @click="onSearch">确认</div>
+        </van-search>
+        <div id="main" class="flex-con">
+
+            <div class="history" v-show="showHistory">
+                <div class="historyTitle">
+                    搜索历史
+                </div>
+                <div class="tip">
+                    自动保留最近10条搜索历史
+                </div>
+            </div>
+
+            <div class="historyLabel" v-show="showHistory">
+                <div class="aui-label" v-for="(item,index) in searchHistorys" :key="index" @click="SearchHistory(item)" v-longtap="(e)=>showDelete(index,e)">
+                    {{item}}
+                    <div class="delete" v-show="currentHistory == index && value == ''" @click.stop="deleteHistory(index)"></div>
+                </div>
+            </div>
+
+            <div class="noResult" v-show="showNoResult">
+                没有更多的搜索结果
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.SearchVue = new Vue({
+            el: '#wrap',
+            data: {
+                value: '',
+                searchHistorys: $api.getStorage('scanSearchHistorys') == undefined ? [] : $api.getStorage('scanSearchHistorys'),
+                showHistory: true,
+                showNoResult: false,
+                currentHistory: -1
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                onSearch() {
+                  var db = api.require("db");
+                    this.currentHistory = -1;
+                    if (this.value != "") {
+                        var index = this.searchHistorys.findIndex(function(item) {
+                            return item == SearchVue.value;
+                        });
+                        if (index == -1) {
+                            if (this.searchHistorys.length > 10) {
+                                this.searchHistorys.splice(this.searchHistorys.length - 1, 1);
+                            }
+                            this.searchHistorys.unshift(this.value);
+                            $api.setStorage('scanSearchHistorys', this.searchHistorys);
+                        }
+                        this.showHistory = false;
+                        this.showNoResult = false;
+                        var body = {
+                            Information: this.value
+                        };
+                        fnPost('WMM007', body, 'application/json', false, false, (ret, err) => {
+                          api.hideProgress();
+                            if (ret) {
+                                if (ret.Status == 0) {
+                                    if (ret.Data.length > 0) {
+                                        var data =JSON.parse(ret.Data);
+                                        api.closeWin({});
+                                        api.sendEvent({
+                                            name: 'searchContent',
+                                            extra: {
+                                                data: data,
+                                            }
+                                        });
+
+                                    } else {
+                                      this.showNoResult = true;
+                                    }
+                                }
+                            }
+                        });
+
+
+
+                    } else {
+                        vant.Toast("请先输入搜索内容");
+                    }
+                },
+                SearchHistory(name, e) {
+                    this.value = name;
+                    this.onSearch();
+                },
+                showDelete(index, e) {
+                    this.currentHistory = index;
+                },
+                deleteHistory(index) {
+                    this.searchHistorys.splice(index, 1);
+                    $api.setStorage('scanSearchHistorys', this.searchHistorys);
+                    this.currentHistory = -1;
+                }
+            },
+            mounted: function() {
+
+            }
+        })
+    }
+</script>
+
+</html>

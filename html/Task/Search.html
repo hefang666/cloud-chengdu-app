@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>搜索界面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-weight: 900;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .aui-list {
+            background-image: none !important;
+        }
+
+        .aui-media-list .aui-list-item {
+            display: flex;
+            padding-left: 0.75rem;
+        }
+
+        .aui-media-list-item-inner {
+            width: 90vw;
+        }
+
+        .aui-list .aui-list-item-inner {
+            padding-right: 0.65rem;
+            padding-top: 1.2rem;
+            padding-bottom: 1.2rem;
+        }
+
+        .aui-list .aui-list-item-title {
+            font-size: 0.9rem;
+            color: #1C1C1C;
+        }
+
+        .aui-list .aui-list-item-media.systemIcon {
+            width: auto;
+            padding: 1.27rem 0.35rem 0.75rem 0;
+            align-items: flex-start;
+        }
+
+        .aui-list .aui-list-item-text:first-child,
+        .aui-list .aui-list-item-text:last-child {
+            padding: 0;
+        }
+
+        .aui-list .aui-list-item-text {
+            padding: 0.5rem 0 0.6rem 0;
+            font-size: 0.75rem;
+            color: #A7A7A7;
+        }
+
+        .aui-list .aui-list-item-right,
+        .aui-list-item-title-row em {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 0.1rem;
+            font-size: 0.7rem;
+            color: #A7A7A7;
+        }
+
+        .aui-list .aui-list-item-text.projectName {
+            color: #4D4D4D
+        }
+
+        .avatar {
+            width: 1.33rem;
+            height: 1.33rem;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .biaowu {
+            background: url("../../image/Task/biaowu.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .chaobiao {
+            background: url("../../image/Task/chaobiao.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .biaoqian {
+            width: 0.9rem;
+            height: 1.88rem;
+            position: absolute;
+            top: 0;
+            right: 1.18rem;
+            color: #fff;
+            font-size: 0.88rem;
+            text-align: center;
+            background: url("../../image/Task/biaoqian.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .van-search {
+            padding: 0.65rem 1.3rem 0.65rem 0.75rem;
+        }
+
+        .van-search__content {
+            padding-left: 0.63rem;
+            background-color: #F3F3F3;
+            border-radius: 0.85rem;
+        }
+
+        .van-field__left-icon {
+            margin-right: 0.7rem;
+            margin-top: 0.2rem;
+        }
+
+        .van-field__left-icon .van-icon {
+            min-width: 0.65rem;
+            font-size: 0.7rem;
+        }
+
+        .van-icon__image {
+            width: 0.65rem;
+            height: 0.68rem;
+        }
+
+        .van-search__action {
+            padding: 0 0.55rem;
+            color: #5CBA52;
+            font-size: 0.8rem;
+        }
+
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.7rem;
+            color: #999999;
+        }
+
+        .history {
+            display: flex;
+            padding: 0.65rem 1.33rem;
+            align-items: baseline;
+        }
+
+        .historyTitle {
+            font-size: 0.85rem;
+            color: #545454;
+            margin-right: 0.88rem;
+        }
+
+        .tip {
+            font-size: 0.7rem;
+            color: #ADADAD;
+        }
+
+        .historyLabel {
+            padding: 0 1.33rem;
+        }
+
+        .aui-label {
+            font-size: 0.7rem;
+            border-radius: 0;
+            padding: 0.5em 1em;
+            margin: 0.5rem 1.25rem 0 0;
+            background-color: #fff;
+            color: #333;
+            min-width: 5vw;
+        }
+
+        .c-sure-btn {
+            color: #2E87F9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">搜索</div>
+        </header>
+
+        <van-search v-model="value" show-action placeholder="请输入用户地址查询" left-icon="../../image/Task/sousuo2.png">
+            <div slot="action" class='c-sure-btn' @click="onSearch">确认</div>
+        </van-search>
+
+        <div id="main" class="flex-con">
+            <div class="history" v-show="value==''">
+                <div class="historyTitle">
+                    搜索历史
+                </div>
+                <div class="tip">
+                    自动保留最近10条搜索历史
+                </div>
+            </div>
+            <!-- 我发起页面搜索历史 -->
+            <div class="historyLabel" v-show="value=='' && searchHistorysShow">
+                <div class="aui-label" v-for="(item,index) in searchHistorys" :key="index" @click="showDelete(item)">{{item}}
+                </div>
+            </div>
+            <!--我的任务页面搜索历史  -->
+            <div class="historyLabel" v-show="value=='' && mytaskSearchHistorysShow">
+                <div class="aui-label" v-for="(item,index) in myTaskSearchHistorys" :key="index" @click="showDelete(item)">{{item}}
+                </div>
+            </div>
+            <!-- <div class="aui-content">
+                <ul class="aui-list aui-media-list">
+                    <li class="aui-list-item aui-list-item-middle">
+                        <div class="aui-list-item-media systemIcon">
+                            <div class="avatar biaowu"></div>
+                        </div>
+                        <div class="aui-media-list-item-inner">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-title">任务编号：14325378473</div>
+                                </div>
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-text projectName">工程名称：移改提</div>
+                                    <div class="aui-list-item-right" style="color:#FF9320">待处理</div>
+                                </div>
+                                <div class="aui-list-item-text">
+                                  <div class="aui-list-item-text">创建时间：2018/11/12 19:00</div>
+                                  <div class="aui-list-item-right">昨天 10:33</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="biaoqian">
+                            1
+                        </div>
+                    </li>
+
+                    <li class="aui-list-item aui-list-item-middle">
+                        <div class="aui-list-item-media systemIcon">
+                            <div class="avatar chaobiao"></div>
+                        </div>
+                        <div class="aui-media-list-item-inner">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-title">任务编号：14325378473</div>
+                                </div>
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-text projectName">工程名称：抄表</div>
+                                    <div class="aui-list-item-right" style="color:#FF9320">待处理</div>
+                                </div>
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-text">创建时间：2018/11/12 19:00</div>
+                                    <div class="aui-list-item-right">昨天 10:33</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="biaoqian">
+                            2
+                        </div>
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.AddAppVue = new Vue({
+            el: '#wrap',
+            data: {
+                value: $api.getStorage('lastSearchValue') != undefined ? $api.getStorage('lastSearchValue') : '',
+                searchHistorys: $api.getStorage('taskSearchHistorys') == undefined ? [] : $api.getStorage('taskSearchHistorys'),
+                myTaskSearchHistorys: $api.getStorage('mytaskSearchHistorys') == undefined ? [] : $api.getStorage('mytaskSearchHistorys'),
+                searchHistorysShow: false,
+                mytaskSearchHistorysShow: false,
+            },
+            watch: {
+                value: function(newValue, oldValue) {
+                    if (newValue == "") {
+                        $api.setStorage('lastSearchValue', newValue);
+                        this.GetMySponsorTasks();
+                    }
+                }
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                onSearch(value) {
+                    if (api.pageParam.from == 'myTask') {
+                        if (this.myTaskSearchHistorys.length > 10) {
+                            this.myTaskSearchHistorys.splice(this.myTaskSearchHistorys.length - 1, 1);
+                        }
+                        if (this.value != '') {
+                            if (this.myTaskSearchHistorys.indexOf(this.value) == -1) {
+                                this.myTaskSearchHistorys.unshift(this.value);
+                            }
+                        }
+                        $api.setStorage('lastSearchValue', this.value);
+                        $api.setStorage('mytaskSearchHistorys', this.myTaskSearchHistorys);
+                    } else {
+                        if (this.searchHistorys.length > 10) {
+                            this.searchHistorys.splice(this.searchHistorys.length - 1, 1);
+                        }
+                        if (this.value != '') {
+                            if (this.searchHistorys.indexOf(this.value) == -1) {
+                                this.searchHistorys.unshift(this.value);
+                            }
+                        }
+                        $api.setStorage('lastSearchValue', this.value);
+                        $api.setStorage('taskSearchHistorys', this.searchHistorys);
+                    }
+                    this.GetMySponsorTasks(true);
+
+                },
+                GetMySponsorTasks(goBack = false) { //goBack 是否关闭窗口，输入框为空的时候，不返回上个页面
+                    var CurrentLocation = $api.getStorage('CurrentLocation');
+                    var params = api.pageParam.data;
+                    var from = api.pageParam.from;
+                    if (api.connectionType != "none") {
+                        if (from == 'myTask') {
+                            var url =
+                                `services/app/WorkFlow/GetMyTasks?Lng=${CurrentLocation.lon}&Lat=${CurrentLocation.lat}&Account=${$api.getStorage("thirdPartyAccount")}&PassWord=${$api.getStorage("thirdPartyPassWord")}&Status=${params.Status}&ProductID=${params.productId}&TemplateId=${params.typeId}&Filter=${this.value}&PageIndex=1&MaxResultCount=50`;
+                        } else {
+                            var url =
+                                `services/app/WorkFlow/GetMySponsorTasks?Lng=${CurrentLocation.lon}&Lat=${CurrentLocation.lat}&Account=${$api.getStorage("thirdPartyAccount")}&PassWord=${$api.getStorage("thirdPartyPassWord")}&ProductID=${params.productId}&TemplateId=${params.typeId}&Filter=${this.value}&PageIndex=1&MaxResultCount=50`;
+                        }
+
+                        fnGet(url, {}, false, (ret, err) => {
+                            api.hideProgress();
+                            if (ret) {
+                                if (ret.success) {
+                                    var params = ret.result.items;
+                                    api.sendEvent({
+                                        name: 'searchContents',
+                                        extra: {
+                                            data: params,
+                                            searchValue: this.value
+                                        }
+                                    });
+                                    if (goBack) {
+                                        api.closeWin({});
+                                    }
+
+                                }
+                            }
+                        });
+                    } else {
+                        if (from == 'myTask') {
+                            api.showProgress({
+                                style: 'default',
+                                animationType: 'fade',
+                                title: '加载中...',
+                                modal: false
+                            });
+                            var filterType = {
+                                productId: params.productId,
+                                typeId: params.typeId
+                            }
+                            offLineGetMyTask(this.value, filterType, 0, (ret) => {
+                                if (ret) {
+                                    api.sendEvent({
+                                        name: 'searchContents',
+                                        extra: {
+                                            data: ret.taskListData,
+                                            searchValue: this.value
+                                        }
+                                    });
+                                    if (goBack) {
+                                        api.closeWin({});
+                                    }
+                                }
+                            });
+
+                        } else {
+                            vant.Toast('网络连接错误,请检查网络是否连接!');
+                        }
+                    }
+
+
+
+
+                },
+                showDelete(item) {
+                    this.value = item;
+                    this.onSearch();
+                },
+                initElement() {
+                    if (api.pageParam.from == 'myTask') {
+                        this.mytaskSearchHistorysShow = true;
+                    } else {
+                        this.searchHistorysShow = true;
+                    }
+                }
+            },
+            mounted: function() {
+                this.initElement();
+            }
+        })
+    }
+</script>
+
+</html>

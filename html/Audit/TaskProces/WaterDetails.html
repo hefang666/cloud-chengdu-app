@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>用水稽核任务详情</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css"/>
+    <link rel="stylesheet" href="../../public/css/aui.css">
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #F3F3F3;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      #header {
+        position: fixed;
+      }
+
+      .aui-title {
+        font-size: 1.18rem;
+      }
+
+      .info-title {
+        width: 100%;
+        background-color: #FFFFFF;
+      }
+
+      .info-title-cont {
+        width: 96%;
+        line-height: 57.5px;
+        margin: 0px 2%;
+      }
+
+      .title-cont-title {
+        color: #1F1F1F;
+        font-size: 18px;
+        display: inline-block;
+      }
+
+      .title-cont-time {
+        color: #C5C5C5;
+        font-size: 14px;
+        display: inline-block;
+        float: right;
+      }
+
+      #footer {
+        width: 100%;
+        height: 5rem;
+        border-top: 1px solid #CCCCCC;
+        box-sizing: border-box;
+        padding: 2%;
+      }
+
+      .footer-title {
+        width: 100%;
+        text-align: left;
+      }
+
+      .footer-title-text {
+        font-size: 18px;
+        color: #1F1F1F;
+      }
+
+      .footer-title-cont {
+        font-size: 18px;
+        color: #626262;
+      }
+
+      .task-main {
+        width: 96%;
+        height: auto;
+        background: #FFFFFF;
+        border-radius:0.75rem;
+        margin: 1rem 2% 6rem 2%;
+        padding: 1.875rem 1.625rem 1.875rem 1.625rem;
+        box-sizing: border-box;
+      }
+
+      .task-info {
+        width: 100%;
+        height: auto;
+      }
+
+      .info-item {
+        margin-bottom: 1.4rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .task-title {
+        font-size: 18px;
+        font-weight: 400;
+        color: #1F1F1F;
+        width: 30%;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .task-cont {
+        font-size: 18px;
+        font-weight: 400;
+        color: #626262;
+        width: 68%;
+        display: inline-block;
+      }
+      .w2{
+        letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+        margin-right:-2em; /*同上*/
+      }
+
+      .img-list {
+        width: 100%;
+        height: auto;
+      }
+
+      .img-item {
+        width: 30%;
+        margin-right: 2%;
+        display: inline-block;
+      }
+
+      .progress-text {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .submit-text {
+        display: inline-block;
+        float: left;
+        text-align: left;
+      }
+
+      .examine-text {
+        text-align: left;
+      }
+
+      .end-text {
+        display: inline-block;
+        float: right;
+        text-align: left;
+      }
+
+      .footer-time {
+        font-size: 10px;
+        color: #ACACAC;
+      }
+
+      .active-time {
+        color: #00C45D;
+      }
+
+      .aui-progress-bar{
+        width: 50%; background-image: linear-gradient(to right, #6DE5A5 , #00D665);border-radius: 7px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务处理</div>
+    </header>
+    <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务详情</div>
+    </header>
+    <div class="info-title">
+      <div class="info-title-cont">
+        <span class="title-cont-title"></span>
+        <span class="title-cont-time"></span>
+      </div>
+    </div>
+
+    <div class="task-main">
+        <div class="task-info">
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户号</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountnumber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户名</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountname"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>用户地址</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="address"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>水表位置</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="wmlocation"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>用水性质</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="nature"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">口径</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="caliber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>稽核止度</span>
+              </div>
+              <div class="task-cont">
+                <span id="jhendscale"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>稽核状态</span>
+              </div>
+              <div class="task-cont">
+                <span id="jhstatus"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">备注</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="remark"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: 100%;">
+                <span>处理照片</span>
+              </div>
+              <div class="task-cont" style="margin_top: 10px; width: 100%;">
+                <div class="img-list">
+                  <!-- <img src="./image/demo_img.png" class="img-item" />
+                  <img src="./image/demo_img.png" class="img-item" />
+                  <img src="./image/demo_img.png" class="img-item" /> -->
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="aui-bar aui-bar-tab" id="footer">
+        <div class="footer-title">
+          <span class="footer-title-text">任务进度：</span>
+          <span class="footer-title-cont">审核中</span>
+        </div>
+        <div class="aui-progress aui-progress-xs" style="margin-top: 10px;margin-bottom:5px;">
+          <div class="aui-progress-bar"></div>
+        </div>
+        <div class="progress-text">
+          <span class="submit-text">
+            <span>提交</span>
+            <div class="footer-time submit-time"></div>
+          </span>
+          <span class="examine-text">
+            <span>审核中</span>
+            <div class="footer-time examine-time"></div>
+          </span>
+          <span class="end-text">
+            <span>已结束</span>
+            <div class="footer-time end-time"></div>
+          </span>
+        </div>
+    </footer>
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/zepto.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/remote.js"></script>
+  <script type="text/javascript">
+    var infoData = {};
+    var Longitude = "";
+    var Latitude = "";
+    apiready = function(){
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        var hideheader = $api.byId('hideheader');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(hideheader);
+
+        fnReady();
+        fnReadyOpenWin();
+
+        bMap = api.require("bMap");
+        bMap.getLocation({
+            accuracy: '10m',
+            autoStop: true,
+        }, function(ret, err) {
+            if (ret.status) {
+                Longitude = ret.lon;
+                Latitude = ret.lat;
+            } else {
+                // alert(err.code);
+            }
+        });
+
+        infoData = api.pageParam.data;
+        console.log(JSON.stringify(infoData));
+        alert(JSON.stringify(infoData.Files));
+        $(".title-cont-title").html(infoData.Name);
+        $(".title-cont-time").html(infoData.HandleTime.substring(0,10));
+        $("#accountnumber").html(infoData.CustomerCode);
+        $("#accountname").html(infoData.CustomerName);
+        $("#address").html(infoData.Address);
+        $("#wmlocation").html(infoData.Location);
+        $("#nature").html(infoData.Nature);
+        $("#caliber").html(infoData.Caliber);
+        $("#jhendscale").html(infoData.AuditReadScale);
+        $("#jhstatus").html(infoData.AuditStatus = '0' ? '异常' : '正常');
+
+
+        $(".submit-time").html(infoData.HandleTime.substring(0,10));
+
+
+        if (infoData.Status == '2') {
+          $(".aui-progress-bar").attr('width', '50%');
+          $(".examine-text").addClass('active-time');
+          $(".examine-time").addClass('active-time');
+        } else {
+          console.log(infoData.Handles[(infoData.Handles.length - 1)].Remark);
+          $(".aui-progress-bar").css('width', '100%');
+          $(".end-text").addClass('active-time');
+          $(".end-time").addClass('active-time');
+        }
+
+        if (infoData.TaskType == '1') {
+          $(".examine-time").html(infoData.AuditTime.substring(0,10));
+          $(".end-time").html(infoData.AuditTime.substring(0,10));
+          $("#remark").html(infoData.Remark);
+          if (infoData.FileUrl.length > 0) {
+            var imgList = infoData.FileUrl.split("|");
+            for (var i = 0; i < imgList.length; i++) {
+                var imgItem =
+                "<div class='img-item'>"+
+                  "<img class='imgfile' src='"+ imgList[i] +"'>" +
+                "</div>";
+                 $(".img-list").append(imgItem);
+            }
+          }
+        } else {
+
+          $(".footer-title-cont").html(infoData.StatusName);
+          if (infoData.Status == '2') {
+            $(".examine-time").html(infoData.Handles[(infoData.Handles.length - 2)].OperatedTime.substring(0,10));
+          } else {
+            $(".examine-time").html(infoData.Handles[(infoData.Handles.length - 2)].OperatedTime.substring(0,10));
+            $(".end-time").html(infoData.Handles[(infoData.Handles.length - 1)].OperatedTime.substring(0,10));
+          }
+          $("#remark").html(infoData.Handles[(infoData.Handles.length - 1)].Remark);
+          for (let i = 0; i < infoData.Files.length; i++) {
+            var imgItem =
+            "<div class='img-item'>"+
+              "<img class='imgfile' src='"+ infoData.Files[i].FileUrl +"'>" +
+            "</div>";
+             $(".img-list").append(imgItem);
+          }
+        }
+    };
+
+    var actionList = {
+        'back': function() {
+          api.sendEvent({
+              name: 'goMyTask',
+              extra: {
+                  type: '1'
+              }
+          });
+          api.closeToWin({
+              name: 'MyTask'
+          });
+        },
+        'scanner': function() {
+            var FNScanner = api.require('FNScanner');
+            FNScanner.open({
+                autorotation: true
+            }, function(ret, err) {
+              console.log(JSON.stringify(ret));
+            });
+
+        },
+    }
+
+  </script>
+</html>

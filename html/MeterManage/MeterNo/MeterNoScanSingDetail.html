@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>表号维护单个任务详情页面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .body-content {
+            width: 17.23rem;
+            height: 63vh;
+            background: #fff;
+            border-radius: 1rem;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0.85rem auto;
+            padding: 1.65rem 0 0 1.27rem;
+            padding-bottom: 2rem;
+        }
+
+        .c-aui-row-title {
+            width: 100%;
+            height: 2.88rem;
+            line-height: 2.88rem;
+            background: #fff;
+        }
+
+        .c-aui-row-title .aui-col-xs-6:first-child {
+            font-size: 0.9rem;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            color: #1F1F1F;
+            padding-left: 1.73rem;
+        }
+
+        .c-aui-row-title .aui-col-xs-6:last-child {
+            font-size: 0.7rem;
+            font-family: Arial;
+            font-weight: 400;
+            color: #C5C5C5;
+            text-align: right;
+            padding-right: 0.8rem;
+        }
+
+        .footer {
+            width: 100%;
+            height: 6.25rem;
+            position: fixed;
+            bottom: 0;
+            background: #fff;
+        }
+
+        .footer .c-aui-row-status {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+            margin: 1.08rem 0 0.85rem 1.05rem;
+        }
+
+        .footer .c-aui-row-status span {
+            color: #494949;
+        }
+
+        .footer .aui-progress {
+            width: 90vw;
+            margin: 0 auto;
+            height: 0.35rem;
+            border-radius: 2rem;
+            margin-bottom: 0.57rem;
+        }
+
+        .footer .aui-progress-bar {
+            background: linear-gradient(90deg, rgba(109, 229, 165, 1), rgba(0, 214, 101, 1));
+            border-radius: 2rem;
+        }
+
+        .footer .c-progress-name .aui-col-xs-4 .aui-col-xs-12:first-child {
+            font-size: 0.7rem;
+            color: #6C6C6C;
+        }
+
+        .footer .c-progress-name .aui-col-xs-4 .aui-col-xs-12:last-child {
+            font-size: 0.5rem;
+            color: #ACACAC;
+        }
+
+        .footer .c-progress-active {
+            color: #00C45D!important;
+        }
+
+        .imgDiv {
+            position: relative;
+        }
+
+        .meterImg {
+            width: 3.73rem;
+            height: 2.9rem;
+            margin-bottom: 0.75rem;
+            margin-right: 1rem;
+            float: left;
+        }
+
+        .van-cell.formField,
+        .searchInput,
+        .van-form .van-cell.formField,
+        .textAreaLabel,
+        .locationRow {
+            padding: 0;
+            background-color: transparent;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__label span {
+            width: 3.9rem;
+            font-size: 0.9rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+            height: 2rem;
+            line-height: 2rem;
+        }
+
+        .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .van-field__label {
+            height: 0;
+        }
+
+        .van-cell.formField {
+            border: none;
+            background-size: 100% 1px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-image: linear-gradient(0, #eee, #eee 50%, transparent 50%);
+            background-image: -webkit-linear-gradient(90deg, #eee, #eee 50%, transparent 50%);
+            height: 2rem;
+            width: 95%;
+        }
+
+        .body-content .no-background-image{
+          border: none;
+          background-image:none!important;
+        }
+
+        .van-cell.formField input[type="text"] {
+            height: 2rem;
+        }
+
+        .c-aui-row .aui-col-xs-12 {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak v-swipeleft="openUserDetail">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">任务详情</div>
+        </header>
+        <div class="aui-row c-aui-row-title">
+            <div class="aui-col-xs-6">水表维护</div>
+            <div class="aui-col-xs-6">{{taskInfo.UseTime!=""?moment(taskInfo.UseTime).format("YYYY-MM-DD"):""}}</div>
+        </div>
+        <div class="body-content">
+            <van-field class="formField" :border="false" label="户号:" :value="taskInfo.CustomerCode" readonly></van-field>
+            <van-field class="formField" :border="false" label="用户名称:" :value="taskInfo.CustomerName" readonly></van-field>
+            <van-field class="formField" :border="false" label="用户地址:" :value="taskInfo.Address" readonly></van-field>
+            <van-field class="formField" :border="false" label="用水性质:" :value="taskInfo.Nature" readonly></van-field>
+            <van-field class="formField" :border="false" label="口径:" :value="taskInfo.Caliber" readonly></van-field>
+            <van-field class="formField" :border="false" label="水表类型:" :value="taskInfo.MeterType" readonly></van-field>
+            <van-field class="formField" :border="false" label="水表位置:" :value="taskInfo.Location" readonly></van-field>
+            <van-field class="formField no-background-image" :border="false" label="表位图片:" value="" readonly></van-field>
+
+            <div class="imgDiv" v-if='files.length > 0' v-for="(image,index) in files" :key="index">
+                <van-image class="meterImg" :src="image" @click.stop="pBrowserPicture(index,files)">
+                    <template v-slot:loading>
+                    <van-loading type="spinner" size="20"></van-loading>
+                  </template>
+                </van-image>
+            </div>
+            <div class="aui-row c-aui-row" v-show='files.length == 0'>
+                <div class="aui-col-xs-12">暂无图片!</div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <div class="aui-row c-aui-row-status">任务状态: <span>{{taskInfo.StatusName}}</span></div>
+            <div class="aui-progress aui-progress-sm">
+                <div class="aui-progress-bar" :style="{width:propgressValue}"></div>
+            </div>
+            <div class="aui-row c-progress-name">
+                <div class="aui-col-xs-4 aui-text-center">
+                    <div class="aui-col-xs-12">已发起</div>
+                    <div class="aui-col-xs-12">{{moment(taskInfo.OperatedTime).format("YYYY-MM-DD")}}</div>
+                </div>
+                <div class="aui-col-xs-4 aui-text-center">
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '7'}">处理中</div>
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '7'}">{{moment(taskInfo.UseTime).format("YYYY-MM-DD")}}</div>
+                </div>
+                <div class="aui-col-xs-4 aui-text-center" v-show="taskInfo.Status == '3'">
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '3'}">已终止</div>
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '3'}">{{ taskInfo.HandleTime!=''?moment(taskInfo.HandleTime).format("YYYY-MM-DD"):''}}</div>
+                </div>
+                <div class="aui-col-xs-4 aui-text-center" v-show="taskInfo.Status == '6'">
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '6'}">已撤销</div>
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '6'}">{{ taskInfo.HandleTime!=''?moment(taskInfo.HandleTime).format("YYYY-MM-DD"):''}}</div>
+                </div>
+                <div class="aui-col-xs-4 aui-text-center" v-show="taskInfo.Status == '4'">
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '4'}">已结束</div>
+                    <div class="aui-col-xs-12" :class="{'c-progress-active':taskInfo.Status == '4'}">{{ taskInfo.Status == '4' && taskInfo.HandleTime!=''?moment(taskInfo.HandleTime).format("YYYY-MM-DD"):''}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+    };
+
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.MeterNoVue = new Vue({
+            el: '#wrap',
+            data: {
+                propgressValue: '34%',
+                taskInfoMations: [],
+                files: []
+            },
+            computed: {
+                taskInfo: function() {
+                    if (this.taskInfoMations.length == 0) {
+                        return {};
+                    } else {
+                        if (this.taskInfoMations[0].Status == "4" || this.taskInfoMations[0].Status == "3" || this.taskInfoMations[0].Status == "6") {
+                            this.propgressValue = '100%';
+                        } else {
+                            this.propgressValue = "34%";
+                        }
+                        return this.taskInfoMations[0];
+                    }
+                },
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                getTaskDetail() { //获取任务详情
+                    // console.log(JSON.stringify(api.pageParam));
+                    // this.taskInfo = api.pageParam;
+                    var _this = this;
+                    var Parameter = {
+                        Id: api.pageParam.Id, //api.pageParam.data.taskCode
+                    };
+                    fnPost('MMS002', Parameter, "application/json", true, false, (ret, err) => {
+                        if (ret) {
+                            if (ret.Status == 0) {
+                                api.hideProgress();
+                                var data = JSON.parse(ret.Data);
+                                _this.taskInfoMations = data;
+                                var Files = data[0].Files;
+                                Files.forEach(item => {
+                                    var url = 'http://' + $api.getStorage('apiUrl') + item.Path;
+                                    _this.files.push(url);
+                                });
+                                var handles = data[0].Handles;
+                                if (data[0].Status == '3' || data[0].Status == '6')
+                                    _this.showTaskReason(handles);
+
+                            } else {
+                                api.hideProgress();
+                            }
+                        }
+                    });
+                },
+                showTaskReason(handles) {
+                    var fristHandleds = handles[0];
+                    if (fristHandleds.Remark != "") {
+                        if (fristHandleds.StatusId == "3") {
+                            var title = '终止原因';
+                        } else if (fristHandleds.StatusId == "6") {
+                            var title = '撤销原因';
+                        }
+                        vant.Dialog.alert({
+                            title: title,
+                            message: fristHandleds.Remark,
+                            closeOnPopstate: true
+                        }).then(() => {
+                            // on close
+                        });
+                    }
+                },
+                openUserDetail() {
+                    api.openWin({
+                        name: 'CustomerDetails',
+                        url: '../CustomerSearch/CustomerDetails.html',
+                        pageParam: {
+                            CustomerCode: this.taskInfo.CustomerCode
+                        }
+                    });
+
+                }
+
+            },
+            mounted: function() {
+                this.getTaskDetail();
+            }
+        });
+    }
+</script>
+
+</html>

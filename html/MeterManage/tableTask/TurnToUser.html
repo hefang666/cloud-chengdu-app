@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>转办界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css"/>
+    <link rel="stylesheet" href="../../public/css/aui.css">
+
+    <style>
+        html,
+        body {
+          width: 100%;
+          height: 100%;
+          background-color: #F3F3F3;
+        }
+
+        #header {
+          position: fixed;
+        }
+
+        .aui-title {
+          font-size: 0.95rem;
+          color: #151515;
+        }
+
+        .aui-bar-nav.aui-bar-light .aui-iconfont {
+            color: #000000;
+        }
+
+        #footer {
+          width: 100%;
+          height: 6.08rem;
+          background-color: #fff;
+          border-top: 1px solid #CCCCCC;
+        }
+
+        .footer-btn {
+          border-radius: 1rem;
+          width: 5.5rem;
+          height: 1.86rem;
+          line-height: 1.86rem;
+          font-size: 0.90rem;
+          color: #fff;
+        }
+
+        .title-border{
+          width:100%;
+          height:0.03rem;
+          background:rgba(215,215,215,1);
+          border:0px solid rgba(196,196,196,1);
+        }
+
+        .searchDiv{
+          width: 100%;
+          height: 3rem;
+          background-color: #FFFFFF;
+          box-sizing: border-box;
+          padding: 0.63rem 0.77rem;
+        }
+
+        .search-input-div{
+          width: 80%;
+          height: 100%;
+          background-color: #F3F3F3;
+          border-radius:1rem;
+          display: inline-block;
+        }
+
+        .search-icon {
+          width: 1.85rem;
+          height: 100%;
+          display: inline-block;
+          position: relative;
+        }
+
+        .search-icon img {
+          width: 0.73rem;
+          height: 0.75rem;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -0.36rem;
+          margin-left: -0.37rem;
+        }
+
+        #searchdata {
+          width: calc(100% - 3rem);
+          height: 100%;
+          display: inline-block;
+          vertical-align: top;
+        }
+
+        .search-ok {
+          width: auto;
+          height: 100%;
+          display: inline-block;
+          margin-left: 0.55rem;
+          font-size: 0.8rem;
+          color: #206FFF;
+          vertical-align: top;
+          line-height: 1.74rem;
+        }
+
+        .margin-div {
+          width: 100%;
+          height: 0.53rem;
+        }
+
+        .user-list {
+          width: 100%;
+          /*height: 100%;*/
+          background-color: #FFFFFF;
+          box-sizing: border-box;
+          padding: 0rem 0.77rem 6.61rem 0.77rem;
+          overflow-y: auto;
+        }
+
+        .list-main {
+          width: 94%;
+          height: 100%;
+          display: inline-block;
+        }
+
+        .list-Indexes {
+          width: 6%;
+          height: 100px;
+          position: fixed;
+          top: 2.28rem;
+          right: 0rem;
+        }
+
+        .list-Indexes p{
+          font-size: 0.5rem;
+          text-align: center;
+        }
+
+        .list-Indexes p a{
+          color: #838383;
+        }
+
+        .user-item {
+          width: 100%;
+          height: auto;
+        }
+
+        .item-title{
+          width: 100%;
+          height: 2.42rem;
+          box-sizing: border-box;
+          border-bottom: 0.1rem solid #E0E0E0;
+          color: #206FFF;
+          font-size: 0.95rem;
+          line-height: 2.42rem;
+        }
+
+        .item-cont {
+          width: 100%;
+          height: 2.15rem;
+          box-sizing: border-box;
+          border-bottom: 0.03rem solid #E0E0E0;
+          padding-left: 0.78rem;
+          line-height: 2.15rem;
+          color: #545454;
+          font-size: 0.8rem;
+        }
+
+        .active {
+          background-color: #E3E3E3;
+        }
+
+        #dialogInput {
+          height: 6.05rem;
+          box-sizing: border-box;
+          padding: 0.45rem 0.48rem;
+          font-size: 0.8rem;
+          border: 1px solid #CCCCCC;
+        }
+    </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">转办</div>
+    </header>
+    <header class="aui-bar aui-bar-nav aui-bar-light " id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">转办</div>
+    </header>
+    <div class="title-border"></div>
+    <div class="searchDiv">
+        <div class="search-input-div">
+          <div class="search-icon">
+            <img src="../image/MeterManage/sousuo.png"/>
+          </div>
+          <input id="searchdata" type="text" placeholder="获取更多内容">
+        </div>
+        <div class="search-ok" onclick="search()">
+          确定
+        </div>
+    </div>
+    <div class="margin-div">
+
+    </div>
+    <div class="user-list">
+        <div class="list-main">
+        </div>
+        <div class="list-Indexes">
+        </div>
+    </div>
+    <footer class="aui-bar aui-bar-tab" id="footer">
+        <div class="aui-bar-tab-item" tapmode>
+            <div class="aui-btn aui-btn-primary footer-btn" tapmode data-action='back'>返回</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode>
+            <div class="aui-btn aui-btn-danger footer-btn" tapmode data-action='touserok'>转办</div>
+        </div>
+    </footer>
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/zepto.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/remote.js"></script>
+  <script type="text/javascript" src="./js/jquery-1.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/ChinesePY.js"></script>
+  <script type="text/javascript" src="../../public/script/template.js"></script>
+  <script type="text/javascript" src="./js/auidialog.js"></script>
+  <script type="text/javascript" src="../script/remote.js"></script>
+  <script type="text/template" id="userTpl">
+    {{each items value i}}
+      {{if value.data.length > 0}}
+      <div class="user-item">
+        <div class="item-title">
+          <a href="#index{{value.letter}}" name="title{{value.letter}}" id="title{{value.letter}}">{{value.letter}}</a>
+        </div>
+        {{each value.data values j}}
+        <div class="item-cont" data-userId="{{values.Id}}" tapmode data-action="checkUser">
+          {{values.Name}}
+        </div>
+        {{/each}}
+      </div>
+      {{/if}}
+    {{/each}}
+  </script>
+  <script type="text/javascript">
+      var userId = "";
+      var TaskData = "";
+      var taskType = "";
+      var Longitude = "";
+      var Latitude = "";
+      var ListDemo = [];
+      apiready = function(){
+        TaskData = api.pageParam.data;
+        taskType = api.pageParam.type;
+        console.log(JSON.stringify(TaskData));
+        db = api.require("db");
+
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        var hideheader = $api.byId('hideheader');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(hideheader);
+
+        WinSize();
+        getIndexesData();
+        getData();
+
+        //设置列表高度
+        var titBorH = $api.offset($api.dom(".title-border")).h;
+        var searchH = $api.offset($api.dom(".searchDiv")).h;
+        var mardivH = $api.offset($api.dom(".margin-div")).h;
+        var footerH = $api.offset($api.byId("footer")).h;
+        var userlistH = api.winHeight - headerH - titBorH - searchH - mardivH - footerH;
+        $(".user-list").height(userlistH);
+
+        $(".list-Indexes").css("top", (headerH + titBorH + searchH + mardivH + parseFloat($(".list-Indexes").css("top").replace('px','')) + "px"));
+
+        fnReady();
+        fnReadyOpenWin();
+
+        bMap = api.require("bMap");
+        bMap.getLocation({
+            accuracy: '10m',
+            autoStop: true,
+        }, function(ret, err) {
+            if (ret.status) {
+                Longitude = ret.lon;
+                Latitude = ret.lat;
+            } else {
+                // alert(err.code);
+            }
+        });
+
+      }
+
+      function WinSize() {
+        var winHeight = $(window).height(); //获取当前页面高度
+        $(window).resize(function(){
+              //当窗体大小变化时
+              var thisHeight = $(this).height();  //窗体变化后的高度
+              if (winHeight - thisHeight > 50) {
+                  $('body').css('height', winHeight + 'px');
+                  $("#footer").css("bottom","-100px")//修改底部按钮条的位置
+              } else {
+                  $('body').css('height', '100%');
+                  $("#footer").css("bottom","0px")//还原底部按钮条位置
+              }
+        });
+      }
+
+      var actionList = {
+          'back': function() {
+              api.closeWin();
+          },
+          'scanner': function() {
+              var FNScanner = api.require('FNScanner');
+              FNScanner.open({
+                  autorotation: true
+              }, function(ret, err) {
+                console.log(JSON.stringify(ret));
+              });
+          },
+          'checkUser': function() {
+            console.log($(this).attr("data-userId"));
+            userId = $(this).attr("data-userId");
+            $(".item-cont").removeClass('active');
+            $(this).addClass('active');
+          },
+          'touserok': function () {
+              if (userId == "") {
+                api.toast({
+                    msg: "请选择转办人员",
+                    duration: 2000,
+                    location: 'top'
+                });
+                return;
+              }
+              var dialog = new auiDialog();
+              dialog.prompt({
+                title:"转办",
+                text:'请填写转办原因',
+                input:true,
+                buttons:['取消','确定']
+              }, function(ret){
+                if(ret.buttonIndex == 2) {
+                  api.showProgress({
+                      title: '加载中',
+                      text:'',
+                      modal: false
+                  });
+
+
+                  if(TaskData.ServiceTypeId == 41 || TaskData.ServiceTypeId == 42 || TaskData.ServiceTypeId == 2){//停复水
+                    var obj = {
+                      'Id':TaskData.Id,//流程id
+                      'UserId':userId,
+                      'Remark':ret.text
+                    };
+                    console.log(JSON.stringify(obj));
+                    fnPost('MMS005', obj, 'application/json', false, false, (ret, err)=>{
+                        api.hideProgress();
+                        console.log(JSON.stringify(ret));
+                        if (ret) {
+                          if (ret.Status == 0) {
+                            db.executeSql({
+                                name: 'Wsdatabase',
+                                sql: "DELETE FROM AUDIT_TASK_LIST WHERE Id='"+ TaskData.Id +"'"
+                            }, (ret, err) => {
+                                api.hideProgress();
+                                if (ret.status) {
+                                    console.log(JSON.stringify(ret));
+                                } else {
+                                    console.log(JSON.stringify(err));
+                                }
+                            });
+                            //删除云平台本地数据
+                            db.executeSql({
+                                name: 'Wsdatabase',
+                                sql: "DELETE FROM myTaskSheet WHERE taskCode='" + TaskData.taskCode + "'"
+                            }, function(ret, err) {
+                                if (ret.status) {
+                                    console.log(JSON.stringify(ret));
+                                } else {
+                                    console.log(JSON.stringify(err));
+                                }
+                            });
+
+                            api.toast({
+                                msg: '转办成功',
+                                duration: 2000,
+                                location: 'top'
+                            });
+                            setTimeout(function(){
+                              if (taskType == 'handle') { //任务处理 返回事件
+                                api.sendEvent({
+                                    name: 'refreshCloudMyTask',
+                                    extra: {
+                                        type: '1'
+                                    }
+                                });
+                                api.closeToWin({
+                                    name: 'MyTask'
+                                });
+                              } else if (taskType == 'claimTask') { //任务领用 返回事件
+                                api.sendEvent({
+                                    name: 'refreshCloudClaim',
+                                    extra: {
+                                        type: '1'
+                                    }
+                                });
+                                api.closeToWin({
+                                    name: 'ClaimTask'
+                                });
+                              }
+                            }, 1000);
+                          } else {
+                            api.toast({
+                                msg: ret.Message,
+                                duration: 2000,
+                                location: 'top'
+                            });
+                          }
+                        }
+                    })
+                  }else{
+                    //校表、换表、移改提、三来工单
+                    var obj = {
+                      'InstanceId':TaskData.WorkflowId,//流程id
+                      'StepId':TaskData.StepId,//指向id
+                      'EmployeeID': userId,//节点id
+                      'IsReassign':1, //0：不转办也不延期，1：转办，2：延期
+                      'Content':ret.text,//转办原因
+                    };
+
+                    console.log(JSON.stringify(obj));
+                    bwfnPost('MMS110', obj, 'application/json', true, false, (ret, err) => {
+                      api.hideProgress();
+                      console.log(JSON.stringify(ret)+','+JSON.stringify(err));
+                      if (ret) {
+                        if(ret.Status == 0){
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "DELETE FROM Review_TASK_BASIC_LIST WHERE ReqCode='"+ TaskData.taskCode +"'"
+                          }, (ret, err) => {
+                              api.hideProgress();
+                              if (ret.status) {
+                                  console.log(JSON.stringify(ret));
+                              } else {
+                                  console.log(JSON.stringify(err));
+                              }
+                          });
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "DELETE FROM Review_TASK_HANDLED_LIST WHERE ReqCode='"+ TaskData.taskCode +"'"
+                          }, (ret, err) => {
+                              api.hideProgress();
+                              if (ret.status) {
+                                  console.log(JSON.stringify(ret));
+                              } else {
+                                  console.log(JSON.stringify(err));
+                              }
+                          });
+                          //删除云平台本地数据
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "DELETE FROM myTaskSheet WHERE taskCode='" + TaskData.taskCode + "'"
+                          }, function(ret, err) {
+                              if (ret.status) {
+                                  console.log(JSON.stringify(ret));
+                              } else {
+                                  console.log(JSON.stringify(err));
+                              }
+                          });
+                          api.toast({
+                              msg: '转办成功',
+                              duration: 2000,
+                              location: 'top'
+                          });
+                          setTimeout(function(){
+                            if (taskType == 'handle') { //任务处理 返回事件
+                              api.sendEvent({
+                                  name: 'refreshCloudMyTask',
+                                  extra: {
+                                      type: '1'
+                                  }
+                              });
+                              api.closeToWin({
+                                  name: 'MyTask'
+                              });
+                            } else if (taskType == 'claimTask') { //任务领用 返回事件
+                              api.sendEvent({
+                                  name: 'refreshCloudClaim',
+                                  extra: {
+                                      type: '1'
+                                  }
+                              });
+                              api.closeToWin({
+                                  name: 'ClaimTask'
+                              });
+                            }
+                          }, 1000);
+                        } else {
+                          api.toast({
+                              msg: JSON.parse(ret.Data).Message,
+                              duration: 2000,
+                              location: 'top'
+                          });
+                        }
+                      }else {
+                        api.toast({
+                            msg: err.msg,
+                            duration: 2000,
+                            location: 'top'
+                        });
+                      }
+                    });
+                  }
+                }
+              });
+          }
+      };
+
+      function getIndexesData() {
+        var indexesData = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('');
+        indexesData.forEach(function (item, i) {
+            var indexesItem =
+              "<p>" +
+                "<a href='#title"+ item +"' id='index"+ item +"' name='index"+ item +"'>"+ item +"</a>" +
+              "</p>";
+            $(".list-Indexes").append(indexesItem);
+        });
+      }
+
+      function getData() {
+        console.log(JSON.stringify(TaskData));
+        //3换表 13移改提 14校表 15三来工单 16其他工单 停水通知单4 通水任务42 通水任务(先通水)41 停水办理2
+        if(TaskData.ServiceTypeId == 14 || TaskData.ServiceTypeId == 15 || TaskData.ServiceTypeId == 16 || TaskData.ServiceTypeId == 17){
+
+          api.ajax({
+              url: $api.getStorage("bwapipath") + '/webapi/request/GetMMS',
+              method: 'post',
+              dataType: 'json',
+              // headers:{"Content-Type":"application/json"},
+              data: {
+                values: {
+                    "Method": "MMS116",
+                    "UserName": $api.getStorage("bwUserName"),
+                    "Password": $api.getStorage("bwPassWord"),
+                    "SerialNo": dataTime(),
+                    "Parameter": "{'ServiceTypeId':'"+ TaskData.ServiceTypeId +"','ReqCode':'"+ TaskData.taskCode +"'}"
+                }
+              }
+          },function(ret, err){
+              console.log(JSON.stringify(ret));
+              console.log(JSON.stringify(err));
+              if (ret) {
+                  if (ret.Status == 0) {
+                    ListDemo = JSON.parse(ret.Data);
+                    UserList(ListDemo);
+                  }
+                  console.log( JSON.stringify( ret ) );
+              } else {
+                  console.log( JSON.stringify( err ) );
+              }
+          });
+        } else if (TaskData.ServiceTypeId == 3 || TaskData.ServiceTypeId == 13){
+          api.ajax({
+              url: $api.getStorage("bwapipath") + '/webapi/request/GetMMS',
+              method: 'post',
+              dataType: 'json',
+              // headers:{"Content-Type":"application/json","Authorization":$api.getStorage("bwHeaders")},
+              data: {
+                values: {
+                    "Method": "MMS116",
+                    "UserName": $api.getStorage("bwUserName"),
+                    "Password": $api.getStorage("bwPassWord"),
+                    "SerialNo": dataTime(),
+                    "Parameter": "{'ServiceTypeId':'"+ TaskData.ServiceTypeId +"','ReqCode':'"+ TaskData.taskCode +"'}"
+                }
+              }
+          },function(ret, err){
+            console.log(JSON.stringify(ret));
+            console.log(JSON.stringify(err));
+              if (ret) {
+                  if (ret.Status == 0) {
+                    ListDemo = JSON.parse(ret.Data);
+                    UserList(ListDemo);
+                  }
+                  console.log( JSON.stringify( ret ) );
+              } else {
+                  console.log( JSON.stringify( err ) );
+              }
+          });
+        } else if(TaskData.ServiceTypeId == 41 || TaskData.ServiceTypeId == 42 || TaskData.ServiceTypeId == 2){//停复水转办人员获取
+          api.ajax({
+              url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+              method: 'post',
+              dataType: 'json',
+              // headers:{"Content-Type":"application/json","Authorization":$api.getStorage("bwHeaders")},
+              data: {
+                values: {
+                    "Method": "OSM001",
+                    "UserName": $api.getStorage("bwUserName"),
+                    "Password": $api.getStorage("bwPassWord"),
+                    "SerialNo": dataTime(),
+                    "Parameter": "{'Type':'"+ TaskData.ServiceTypeId +"'}"
+                }
+              }
+          },function(ret, err){
+              if (ret) {
+                  if (ret.Status == 0) {
+                    UserList(JSON.parse(ret.Data));
+                  }
+                  console.log( JSON.stringify( ret ) );
+              } else {
+                  console.log( JSON.stringify( err ) );
+              }
+          });
+        }
+      }
+
+      function UserList(arrList) {
+        $('.list-main').html('');
+        var returnData =  pySegSort(arrList);
+        var listData = {items: returnData};
+
+        var str = template('userTpl', listData);
+        $('.list-main').append(str);
+        api.parseTapmode();
+        operationDom();
+      }
+
+      function search() {
+        var searchData = $("#searchdata").val();
+        var searchList = [];
+        if (searchData != "") {
+          for (var i = 0; i < ListDemo.length; i++) {
+            if(ListDemo[i].Name.indexOf(searchData) != -1) {
+              searchList.push(ListDemo[i]);
+            }
+          }
+          UserList(searchList);
+        } else {
+          UserList(ListDemo);
+        }
+      }
+
+
+      //根据拼音首字母返回分组
+      function pySegSort(arr) {
+        pyArr = arr.map(o => {
+          return  Pinyin.getWordsCode(o.Name.substring(0,1));
+        });
+        // arr = arr.map(o=>{return{Id:o.Id, title:o.Name, Position: o.Position, PositionCode: o.PositionCode}});
+
+        var letters = "ABCDEFGHJKLMNOPQRSTWXYZ".split('');
+        var segs = [];
+        var data = [];
+        var curr = {};
+
+        letters.forEach(function(item,i){
+          // curr = {letter: item, data:[]};
+          data = [];
+          pyArr.forEach(function(item2, j){
+            if (item == item2) {
+              data.push(arr[j]);
+            }
+          });
+          segs.push({'letter': item, 'data': data});
+        });
+        return segs;
+      }
+  </script>
+</html>

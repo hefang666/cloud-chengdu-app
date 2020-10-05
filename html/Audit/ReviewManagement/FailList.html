@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>办理照片上传详情</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F4F4F4;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .upload-main {
+          width: 100%;
+          height: auto;
+        }
+
+        .upload-item {
+          min-height: 100px;
+          margin: 20px;
+          border-radius: 20px;
+          background-color: #FFF;
+          padding: 10px;
+        }
+
+        .check-item {
+          background-color: #F4F4F4;
+          width: 100%;
+          height: auto;
+          min-height: 50px;
+          box-sizing: border-box;
+          padding: 10px;
+          border-radius: 10px;
+          margin-bottom: 10px;
+        }
+
+        .item-item {
+          width: 100%;
+          line-height: 30px;
+          color: #000000;
+          x overflow: scroll;
+          font-size: 18px;
+        }
+
+        .no-data{
+          width:100%;
+          height:100px;
+          text-align:center;
+          line-height: 100px;
+        }
+
+        .item-title {
+          width: 100%;
+          height: 30px;
+          color: #2F7CF5;
+        }
+
+        .title-text {
+          font-size: 18px;
+          margin-left: 10px;
+          display: inline-block;
+          line-height: 30px;
+        }
+
+        .checkAll{
+          display: inline-block;
+          float: right;
+          height: 30px;
+          margin-top: 5px;
+          margin-right: 15px;
+        }
+
+        .title-bottom{
+          height: 2px;
+          background-color: #DEDEDE;
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+
+        .item-check {
+          display: inline-block;
+          float: right;
+          height: 30px;
+          margin-top: 5px;
+          margin-right: 5px;
+        }
+
+        .footer-btn {
+          border-radius: 1rem;
+          width: auto;
+          height: 1.86rem;
+          line-height: 1.86rem;
+          font-size: 0.8rem;
+          background-color: #377EFF;
+          color: #fff;
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+          letter-spacing:1px;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+      <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" tapmode @click='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">失败列表</div>
+      </header>
+
+      <div class="upload-main">
+        <div class="upload-item">
+          <div class="item-title">
+            <div class="title-text">
+              稽核工单数据及照片
+            </div>
+            <div class='checkAll'>
+              <van-checkbox v-model="photoUpload" @click='changeCheck'  icon-size="18px" shape="square"></van-checkbox>
+            </div>
+          </div>
+          <div class="title-bottom"></div>
+          <div class="check-item" v-for='(item,index) in FailList'>
+            <div class="item-item">
+              办理日期：{{item.SaveTime}}
+              <div class="item-check">
+                <van-checkbox @change='itemCheck' v-model="item.isCheck" icon-size="18px" shape="square"></van-checkbox>
+              </div>
+            </div>
+            <div class="item-item">
+              用户编号：{{item.CustomerCode}}
+            </div>
+            <div class="item-item">
+               失败原因：<span style="color: red;">{{item.FailRemark}}</span>
+            </div>
+          </div>
+          <div class="no-data" v-if='FailList.length == 0'>
+            暂无数据
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="aui-bar aui-bar-tab" id="footer">
+          <div class="aui-bar-tab-item" tapmode>
+              <div class="aui-btn footer-btn" @click="emptyList">清空失败列表</div>
+          </div>
+      </footer>
+    </div>
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/remote.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+  <script type="text/javascript">
+    var db;
+    apiready = function() {
+      var header = $api.byId('header');
+      $api.fixStatusBar(header);
+
+      db = api.require('db');
+
+      api.addEventListener({
+          name: 'keyback'
+      }, function(ret, err){
+        api.sendEvent({
+            name: 'refreshList',
+            extra: {
+                type: '1'
+            }
+        });
+        api.closeWin();
+      });
+
+
+      fnIntVue();
+      Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+
+    function fnIntVue() {
+      window.UploadVue = new Vue({
+        el: '#wrap',
+        data: {
+          FailList: [],
+          photoUpload: false,
+        },
+        methods: {
+          back() { //返回上一个页面
+              api.closeWin({});
+          },
+          getFailList() {
+            var _that = this;
+            _that.FailList = [];
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: "SELECT * FROM AUDIT_TASK_LIST WHERE isFail = '1' AND userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave = '2'"
+            }, function(ret, err){
+                if( ret.status ){
+                  for (var i = 0; i < ret.data.length; i++) {
+                    ret.data[i].isCheck = false;
+                    if (ret.data[i].Code == 43 || ret.data[i].Code == 45) {
+                      _that.FailList.push(ret.data[i]);
+                    }
+                  }
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+            });
+          },
+          changeCheck() {
+            this.photoUpload = !this.photoUpload;
+            var allArr = this.FailList;
+            if (this.photoUpload) {
+              for (var i = 0; i < allArr.length; i++) {
+                allArr[i].isCheck = true;
+              }
+            } else {
+              for (var i = 0; i < allArr.length; i++) {
+                allArr[i].isCheck = false;
+              }
+            }
+          },
+          itemCheck(checked) {
+            var _that = this;
+            var allArr = this.FailList;
+            if (checked) {
+              var isChecked = true;
+              for (var i = 0; i < allArr.length; i++) {
+                if (allArr[i].isCheck == false) {
+                  isChecked = false;
+                }
+                if(isChecked && i == (allArr.length - 1)) {
+                  _that.photoUpload = true;
+                }
+              }
+            } else {
+              _that.photoUpload = false;
+            }
+          },
+          emptyList() {
+            var _that = this;
+            var failArr = _that.FailList;
+            var failListArr = [];
+
+            for (let i = 0; i < failArr.length; i++) {
+              if (failArr[i].isCheck) {
+                failListArr.push(failArr[i].Id);
+              }
+            }
+
+            if (failListArr.length == 0) {
+              vant.Toast('请选择清空数据');
+              return;
+            }
+
+            api.showProgress({
+                title: '数据删除中',
+                text:'',
+                modal: false
+            });
+
+            console.log(JSON.stringify(failListArr));
+            for (let i = 0; i < failListArr.length; i++) {
+              var retsult = db.executeSqlSync({
+                  name: 'Wsdatabase',
+                  sql: "DELETE FROM AUDIT_TASK_LIST WHERE Id = '"+failListArr[i]+"'"
+              });
+              if (retsult.status) {
+                var result2 = db.executeSqlSync({
+                  name: 'Wsdatabase',
+                  sql: "DELETE FROM myTaskSheet WHERE thirdTaskId = "+failListArr[i]
+                });
+                console.log(JSON.stringify(result2));
+              }
+              console.log(JSON.stringify(retsult));
+              if (i == (failListArr.length - 1)) {
+                api.hideProgress();
+                _that.getFailList();
+                vant.Toast('清空失败数据完成');
+              }
+            }
+          }
+        },
+        mounted: function() {
+          this.getFailList();
+        }
+      });
+    }
+  </script>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>异常水量复核任务详情</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css"/>
+    <link rel="stylesheet" href="../../public/css/aui.css">
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #F3F3F3;
+      }
+
+      .aui-title {
+        font-size: 1.18rem;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      #header {
+        position: fixed;
+      }
+
+      .info-title {
+        width: 100%;
+        background-color: #FFFFFF;
+      }
+
+      .info-title-cont {
+        width: 96%;
+        line-height: 57.5px;
+        margin: 0px 2%;
+      }
+
+      .title-cont-title {
+        color: #1F1F1F;
+        font-size: 18px;
+        display: inline-block;
+      }
+
+      .title-cont-time {
+        color: #C5C5C5;
+        font-size: 14px;
+        display: inline-block;
+        float: right;
+      }
+
+      #footer {
+        width: 100%;
+        height: 5rem;
+        border-top: 1px solid #CCCCCC;
+        box-sizing: border-box;
+        padding: 2%;
+      }
+
+      .footer-title {
+        width: 100%;
+        text-align: left;
+      }
+
+      .footer-title-text {
+        font-size: 18px;
+        color: #1F1F1F;
+      }
+
+      .footer-title-cont {
+        font-size: 18px;
+        color: #626262;
+      }
+
+      .task-main {
+        width: 96%;
+        height: auto;
+        background: #FFFFFF;
+        border-radius:0.75rem;
+        margin: 1rem 2% 6rem 2%;
+        padding: 1.875rem 1.625rem 1.875rem 1.625rem;
+        box-sizing: border-box;
+      }
+
+      .task-info {
+        width: 100%;
+        height: auto;
+      }
+
+      .info-item {
+        margin-bottom: 0.6rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .task-title {
+        font-size: 18px;
+        font-weight: 400;
+        color: #1F1F1F;
+        width: 30%;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .task-cont {
+        font-size: 18px;
+        font-weight: 400;
+        color: #626262;
+        width: 68%;
+        display: inline-block;
+      }
+      .w2{
+        letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+        margin-right:-2em; /*同上*/
+      }
+
+      .img-list {
+        width: 100%;
+        height: auto;
+      }
+
+      .img-item {
+        width: 30%;
+        height: 2.8rem;
+        margin-right: 5%;
+        margin-top: 0.5rem;
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .img-item-last {
+        margin-right: 0;
+      }
+
+      .img-item img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .progress-text {
+        width: 100%;
+        height: auto;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .submit-text {
+        display: inline-block;
+        float: left;
+        text-align: left;
+      }
+
+      .examine-text {
+        text-align: left;
+      }
+
+      .end-text {
+        display: inline-block;
+        float: right;
+        text-align: left;
+      }
+
+      .footer-time {
+        font-size: 10px;
+        color: #ACACAC;
+      }
+
+      .active-time {
+        color: #00C45D;
+      }
+
+      .aui-progress-bar{
+          width: 50%;
+          background-image: linear-gradient(to right, #6DE5A5 , #00D665);
+          border-radius: 7px;
+      }
+
+      .fj-item{
+        display:inline-block;
+        width: 30%;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #707070;
+      }
+
+      .video-div{
+        margin-right: 5%;
+        display: none;
+      }
+
+      .audio-div{
+        display: none;
+      }
+
+      .addressIcon {
+          background: url(./image/dingwei.png) no-repeat 0 0;
+          background-size: 100% 100%;
+          width: .6rem;
+          height: .7rem;
+          display: inline-block;
+          /*vertical-align: text-bottom;*/
+      }
+
+      .textColor {
+          color: #2045FF;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务详情</div>
+    </header>
+    <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务详情</div>
+    </header>
+    <div class="info-title">
+      <div class="info-title-cont">
+        <span class="title-cont-title"></span>
+        <span class="title-cont-time"></span>
+      </div>
+    </div>
+
+    <div class="task-main">
+        <div class="task-info">
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户号</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountnumber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户名</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountname"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>用户地址</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="address"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>水表位置</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="wmlocation"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>用水性质</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="nature"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">口径</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="caliber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>复核止度</span>
+              </div>
+              <div class="task-cont">
+                <span id="reviewscale" ></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>复核水量</span>
+              </div>
+              <div class="task-cont">
+                <span id="reviewamount"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">备注</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="remark"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: 100%;">
+                <span>处理照片</span>
+              </div>
+              <div class="task-cont" style="margin_top: 10px; width: 100%;">
+                <div class="img-list">
+                </div>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: auto;">
+                <img src="./image/fujian.png" style="width: 19px; height: 18px; display: inline-block;">
+                <span style="font-size: 14px; color: #377EFF;">查看附件</span>
+              </div>
+              <div class="task-cont" style="margin_top: 10px; width: 100%;">
+                <div class="fj-item video-div" onclick="playVideo()">
+                    <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                      <img src="./image/video.png" style="width: 50%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-25%;" alt=""/>
+                    </div>
+                    视频文件
+                </div>
+                <div class="fj-item audio-div" onclick="startAudio()">
+                    <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                      <img src="./image/audio.png" style="width: 25%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-12.5%;" alt=""/>
+                    </div>
+                    音频文件
+                </div>
+              </div>
+            </div>
+            <p>
+                <i class="addressIcon"></i>
+                <span class="textColor"></span>
+            </p>
+        </div>
+    </div>
+
+    <footer class="aui-bar aui-bar-tab" id="footer">
+        <div class="footer-title">
+          <span class="footer-title-text">任务进度：</span>
+          <span class="footer-title-cont">审核中</span>
+        </div>
+        <div class="aui-progress aui-progress-xs" style="margin-top: 10px;margin-bottom:5px;">
+          <div class="aui-progress-bar"></div>
+        </div>
+        <div class="progress-text">
+          <span class="submit-text">
+            <span>提交</span>
+            <div class="footer-time submit-time"></div>
+          </span>
+          <span class="examine-text">
+            <span>审核中</span>
+            <div class="footer-time examine-time"></div>
+          </span>
+          <span class="end-text">
+            <span>已结束</span>
+            <div class="footer-time end-time"></div>
+          </span>
+        </div>
+    </footer>
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/zepto.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/remote.js"></script>
+  <script type="text/javascript">
+    var infoData = {};
+    var taskType = '';
+    var Longitude = "";
+    var Latitude = "";
+    var videoPath = audioPath = "";
+    var videoUrl = audioUrl = "";
+    var videoFileName = audioFileName = '';
+    apiready = function(){
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        var hideheader = $api.byId('hideheader');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(hideheader);
+
+        fnReady();
+        fnReadyOpenWin();
+
+        bMap = api.require("bMap");
+        bMap.getLocation({
+            accuracy: '10m',
+            autoStop: true,
+        }, function(ret, err) {
+            if (ret.status) {
+                Longitude = ret.lon;
+                Latitude = ret.lat;
+            } else {
+                // alert(err.code);
+            }
+        });
+
+        infoData = api.pageParam.data;
+        taskType = api.pageParam.type;
+        getTaskInfo(infoData.thirdTaskId);
+        console.log(taskType);
+
+        api.addEventListener({
+            name: 'swipeleft'
+        }, function(ret, err){
+            if( ret ){
+                 alert( JSON.stringify( ret ) );
+            }else{
+                 alert( JSON.stringify( err ) );
+            }
+        });
+
+
+        //home键监听
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+          if (taskType == 'handle') { //任务处理 返回事件
+            api.sendEvent({
+                name: 'refreshCloudMyTask',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'MyTask'
+            });
+          } else if (taskType == 'claimTask') { //任务领用 返回事件
+            api.sendEvent({
+                name: 'refreshCloudClaim',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'ClaimTask'
+            });
+          } else {  //代办列表进入详情
+            api.closeWin();
+          }
+        });
+    };
+
+    var actionList = {
+        'back': function() {
+            // api.closeWin();
+            if (taskType == 'handle') { //任务处理 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudMyTask',
+                  extra: {
+                      type: '1'
+                  }
+              });
+              api.closeToWin({
+                  name: 'MyTask'
+              });
+            } else if (taskType == 'claimTask') { //任务领用 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudClaim',
+                  extra: {
+                      type: '1'
+                  }
+              });
+              api.closeToWin({
+                  name: 'ClaimTask'
+              });
+            } else {  //代办列表进入详情
+              api.closeWin();
+            }
+        },
+        'scanner': function() {
+            var FNScanner = api.require('FNScanner');
+            FNScanner.open({
+                autorotation: true
+            }, function(ret, err) {
+              console.log(JSON.stringify(ret));
+            });
+
+        },
+    }
+
+    function getTaskInfo(taskId) {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+        url: $api.getStorage("jhapipath") + 'waterMeters/info',
+        method: 'post',
+        dataType: 'json',
+        // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+        data: {
+          values: {
+            "UserName": $api.getStorage("jhUserName"),
+            "Password": $api.getStorage("jhPassWord"),
+            "SerialNo": dataTime(),
+            "Method": "MMS002",
+            "Longitude": Longitude,
+            "Latitude": Latitude,
+            "Parameter": "{'Id': '" + taskId + "', 'Code':'43', 'Status':'', 'Source':'', 'BookId':'', 'ReaderId':'', 'CustomerCode':'', 'BeginTime':'', 'EndTime':''}"
+          }
+        }
+      }, function(ret, err) {
+        if (ret) {
+          api.hideProgress();
+          if (ret.Status == '0') {
+            console.log(JSON.stringify(ret));
+            var allList = JSON.parse(ret.Data);
+            showHtml(allList[0]);
+          }
+        } else {
+          console.log(JSON.stringify(err));
+          api.toast({
+              msg: err.msg,
+              duration: 2000,
+              location: 'top'
+          });
+        }
+      });
+    }
+
+    function showHtml(taskInfo) {
+      $(".title-cont-title").html(taskInfo.Name);
+      $(".title-cont-time").html(taskInfo.HandleTime.substring(0,10));
+      $("#accountnumber").html(taskInfo.CustomerCode);
+      $("#accountname").html(taskInfo.CustomerName);
+      $("#address").html(taskInfo.Address);
+      $("#wmlocation").html(taskInfo.Location);
+      $("#nature").html(taskInfo.Nature);
+      $("#caliber").html(taskInfo.Caliber);
+      $("#reviewscale").html(taskInfo.RecordEndScale);
+      $("#reviewamount").html(taskInfo.RecordAmount);
+
+      $(".submit-time").html(taskInfo.HandleTime.substring(0,10));
+
+      if (taskInfo.Status == '2') {
+        $(".aui-progress-bar").attr('width', '50%');
+        $(".examine-text").addClass('active-time');
+        $(".examine-time").addClass('active-time');
+      } else {
+        $(".aui-progress-bar").css('width', '100%');
+        $(".end-text").addClass('active-time');
+        $(".end-time").addClass('active-time');
+        $(".footer-title-cont").html('已结束(' + taskInfo.StatusName + ')');
+      }
+
+      if (taskInfo.Status == '2') {
+        $(".examine-time").html(taskInfo.Handles[0].OperatedTime.substring(0,10));
+      } else {
+        $(".examine-time").html(taskInfo.Handles[1].OperatedTime.substring(0,10));
+        $(".end-time").html(taskInfo.Handles[0].OperatedTime.substring(0,10));
+      }
+      $("#remark").html(taskInfo.Handles[0].Remark);
+
+
+      if (taskInfo.Coordinates.length > 0) {
+        $(".textColor").html(taskInfo.Coordinates[0].Address);
+      }
+
+      var dataArr = taskInfo.Files;
+      for (let i = 0; i < dataArr.length; i++) {
+        var item = dataArr[i];
+        var fileType = item.Path.substring(item.Path.lastIndexOf('.'));
+        console.log(fileType);
+        if (fileType == '.jpg' || fileType == '.png' ) { //图片
+          var imgItem = '';
+          if ((i+1)%3 == 0) {
+            imgItem =
+              "<div class='img-item img-item-last'>"+
+                "<img class='imgfile' src='"+ "http://" + $api.getStorage('apiUrl') + item.Path +"' onclick='previewImg("+i+")'>" +
+              "</div>";
+          } else {
+            imgItem =
+              "<div class='img-item'>"+
+                "<img class='imgfile' src='"+ "http://" + $api.getStorage('apiUrl') + item.Path +"' onclick='previewImg("+i+")'>" +
+              "</div>";
+          }
+          $(".img-list").append(imgItem);
+        } else if (fileType == '.mp4' || fileType == '.avi' || fileType == '.mov') { //安卓视频格式-mp4、avi  ios视频格式-mov
+          $(".video-div").css('display', 'inline-block');
+          videoPath = "http://" +$api.getStorage('apiUrl') + item.Path;
+          videoFileName = item.FileName;
+        } else { //音频
+          $(".audio-div").css('display', 'inline-block');
+          audioPath = "http://" +$api.getStorage('apiUrl') + item.Path;
+          audioFileName = item.FileName;
+        }
+      }
+    }
+
+    function playVideo() {
+      console.log(videoPath);
+      api.openVideo({
+          url: videoPath
+      });
+    }
+
+    function startAudio() {
+      console.log(audioPath);
+      var audioStreamer = api.require('audioStreamer');
+      audioStreamer.openPlayer({
+          path: audioPath
+      }, function(ret) {
+          if (ret.status) {
+              console.log(JSON.stringify(ret));
+          }
+      });
+    }
+
+    function previewImg(index) {  //图片预览
+      var imgData = $(".imgfile");
+      var imgArr = [];
+      for (var i = 0; i < imgData.length; i++) {
+        imgArr.push(imgData[i].src);
+      }
+      api.openWin({
+          name: 'pictureBrowser',
+          url: '../pictureBrowser.html',
+          pageParam: {
+              images: imgArr,
+              index: index
+          },
+          animation:{
+              type: "fade", //动画类型（详见动画类型常量）
+              duration: 300 //动画过渡时间，默认300毫秒
+          }
+      });
+    }
+
+    function showDownload() {
+      api.actionSheet({
+          title: '',
+          cancelTitle: '',
+          buttons: ['下载音频','下载视频']
+      }, function(ret, err){
+          if( ret ){
+            if (ret.buttonIndex == 1) {
+              if (audioPath != '') {
+                downloadFile(audioPath, audioFileName, 1);
+              } else {
+                api.toast({
+                    msg: '无音频文件',
+                    duration: 2000,
+                    location: 'top'
+                });
+              }
+
+            } else if (ret.buttonIndex == 2) {
+              if (audioPath != '') {
+                downloadFile(videoPath, videoFileName, 2);
+              } else {
+                api.toast({
+                    msg: '无视频文件',
+                    duration: 2000,
+                    location: 'top'
+                });
+              }
+            }
+          }else{
+            console.log( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    function downloadFile(fileUrl, fileName, fileType) {
+      console.log(fileUrl);
+      api.showProgress({
+          title: '下载中',
+          text:'',
+          modal: false
+      });
+      api.download({
+          url: fileUrl,
+          savePath: api.fsDir + "/downloadFile/" + fileName,
+          report: true,
+          cache: true,
+          allowResume: true
+      },function(ret, err){
+          console.log(JSON.stringify(ret));
+          console.log(JSON.stringify(err));
+          if(ret.state == 1){
+            api.hideProgress();
+            if(fileType == 1) {  //音频
+              audioUrl = ret.savePath;
+              $(".audio-div").css('display', 'inline-block');
+            } else if (fileType == 2) {  //视频
+              videoUrl = ret.savePath;
+              $(".video-div").css('display', 'inline-block');
+            }
+
+          }else{
+
+          }
+      });
+
+    }
+
+  </script>
+</html>

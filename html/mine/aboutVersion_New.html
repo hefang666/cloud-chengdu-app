@@ -1,0 +1,387 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>关于版本</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background-color: #fff;
+            color: #333333;
+            font-size: 0.9rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333333;
+            font-weight: 900;
+        }
+
+        .aui-list:after {
+            display: none;
+        }
+
+        .aui-list {
+            background-image: none !important;
+        }
+
+        .aui-list-item-arrow:before {
+            border-color: #A2A2A2;
+        }
+
+        .mine_List .aui-list .aui-list-item-media {
+            width: 2.0rem;
+            padding-right: 0 !important;
+        }
+
+        .mine_List .aui-list .aui-list-item {
+            min-height: 2.7rem !important;
+            font-size: 0.75rem;
+        }
+
+        .aui-list .aui-list-item-text {
+            font-size: 0.7rem;
+        }
+
+        .hasNewVersion {
+            display: inline-block;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: red;
+            margin-right: 0.5rem;
+        }
+
+        .isShow {
+            display: none;
+        }
+
+        .c-cloud-title {
+            display: inline-block;
+            float: left;
+            /*width: 14.5rem;*/
+        }
+    </style>
+</head>
+
+<body>
+    <div id="aboutVersionVue">
+        <header class="aui-bar aui-bar-nav aui-border-b" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click="api.closeWin();">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">版本信息与检测</div>
+        </header>
+
+        <div class="aui-content mine_List">
+            <ul class="aui-list">
+                <li class="aui-list-item" tapmode @click="fnCheckUpdate(0)" v-show="showCloudAppVersion">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-inner aui-list-item-arrow">
+
+                            <span class='c-cloud-title'>综合水务平台 <span class="hasNewVersion" v-show='cloudHasUpdate'></span></span>
+
+                            <div class="aui-list-item-text">
+                                <span>{{cloudVersionNo}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item" v-for='(item,index) in versionListData' :key='index' tapmode @click="applicationUpdate(item)">
+                    <div class="aui-list-item-inner" v-if='item.moduleCode!="WaterStarOne-Cloud-S9"'>
+                        <div class="aui-list-item-inner aui-list-item-arrow">
+                            {{item.moduleName}}
+                            <div class="aui-list-item-text">
+                                <!-- 用户判断是否有新的版本 -->
+                                <span :class='{hasNewVersion:item.isHasNewVersion =="1"}'></span>
+                                <!-- <span v-else class="hasNewVersion isShow"></span> -->
+                                <span class='versionNo'>V{{item.versionNo}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/versionInfo.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        api.addEventListener({
+            name: 'updateVersionList'
+        }, function(ret, err){
+            if( ret ){
+              aboutVersionVue.initList();
+            }
+        });
+
+        initVue();
+    };
+
+
+    function initVue() {
+        window.aboutVersionVue = new Vue({
+            el: '#aboutVersionVue',
+            data: {
+                showCloudAppVersion: api.systemType == 'ios' ? false : true, //云平台app版本信息 （ios不显示）
+                cloudVersionNo: "V" + api.appVersion, //云平台版本号
+                versionListData: [], //app版本信息
+                cloudHasUpdate: false, //云平台是否有新的版本
+            },
+            watch: {
+
+            },
+            methods: {
+                initList: function() { //初始化列表
+                    var _this = this;
+                    var db = api.require("db");
+                    var currentUserName = $api.getStorage('loginData').userName;
+                    // 缓存方式的组件化检测更新
+                    var userLoginInformation = $api.getStorage('userLoginInformation');
+                    // var versionInformation = userLoginInformation.versionInformation;
+                    var appList = userLoginInformation.appList[0].applications;
+                    // console.log(JSON.stringify(userLoginInformation));
+                    if (appList == null) {
+                        return;
+                    }
+                    // for (let v = 0; v < versionInformation.length; v++) {
+                    //     for (let a = 0; a < appList.length; a++) {
+                    //         if (versionInformation[v].moduleCode === appList[a].coding) {
+                    //             _this.versionListData.push(versionInformation[v]);
+                    //         }
+                    //     }
+                    // }
+
+                    // 数据存储在本地数据库的版本检测更新方式
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: 'SELECT * FROM VersionInfoSheets where userName = "'+currentUserName+'"'
+                    }, function(ret, err) {
+                        _this.versionListData = [];
+                        if (ret.status) {
+                            if (ret.data.length > 0) {
+                                var data = ret.data;
+                                for (var v = 0; v < data.length; v++) {
+                                    for (var a = 0; a < appList.length; a++) {
+                                        if (data[v].moduleCode === appList[a].coding) {
+                                            _this.versionListData.push(data[v]);
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    });
+                },
+                applicationUpdate: function(params) { // 检查版本是否有新的版本
+                    var _this = this;
+                    var userLoginInformation = $api.getStorage('userLoginInformation');
+                    var versionCurentUserName = $api.getStorage('loginData') != undefined ? $api.getStorage('loginData').userName : ""; //全局变量 （当前登录用户账号）
+                    var db = api.require("db");
+                    if (params.isHasNewVersion == '1') { //有新的版本
+                        vant.Dialog.confirm({
+                            title: '提示',
+                            message: '发现新版本,是否立即更新'
+                        }).then(function() {
+                            singleAppUpdate(params, true, function(ret) {
+                                _this.remarkFrame(params);
+                                addNewField();
+                                fndecompressionZip();//解压压缩包 20200825 zxf
+                                api.toast({
+                                    msg: '版本更新成功!',
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                            });
+
+                        }).catch(function() {
+                            // on cancel
+                        });
+                    } else {
+                        // 调用接口，查询新的版本
+                        var body = {
+                            body: JSON.stringify({
+                                "tenantId": userLoginInformation.loginSuccessData.allTenants[0].tenantId,
+                            })
+                        };
+                        fnPost('services/app/AppVersionService/CheckAppVsersionByTeantId', body, 'application/json', true, false, function(ret, err) {
+                            api.hideProgress();
+                            if (ret && ret.success) {
+                                var result = ret.result;
+                                for (var i = 0; i < result.length; i++) {
+                                    if (params.moduleCode == result[i].moduleCode) {
+                                        if (params.versionNo != result[i].versionNo || result[i].packetUrl !== params.packetUrl) {
+                                            db.executeSql({
+                                                name: 'Wsdatabase',
+                                                sql: ' UPDATE  VersionInfoSheets SET Id = ' + result[i].id + ',sort = ' + result[i].sort + ',newVersionNo = ' + result[i].versionNo + ',tenantId = ' + result[i].tenantId +
+                                                    ',isHasNewVersion = "1",creationTime = "' + result[i].creationTime + '",creatorUserId = "' + result[i].creatorUserId + '",creatorUserName = "' + result[i].creatorUserName +
+                                                    '",lanApiUrl = "' + result[i].lanApiUrl + '",netApiUrl = "' + result[i].netApiUrl + '",remark = "' + result[i].remark + '",tenantName = "' + result[i].tenantName +
+                                                    '",newPackageUrl = "' + result[i].packetUrl +
+                                                    '" WHERE moduleCode = "' + result[i].moduleCode + '" and userName = "' + versionCurentUserName + '"'
+                                            }, function(ret1, err1) {
+                                                if (ret1) {
+                                                    _this.initList();
+                                                    vant.Dialog.confirm({
+                                                        title: '提示',
+                                                        message: '发现新版本,是否立即更新'
+                                                    }).then(function() {
+                                                        db.selectSql({
+                                                                name: 'Wsdatabase',
+                                                                sql: 'SELECT * FROM VersionInfoSheets where moduleCode = "' + params.moduleCode + '" and userName = "' + versionCurentUserName + '"'
+                                                            }, function(ret2, err2) {
+                                                                if (ret2.status) {
+                                                                    singleAppUpdate(ret2.data[0], true, function(ret3){
+                                                                    if(ret3){
+                                                                      _this.remarkFrame(ret2.data[0]);
+                                                                      addNewField();
+                                                                      fndecompressionZip();//解压压缩包 20200825 zxf
+                                                                      api.toast({
+                                                                          msg: '版本更新成功!',
+                                                                          duration: 2000,
+                                                                          location: 'top'
+                                                                      });
+                                                                    }
+                                                                    });
+                                                        }
+
+                                                    });
+                                                }).catch(function() {
+                                                  // on cancel
+                                              });
+                                                }
+                                            });
+
+                                        } else {
+                                            api.toast({
+                                                msg: '已经是最新版了',
+                                                duration: 2000,
+                                                location: 'top'
+                                            });
+
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                },
+                remarkFrame: function(params) {
+                    api.openFrame({
+                        name: 'updateVersion_frame',
+                        url: '../work/updateVersion_frame.html',
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        bounces: false,
+                        pageParam: {
+                            type: 'remark',
+                            number: 'one',
+                            data: params
+                        },
+                        bgColor: 'rgba(0,0,0,0.1)',
+                    });
+                },
+
+                fnCheckUpdate: function(type) { //检查云平台更新
+                    var mam = api.require('mam');
+                    var _this = this;
+                    api.showProgress({
+                        style: 'default',
+                        animationType: 'fade',
+                        title: '加载中...',
+                        modal: false
+                    });
+                    mam.checkUpdate(function(ret, err) {
+                        api.hideProgress();
+                        if (ret.status) {
+                            var result = ret.result;
+                            if (result.update == true && result.closed == false) {
+                                if (type == 1) {
+                                    _this.cloudHasUpdate = true;
+                                } else {
+                                    api.openFrame({
+                                        name: 'checkupdate_frm',
+                                        url: './checkupdate_frm.html',
+                                        rect: {
+                                            x: 0,
+                                            y: 0,
+                                            w: 'auto',
+                                            h: 'auto'
+                                        },
+                                        pageParam: {
+                                            version: result.version,
+                                            updateTip: result.updateTip,
+                                            source: result.source
+                                        },
+                                        bounces: false,
+                                        bgColor: 'rgba(0,0,0,0.4)',
+                                    });
+                                }
+                            } else {
+                                if (type == 0) {
+                                    api.toast({
+                                        msg: '当前已是最新版本',
+                                        duration: 2000,
+                                        location: 'top'
+                                    });
+                                }
+
+                            }
+                        } else {
+                            if (type == 0) {
+                                api.toast({
+                                    msg: '服务器繁忙，请稍后再试',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }
+                        }
+                    })
+                }
+            },
+            mounted: function() {
+                this.initList();
+                this.fnCheckUpdate(1);
+            }
+        });
+    }
+</script>
+
+</html>

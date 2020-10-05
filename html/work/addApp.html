@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>添加应用win界面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background-color: #fff;
+            color: #333333;
+            font-size: var(--fontsize9);
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333333;
+            font-weight: 900;
+        }
+
+        .title3 {
+            margin: 0.65rem 0;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            font-size: var(--fontsize75);
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            color: #999999;
+        }
+
+        .border-t:before,
+        .border-b:after {
+            background: none !important;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .icon {
+            margin-right: 0.6rem;
+        }
+
+        .title {
+            font-size: var(--fontsize75);
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            color: #999999;
+            display: block;
+            padding: 0.65rem 0.75rem;
+        }
+
+        .van-cell {
+            font-size: var(--fontsize8);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">添加应用</div>
+        </header>
+
+        <div id="main" class="flex-con">
+            <span class="title" id="title">已添加的应用</span>
+            <van-swipe-cell ref="swipeCell" v-for="(ownApp,index) in ownAppList" :key="index">
+
+                <template slot="right">
+                    <van-button square type="danger" text="删除" @click="deleteApp(ownApp,index)"/>
+                </template>
+
+                <van-cell :title="ownApp.productName" center>
+                    <van-image class="icon" width="0.95rem" height="0.95rem" src="../../image/addApp_frame/delete.png" slot="icon" @click.stop="swipe(index)" />
+                </van-cell>
+
+            </van-swipe-cell>
+            <van-cell :border="false" title="暂无已添加应用" center v-if="ownAppList.length==0">
+
+            </van-cell>
+            <span class="title" id="title2">未添加的应用</span>
+            <van-cell :title="notOwnApp.productName" center v-for="(notOwnApp,index) in notOwnAppList" :key="index">
+                <van-image class="icon" width="0.95rem" height="0.95rem" src="../../image/addApp_frame/add.png" slot="icon" @click.stop="addApp(notOwnApp,index)" />
+            </van-cell>
+            <van-cell :border="false" title="暂无未添加应用" center v-if="notOwnAppList.length == 0">
+
+            </van-cell>
+        </div>
+
+        <div id="footer" class="title3 border-t">
+            <span style="margin:0 auto">已经添加{{num}}个应用</span>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/versionInfo.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        tempalteTitleId = api.pageParam.id;
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+          if(ret.keyCode == 4){
+            AddAppVue.back();
+          }
+        });
+    };
+
+    function fnIntVue() {
+        window.AddAppVue = new Vue({
+            el: '#wrap',
+            data: {
+                ownAppList: [],
+                notOwnAppList: [],
+            },
+            computed: {
+                num: function() {
+                    return this.ownAppList.length
+                }
+            },
+            methods: {
+                back:function() { //返回上一个页面
+                    api.sendEvent({
+                        name: 'updateGetHome',
+                    });
+                    api.closeWin({});
+                },
+                swipe:function(index) { //点击删除按钮弹出右侧删除按钮
+                    this.$refs.swipeCell[index].open('right');
+                },
+                deleteApp:function(app, index) { //删除已添加中的应用
+                    var _this = this;
+                    var data = {
+                        productId: app.productId,
+                        tempalteTitleId: tempalteTitleId
+                    };
+                    var fs = api.require("fs");
+                    // console.log(JSON.stringify(app));
+                    // 删除本地的应用
+                    var userLoginInformation = $api.getStorage('userLoginInformation');
+                    var oldApplicationList = userLoginInformation.versionInformation;
+
+                    fnPost('services/app/Home/InsertOrDeleteApplicationAsyn', {
+                        body: JSON.stringify(data)
+                    }, 'application/json', true, false, function(ret, err) {
+                        api.hideProgress();
+                        if (ret && ret.success) {
+                            AddAppVue.ownAppList.splice(index, 1);
+                            AddAppVue.notOwnAppList.push(app);
+                            AddAppVue.notOwnAppList.sort(AddAppVue.locale);
+                            // api.sendEvent({
+                            //     name: 'refreshAppList',
+                            // });
+                            // // 删除本地的应用
+                            // for (let i = 0; i < oldApplicationList.length; i++) {
+                            //     oldApplicationList[i].index = i;
+                            //     if (oldApplicationList[i].moduleName == app.productName) {
+                            //         oldApplicationList.splice(oldApplicationList[i].index, 1);
+                            //         fs.remove({
+                            //             path: `fs://${app.productName}.zip`
+                            //         }, function(ret, err) {
+                            //             if (ret.status) {
+                            //                 deleteLocalWgt(app);
+                            //             }
+                            //         });
+                            //         userLoginInformation.versionInformation = oldApplicationList;
+                            //         $api.setStorage('userLoginInformation', userLoginInformation);
+                            //         _this.updateVersion();
+                            //         break;
+                            //     }
+                            // }
+                            // 版本更新，数据库方式
+                              // versionNumbersIndex = 0;
+                            _this.deleteOrAddLocalVersion(app,false);
+                        }
+                    })
+                },
+                addApp:function(app, index) { //添加应用到分类中
+                  var _this = this;
+                    var data = {
+                        productId: app.productId,
+                        tempalteTitleId: api.pageParam.id
+                    };
+                    fnPost('services/app/Home/InsertOrDeleteApplicationAsyn', {
+                        body: JSON.stringify(data)
+                    }, 'application/json', true, false, function(ret, err){
+                        api.hideProgress();
+                        if (ret && ret.success) {
+                            AddAppVue.notOwnAppList.splice(index, 1);
+                            AddAppVue.ownAppList.push(app);
+                            AddAppVue.ownAppList.sort(AddAppVue.locale);
+                            // api.sendEvent({
+                            //     name: 'refreshAppList',
+                            // });
+                            // this.updateVersion(); //3.26 zxf
+
+                           _this.deleteOrAddLocalVersion(app,false); //通过本地数据库方式 20200824 zxf
+                        }
+                    })
+                },
+                deleteOrAddLocalVersion:function(app,type){ //type == true 删除app
+                  var db = api.require("db");
+                  var _this = this;
+                  if(type){
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: 'DELETE  FROM VersionInfoSheets WHERE moduleName = "'+app.productName+'"'
+                    }, function(ret, err){
+                        if( ret.status ){
+                             app.moduleName =app.productName;
+                             removeFilesToLocal(app);
+                            _this.updateVersion(type);
+                        }
+                    });
+                  }else{
+                  _this.updateVersion(type);
+                  }
+                },
+                updateVersion:function(type) {
+                  var _this = this;
+                    fnGet('services/app/Home/GetHome', {}, false, function(ret, err){
+                        api.hideProgress();
+                        if (ret) {
+                            if (ret.success) {
+                                if (ret.result != null) {
+                                    _this.appData = ret.result.templateTitles;
+                                    // 19.12.12  保存应用列表到本地，用于无网络状态的时候，可以显示使用
+                                    var userLoginInformation = $api.getStorage('userLoginInformation');
+                                    userLoginInformation.appList = _this.appData;
+                                    $api.setStorage('userLoginInformation', userLoginInformation);
+                                    // 调用模块版本更新方法(组件化)
+                                    if(type == false){
+                                        CheckAppVsersionByTeantId();
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+                getApp:function() { //获取所有应用，包含已添加和未添加
+                    fnGet('services/app/Home/GetInsertApplication?TitleId=' + tempalteTitleId + '', {}, false, function(ret, err) {
+                        api.hideProgress();
+                        if (ret && ret.success) {
+                            if (ret.result.alreadyApplications != null) {
+                                AddAppVue.ownAppList = ret.result.alreadyApplications;
+                                AddAppVue.ownAppList.sort(AddAppVue.locale);
+                            }
+                            if (ret.result.notAlreadyApplications != null) {
+                                AddAppVue.notOwnAppList = ret.result.notAlreadyApplications;
+                                AddAppVue.notOwnAppList.sort(AddAppVue.locale);
+                            }
+                        }
+                    })
+                },
+                locale:function(a, b) { //应用按照名称排序
+                    return a.productName.localeCompare(b.productName, 'zh-Hans-CN', {
+                        sensitivity: 'variant'
+                    });
+                }
+            },
+            mounted: function() {
+                this.getApp();
+            }
+        })
+    }
+</script>
+
+</html>

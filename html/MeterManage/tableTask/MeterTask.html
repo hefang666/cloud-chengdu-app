@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>任务处理-换表/移改提/校表</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            /*height: 99%;*/
+            height: calc(100% - .3rem);
+            background-color: #F3F3F3;
+        }
+
+        .ri {
+            float: right
+        }
+
+        .le {
+            float: left;
+        }
+
+        .cl {
+            clear: both;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.9rem;
+            color: #626262;
+        }
+
+        .unusualTypePicker.van-cell {
+            padding: 0 1.3rem;
+            height: 2.87rem;
+            line-height: 2.87rem;
+        }
+
+        .aui-list-item,
+        .aui-list-item-middle {
+            border: none !important
+        }
+
+        .footer {
+            width: 100vw;
+            height: 6.08rem;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.35rem;
+            bottom: 0;
+        }
+
+        .footer .van-button {
+            width: 5.5rem;
+            height: 1.86rem;
+            line-height: normal;
+            font-size: 0.90rem;
+            color: #fff;
+        }
+
+        .showTurnBtn {
+            /*width: 4.4rem !important;*/
+        }
+
+        .footer .van-button:first-child {
+            background-color: #377EFF;
+        }
+
+        .footer .van-button:last-child {
+            background-color: #FF4141;
+            border-color: #FF4141;
+        }
+        /*.flex-vertical {
+            max-height: inherit;
+        }*/
+
+        #wrap {
+            height: 100%;
+        }
+
+        .aui-content {
+            height: 100%;
+        }
+
+        .content {
+            margin: .5rem 1rem;
+            background-color: #fff;
+            border-radius: 0.8rem;
+            padding-top: .1rem;
+            padding-bottom: .9rem;
+            /*min-height: 160vw;*/
+        }
+
+        .row {
+            margin: 15px 25px 0 25px;
+        }
+
+        .text-left {
+            font-size: 0.9rem;
+            color: #000;
+            display: inline-block;
+            width: 38%;
+            letter-spacing: -1px;
+        }
+
+        .text-right {
+            margin-left: 0px;
+            font-size: 0.9rem;
+            color: #656265;
+            display: inline-block;
+            width: calc(60% - 0px);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            vertical-align: top;
+        }
+
+        .cause {
+            white-space: inherit;
+        }
+
+        .text-two {
+            letter-spacing: 1.65rem;
+        }
+
+        .textColor {
+            color: #2045FF;
+        }
+
+        .textarea {
+            border: 1px solid #D8D8D8;
+            border-radius: 0.13rem;
+            margin-top: 0.4rem;
+            padding: 0.25rem 0.5rem;
+            color: #626262;
+        }
+
+        .images {
+            vertical-align: text-top;
+        }
+
+        .images>img {
+            width: 0.7rem;
+            height: 0.6rem;
+        }
+
+        .photoList {
+            margin-top: 8px;
+            margin-bottom: 14px;
+        }
+
+        .phont {
+            width: 3.6rem;
+            height: 2.8rem;
+            position: relative;
+            display: inline-block;
+            margin-right: .7rem;
+        }
+
+        .phont img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .delectImg {
+            background: url(../image/MeterManage/shanchu@2x.png) no-repeat 0 0;
+            background-size: 100% 100%;
+            width: .8rem;
+            height: .8rem;
+            display: inline-block;
+            position: absolute;
+            right: -7px;
+            top: -7px;
+        }
+
+        .addressIcon {
+            background: url(../image/MeterManage/dingwei.png) no-repeat 0 0;
+            background-size: 100% 100%;
+            width: .6rem;
+            height: .7rem;
+            display: inline-block;
+            /*vertical-align: text-bottom;*/
+        }
+
+        .exTableBtn .van-button {
+            font-size: 0.8rem;
+            line-height: 1.1rem;
+            padding: 0.3rem 1.2rem;
+            border-radius: 4px;
+        }
+
+        .disposeRow {
+            margin-top: .5rem;
+        }
+
+        .textRight {
+            text-align: right;
+        }
+        /*下拉弹窗样式修改*/
+
+        .popup {
+            max-height: 35vh;
+        }
+
+        .pickerMain {
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .van-search .van-field__body,
+        .van-form .van-field__body {
+            border-bottom: 0.03rem solid #D8D8D8;
+        }
+
+        .van-form .van-field {
+            width: 5 rem !important;
+            /*float: right;*/
+            color: blue;
+        }
+
+        .picker {
+            width: 100vw;
+            height: 2.13rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+            border-bottom: 0.03rem solid #EDEDED;
+        }
+
+        .picker:last-child {
+            border-bottom: none;
+        }
+
+        .picker.active {
+            background-color: #F4F4F4;
+            color: #2F81F6;
+        }
+
+        .popupFooter {
+            width: 100vw;
+            height: 2.46rem;
+            border-top: 0.25rem solid #ECECEC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+        }
+
+        .flex-con .van-cell.formField,
+        .searchInput,
+        .van-form .van-cell.formField,
+        .textAreaLabel,
+        .locationRow {
+            padding: 0.4rem 0.95rem 0.4rem 1.25rem;
+            background-color: transparent;
+        }
+
+        .van-form .van-cell.formField {}
+
+        .van-form .van-field__label {
+            width: 5.8rem !important;
+        }
+
+        .van-form .van-field_required {
+            font-size: 60px !important;
+        }
+
+        .van-form .required-class {
+            font-size: 30px !important;
+        }
+        /*下拉弹窗样式修改*/
+
+        .slMessage {
+            /*width: calc(100% + 1rem);*/
+            margin: .6rem 1.2rem .2rem 1.2rem;
+            padding-bottom: .5rem;
+            border-top: 2px solid #DEDEDE;
+            border-bottom: 2px solid #DEDEDE;
+        }
+
+        .slMessage .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+        /*延期申请弹窗样式*/
+
+        .popTitle {
+            text-align: center;
+            border-bottom: 1px solid #2777FF;
+            padding: .9rem 1rem;
+            margin: 0 1rem;
+        }
+
+        .popTitle p {
+            color: #2074FF;
+            font-size: 1.0rem;
+        }
+
+        .timeType .van-radio-group {
+            display: inline-block;
+            ;
+            width: 100%;
+            font-size: 0.85rem;
+            color: #414141;
+        }
+
+        .timeValue .timeField .van-field__control[type=text] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.75rem;
+            color: #D4D4D4;
+        }
+
+        .timeValue .timeField .active .van-field__control[type=text] {
+            color: #3883FF;
+        }
+
+        .timeValue .timeField .van-cell {
+            padding: 0.5rem 0.2rem;
+            border-bottom: 0.03rem solid #C9C9C9;
+            margin: 0 1.1rem;
+            width: calc(100% - 2.2rem);
+        }
+
+        .timeValue .timeField .van-cell.active {
+            border-color: #347CFF
+        }
+
+        .disposeRow .van-field {
+            width: calc(100% - 2.0rem);
+            margin: 0 1.0rem .5rem 1rem;
+            border: 1px solid #DEDEDE;
+        }
+
+        .timeSelect {
+            padding: 1.3rem 0.98rem;
+        }
+
+        .van-dialog {
+            border-radius: 0;
+            width: 86vw;
+        }
+
+        .van-dialog .van-button {
+            font-size: 0.95rem;
+            height: 2.75rem;
+            line-height: 2.75rem;
+        }
+
+        .van-dialog__confirm,
+        .van-dialog__confirm:active {
+            color: #2F7DF5;
+        }
+
+        .van-dialog__cancel,
+        .van-dialog__cancel:active {
+            color: #F52F2F;
+        }
+        /*延期申请弹窗样式*/
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">任务处理</div>
+        </header>
+
+        <van-popup class="popup" v-model="showPicker" position="bottom" @closed="hideAllSelect">
+            <div class="flex-wrap flex-vertical">
+                <div class="flex-con pickerMain" v-if="showResultSelect">
+                    <div class="picker" v-for="(item,index) in addResult" :key="index" @click="Remark=item.name;showPicker=false">
+                        {{item.name}}
+                    </div>
+                </div>
+                <div class="popupFooter" @click="hideAllSelect">
+                    取消
+                </div>
+            </div>
+        </van-popup>
+
+        <!-- 延期申请弹窗 -->
+        <van-dialog v-model="showTimePicker" title="" show-cancel-button :before-close="beforeClose">
+            <div class="popTitle">
+                <p>申请延期</p>
+            </div>
+            <div class="timeType">
+                <van-row class="disposeRow">
+                    <van-col span="8" style="text-align:right;font-size:0.85rem;">
+                        延期日期:
+                    </van-col>
+                    <van-col span="14"></van-col>
+                </van-row>
+                <div class="timeField disposeRow">
+                    <van-datetime-picker style="width: calc(100% - 2rem);margin: 0 1.0rem .5rem 1rem;" v-show="true" v-model="currentDate" :min-date="minTime" type="datetime" :show-toolbar="false" item-height="32" visible-item-count="4"></van-datetime-picker>
+                </div>
+            </div>
+            <div class="timeValue">
+                <van-radio-group>
+                    <van-row class="disposeRow">
+                        <van-col span="8" style="text-align:right;font-size:0.85rem;">
+                            申请原因:
+                        </van-col>
+                        <van-col span="14"></van-col>
+                    </van-row>
+                    <van-row class="disposeRow">
+                        <van-col span="24">
+                            <van-field class="applyCause" v-model="dayHourText" border='true' rows="3" type="textarea" maxlength="100" placeholder="请填写申请原因" show-word-limit />
+                        </van-col>
+                    </van-row>
+                </van-radio-group>
+            </div>
+        </van-dialog>
+
+        <!-- 退回备注弹窗 -->
+        <van-dialog v-model="showBackPop" title="" show-cancel-button :before-close="backPop">
+            <div class="popTitle">
+                <p>退回</p>
+            </div>
+            <van-radio-group>
+                <van-row class="disposeRow">
+                    <van-col span="8" style="text-align:right;font-size:0.85rem;">
+                        退回原因:
+                    </van-col>
+                    <van-col span="14"></van-col>
+                </van-row>
+                <van-row class="disposeRow">
+                    <van-col span="24">
+                        <van-field class="applyCause" v-model="Annotation" border='true' rows="3" type="textarea" maxlength="100" placeholder="请填写退回原因" show-word-limit />
+                    </van-col>
+                </van-row>
+            </van-radio-group>
+        </van-dialog>
+        <!-- 退回备注弹窗 -->
+
+        <div id="main" class="aui-content ">
+            <div class="content ">
+                <div class="row">
+                    <div class="text-left">
+                        <label for="">任务类型</label>
+                    </div>
+                    <div class="text-right">
+                        <span>{{TypeName}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-left text-two">
+                        <label for="">户名</label>
+                    </div>
+                    <div class="text-right cause">
+                        <span>{{CustomerName}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-left text-two">
+                        <label for="">户号</label>
+                    </div>
+                    <div class="text-right">
+                        <span>{{CustomerCode}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-left text-two">
+                        <label for="">地址</label>
+                    </div>
+                    <div class="text-right cause">
+                        <span>{{Address}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-left text-two">
+                        <label for="">表位</label>
+                    </div>
+                    <div class="text-right">
+                        <span>{{Location}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-left text-two">
+                        <label for="">表号</label>
+                    </div>
+                    <div class="text-right">
+                        <span>{{StampNo}}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="text-left text-two">
+                        <label for="">口径</label>
+                    </div>
+                    <div class="text-right">
+                        <span>{{Caliber}}</span>
+                    </div>
+                </div>
+
+                <!-- 移改提 -->
+                <div class="" v-if="ygt">
+                    <div class="row">
+                        <div class="text-left text-two">
+                            <label for="">备注</label>
+                        </div>
+                        <div class="text-right textColor textRight">
+                        </div>
+                        <div class="textarea">
+                            <textarea name="name" rows="16" cols="80" v-model="Remark" :readonly="isClaim"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-left text-two">
+                            <label for="">照片</label>
+                        </div>
+                        <div class="text-right images">
+                            <img @click="openCamera" class="ri" src="../image/MeterManage/paizhao.png" alt="">
+                        </div>
+                        <div class="photoList">
+                            <div class="phont" v-for="(item,index) in pic" :key="index">
+                                <i class="delectImg" @click="delectPic(index)"></i>
+                                <img :src="item.url" alt="" @click="onChange(index)">
+                            </div>
+                        </div>
+                        <p @click='getLocation'>
+                            <i class="addressIcon"></i>
+                            <span class="textColor">{{AppAddress}}</span>
+                        </p>
+                    </div>
+                </div>
+                <!-- 移改提 -->
+
+                <!-- 换表 -->
+                <div class="" v-if="hb">
+                    <div class="row">
+                        <div class="text-left textColor" @click="openTableMessage">
+                            <label for="">换表信息</label>
+                        </div>
+                        <div class="text-right">
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="info-item aui-list-item-inner" style="height: 30px; line-height: 30px;">
+                        <label>
+                          <input id="oldMerter" v-model="isOldMeter" :disabled="isClaim" class="aui-checkbox" style="width: 0.9rem; height: 0.9rem;margin-top: 5px;" type="checkbox" name="checkbox">
+                          <span style="font-size: 0.9rem;font-weight: 400;color: #1F1F1F;margin-left: 8px;">报废旧表</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-left text-two">
+                            <label for="">备注</label>
+                        </div>
+                        <div class="text-right textColor textRight ">
+                        </div>
+                        <div class="textarea">
+                            <textarea name="name" rows="32" cols="80" v-model="Remark" :readonly="isClaim"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-left text-two">
+                            <label for="">照片</label>
+                        </div>
+                        <div class="text-right images">
+                            <img @click="openCamera" class="ri" src="../image/MeterManage/paizhao.png" alt="">
+                        </div>
+                        <div class="photoList">
+                            <div class="phont" v-for="(item,index) in pic" :key="index">
+                                <i class="delectImg" @click="delectPic(index)"></i>
+                                <img :src="item.url" alt="" @click="onChange(index)">
+                            </div>
+                        </div>
+                        <p @click='getLocation'>
+                            <i class="addressIcon"></i>
+                            <span class="textColor">{{AppAddress}}</span>
+                        </p>
+                    </div>
+                </div>
+                <!-- 换表 -->
+
+                <!-- 校表 -->
+                <div class="" v-if="xb">
+                    <div class="row">
+                        <div class="text-left text-two">
+                            <label for="">备注</label>
+                        </div>
+                        <div class="text-right textColor textRight">
+                        </div>
+                        <div class="textarea">
+                            <textarea name="name" rows="16" cols="80" v-model="Remark" :readonly="isClaim"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="text-left text-two">
+                            <label for="">照片</label>
+                        </div>
+                        <div class="text-right images">
+                            <img @click="openCamera" class="ri" src="../image/MeterManage/paizhao.png" alt="">
+                        </div>
+                        <div class="photoList">
+                            <div class="phont" v-for="(item,index) in pic" :key="index">
+                                <i class="delectImg" @click="delectPic(index)"></i>
+                                <img :src="item.url" alt="" @click="onChange(index)">
+                            </div>
+                        </div>
+                        <p @click='getLocation'>
+                            <i class="addressIcon"></i>
+                            <span class="textColor">{{AppAddress}}</span>
+                        </p>
+                    </div>
+                </div>
+                <!-- 校表 -->
+
+                <!-- 三来 -->
+                <div class="" v-if="sl">
+                    <div class="slMessage">
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">工单编号</label>
+                            </div>
+                            <div class="text-right">
+                                <span>{{OrderNo}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">反映区名</label>
+                            </div>
+                            <div class="text-right">
+                                <span>{{AreasName}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">客户电话</label>
+                            </div>
+                            <div class="text-right">
+                                <span>{{Phone}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">信息来源</label>
+                            </div>
+                            <div class="text-right">
+                                <span>{{SourceName}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">紧急情况</label>
+                            </div>
+                            <div class="text-right">
+                                <span>{{UsgentText}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">处理级别</label>
+                            </div>
+                            <div class="text-right">
+                                <span>{{Processinglevelid}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">原因描述</label>
+                            </div>
+                            <div class="text-right cause">
+                                <span>{{MeterRemark}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left">
+                                <label for="">完成时间</label>
+                            </div>
+                            <div class="text-right">
+                                <span>{{EndTime}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="text-left textColor">
+                                <label for="" @click="isOpenPostpone">申请延期</label>
+                            </div>
+                            <div class="text-right">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-left ">
+                            <label for="">处理结果</label>
+                        </div>
+                        <div class="text-right textColor textRight">
+                            <span @click="isOpenAddResults">添加结果</span>
+                        </div>
+                        <div class="textarea">
+                            <textarea name="name" rows="16" cols="80" v-model="Remark" :readonly="isClaim"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="text-left text-two">
+                            <label for="">照片</label>
+                        </div>
+                        <div class="text-right images">
+                            <img @click="openCamera" class="ri" src="../image/MeterManage/paizhao.png" alt="">
+                        </div>
+                        <div class="photoList">
+                            <div class="phont" v-for="(item,index) in pic" :key="index">
+                                <i class="delectImg" @click="delectPic(index)"></i>
+                                <img :src="item.url" alt="" @click="onChange(index)">
+                            </div>
+                        </div>
+
+                        <!-- 附件 -->
+                        <div class="text-left text-two">
+                            <label for="">附件</label>
+                        </div>
+                        <div class="text-right images" @click="openFile">
+                            <img class="ri" src="../image/MeterManage/fujian.png" alt="">
+                        </div>
+                        <div class="photoList" v-for="(item,index) in fileArray">
+                            <p class="">{{item.fileName}}</p>
+                        </div>
+
+                        <p @click='getLocation'>
+                            <i class="addressIcon"></i>
+                            <span class="textColor">{{AppAddress}}</span>
+                        </p>
+                    </div>
+                </div>
+                <!-- 三来 -->
+
+            </div>
+
+        </div>
+
+        <div id='footer1' class="footer" v-show="isDispose">
+            <van-button round block color="#FFA836" class="showTurnBtn" @click="turnToUser">
+                转办
+            </van-button>
+            <van-button round block type="danger" class="showTurnBtn" @click="saveBtnFunc">
+                提交
+            </van-button>
+        </div>
+        <div id='footer2' class="footer" v-show="isClaim">
+            <van-button round block type="info" class="showTurnBtn" @click="showBackPop = true">
+                退回
+            </van-button>
+            <van-button round block type="danger" class="showTurnBtn" @click="claimFunc">
+                认领
+            </van-button>
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../script/meterManageLocalData.js"></script>
+<script type="text/javascript" src="./js/auidialog.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        dataObj = api.pageParam.data,
+        console.log(JSON.stringify(dataObj));
+        getTaskType = api.pageParam.type;
+        isClaim = false;
+        isDispose = false;
+        if (getTaskType == 'claimTask') { //认领详情
+            isClaim = true;
+            isDispose = false;
+        } else if (getTaskType == 'handle') { //任务处理
+            isClaim = false;
+            isDispose = true;
+        }
+
+        //home键监听
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            if (getTaskType == 'handle') { //任务处理 返回事件
+                api.sendEvent({
+                    name: 'refreshCloudMyTask',
+                    extra: {
+                        type: '1'
+                    }
+                });
+            } else if (getTaskType == 'claimTask') { //任务领用 返回事件
+                api.sendEvent({
+                    name: 'refreshCloudClaim',
+                    extra: {
+                        type: '1'
+                    }
+                });
+            }
+            api.closeWin();
+        });
+
+        //3换表 13移改提 14校表 15三来工单 16其他工单 停水通知单4 通水任务42 通水任务(先通水)41 停水办理2 ServiceTypeId
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        $api.fixIos7Bar(header);
+
+        bMap = api.require("bMap");
+        db = api.require("db");
+        photoBrowser = api.require('photoBrowser');
+
+        messageObj = {
+          "dataObj":{
+            "BeginScale":"",
+            "LastReadScale":"",
+            "OriginalScale":"",
+            "OldAmount":"",
+            "StampNo":"",
+            "ComputeTypeId":"",
+            "ComputeType":"",
+            "CaliberId":"",
+            "Caliber":"",
+            "MeterTypeId":"",
+            "MeterType":"",
+            "NamePlateId":"",
+            "NamePlate":"",
+            "SealNo":"",
+            "Zhf":"",
+            "Jyf":"",
+            "ModelId":"",
+            "Model":"",
+            "InstallationModeId":"",
+            "InstallationMode":""
+          }
+        };
+        api.addEventListener({
+            name: 'hbMessage'
+        }, (ret, err) => {
+            messageObj = ret.value;
+            // console.log(JSON.stringify(ret.value));
+        });
+
+        fnIntVue();
+
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+    };
+
+    function fnIntVue() {
+        window.ApplyTaskVue = new Vue({
+            el: '#wrap',
+            data: {
+                isOldMeter: false,  //报废旧表
+                currentDate: new Date(),  //
+                minTime: new Date(),  // 延期时间
+                dataObj: dataObj,  //云平台传递的数据
+                isClaim: isClaim,  // 是否 -- 认领
+                isDispose: isDispose,  //是否 -- 处理
+
+                TypeName: '',  //任务类型
+                CustomerName: '',  //户名
+                CustomerCode: '',  //户号
+                Address: '',  //地址
+                Location: '',  //表位
+                StampNo: '',  //表号
+                Caliber: '',  //口径
+                Remark: '', //备注
+                pic: [],  //图片数据
+                AppAddress: '',  //定位位置
+
+                OrderNo: '',  //工单编号
+                AreasName: '',  //反映区名
+                Phone: '',  //客户电话
+                SourceName: '',   //信息来源
+                UsgentText: '',  //紧急情况
+                Processinglevelid: '',  //处理级别
+                MeterRemark: '',  //原因描述
+                EndTime: '',  //完成时间
+
+                fileArray: [{
+                    'fileName': '',
+                    'fileUrl': ''
+                }], //附件
+
+                hb: false,  //判断显示工单类型
+                ygt: false,
+                xb: false,
+                sl: false,
+
+                Annotation: '', //退回原因
+
+                showResultSelect: false,
+                showPicker: false,
+                showTimePicker: false,
+                showBackPop: false, //退回备注弹窗是否展示
+
+                addResult: [{
+                    name: "按期完成",
+                    id: 1
+                }, {
+                    name: "客户取消",
+                    id: 2
+                }, {
+                    name: "上门不遇",
+                    id: 3
+                }, {
+                    name: "线上完成",
+                    id: 4
+                }],
+
+                dayHourText: '',  //  申请延期原因
+
+                Longitude: 0,
+                Latitude: 0,
+
+                audioPath: '',
+                videoPath: '',
+
+                getTaskDetail: {}  //获取的工单详情
+            },
+            computed: {
+
+            },
+            methods: {
+                isOpenPostpone() { //是否可以打开延期弹窗
+                    if (this.isClaim) {
+                        return
+                    }
+                    this.showTimePicker = true;
+                },
+                isOpenAddResults() {
+                    if (this.isClaim) {
+                        return
+                    }
+                    this.showPicker = true;
+                    this.showResultSelect = true;
+                },
+                openTableMessage() { //打开换表信息
+                    if (this.isClaim) {
+                        return
+                    }
+                    api.openWin({
+                        name: 'tableMessage',
+                        url: './tableMessage.html',
+                        pageParam: {
+                            messageObj: messageObj
+                        }
+                    });
+                },
+                getDetail() { //获取详情信息
+                  var _that = this;
+                  //3换表 13移改提 14校表 15三来工单 16其他工单 停水通知单4 通水任务42 通水任务(先通水)41 停水办理2
+                  var body = {
+                      'ReqCode': this.dataObj.taskCode, //流程编号
+                      'TypeId': 1
+                  };
+                  fngetmmsPost('MMS104', body, 'application/json', true, false, (ret, err) => {
+                      api.hideProgress();
+                      console.log(JSON.stringify(ret));
+                      if (ret) {
+                        if (ret.Status == 0 && ret.Data != '') {
+                          var data = JSON.parse(ret.Data);
+
+                          db.selectSql({
+                              name: 'Wsdatabase',
+                              sql: "SELECT * FROM MeterTable WHERE ReqCode = '"+ data[0].ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  if (ret.data.length > 0) {
+                                    _that.updateLocalData(data[0]);
+                                  } else {
+                                    _that.insertLocalData(data[0]);
+                                  }
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                        }
+                      } else {
+                        api.toast({
+                            msg: err.msg,
+                            duration: 2000,
+                            location: 'top'
+                        });
+                      }
+                  });
+                },
+                showHtml(taskInfo) {
+                  console.log(JSON.stringify(taskInfo));
+                  if (taskInfo.ServiceTypeId == 3) {
+                    this.hb = true;
+                  } else if(taskInfo.ServiceTypeId == 13) {
+                    this.ygt = true;
+                  } else if(taskInfo.ServiceTypeId == 14) {
+                    this.xb = true;
+                  } else if(taskInfo.ServiceTypeId == 15 || data[0].ServiceTypeId == 16) {
+                    this.sl = true;
+                  }
+
+                  this.TypeName = taskInfo.TypeName;
+                  this.CustomerName = taskInfo.CustomerName;
+                  this.CustomerCode = taskInfo.CustomerCode;
+                  this.Address = taskInfo.Address;
+                  this.Location = taskInfo.Location;
+                  this.StampNo = taskInfo.StampNo;
+                  this.Caliber = taskInfo.Caliber;
+                  this.Remark = taskInfo.Remark;
+                  if (taskInfo.pic != '') {
+                    this.pic = JSON.parse(taskInfo.pic);
+                  } else {
+                    this.pic = [];
+                  }
+
+                  this.AppAddress = taskInfo.AppAddress;
+                  this.OrderNo = taskInfo.OrderNo;
+                  this.AreasName = taskInfo.AreasName;
+                  this.Phone = taskInfo.Phone;
+                  this.SourceName = taskInfo.SourceName;
+                  this.UsgentText = taskInfo.UsgentText;
+                  this.Processinglevelid = taskInfo.Processinglevelid;
+                  this.MeterRemark = taskInfo.MeterRemark;
+                  this.EndTime = taskInfo.EndTime;
+                  this.isOldMeter = taskInfo.IsScrapped;
+
+                  messageObj.dataObj.BeginScale = taskInfo.BeginScale; //旧表止度
+                  messageObj.dataObj.LastReadScale = taskInfo.LastReadScale; //旧表随后抄表止度
+                  messageObj.dataObj.OriginalScale = taskInfo.OriginalScale; //新表起度
+                  messageObj.dataObj.OldAmount = taskInfo.OldAmount; //换表水量
+                  messageObj.dataObj.StampNo = taskInfo.NewStampNo; //水表表号
+                  messageObj.dataObj.ComputeTypeId = taskInfo.ComputeTypeId; //计费时间即换表水量计算方式
+                  messageObj.dataObj.ComputeType = taskInfo.ComputeType; //计费时间即换表水量计算方式
+                  messageObj.dataObj.CaliberId = taskInfo.NewCaliberId; //水表口径
+                  messageObj.dataObj.Caliber = taskInfo.NewCaliber; //水表口径
+                  messageObj.dataObj.MeterTypeId = taskInfo.MeterTypeId; //水表类型
+                  messageObj.dataObj.MeterType = taskInfo.MeterType; //水表类型
+                  messageObj.dataObj.NamePlateId = taskInfo.NamePlateId; //水表铭牌
+                  messageObj.dataObj.NamePlate = taskInfo.NamePlate; //水表铭牌
+                  messageObj.dataObj.SealNo = taskInfo.SealNo; //水表铅封号
+                  messageObj.dataObj.Zhf = taskInfo.Zhf; //止回阀
+                  messageObj.dataObj.Jyf = taskInfo.Jyf; //减压阀
+                  messageObj.dataObj.ModelId = taskInfo.ModelId; //水表型号
+                  messageObj.dataObj.Model = taskInfo.Model; //水表型号
+                  messageObj.dataObj.InstallationModeId = taskInfo.InstallationModeId; //安装方式
+                  messageObj.dataObj.InstallationMode = taskInfo.InstallationMode; //安装方式
+                },
+                saveBtnFunc() { //点击提交
+                    var ServiceTypeId = this.getTaskDetail.ServiceTypeId;
+                    //3换表 13移改提 14校表 15三来工单 16其他工单 停水通知单4 通水任务42 通水任务(先通水)41 停水办理2
+                    if (this.pic.length == 0 || this.pic == []) {
+                        api.toast({
+                            msg: '请上传照片',
+                            duration: 2000,
+                            location: 'bottom'
+                        });
+                        return
+                    }
+
+                    if (api.connectionType != 'none') {
+                        var body = {};
+                        var MethodType = 'MMS105';
+                        if (ServiceTypeId == 13) { //移改提
+                            body = {
+                                'Longitude': this.Longitude, //经度
+                                'Latitude': this.Latitude, //纬度
+                                'Location': this.AppAddress, //定位地址
+                                'ReqCode': this.getTaskDetail.ReqCode, //流程Code
+                                'WorkflowId': this.getTaskDetail.WorkflowId, //流程Id
+                                'ActivityId': this.getTaskDetail.ActivityId, //节点Id
+                                'StepId': this.getTaskDetail.StepId, //指向Id
+                                'TypeId': ServiceTypeId, //流程类型
+                                'CustomerCode': this.CustomerCode, //用户编号
+                                'ClientId': api.deviceId, //手机MEI
+                                'ClientName': api.deviceName, //手机名称
+                                'Remark': this.Remark, //处理结果
+                            }
+                        } else if (ServiceTypeId == 14) { //校表
+                            body = {
+                                'Longitude': this.Longitude, //经度
+                                'Latitude': this.Latitude, //纬度
+                                'Location': this.AppAddress, //定位地址
+                                'ReqCode': this.getTaskDetail.ReqCode, //流程Code
+                                'WorkflowId': this.getTaskDetail.WorkflowId, //流程Id
+                                'ActivityId': this.getTaskDetail.ActivityId, //节点Id
+                                'StepId': this.getTaskDetail.StepId, //指向Id
+                                'TypeId': ServiceTypeId, //流程类型
+                                'CustomerCode': this.CustomerCode, //用户编号
+                                'Remark': this.Remark, //处理结果
+                                'ClientId': api.deviceId, //手机MEI
+                                'ClientName': api.deviceName, //手机名称
+                            };
+                        } else if (ServiceTypeId == 15 || ServiceTypeId == 16) { //三来工单
+                            body = {
+                                'Longitude': this.Longitude, //经度
+                                'Latitude': this.Latitude, //纬度
+                                'Location': this.AppAddress, //定位地址
+                                'ReqCode': this.getTaskDetail.ReqCode, //流程Code
+                                'WorkflowId': this.getTaskDetail.WorkflowId, //流程Id
+                                'ActivityId': this.getTaskDetail.ActivityId, //节点Id
+                                'StepId': this.getTaskDetail.StepId, //指向Id
+                                'TypeId': ServiceTypeId, //流程类型
+                                'CustomerCode': this.CustomerCode, //用户编号
+                                'Remark': this.Remark, //备注
+                                'ClientId': api.deviceId, //手机MEI
+                                'ClientName': api.deviceName, //手机名称
+                            };
+                        } else if (ServiceTypeId == 3) { //换表
+                            if (messageObj.dataObj.BeginScale == '' ||
+                                messageObj.dataObj.LastReadScale == '' ||
+                                messageObj.dataObj.OriginalScale == '' ||
+                                messageObj.dataObj.OldAmount == '' ||
+                                messageObj.dataObj.StampNo == '' ||
+                                messageObj.dataObj.ComputeTypeId == '' ||
+                                messageObj.dataObj.Caliber == '' ||
+                                messageObj.dataObj.MeterTypeId == '' ||
+                                messageObj.dataObj.NamePlateId == '') {
+                                api.toast({
+                                    msg: '请完善换表信息',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                return;
+                            }
+                            body = {
+                                'ReqCode': this.getTaskDetail.ReqCode, //流程编号
+                                'CustomerCode': this.CustomerCode, //用户编号
+                                'CauseId': this.Remark, //换表原因
+                                'Remark': this.Remark,
+                                'TypeId': ServiceTypeId, //流程类型
+                                'ClientId': api.deviceId, //手机MEI
+                                'ClientName': api.deviceName, //手机名称
+                                'Longitude': this.Longitude, //经度
+                                'Latitude': this.Latitude, //纬度
+                                'Location': this.AppAddress, //定位地址
+                                'BeginScale': messageObj.dataObj.BeginScale, //旧表止度
+                                'LastReadScale': messageObj.dataObj.LastReadScale, //旧表随后抄表止度
+                                'OriginalScale': messageObj.dataObj.OriginalScale, //新表起度
+                                'OldAmount': messageObj.dataObj.OldAmount, //换表水量
+                                'StampNo': messageObj.dataObj.StampNo, //水表表号
+                                'ComputeTypeId': messageObj.dataObj.ComputeTypeId, //计费时间即换表水量计算方式
+                                'Caliber': messageObj.dataObj.CaliberId, //水表口径
+                                'MeterTypeId': messageObj.dataObj.MeterTypeId, //水表类型
+                                'NamePlateId': messageObj.dataObj.NamePlateId, //水表铭牌
+                                'SealNo': messageObj.dataObj.SealNo, //水表铅封号
+                                'Zhf': messageObj.dataObj.Zhf, //止回阀
+                                'Jyf': messageObj.dataObj.Jyf, //减压阀
+                                'ModelId': messageObj.dataObj.ModelId, //水表型号
+                                'InstallationModeId': messageObj.dataObj.InstallationModeId, //安装方式
+                                'IsScrapped': (this.isOldMeter == true ? 1 : 0),  //报废旧表
+                                'WorkflowId': this.getTaskDetail.WorkflowId, //流程Id
+                                'ActivityId': this.getTaskDetail.ActivityId, //节点Id
+                                'StepId': this.getTaskDetail.StepId, //指向Id
+                            };
+                            MethodType = 'MMS106';
+                        }
+                        console.log(JSON.stringify(body));
+                        this.uploadFilesFnc(MethodType, body); //图片上传成功后，再提交任务处理
+                    } else {
+                        var picPath = '';
+                        var saveSql = '';
+                        if (ServiceTypeId == 13 || ServiceTypeId == 14) { //移改提  --  校表
+                          if (this.pic.length > 0) {
+                            picPath = JSON.stringify(this.pic);
+                          }
+                          saveSql = "UPDATE MeterTable SET "+
+                                    "Longitude = '"+ this.Longitude +"',"+
+                                    "Latitude = '"+ this.Latitude +"',"+
+                                    "AppAddress = '"+ this.AppAddress +"',"+
+                                    "Remark = '"+ this.Remark +"',"+
+                                    "pic = '"+ picPath +"' WHERE ReqCode = '"+ this.dataObj.taskCode +"'";
+                        } else if (ServiceTypeId == 15 || ServiceTypeId == 16) { //三来工单
+                          if (this.pic.length > 0) {
+                            picPath = JSON.stringify(this.pic);
+                          }
+                          saveSql = "UPDATE MeterTable SET "+
+                                    "Longitude = '"+ this.Longitude +"',"+
+                                    "Latitude = '"+ this.Latitude +"',"+
+                                    "AppAddress = '"+ this.AppAddress +"',"+
+                                    "Remark = '"+ this.Remark +"',"+
+                                    "pic = '"+ picPath +"',"+
+                                    "audioPath = '"+ this.audioPath +"',"+
+                                    "videoPath = '"+ this.videoPath +"' WHERE ReqCode = '"+ this.dataObj.taskCode +"'";
+                        } else if (ServiceTypeId == 3) { //换表
+                            if (messageObj == '') {
+                                api.toast({
+                                    msg: '请填写换表信息',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                return
+                            }
+                            if (this.pic.length > 0) {
+                              picPath = JSON.stringify(this.pic);
+                            }
+                            saveSql = "UPDATE MeterTable SET "+
+                                      "Longitude = '"+ this.Longitude +"',"+
+                                      "Latitude = '"+ this.Latitude +"',"+
+                                      "AppAddress = '"+ this.AppAddress +"',"+
+                                      "Remark = '"+ this.Remark +"',"+
+                                      "pic = '"+ picPath +"',"+
+                                      "BeginScale = '"+ messageObj.dataObj.BeginScale +"',"+
+                                      "LastReadScale = '"+ messageObj.dataObj.LastReadScale +"',"+
+                                      "OriginalScale = '"+ messageObj.dataObj.OriginalScale +"',"+
+                                      "OldAmount='"+messageObj.dataObj.OldAmount+"',"+
+                                      "NewStampNo='"+messageObj.dataObj.StampNo+"',"+
+                                      "ComputeTypeId='"+ messageObj.dataObj.ComputeTypeId +"',"+
+                                      "ComputeType='"+ messageObj.dataObj.ComputeType +"',"+
+                                      "NewCaliberId='"+ messageObj.dataObj.CaliberId +"',"+
+                                      "NewCaliber='"+ messageObj.dataObj.Caliber +"',"+
+                                      "MeterTypeId ='"+ messageObj.dataObj.MeterTypeId +"',"+
+                                      "MeterType ='"+ messageObj.dataObj.MeterType +"',"+
+                                      "NamePlateId = '"+ messageObj.dataObj.NamePlateId +"',"+
+                                      "NamePlate = '"+ messageObj.dataObj.NamePlate +"',"+
+                                      "SealNo = '"+messageObj.dataObj.SealNo+"',"+
+                                      "Zhf = '"+messageObj.dataObj.Zhf+"',"+
+                                      "Jyf = '"+ messageObj.dataObj.Jyf +"',"+
+                                      "ModelId = '"+messageObj.dataObj.ModelId+"',"+
+                                      "Model = '"+messageObj.dataObj.ModelId+"',"+
+                                      "InstallationModeId = '"+messageObj.dataObj.InstallationModeId+"',"+
+                                      "InstallationMode = '"+messageObj.dataObj.InstallationMode+"',"+
+                                      "IsScrapped = '"+this.isOldMeter+"' WHERE ReqCode = '"+ this.dataObj.taskCode +"'";
+                        }
+                        db.executeSql({
+                            name: 'Wsdatabase',
+                            sql: saveSql
+                        }, function(ret, err){
+                            if( ret.status ){
+                                console.log( JSON.stringify( ret ) );
+                                api.toast({
+                                    msg: '无网络，数据保存本地成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }else{
+                                console.log( JSON.stringify( err ) );
+                                api.toast({
+                                    msg: '无网络，数据保存本地失败',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }
+                        });
+                    }
+                },
+                uploadFilesFnc(MethodType, body) { //文件上传
+                    var imgList = this.pic; //选择图片
+                    var fileTypeId = ''; //文件后缀
+                    var filePath = '';
+                    var uploadFiles = [];
+                    for (var i = 0, len = imgList.length; i < len; i++) {
+                        fileTypeId += imgList[i].url.substr(imgList[i].url.lastIndexOf(".") + 1) + "|";
+                        filePath += imgList[i].url + "|";
+                        uploadFiles.push(imgList[i].url);
+                    }
+                    if (fileTypeId != '') {
+                        fileTypeId = fileTypeId.substring(0, fileTypeId.length - 1);
+                    }
+                    if (filePath != '') {
+                        filePath = filePath.substring(0, filePath.length - 1);
+                    }
+
+                    if (this.audioPath != '') {
+                        uploadFiles.push(this.audioPath);
+                        fileTypeId += this.audioPath.substr(this.audioPath.lastIndexOf(".") + 1) + "|";
+                        filePath += this.audioPath + "|";
+                    }
+
+                    if (this.videoPath != '') {
+                        uploadFiles.push(this.videoPath);
+                        fileTypeId += this.videoPath.substr(this.videoPath.lastIndexOf(".") + 1) + "|";
+                        filePath += this.videoPath + "|";
+                    }
+                    var _that = this;
+                    api.showProgress({
+                        title: '正在加载',
+                        text:'',
+                        modal: false
+                    });
+                    api.ajax({
+                        url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+                        method: 'post',
+                        timeout: 15,
+                        dataType: 'json',
+                        returnAll: false,
+                        headers: 'application/json',
+                        data: {
+                            values: {
+                                Method: 'MMS100',
+                                UserName: $api.getStorage("bwUserName"), //"01012"
+                                Password: $api.getStorage("bwPassWord"), // "g6OuZomFp3E="
+                                SerialNo: '',
+                                KeyCode: '', //营业
+                                Parameter: "{'ReqCode':'" + this.dataObj.taskCode + "', 'TypeId':'" + fileTypeId + "', 'filePath':'" + filePath + "'}"
+                            },
+                            files: {
+                                file: uploadFiles
+                            }
+                        }
+                    }, function(ret, err) {
+                        if (ret) {
+                            if (ret.Status == 0) {
+                                bwfnPost(MethodType, body, 'application/json', true, false, (ret, err) => {
+                                    api.hideProgress();
+                                    console.log(JSON.stringify(ret));
+                                    console.log(JSON.stringify(err));
+                                    if (ret) {
+                                        if (ret.Status == 0) {
+                                            api.toast({
+                                                msg: '处理成功',
+                                                duration: 2000,
+                                                location: 'top'
+                                            });
+                                            setTimeout(function() {
+                                                api.openWin({
+                                                    name: 'tableTaskDetail',
+                                                    url: './tableTaskDetail.html',
+                                                    pageParam: {
+                                                        'data': _that.dataObj,
+                                                        'type': getTaskType
+                                                    }
+                                                });
+                                            }, 1000)
+                                        } else {
+                                          api.toast({
+                                              msg: '提交失败',
+                                              duration: 2000,
+                                              location: 'top'
+                                          });
+                                        }
+                                    } else {
+                                        api.toast({
+                                            msg: err.msg,
+                                            duration: 2000,
+                                            location: 'top'
+                                        });
+                                    }
+                                });
+                            } else {
+                                api.hideProgress();
+                                api.toast({
+                                    msg: '图片上传失败，请重新提交',
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                            }
+                            console.log(JSON.stringify(ret));
+                        } else {
+                            console.log(JSON.stringify(err));
+                        }
+                    });
+                },
+                backPop(action, done) { //打开退回弹窗
+                    if (action == "confirm") {
+                        this.sendBack();
+                        done();
+                    } else if (action == 'cancel') {
+                        done();
+                    }
+                },
+                selectLocalTable() {  //查询本地数据
+                  var _that = this;
+                  db.openDatabase({
+                      name: 'Wsdatabase'
+                  }, function(ret, err){
+                      if( ret.status ){
+                          db.selectSql({
+                              name: 'Wsdatabase',
+                              sql: 'SELECT * FROM MeterTable'
+                          }, function(ret, err){
+                              if( ret.status ){
+                                console.log( JSON.stringify( ret ) );
+                                if (api.connectionType == 'none') {  //无网络
+                                  _that.selectLocalData();
+                                } else {
+                                  _that.getDetail();
+                                }
+                              }else{
+                                // 本地无表 -- 创建
+                                var meterSql = "CREATE TABLE MeterTable("+
+                                                "TypeName varchar(255),"+  // --显示基本信息
+                                                "CustomerName varchar(255),"+
+                                                "CustomerCode varchar(255),"+
+                                                "Address varchar(255),"+
+                                                "Location varchar(255),"+
+                                                "StampNo varchar(255),"+
+                                                "Caliber varchar(255),"+
+                                                "Remark varchar(255),"+
+                                                "OrderNo varchar(255),"+
+                                                "AreasName varchar(255),"+
+                                                "Phone varchar(255),"+
+                                                "SourceName varchar(255),"+
+                                                "UsgentText varchar(255),"+
+                                                "Processinglevelid varchar(255),"+
+                                                "MeterRemark varchar(255),"+
+                                                "EndTime varchar(255),"+  // --显示基本信息
+
+                                                "pic varchar(255),"+  // 图片
+                                                "audioPath varchar(255),"+ //音频路径
+                                                "videoPath varchar(255),"+ //视屏路径
+                                                "AppAddress varchar(255),"+  // 定位地址
+
+                                                "BeginScale varchar(255),"+ //旧表止度
+                                                "LastReadScale varchar(255),"+  // 旧表的最后抄见计数
+                                                "OldAmount varchar(255),"+ // 换表水量
+                                                "ComputeTypeId varchar(255),"+ // 换表水量计算方式
+                                                "OriginalScale varchar(255),"+  // 新表起度
+                                                "NewStampNo varchar(255),"+  //水表表号
+                                                "SealNo varchar(255),"+ //水表铅封号
+                                                "NamePlate varchar(255),"+
+                                                "NamePlateId varchar(255),"+ //水表名牌
+                                                "MeterType varchar(255),"+
+                                                "MeterTypeId varchar(255),"+  //水表类型
+                                                "Model varchar(255),"+
+                                                "ModelId varchar(255),"+ //水表型号
+                                                "NewCaliber varchar(255),"+ //水表口径
+                                                "NewCaliberId varchar(255),"+ //水表口径
+                                                "Structure varchar(255),"+  //机械结构
+                                                "StructureId varchar(255),"+  //机械结构
+                                                "InstallationMode varchar(255),"+ //安装方式
+                                                "InstallationModeId varchar(255),"+ //安装方式
+                                                "Zhf varchar(255),"+   //止回阀
+                                                "Jyf varchar(255),"+  //减压阀
+                                                "IsScrapped varchar(255),"+ //是否报废
+
+                                                "ServiceTypeId varchar(255),"+
+
+                                                "ReqCode varchar(255),"+  // -- 提交需要信息
+                                                "WorkflowId varchar(255),"+
+                                                "ActivityId varchar(255),"+
+                                                "StepId varchar(255),"+
+                                                "TypeId varchar(255),"+
+                                                "Longitude varchar(255),"+
+                                                "Latitude varchar(255),"+
+                                                "ClientId varchar(255),"+
+                                                "ClientName varchar(255),"+  // -- 提交需要信息
+                                                "SBKJSelect varchar(255),"+
+                                                "SBLXSelect varchar(255),"+
+                                                "SBMPSelect varchar(255),"+
+                                                "SBAZFSSelect varchar(255),"+
+                                                "SBXHSelect varchar(255),"+
+                                                "HBSLJSFSSelect varchar(255))";
+                                db.executeSql({
+                                    name: 'Wsdatabase',
+                                    sql: meterSql
+                                }, function(ret, err){
+                                    if( ret.status ){
+                                        console.log( JSON.stringify( ret ) );
+                                        if (api.connectionType == 'none') {  //无网络
+                                          api.toast({
+                                              msg: "请检查网络重试",
+                                              duration: 2000,
+                                              location: 'top'
+                                          });
+                                        } else {
+                                          _that.getDetail();
+                                        }
+                                    }else{
+                                        console.log( JSON.stringify( err ) );
+                                    }
+                                });
+                              }
+                          });
+
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                  });
+                },
+                insertLocalData(taskDetail) {  //插入本地数据
+                  var _that = this;
+                  var insertSql = "INSERT INTO MeterTable VALUES ('"+
+                                    taskDetail.TypeName+"','"+
+                                    taskDetail.CustomerName+"','"+
+                                    taskDetail.CustomerCode+"','"+
+                                    taskDetail.Address+"','"+
+                                    taskDetail.Location+"','"+
+                                    taskDetail.StampNo+"','"+
+                                    taskDetail.Caliber+"','"+
+                                    taskDetail.Remark+"','"+
+                                    taskDetail.OrderNo+"','"+
+                                    taskDetail.AreasName+"','"+
+                                    taskDetail.Phone+"','"+
+                                    taskDetail.SourceName+"','"+
+                                    taskDetail.UsgentText+"','"+
+                                    taskDetail.Processinglevelid+"','"+
+                                    taskDetail.MeterRemark+"','"+
+                                    taskDetail.EndTime+"','','','','','','"+
+                                    taskDetail.LastScale+"','','','','','','','','','','','','','','','','','','','','','"+
+                                    taskDetail.ServiceTypeId+"','"+
+                                    taskDetail.ReqCode+"','"+
+                                    taskDetail.WorkflowId+"','"+
+                                    taskDetail.ActivityId+"','"+
+                                    taskDetail.StepId+"','"+
+                                    taskDetail.ServiceTypeId+"','','','"+
+                                    api.deviceId+"','"+
+                                    api.deviceName+"','','','','','','')";
+                  db.executeSql({
+                      name: 'Wsdatabase',
+                      sql: insertSql
+                  }, function(ret, err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          db.selectSql({
+                              name: 'Wsdatabase',
+                              sql: "SELECT * FROM MeterTable WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                console.log(JSON.stringify(ret));
+                                _that.getTaskDetail = ret.data[0];
+                                _that.showHtml(_that.getTaskDetail);
+                                _that.getSelectData(_that.getTaskDetail);
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                  });
+                },
+                updateLocalData(taskDetail) {  //更新本地数据
+                  var _that = this;
+                  var updateSql = "UPDATE MeterTable SET "+
+                                  "TypeName = '"+ taskDetail.TypeName +"',"+
+                                  "CustomerName = '"+ taskDetail.CustomerName +"',"+
+                                  "CustomerCode = '"+ taskDetail.CustomerCode +"',"+
+                                  "Address = '"+ taskDetail.Address +"',"+
+                                  "Location = '"+ taskDetail.Location +"',"+
+                                  "StampNo = '"+ taskDetail.StampNo +"',"+
+                                  "Caliber = '"+ taskDetail.Caliber +"',"+
+                                  "OrderNo = '"+ taskDetail.OrderNo +"',"+
+                                  "AreasName = '"+ taskDetail.AreasName +"',"+
+                                  "Phone = '"+ taskDetail.Phone +"',"+
+                                  "SourceName = '"+ taskDetail.SourceName +"',"+
+                                  "UsgentText = '"+ taskDetail.UsgentText +"',"+
+                                  "Processinglevelid = '"+ taskDetail.Processinglevelid +"',"+
+                                  "EndTime = '"+ taskDetail.EndTime +"',"+
+                                  // "ReqCode = '"+ taskDetail.ReqCode +"',"+
+                                  "WorkflowId = '"+ taskDetail.WorkflowId +"',"+
+                                  "ActivityId = '"+ taskDetail.ActivityId +"',"+
+                                  "ServiceTypeId = '"+ taskDetail.ServiceTypeId +"',"+
+                                  "TypeId = '"+ taskDetail.ServiceTypeId +"',"+
+                                  "StepId = '"+ taskDetail.StepId +"',"+
+                                  "ClientId = '"+ api.deviceId +"',"+
+                                  "ClientName='"+ api.deviceName +"' WHERE ReqCode = '"+ taskDetail.ReqCode +"'";
+                  db.executeSql({
+                      name: 'Wsdatabase',
+                      sql: updateSql
+                  }, function(ret, err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          db.selectSql({
+                              name: 'Wsdatabase',
+                              sql: "SELECT * FROM MeterTable WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                _that.getTaskDetail = ret.data[0];
+                                _that.showHtml(_that.getTaskDetail);
+                                _that.getSelectData(_that.getTaskDetail);
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                  });
+                },
+                selectLocalData() {  //查询本地数据
+                  var _that = this;
+                  db.selectSql({
+                      name: 'Wsdatabase',
+                      sql: "SELECT * FROM MeterTable WHERE ReqCode = '"+ this.dataObj.taskCode +"'"
+                  }, function(ret, err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          _that.getTaskDetail = ret.data[0];
+                          _that.showHtml(_that.getTaskDetail);
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                          api.toast({
+                              msg: "暂无数据",
+                              duration: 2000,
+                              location: 'top'
+                          });
+                      }
+                  });
+
+                },
+                sendBack() { //退回接口请求
+
+                    //移改提、换表，三来工单，校表
+                    var obj = {
+                        'InstanceId': this.getTaskDetail.WorkflowId, //流程ID
+                        'StepId': this.getTaskDetail.StepId, //指向ID
+                        'Annotation': this.Annotation, //备注
+                    };
+
+                    bwfnPost('MMS109', obj, 'application/json', false, false, (ret, err) => {
+                        api.hideProgress();
+                        if (ret) {
+                            if (ret.Status == 0) {
+                                api.toast({
+                                    msg: "退回成功",
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                                setTimeout(function() {
+                                    api.sendEvent({
+                                        name: 'refreshCloudClaim',
+                                        extra: {
+                                            key1: 'value1',
+                                            key2: 'value2'
+                                        }
+                                    });
+                                    api.closeWin();
+
+                                }, 1000);
+                            }
+                            console.log(JSON.stringify(ret));
+                        } else {
+                            api.toast({
+                                msg: err.msg,
+                                duration: 2000,
+                                location: 'top'
+                            });
+                        }
+                    });
+                },
+                turnToUser() { //点击转办
+                    api.openWin({
+                        name: 'TurnToUser',
+                        url: './TurnToUser.html',
+                        pageParam: {
+                            data: this.getTaskDetail,
+                            type: getTaskType
+                        }
+                    });
+                },
+                claimFunc() { //认领接口请求
+                    api.showProgress({
+                        style: 'default',
+                        animationType: 'fade',
+                        title: '正在加载...',
+                        modal: false
+                    });
+                    pGetLocation((ret,err)=>{
+                      if(ret.status){
+                        this.Longitude = ret.lon;
+                        this.Latitude = ret.lat;
+                        var body = {
+                            body: JSON.stringify({
+                                taskCode: this.dataObj.taskCode, // 云平台传的taskCode 修改id 为 taskCode 20200807 15:24 zxf
+                                lng: ret.lon,
+                                lat: ret.lat,
+                                account: $api.getStorage("jhUserName"),
+                                passWord: $api.getStorage("jhPassWord")
+                            })
+                        };
+                        api.ajax({
+                            url: 'http://' + $api.getStorage('apiUrl') + '/api/services/app/WorkFlow/ConfirmTaskById',
+                            method: 'post',
+                            dataType: "json",
+                            returnAll: false,
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": $api.getStorage('loginInfo')
+                            },
+                            data: body
+                        }, (ret, err) => {
+                            if (ret) {
+                                api.hideProgress();
+                                console.log(JSON.stringify(ret));
+                                if (ret.success) {
+                                    api.toast({
+                                        msg: '任务认领成功',
+                                        duration: 2000,
+                                        location: 'middle'
+                                    });
+                                   updateMyTaskSheets(ret.result); //添加数据到云平台我的任务本地数据 2020810 11:08 zxf
+                                    this.isClaim = false; //详情
+                                    this.isDispose = true; //处理
+
+
+                                }
+                            } else {
+                                // console.log( JSON.stringify( err ) );
+                            }
+                        });
+                      }
+                    });
+
+
+                },
+                turnTime(time) {
+                    return time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' +
+                        time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+                },
+                openCamera() { //打开相机
+                    if (this.isClaim) {
+                        return
+                    }
+
+                    api.actionSheet({
+                        cancelTitle: '取消',
+                        buttons: ['拍照', '手机相册']
+                    }, (ret, err) => {
+                        if (ret.buttonIndex == 1) { //打开相机
+                            api.getPicture({
+                                sourceType: 'camera',
+                                encodingType: 'jpg',
+                                mediaValue: 'pic',
+                                destinationType: 'url',
+                                allowEdit: false,
+                                quality: 100,
+                                saveToPhotoAlbum: false
+                            }, (ret, err) => {
+                                if (ret) {
+                                    if (ret.data != "") {
+                                        if (this.pic.length < 5) {
+                                            this.pic.push({
+                                                'url': ret.data,
+                                            });
+                                            this.getLocation();
+                                        }
+                                    }
+                                } else {
+                                    // console.log(JSON.stringify(err));
+                                }
+                            });
+                        } else if (ret.buttonIndex == 2) { //打开相册
+                            api.getPicture({
+                                sourceType: 'library',
+                                encodingType: 'jpg',
+                                mediaValue: 'pic',
+                                destinationType: 'url',
+                                allowEdit: false,
+                                quality: 100,
+                                saveToPhotoAlbum: false
+                            }, (ret, err) => {
+                                if (ret) {
+                                    if (ret.data != "") {
+                                        console.log(JSON.stringify(ret));
+                                        if (this.pic.length < 5) {
+                                            this.pic.push({
+                                                'url': ret.data,
+                                            });
+                                            this.getLocation();
+                                        }
+                                    }
+                                } else {
+                                    // console.log(JSON.stringify(err));
+                                }
+                            });
+                        }
+                    });
+                },
+                openFile() { //上传附件
+                    if (this.isClaim) {
+                        return;
+                    }
+                    api.actionSheet({
+                        title: '',
+                        cancelTitle: '取消',
+                        buttons: ['音频', '视频']
+                    }, (ret, err) => {
+                        if (ret.buttonIndex == '1') {
+                            var fileBrowser = api.require('fileBrowser');
+                            fileBrowser.open((ret) => {
+                                if (ret) {
+                                    if (ret.url != '') {
+                                        this.audioPath = ret.url;
+                                        this.fileArray[0].fileName = ret.url.substr(ret.url.lastIndexOf("/") + 1);
+                                        this.fileArray[0].fileUrl = ret.url;
+                                    }
+                                }
+                            });
+                        } else if (ret.buttonIndex == '2') {
+                            api.getPicture({
+                                sourceType: 'album', //从相册中选择
+                                mediaValue: 'video',
+                                allowEdit: false,
+                                //destinationType: 'base64',  //返回base64地址
+                                destinationType: 'base64',
+                                quality: 90,
+                                saveToPhotoAlbum: true
+                            }, (ret, err) => {
+                                if (ret) {
+                                    if (ret.duration > 25) {
+                                        alert("视频时长最大为25秒");
+                                    } else {
+                                        if (ret.data != '') {
+                                            // $(".video-div").css('display', 'inline-block');
+                                            this.videoPath = ret.data;
+                                            this.fileArray[0].fileName = ret.url.substr(ret.url.lastIndexOf("/") + 1);
+                                            this.fileArray[0].fileUrl = ret.url;
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
+                },
+                back() { //返回上一个页面
+                    if (getTaskType == 'handle') { //任务处理 返回事件
+                        api.sendEvent({
+                            name: 'refreshCloudMyTask',
+                            extra: {
+                                type: '1'
+                            }
+                        });
+                    } else if (getTaskType == 'claimTask') { //任务领用 返回事件
+                        api.sendEvent({
+                            name: 'refreshCloudClaim',
+                            extra: {
+                                type: '1'
+                            }
+                        });
+                    }
+                    api.closeWin();
+                },
+                delectPic(index) { //删除指定照片
+                    if (this.isClaim) {
+                        return
+                    }
+                    var _picArray = this.pic;
+
+                    _picArray.splice(index, 1);
+                },
+                getLocation() { //定位
+                    if (this.isClaim) {
+                        return
+                    }
+                    this.AppAddress = "正在定位中...";
+                    this.Longitude = 0;
+                    this.Latitude = 0;
+                    bMap.getLocation({
+                        accuracy: '10m',
+                        autoStop: true,
+                    }, (ret, err) => {
+                        if (ret.status) {
+                            ApplyTaskVue.Longitude = ret.lon;
+                            ApplyTaskVue.Latitude = ret.lat;
+                            bMap.getNameFromCoords({
+                                lon: ret.lon,
+                                lat: ret.lat
+                            }, (ret, err) => {
+                                // console.log(JSON.stringify(ret)+','+JSON.stringify(err));
+                                if (ret.status) {
+                                    ApplyTaskVue.AppAddress = ret.address;
+                                    // ApplyTaskVue.uploadCoordinat();
+                                } else {
+                                    ApplyTaskVue.AppAddress = "定位失败";
+                                }
+                            });
+                        } else {
+                            ApplyTaskVue.AppAddress = "定位失败";
+                        }
+                    });
+                },
+                uploadCoordinat() { //上传坐标
+                    let obj = {
+                        'Type': this.getTaskDetail.ServiceTypeId,
+                        'ReviewId': this.Id,
+                        'CustomerCode': this.CustomerCode,
+                        'Longitude': this.Longitude, //经度
+                        'Latitude': this.Latitude, //纬度
+                        'Address': this.Location, //经度纬度坐标地址
+                        'CustomerCode': this.CustomerCode, //用户编号
+                        'ClientId': api.deviceId, //手机MEI
+                        'CollectedTime': new Date(),
+                    };
+                    fnPost('MMS010', obj, 'application/json', false, false, (ret, err) => {
+                        if (ret && ret.Status == 0) {
+                            if (ret.Data != '') {
+                                // var data = JSON.parse(ret.Data);
+                                // this.getLocation;
+                            }
+                        }
+                    });
+
+                },
+                onChange(xh) { //图片预览
+
+                    var iamgesArray = [];
+                    for (item of this.pic) {
+                        iamgesArray.push(item.url);
+                    }
+
+                    photoBrowser.open({
+                        'images': iamgesArray,
+                        // placeholderImg: 'widget://image/MeterManage/dingwei.png',
+                        'bgColor': '#000',
+                        'activeIndex': xh
+                    }, (ret, err) => {
+                        if (ret) {
+                            if (ret.eventType == 'click') {
+                                photoBrowser.close();
+                            }
+                        } else {
+                            // console.log(JSON.stringify(err));
+                        }
+                    });
+                },
+                hideAllSelect() {
+                    this.showPicker = false;
+                    this.showAreaSelect = false;
+                },
+                beforeClose(action, done) { //延期申请调取接口
+                    if (action == "confirm") {
+                        var delayTime = this.currentDate.getFullYear() + "-" +
+                            ((this.currentDate.getMonth() + 1) < 10 ? "0" + (this.currentDate.getMonth() + 1) : (this.currentDate.getMonth() + 1)) + "-" +
+                            (this.currentDate.getDate() < 10 ? "0" + this.currentDate.getDate() : this.currentDate.getDate()) + "  " +
+                            (this.currentDate.getHours() < 10 ? "0" + this.currentDate.getHours() : this.currentDate.getHours()) + ":" +
+                            (this.currentDate.getMinutes() < 10 ? "0" + this.currentDate.getMinutes() : this.currentDate.getMinutes()) + ":00";
+                        var body = {
+                            'Id': '',
+                            'InstanceId': this.getTaskDetail.WorkflowId, //流程Id
+                            'EmployeeID': this.getTaskDetail.ActivityId, //节点Id
+                            'stepId': this.getTaskDetail.StepId, //指向Id
+                            'TypeId': this.getTaskDetail.ServiceTypeId, //流程类型
+                            'IsReassign': 2, //  是否转办、延期 0：不转办也不延期，1：转办，2：延期
+                            'Content': this.dayHourText, //备注
+                            // 'Id':,//轨迹ID
+                            'DeferredTime': delayTime, //DeferredTime,//延期时间
+
+                        };
+                        bwfnPost('MMS110', body, 'application/json', false, false, (ret, err) => {
+                            api.hideProgress();
+                            if (ret) {
+                                done();
+                                if (ret.Status == 0) {
+                                    api.toast({
+                                        msg: '申请成功',
+                                        duration: 2000,
+                                        location: 'top'
+                                    });
+                                    if (getTaskType == 'handle') { //任务处理 返回事件
+                                        api.sendEvent({
+                                            name: 'refreshCloudMyTask',
+                                            extra: {
+                                                type: '1'
+                                            }
+                                        });
+                                    } else if (getTaskType == 'claimTask') { //任务领用 返回事件
+                                        api.sendEvent({
+                                            name: 'refreshCloudClaim',
+                                            extra: {
+                                                type: '1'
+                                            }
+                                        });
+                                    }
+                                    setTimeout(function() {
+                                        api.closeWin();
+                                    }, 1000);
+                                }
+                            } else {
+                                api.toast({
+                                    msg: err.msg,
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                            }
+                        });
+                    } else if (action == 'cancel') {
+                        // console.log('cancel'+','+'222');
+                        done();
+                    }
+                },
+                getSelectData(taskDetail) {
+                  fnPost('MMS103', {'TypeId': 'SBKJ'}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                      if (ret && ret.Status == 0) {
+                          var data = JSON.parse(ret.Data);
+                          var SourceData = [];
+                          for (item of data) {
+                              SourceData.push({
+                                  name: item.Name,
+                                  id: item.Id
+                              });
+                          }
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "UPDATE MeterTable SET SBKJSelect='"+JSON.stringify(SourceData)+"' WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  console.log( JSON.stringify( ret ) );
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                      }
+                  });
+                  fnPost('MMS103', {'TypeId': 'SBLX'}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                      if (ret && ret.Status == 0) {
+                          var data = JSON.parse(ret.Data);
+                          var EmergencyData = [];
+                          for (item of data) {
+                              EmergencyData.push({
+                                  name: item.Name,
+                                  id: item.Id
+                              });
+                          }
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "UPDATE MeterTable SET SBLXSelect='"+JSON.stringify(EmergencyData)+"' WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  console.log( JSON.stringify( ret ) );
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                      }
+                  });
+                  fnPost('MMS103', {'TypeId': 'SBMP'}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                      if (ret && ret.Status == 0) {
+                          var data = JSON.parse(ret.Data);
+                          var LevelData = [];
+                          for (item of data) {
+                              LevelData.push({
+                                  name: item.Name,
+                                  id: item.Id
+                              });
+                          }
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "UPDATE MeterTable SET SBMPSelect='"+JSON.stringify(LevelData)+"' WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  console.log( JSON.stringify( ret ) );
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                      }
+                  });
+                  fnPost('MMS103', {'TypeId': 'SBAZFS'}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                      if (ret && ret.Status == 0) {
+                          var data = JSON.parse(ret.Data);
+                          var install = [];
+                          for (item of data) {
+                              install.push({
+                                  name: item.Name,
+                                  id: item.Id
+                              });
+                          }
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "UPDATE MeterTable SET SBAZFSSelect='"+JSON.stringify(install)+"' WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  console.log( JSON.stringify( ret ) );
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                      }
+                  });
+                  fnPost('MMS103', {'TypeId': 'SBXH'}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                      if (ret && ret.Status == 0) {
+                          var data = JSON.parse(ret.Data);
+                          var ReasonData = [];
+                          for (item of data) {
+                              ReasonData.push({
+                                  name: item.Name,
+                                  id: item.Id
+                              });
+                          }
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "UPDATE MeterTable SET SBXHSelect='"+JSON.stringify(ReasonData)+"' WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  console.log( JSON.stringify( ret ) );
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                      }
+                  });
+                  fnPost('MMS103', {'TypeId': 'HBSLJSFS'}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                      if (ret && ret.Status == 0) {
+                          var data = JSON.parse(ret.Data);
+                          var AreaData = [];
+                          for (item of data) {
+                              AreaData.push({
+                                  name: item.Name,
+                                  id: item.Id
+                              });
+                          }
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: "UPDATE MeterTable SET HBSLJSFSSelect='"+JSON.stringify(AreaData)+"' WHERE ReqCode = '"+ taskDetail.ReqCode +"'"
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  console.log( JSON.stringify( ret ) );
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+                      }
+                  });
+                }
+            },
+            mounted: function() { //挂载完成后调用
+                this.selectLocalTable();
+                this.getLocation();
+            }
+        })
+    }
+</script>
+
+</html>

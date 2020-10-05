@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>异常水量复核任务处理</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+    <style>
+        html,
+        body {
+          width: 100%;
+          height: 100%;
+          background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        #header {
+          position: fixed;
+        }
+
+        .aui-title {
+          font-size: 1.18rem;
+        }
+
+        #footer1, #footer2 {
+          width: 100%;
+          height: 6.08rem;
+          background-color: #fff;
+          border-top: 1px solid #CCCCCC;
+        }
+
+        .footer-btn {
+          border-radius: 1rem;
+          width: 5.5rem;
+          height: 1.86rem;
+          line-height: 1.86rem;
+          font-size: 0.90rem;
+          color: #fff;
+        }
+
+        .task-main {
+          width: calc(100% - 1.5rem);
+          height: auto;
+          background: #FFFFFF;
+          border-radius:0.75rem;
+          margin: 0.83rem 0.75rem 6.91rem 0.75rem;
+          padding: 1.5rem 1.3rem;
+          box-sizing: border-box;
+        }
+
+        .task-info {
+          width: 100%;
+          height: auto;
+        }
+
+        .info-item {
+          margin-bottom: 0.6rem;
+          width: 100%;
+          box-sizing: border-box;
+        }
+
+        .task-title {
+          font-size: 0.9rem;
+          font-weight: 400;
+          color: #1F1F1F;
+          width: 30%;
+          display: inline-block;
+          vertical-align: top;
+        }
+        .task-cont {
+          font-size: 0.9rem;
+          font-weight: 400;
+          color: #626262;
+          width: 68%;
+          display: inline-block;
+        }
+        .w2{
+          letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+          margin-right:-2em; /*同上*/
+        }
+        .img-list {
+          width: 100%;
+          height: auto;
+        }
+
+        .img-item {
+          width: 30%;
+          height: auto;
+          margin-right: 5%;
+          margin-top: 0.5rem;
+          display: inline-block;
+          position: relative;
+          vertical-align: top;
+        }
+
+        .img-item-last {
+          margin-right: 0;
+        }
+
+        .img-delete {
+          position: absolute;
+          right: -8px;
+          top: -8px;
+        }
+
+        .img-item img {
+          width: 100%;
+          height: 2.8rem;
+        }
+
+        .img-type {
+          font-size: 0.55rem;
+          color: #707070;
+          margin-top: 0.25rem;
+        }
+
+        .remark {
+          width: 100%;
+          height: 2.95rem;
+          border-radius:6px;
+          border: 1px solid #D8D8D8;
+          box-sizing: border-box;
+          padding: 0.45rem 0.48rem;
+          font-size: 0.65rem;
+        }
+
+        #dialogInput {
+          height: 6.05rem;
+          box-sizing: border-box;
+          padding: 0.45rem 0.48rem;
+          font-size: 0.8rem;
+          border: 1px solid #CCCCCC;
+        }
+
+        .fj-item{
+          display:inline-block;
+          width: 30%;
+          text-align: center;
+          font-size: 0.8rem;
+          color: #707070;
+          position: relative;
+        }
+
+        .video-div{
+          margin-right: 5%;
+          display: none;
+        }
+
+        .audio-div{
+          display: none;
+        }
+
+        .popup {
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.3);
+          position: fixed;
+          z-index: 999;
+        }
+
+        .audio-popup {
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.8);
+          position: fixed;
+          z-index: 999;
+          display: none;
+        }
+
+        .audio-img {
+          width: 25%;
+          position: absolute;
+          left: 37.5%;
+          bottom: 10%;
+        }
+
+        .audio-popup p{
+          width: 100%;
+          text-align: center;
+          margin-top: 50%;
+          font-size: 36px;
+          color: #CCC;
+        }
+
+        .audio-time-div {
+          width: 100%;
+          height: 1.5rem;
+          text-align: center;
+          line-height: 1.5rem;
+          font-size: 18px;
+          color: #CCC;
+          margin-top: 0.5rem;
+        }
+
+        .audio-time-div span{
+          margin-right: 8px;
+          font-size: 36px;
+          color: rgba(0, 210, 123, 1);
+        }
+
+        .status-popup{
+          width: 100%;
+          height: auto;
+          position: absolute;
+          bottom: 0;
+          background-color: #ccc;
+        }
+
+        .popup-item {
+          width: 100%;
+          height: 3rem;
+          line-height: 3rem;
+          border-bottom: 1px solid #cccccc;
+          box-sizing: border-box;
+          padding: 0rem 1rem;
+          background-color: #fff;
+        }
+
+        .popup-list {
+          width: 100%;
+          height: 100%;
+          overflow-y: auto;
+          background-color: #fff;
+        }
+
+        .popup-title {
+          width: 100%;
+          height: 3rem;
+          line-height: 3rem;
+          box-sizing: border-box;
+          padding: 0rem 1rem;
+          background-color: #fff;
+          margin-bottom: 1rem;
+        }
+
+        .popup-title span {
+          color: #3E7BF3;
+          font-size: 0.9rem;
+          display: inline-block;
+        }
+
+        .popup-cont-all {
+          width: 100%;
+          height: auto;
+        }
+
+        .popup-cont-item {
+          width: 100%;
+          height: 2rem;
+          line-height: 2rem;
+          font-size: 0.9rem;
+          text-align: center;
+        }
+
+        .lanse {
+            color: #3A87F7;
+        }
+
+        .popup-cont-all{
+          background-color: #CCCCCC;
+        }
+
+        .addressIcon {
+            background: url(./image/dingwei.png) no-repeat 0 0;
+            background-size: 100% 100%;
+            width: .6rem;
+            height: .7rem;
+            display: inline-block;
+            /*vertical-align: text-bottom;*/
+        }
+
+        .textColor {
+            color: #2045FF;
+        }
+
+        .isTurn {
+          display: none;
+        }
+
+        .item-title {
+          float: left;
+        }
+    </style>
+  </head>
+  <body>
+    <div id='wrap' class="flex-wrap flex-vertical">
+      <div class="popup"  v-if='showReview'><!-- @click="noClose" -->
+        <div class="status-popup">
+          <ul class="popup-list">
+            <li class="popup-item" @click="showToggle(item)" v-for='(item,index) in firstMenuArr' :key='index'>
+              <div class="item-title">{{item.CBZT}} </div>
+              <i class="aui-iconfont aui-icon-right" style="float: right;"></i>
+              <ul style='width: 100%; height: auto;' v-if="item.isSubshow">
+                <li style="width: 100%; height: 30px;" v-for='(itemTwo,indexTwo) in item.twoMenu'>
+                  <!-- @click="closeStatse" -->
+                  <div class="popup-cont-item" tapmode  params="{{itemTwo}}">{{itemTwo.MC}}</div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+          <div class="aui-pull-left aui-btn">
+              <span class="aui-iconfont aui-icon-left"></span>
+          </div>
+          <div class="aui-title">任务处理</div>
+      </header>
+      <header class="aui-bar aui-bar-nav" id="header">
+          <div class="aui-pull-left aui-btn" tapmode @click='back'>
+              <span class="aui-iconfont aui-icon-left"></span>
+          </div>
+          <div class="aui-title">任务处理</div>
+      </header>
+
+      <div class="task-main">
+        <div class="task-info">
+          <div class="info-item">
+            <div class="task-title">
+              <span>任务类型</span>
+            </div>
+            <div class="task-cont">
+              <span>{{TaskType}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">户名</span>
+            </div>
+            <div class="task-cont">
+              <span>{{CustomerName}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">户号</span>
+            </div>
+            <div class="task-cont">
+              <span>{{CustomerCode}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">地址</span>
+            </div>
+            <div class="task-cont">
+              <span>{{Address}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">表位</span>
+            </div>
+            <div class="task-cont">
+              <span>{{Location}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span>用水性质</span>
+            </div>
+            <div class="task-cont">
+              <span>{{Nature}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">口径</span>
+            </div>
+            <div class="task-cont">
+              <span>{{Caliber}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">起度</span>
+            </div>
+            <div class="task-cont">
+              <span>{{RecordBeginScale}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">止度</span>
+            </div>
+            <div class="task-cont">
+              <span>{{RecordEndScale}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span class="w2">用量</span>
+            </div>
+            <div class="task-cont">
+              <span>{{RecordAmount}}</span>
+            </div>
+          </div>
+          <div class="info-item" v-if='isTurn'>
+            <div class="task-title">
+              <span class="">转办失败</span>
+            </div>
+            <div class="task-cont">
+              <span>{{TurnRemark}}</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title" style="width: 45%;">
+              <span>复核水表状态</span>
+            </div>
+            <!-- @click='showState' -->
+            <div  class="task-cont" style="width: 53%;border-bottom: 1px solid #D8D8D8;position: relative;">
+              <input v-model='reviewstate' readonly style="width: 100%; height: 27px;" type="text"/>
+              <i class="aui-iconfont aui-icon-down" style="position: absolute;right: 0;top: 20%;"></i>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span>复核止度</span>
+            </div>
+            <div class="task-cont"  style="border-bottom: 1px solid #D8D8D8;">
+              <!-- @click='showScaleTip' -->
+              <input v-model='reviewscale' readonly='true' style="width: 100%; height: 27px;" type="number" >
+            </div>
+          </div>
+          <div class="info-item" v-if='showActualMeter'>
+            <div class="task-title">
+              <span>实际表码</span>
+            </div>
+            <div class="task-cont"  style="border-bottom: 1px solid #D8D8D8;">
+              <input v-model='actualmeter' style="width: 100%; height: 27px;" type="number">
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title">
+              <span>复核水量</span>
+            </div>
+            <div class="task-cont" style="border-bottom: 1px solid #D8D8D8;">
+              <!-- @click='showAmountTip' -->
+              <input v-model='reviewamount' readonly='true' style="width: 100%; height: 27px;" type="number" >
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title" style="display: block;">
+              <span class="w2">备注</span>
+            </div>
+            <div class="task-cont" style="margin_top: 11px; width: 100%;height: 2.95rem; position: relative;">
+              <textarea class='remark' v-model='Remark' maxlength="200"></textarea>
+              <span class="fontnum" style="color: #E2E2E2; font-size:0.65rem;position: absolute;right: 0.45rem;bottom: 0.48rem;">200</span>
+            </div>
+          </div>
+          <div class="info-item">
+            <div class="task-title" style="width: 100%;height: 1.5rem;">
+              <span class="w2">照片</span>
+              <img id="waimg" src="./image/zhaopian.png" style="float: right;width: 1.05rem; height: 0.85rem;margin-top: 0.2rem;">
+            </div>
+            <div class="task-cont" v-if='showPhoto' style="margin_top: 11px; width: 100%;">
+              <div class="img-list" id="imgList">
+              </div>
+            </div>
+          </div>
+          <div class="info-item" style="width: 100%; height: 1px ;background-color: #C0C0C0;">
+          </div>
+          <div class="info-item">
+            <div class="task-title" style="width: 100%;height: 1.5rem;">
+              <span class="w2">附件</span>
+              <img id="fjimg" src="./image/fujian.png" style="float: right; width: 0.95rem; height: 0.9rem;margin-top: 0.2rem;">
+            </div>
+            <div class="task-cont" v-if='showFJ' style="margin_top: 0.5rem; width: 100%;">
+              <div class="fj-item video-div" @click='playVideo' v-if='showVideo'>
+                  <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                    <img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' onclick='DeleteVideo()' />
+                    <img src="./image/video.png" style="width: 50%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-25%;" alt=""/>
+                  </div>
+                  视频文件
+              </div>
+              <div class="fj-item audio-div" @click='startAudio' v-if='showAudio'>
+                  <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                    <img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' onclick='DeleteAudio()' />
+                    <img src="./image/audio.png" style="width: 25%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-12.5%;" alt=""/>
+                  </div>
+                  音频文件
+              </div>
+            </div>
+          </div>
+          <!-- @click='getLocation' -->
+          <p >
+              <i class="addressIcon"></i>
+              <span class="textColor">{{LocationAddress}}</span>
+          </p>
+        </div>
+      </div>
+      <footer v-if='!isClaim' class="aui-bar aui-bar-tab" id="footer1">
+          <div class="aui-bar-tab-item" tapmode>
+              <div class="aui-btn footer-btn" style='background-color: #FFA836' @click='TaskUserList'>转办</div>
+          </div>
+          <div class="aui-bar-tab-item" tapmode>
+              <div class="aui-btn footer-btn" style='background-color: #FF4141' @click='TaskSubmit'>提交</div>
+          </div>
+      </footer>
+
+      <footer v-if='isClaim' class="aui-bar aui-bar-tab" id="footer2">
+        <div class="aui-bar-tab-item" tapmode>
+            <div class="aui-btn footer-btn" style='background-color: #377EFF' tapmode @click='TaskReturn'>退回</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode>
+            <div class="aui-btn footer-btn" style='background-color: #FF4141' tapmode @click='ClaimOk'>认领</div>
+        </div>
+      </footer>
+    </div>
+
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/moment.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+  <script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+  <script type="text/javascript">
+    var db;
+    apiready = function() {
+      api.parseTapmode();
+      var header = $api.byId('header');
+      // 实现沉浸式状态栏效果
+      $api.fixStatusBar(header);
+      headerH = $api.offset(header).h;
+      var hideheader = $api.byId('hideheader');
+      // 实现沉浸式状态栏效果
+      $api.fixStatusBar(hideheader);
+
+      db = api.require('db');
+
+      fnIntVue();
+      Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+      api.addEventListener({
+          name: 'keyback'
+      }, function(ret, err){
+        if( ret ){
+          if(ret.keyCode == 4){
+            FilterVue.back();
+          }
+        }
+      });
+
+    };
+
+    function fnIntVue() {
+      window.FilterVue = new Vue({
+        el: "#wrap",
+        data: {
+          TaskType: '',//任务类型
+          CustomerName: '',//户名
+          CustomerCode: '',//户号
+          Address: '', //地址
+          Location: '',//表位
+          Nature: '',//用水性质
+          Caliber: '',//口径
+          RecordBeginScale: '',//起度
+          RecordEndScale: '', //止度
+          RecordAmount: '', //用量
+          TurnRemark: '', //转办失败原因
+
+          reviewstate: '请选择',//复核状态显示文本
+          reviewscale: '',//复核止度
+          actualmeter: '',//实际表码
+          reviewamount: '',//复核水量
+          Remark: '',//备注
+
+          LocationAddress: '',//APP定位位置
+
+          isTurn: false,//转办失败显示
+          showActualMeter: false,//实际表码显示
+          showPhoto: false, //照片显示
+          showFJ: false, //附件显示
+          showVideo: false, //视频显示
+          showAudio: false,//音频显示
+          isClaim: true,//认领状态
+
+          TaskData: {}, //接收到的任务数据
+          getTaskType: '',//用于返回上一界面，刷新
+
+          imgData: [],//图片类型数据
+          imgDataText: [],//图片类型文本名称
+
+          reviewStateArr: [],//复核状态数据
+          firstMenuArr: [],//复核状态菜单
+
+          showReview: true,//复核状态弹框显示
+        },
+        computed: {},
+        methods: {
+          back() {
+            if (this.getTaskType == 'handle') { //任务处理 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudMyTask',
+                  extra: {
+                      type: '1'
+                  }
+              });
+            } else if (this.getTaskType == 'claimTask') { //任务领用 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudClaim',
+                  extra: {
+                      type: '1'
+                  }
+              });
+            }
+            api.closeWin();
+          },
+          selectLocationAudit() {
+            var _that = this;
+            //创建或打开数据库
+            db.openDatabase({
+              name: 'Wsdatabase',
+              path: 'fs://Wsdatabase/Wsdatabase.db'
+            }, function(ret, err){
+                if( ret.status ){
+                    //查询本地是否有 AUDIT_TASK_LIST 表
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: 'SELECT * FROM AUDIT_TASK_LIST'
+                    }, function(ret, err){
+                        if( ret.status ){
+                          //本地有 AUDIT_TASK_LIST 表
+                          if(api.connectionType == 'none') {
+                            _that.selectLocation(_that.TaskData.thirdTaskId);
+                          } else {
+                            _that.getTaskDetail(_that.TaskData.thirdTaskId);
+                          }
+                        }else{
+                          //本地无 AUDIT_TASK_LIST 表
+                          var Sql = "CREATE TABLE AUDIT_TASK_LIST("+
+                                    "Id varchar(255),"+
+                                    "Source varchar(255),"+
+                                    "Code varchar(255),"+
+                                    "Name varchar(255),"+
+                                    "Status varchar(255),"+
+                                    "CustomerCode varchar(255),"+
+                                    "CustomerName varchar(255),"+
+                                    "Address varchar(255),"+
+                                    "Location varchar(255),"+
+                                    "Nature varchar(255),"+
+                                    "Caliber varchar(255),"+
+                                    "Nameplate varchar(255),"+
+                                    "MeterType varchar(255),"+
+                                    "StampNo varchar(255),"+
+                                    "LastScale varchar(255),"+
+                                    "BeginScale varchar(255),"+
+                                    "EndScale varchar(255),"+
+                                    "Amount varchar(255),"+
+                                    "ArrearMoney varchar(255),"+
+                                    "Description varchar(255),"+
+                                    "Remark varchar(255),"+
+                                    "TaskNo varchar(255),"+
+                                    "RecordBeginScale varchar(255),"+
+                                    "RecordEndScale varchar(255),"+
+                                    "RecordAmount varchar(255),"+
+                                    "RecordTypdId varchar(255),"+
+                                    "RecordTypdName varchar(255),"+
+                                    "LastReadScale varchar(255),"+
+                                    "AuditReadScale varchar(255),"+
+                                    "OperatedTime varchar(255),"+
+                                    "DispatchTime varchar(255),"+
+                                    "UseTime varchar(255),"+
+                                    "HandleTime varchar(255),"+
+                                    "AuditTime varchar(255),"+
+                                    "AuditTimes varchar(255),"+
+                                    "Files varchar(255),"+
+                                    "Handles varchar(255),"+
+                                    "UsedTypeId varchar(255),"+
+                                    "AuditStatus varchar(255),"+
+                                    "FileUrl varchar(255),"+
+                                    "FileType varchar(255),"+
+                                    "Type varchar(255),"+
+                                    "ReadTime varchar(255),"+
+                                    "ReviewStateText varchar(255),"+
+                                    "SelectData varchar(255),"+
+                                    "ImgStatus varchar(255),"+
+                                    "UserScale varchar(255),"+
+                                    "UserAmount varchar(255),"+
+                                    "ActualMeter varchar(255),"+
+                                    "FileLocation varchar(255),"+
+                                    "LocationAddress varchar(255),"+
+                                    "VideoPath varchar(255),"+
+                                    "AudioPath varchar(255))";
+                          db.executeSql({
+                              name: 'Wsdatabase',
+                              sql: Sql
+                          }, function(ret, err){
+                              if( ret.status ){
+                                  if (api.connectionType != 'none') {
+                                    _that.getTaskDetail(_that.TaskData.thirdTaskId);
+                                  }
+                              }else{
+                                  console.log( JSON.stringify( err ) );
+                              }
+                          });
+
+                        }
+                    });
+                }else{
+                    alert( JSON.stringify( err ) );
+                }
+            });
+          },
+          insertAudit(taskItem) {
+            var _that = this;
+            var Sql = "INSERT INTO AUDIT_TASK_LIST VALUES ('"+
+              taskItem.Id +"', '"+
+              taskItem.Source +"','"+
+              taskItem.Code +"','"+
+              taskItem.Name +"','"+
+              taskItem.Status +"','"+
+              taskItem.CustomerCode +"','"+
+              taskItem.CustomerName +"','"+
+              taskItem.Address +"','"+
+              taskItem.Location +"','"+
+              taskItem.Nature +"','"+
+              taskItem.Caliber +"','"+
+              taskItem.Nameplate +"','"+
+              taskItem.MeterType +"','"+
+              taskItem.StampNo +"','"+
+              taskItem.LastScale +"','"+
+              taskItem.BeginScale +"','"+
+              taskItem.EndScale +"','"+
+              taskItem.Amount +"','"+
+              taskItem.ArrearMoney +"','"+
+              taskItem.Description +"','"+
+              taskItem.Remark +"','"+
+              taskItem.TaskNo +"','"+
+              taskItem.RecordBeginScale +"','"+
+              taskItem.RecordEndScale +"','"+
+              taskItem.RecordAmount +"','"+
+              taskItem.RecordTypdId +"','"+
+              taskItem.RecordTypdName +"','"+
+              taskItem.LastReadScale +"','"+
+              taskItem.AuditReadScale +"','"+
+              taskItem.OperatedTime +"','"+
+              taskItem.DispatchTime +"','"+
+              taskItem.UseTime +"','"+
+              taskItem.HandleTime +"','"+
+              taskItem.AuditTime +"','"+
+              taskItem.AuditTimes +"','','"+
+              JSON.stringify(taskItem.Handles) +"','','','','','','','','','','','','','','','','')";
+            db.executeSql({
+                name: 'Wsdatabase',
+                sql: Sql
+            }, function(ret, err){
+                if( ret.status ){
+                    _that.selectLocation(taskItem.Id);
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+            });
+          },
+          updateAudit(taskItem) {
+            var _that = this;
+            var Sql = "UPDATE AUDIT_TASK_LIST SET " +
+                      "Source = '" + taskItem.Source + "'," +
+                      "Code = '" + taskItem.Code + "'," +
+                      "Name = '" + taskItem.Name + "'," +
+                      "Status = '" + taskItem.Status + "'," +
+                      "CustomerCode = '" + taskItem.CustomerCode + "'," +
+                      "CustomerName = '" + taskItem.CustomerName + "'," +
+                      "Address = '" + taskItem.Address + "'," +
+                      "Location = '" + taskItem.Location + "'," +
+                      "Nature = '" + taskItem.Nature + "'," +
+                      "Caliber = '" + taskItem.Caliber + "'," +
+                      "Nameplate = '" + taskItem.Nameplate + "'," +
+                      "MeterType = '" + taskItem.MeterType + "'," +
+                      "StampNo = '" + taskItem.StampNo + "'," +
+                      "LastScale = '" + taskItem.LastScale + "'," +
+                      "BeginScale = '" + taskItem.BeginScale + "'," +
+                      "EndScale = '" + taskItem.EndScale + "'," +
+                      "Amount = '" + taskItem.Amount + "'," +
+                      "ArrearMoney = '" + taskItem.ArrearMoney + "'," +
+                      "Description = '" + taskItem.Description + "'," +
+                      "TaskNo = '" + taskItem.TaskNo + "'," +
+                      "RecordBeginScale = '" + taskItem.RecordBeginScale + "'," +
+                      "RecordEndScale = '" + taskItem.RecordEndScale + "'," +
+                      "RecordAmount = '" + taskItem.RecordAmount + "'," +
+                      "RecordTypdId = '" + taskItem.RecordTypdId + "'," +
+                      "RecordTypdName = '" + taskItem.RecordTypdName + "'," +
+                      "LastReadScale = '" + taskItem.LastReadScale + "'," +
+                      "AuditReadScale = '" + taskItem.AuditReadScale + "'," +
+                      "OperatedTime = '" + taskItem.OperatedTime + "'," +
+                      "DispatchTime = '" + taskItem.DispatchTime + "'," +
+                      "UseTime = '" + taskItem.UseTime + "'," +
+                      "HandleTime = '" + taskItem.HandleTime + "'," +
+                      "AuditTime = '" + taskItem.AuditTime + "'," +
+                      "AuditTimes = '" + taskItem.AuditTimes + "'," +
+                      "Handles = '" + JSON.stringify(taskItem.Handles) + "' WHERE Id='"+ taskItem.Id +"'";
+            db.executeSql({
+                name: 'Wsdatabase',
+                sql: Sql
+            }, function(ret, err){
+                if( ret.status ){
+                    _that.selectLocation(taskItem.Id);
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+            });
+          },
+          selectLocation(taskId) {
+            var _that = this;
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskId + "'"
+            }, function(ret, err){
+                if( ret.status ){
+                    _that.showHtml(ret.data[0]);
+                    if(api.connectionType != 'none') {
+                      _that.getSelectData(taskId);
+                      _that.getImgStatus(taskId);
+                    }
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+            });
+          },
+          getTaskDetail(taskId) {
+            var _that = this;
+            api.showProgress({
+                title: '加载中',
+                text:'',
+                modal: false
+            });
+            api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    values: {
+                      UserName: $api.getStorage("jhUserName"),
+                      Password: $api.getStorage("jhPassWord"),
+                      SerialNo: dataTime(),
+                      Method: "MMS002",
+                      Longitude: '',//Longitude
+                      Latitude:  '',//Latitude
+                      Parameter: "{'id':'"+ taskId +"',  'Code':'43', 'Status':'', 'Source':'', 'BookId':'', 'ReaderId':'', 'CustomerCode':'', 'BeginTime':'', 'EndTime':''}"
+                    }
+                }
+            },function(ret, err){
+                api.hideProgress();
+                console.log(JSON.stringify(ret));
+                console.log(JSON.stringify(err));
+                if (ret) {
+                  if(ret.Status == '0') {
+                    if(ret.Data == '') {
+                      vant.Toast('暂无数据');
+                      return;
+                    }
+                    var taskDetails = JSON.parse(ret.Data);
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskId + "'"
+                    }, function(ret, err){
+                        if( ret.status ){
+                            if (ret.data.length > 0) {
+                              _that.updateAudit(taskDetails[0]);
+                            } else if (ret.data.length == 0) {
+                              _that.insertAudit(taskDetails[0]);
+                            }
+                        }else{
+                            console.log( JSON.stringify( err ) );
+                        }
+                    });
+
+                  } else {
+                    vant.Toast(err.Message);
+                  }
+                } else {
+                    vant.Toast(err.msg);
+                }
+            });
+
+          },
+          getSelectData(taskId) {
+            var _that = this;
+            api.showProgress({
+                title: '加载中',
+                text:'',
+                modal: false
+            });
+            api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                dataType: 'json',
+                returnAll: false,
+                headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+                data: {
+                  "body":
+                    "{\"UserName\":\""+$api.getStorage("jhUserName")+"\",\"Password\":\""+$api.getStorage("jhPassWord")+"\",\"SerialNo\":\""+ dataTime() +"\",\"Method\":\"R999\"," +
+                    "\"Parameter\":\"{\\\"ClientId\\\":\\\""+api.deviceId+"\\\",\\\"ClientName\\\":\\\""+api.deviceModel+"\\\",\\\"OperatorId\\\":\\\""+$api.getStorage('cbOperatorId')+"\\\",\\\"OperatorName\\\":\\\""+ $api.getStorage('cbOperatorName') +"\\\",\\\"Required\\\":\\\"\\\",\\\"Type\\\":\\\"104\\\"}\"}"
+                }
+            },function(ret, err){
+                api.hideProgress();
+                if (ret) {
+                    if (ret.Status == 0) {
+                      var Sql = "UPDATE AUDIT_TASK_LIST SET " +
+                                "SelectData = '" + ret.Data + "' WHERE Id = '" +taskId+ "'";
+                      db.executeSql({
+                          name: 'Wsdatabase',
+                          sql: Sql
+                      }, function(ret, err) {
+                          if (ret.status) {
+                              console.log(JSON.stringify(ret))
+                          } else {
+                              console.log(JSON.stringify(err));
+                          }
+                      });
+
+                      _that.reviewStateArr = JSON.parse(ret.Data);
+                      _that.reviewSelect(ret.Data);
+                    }
+                } else {
+                    alert( JSON.stringify( err ) );
+                }
+            });
+
+          },
+          reviewSelect(selectData) {
+            var firstArr = JSON.parse(selectData);
+            for (var i = 0; i < firstArr.length - 1; i++) {
+                for (var j = i + 1; j < firstArr.length; j++) {
+                    if (firstArr[i].CBZTID == firstArr[j].CBZTID) {
+                        firstArr.splice(j, 1);
+                        j--;
+                    }
+                }
+            }
+            for(var i = 0, len = firstArr.length; i < len; i++) {
+              firstArr[i].twoMenu = [];
+              firstArr[i].isSubshow = false;
+              for (var j = 0, len1 = this.reviewStateArr.length; j < len1; j++) {
+                if (firstArr[i].CBZTID == this.reviewStateArr[j].CBZTID) {
+                  firstArr[i].twoMenu.push(this.reviewStateArr[j]);
+                }
+              }
+            }
+            this.firstMenuArr = firstArr;
+            console.log(this.firstMenuArr.length);
+            console.log(JSON.stringify(this.firstMenuArr));
+          },
+          getImgStatus(taskId) {
+            var _that = this;
+            api.showProgress({
+                title: '加载中',
+                text:'',
+                modal: false
+            });
+            api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    values: {
+                      "UserName": $api.getStorage("jhUserName"),
+                      "Password": $api.getStorage("jhPassWord"),
+                      "SerialNo": dataTime(),
+                      "Longitude": '',//Longitude
+                      "Latitude": '',//Latitude
+                      "Method": "MMS103",
+                      "Parameter": "{'TypeId':'RWWJLX'}"
+                    }
+                }
+            },function(ret, err){
+                api.hideProgress();
+                if (ret) {
+                    if (ret.Status == 0) {
+                      var wjData = JSON.parse(ret.Data);
+                      for (var i = 0; i < wjData.length; i++) {
+                        if (wjData[i].Id != '4' && wjData[i].Id != '5') {
+                          _that.imgData.push(wjData[i]);
+                          _that.imgDataText.push(wjData[i].Name);
+                        }
+                      }
+
+
+                      var Sql = "UPDATE AUDIT_TASK_LIST SET " +
+                                "ImgStatus = '" + JSON.stringify(_that.imgData) + "' WHERE Id = '" +taskId+ "'";
+                      db.executeSql({
+                          name: 'Wsdatabase',
+                          sql: Sql
+                      }, function(ret, err){
+                          if( ret.status ){
+                              console.log( JSON.stringify( ret ) );
+                          }else{
+                              console.log( JSON.stringify( err ) );
+                          }
+                      });
+
+                    }
+                } else {
+                    alert( JSON.stringify( err ) );
+                }
+            });
+
+
+          },
+          showHtml(taskDetails) {
+            this.TaskType = taskDetails.Name;
+            this.CustomerName = taskDetails.CustomerName;
+            this.CustomerCode = taskDetails.CustomerCode;
+            this.Address = taskDetails.Address;
+            this.Location = taskDetails.Location;
+            this.Nature = taskDetails.Nature;
+            this.Caliber = taskDetails.Caliber;
+            this.RecordBeginScale = taskDetails.RecordBeginScale;
+            this.RecordEndScale = taskDetails.RecordEndScale;
+            this.RecordAmount = taskDetails.RecordAmount;
+
+            //审核失败原因
+            if (JSON.parse(taskDetails.Handles).length >= 2) {
+              if (JSON.parse(taskDetails.Handles)[1].StatusId == '5' || JSON.parse(taskDetails.Handles)[1].StatusId == '4') {
+                this.isTurn = true;
+                this.TurnRemark = JSON.parse(taskInfo.Handles)[0].Remark;
+              }
+            }
+
+          },
+          TaskUserList() {//转办
+
+          },
+          TaskSubmit() {//提交
+
+          },
+          TaskReturn() {//退回
+
+          },
+          ClaimOk() {//认领
+
+          },
+          showToggle(item) {//显示二级菜单
+            item.isSubshow = !item.isSubshow;
+          }
+        },
+        mounted: function() {
+          this.TaskData = api.pageParam.data;
+          this.getTaskType = api.pageParam.type;
+
+          this.selectLocationAudit();
+        }
+      });
+    }
+
+  </script>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>分类frame页面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            background-color: transparent;
+        }
+
+        .aui-content {
+            position: absolute;
+            width: 250px;
+            height: auto;
+            top: 40%;
+            left: calc( (100% - 250px)/2);
+            border-radius: 5px;
+        }
+
+        .aui-content ul li:last-child,
+        .aui-content ul {
+            background-image: none !important;
+        }
+
+        .aui-list-item {
+            background-position: 0 bottom !important;
+        }
+
+        input {
+            outline: none;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+        .c-overlay{
+          z-index: 11111;
+        }
+    </style>
+</head>
+
+<body>
+  <div id="classify"  v-cloak >
+    <div class="aui-content aui-margin-b-15" >
+        <ul class="aui-list aui-list-in">
+            <li class="aui-list-item" tapmode @click="addClassify()">
+                <div class="aui-list-item-inner">
+                    新增分类
+                </div>
+            </li>
+            <li class="aui-list-item" tapmode @click="editClassify()">
+                <div class="aui-list-item-inner">
+                    修改分类
+                </div>
+            </li>
+            <li class="aui-list-item" tapmode @click="deleteClassify()" v-show="showDelete">
+                <div class="aui-list-item-inner">
+                    删除分类
+                </div>
+            </li>
+        </ul>
+    </div>
+    <van-dialog v-model="showDialog" :title="dialogTitle" show-cancel-button close-on-click-overlay  overlay-class='c-overlay'  @confirm="confirmDialog">
+        <van-cell-group v-if="inputDialog" :border="false">
+            <van-field v-model="title" placeholder="请输入分类名" />
+        </van-cell-group>
+    </van-dialog>
+  </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script>
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        fnIntVue(); //初始化vue实例
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        var myDiv = document.getElementById("classify");
+        document.addEventListener("touchstart", function() {
+            api.closeFrame({});
+        });
+        $api.setStorage('addClassify', true);
+        myDiv.addEventListener("touchstart", function(event) {
+            event = event || window.event;
+            event.stopPropagation();
+        });
+    };
+
+    function fnIntVue() {
+        window.ClassifyVue = new Vue({
+            el: "#classify",
+            data: {
+                classify: null,
+                showDelete: false,
+                showDialog: false,
+                inputDialog: true,
+                dialogTitle: "",
+                title: ""
+            },
+            methods: {
+                addClassify:function() {
+                    this.dialogTitle = "新增分类";
+                    this.title = "";
+                    this.inputDialog = true;
+                    this.showDialog = true;
+                },
+                editClassify:function() {
+                    this.dialogTitle = "修改分类";
+                    this.title = this.classify.title;
+                    this.inputDialog = true;
+                    this.showDialog = true;
+                },
+                deleteClassify:function() {
+                    this.dialogTitle = "确定删除吗？";
+                    this.inputDialog = false;
+                    this.showDialog = true;
+                },
+                confirmDialog:function() {
+                    if (this.inputDialog) {
+                        if (this.dialogTitle == "新增分类") {
+                            if (!this.title) {
+                                api.toast({
+                                    msg: '新增失败，分类名不能为空！',
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                                return
+                            } else {
+                                api.sendEvent({
+                                    name: 'addClassify',
+                                    extra: {
+                                        title: this.title
+                                    }
+                                });
+                                api.closeFrame({
+                                    name: 'classify_frame'
+                                });
+                            }
+                        } else {
+                            if (!this.title) {
+                                api.toast({
+                                    msg: '修改失败，分类名不能为空！',
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                                return
+                            } else {
+                                api.sendEvent({
+                                    name: 'editClassify',
+                                    extra: {
+                                        title: this.title,
+                                        id: this.classify.id,
+                                        sort: this.classify.sort,
+                                        item: this.classify,
+                                        index: api.pageParam.index
+                                    }
+                                });
+                                api.closeFrame({
+                                    name: 'classify_frame'
+                                });
+                            }
+                        }
+                    } else {
+                        api.sendEvent({
+                            name: 'deleteClassify',
+                            extra: {
+                                id: this.classify.id,
+                                index: api.pageParam.index
+                            }
+                        });
+                        api.closeFrame({
+                            name: 'classify_frame'
+                        });
+                    }
+                },
+            },
+            mounted: function() {
+                this.classify = api.pageParam.classify;
+                this.showDelete = !this.classify.notDelete;
+            }
+        })
+    }
+
+    //点击新增分类，弹出带输入框的对话框
+    function addClassify() {
+        dialog.prompt({
+            title: "新增分类",
+            text: '默认内容',
+            type: 'number',
+            buttons: ['确定', '取消']
+        }, function(ret) {
+            if (ret.buttonIndex == 1) {
+                if (ret.text != "") {
+                    var fun = "addClassify('" + ret.text + "')";
+                    api.execScript({
+                        name: 'main',
+                        frameName: 'main_frame',
+                        script: fun
+                    });
+                    api.closeFrame({
+                        name: 'classify_frame'
+                    });
+                } else {
+                    api.toast({
+                        msg: '新增失败，分类名不能为空！',
+                        duration: 2000,
+                        location: 'top'
+                    });
+                    return
+                }
+            }
+        })
+    }
+
+    //点击修改分类，弹出带输入框的对话框，输入框的值为当前分类名
+    function editClassify() {
+        dialog.prompt({
+            title: "修改分类",
+            text: '默认内容',
+            type: 'number',
+            buttons: ['确定', '取消'],
+            inputValue: title
+        }, function(ret) {
+            if (ret.buttonIndex == 1) {
+                if (ret.text != "") {
+                    var fun = "editClassify('" + title + "','" + ret.text + "','" + id + "','" + sort + "')";
+                    api.sendEvent({
+                        name: 'editClassify',
+                        extra: {
+                            key1: 'value1',
+                            key2: 'value2'
+                        }
+                    });
+                    api.closeFrame({
+                        name: 'classify_frame'
+                    });
+                } else {
+                    api.toast({
+                        msg: '修改失败，分类名不能为空！',
+                        duration: 2000,
+                        location: 'top'
+                    });
+                    return
+                }
+            }
+        })
+    }
+
+    //点击删除分类，弹出确认提示框
+    function deleteClassify() {
+        dialog.alert({
+            msg: '确定删除吗',
+            buttons: ['确定', '取消']
+        }, function(ret) {
+            if (ret.buttonIndex == 1) {
+                var fun = "deleteClassify('" + id + "')";
+                api.execScript({
+                    name: 'main',
+                    frameName: 'main_frame',
+                    script: fun
+                });
+                api.closeFrame({
+                    name: 'classify_frame'
+                });
+            }
+        })
+    }
+</script>
+
+</html>

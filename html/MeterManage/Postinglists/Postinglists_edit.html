@@ -1,0 +1,2149 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>张贴列表任务处理</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right img {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            height: 100%;
+            overflow: hidden;
+            background-color: #F3F3F3;
+            width: 92%;
+            margin: 0 auto;
+            border-radius: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        /*.footer .van-button {
+          width: 13.98rem;
+          height: 2.23rem;
+          line-height: normal;
+          font-size: 0.95rem;
+          color: #fff;
+          background-color: #377EFF;
+      }*/
+        /*标题*/
+
+        .aui-info {
+            background: #fff;
+            height: 3rem;
+        }
+
+        .aui-info .aui-info-item:first-child {
+            padding-left: 1rem;
+        }
+
+        .aui-info .aui-margin-l-5 {
+            font-size: 1rem;
+            font-family: Source Han Sans SC;
+            font-weight: 400;
+            color: #000;
+        }
+
+        .aui-info .aui-info-item:last-child {
+            padding-right: 1rem;
+            font-size: 0.8rem;
+        }
+        /*列表*/
+
+        .section_one {
+            height: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            /*border-radius: 1rem;*/
+            padding: 0.8rem 1.25rem;
+            background: white;
+            padding-bottom: 0.3rem;
+        }
+
+        .aui-card-list .section_one_box .box>div {
+            padding: 0.05rem 0;
+            font-size: 1rem;
+            font-family: Source Han Sans SC;
+            font-weight: 400;
+            color: rgba(80, 80, 80, 1);
+        }
+
+        .aui-card-list .section_one_box .box .textareaBox {
+            position: relative;
+        }
+
+        .aui-card-list .section_one_box .box .textareaBox #in {
+            position: absolute;
+            bottom: 0.2rem;
+            right: 1rem;
+            color: red;
+            font-size: 0.7rem;
+        }
+
+        .aui-card-list .section_one_box .box .textareaBox textarea {}
+
+        .aui-card-list .section_one_box .box>div:first-child {
+            padding-top: 0rem;
+        }
+
+        .aui-card-list .section_one_box .box>div:before {
+            content: "";
+            display: table;
+        }
+
+        .aui-card-list .section_one_box .box>div:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .aui-card-list .section_one_box .box>div>span:nth-child(1) {
+            overflow: hidden;
+            float: left;
+            text-align: left;
+            width: 50%;
+        }
+        /*.aui-card-list .section_one_box .box>div>span:nth-child(1)>span{
+        position: relative;
+        bottom: -2px;
+        width: 49%;
+        line-height: 0.8rem;
+        display: inline-block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }*/
+        /*.aui-card-list .section_one_box .box>div>span:nth-child(2){
+        overflow: hidden;
+        float: right;
+        text-align: left;
+        width: 50%;
+      }
+      .aui-card-list .section_one_box .box>div>span:nth-child(2)>span{
+        position: relative;
+        bottom: -2px;
+        width: 49%;
+        line-height: 0.8rem;
+        display: inline-block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }*/
+
+        .section_two {
+            border-radius: 0.5rem;
+            margin: 0.71rem 0.25rem;
+        }
+
+        .section_two .box>div:first-child {
+            padding-bottom: 0.5rem;
+        }
+
+        .section_two .box>div:first-child span:nth-child(1) {
+            width: 20%!important;
+            line-height: 2rem;
+        }
+
+        .section_two .box>div:first-child span:nth-child(2) {
+            width: 80%!important;
+        }
+
+        .footer {
+            width: 100vw;
+            height: auto;
+            background: #fff;
+            /*justify-content: center;*/
+        }
+
+        .footer ul {
+            display: flex;
+            flex-flow: row;
+            width: 94%;
+            margin: 0 auto;
+            padding-top: 0.3rem;
+            padding-bottom: 1rem;
+        }
+
+        .footer ul li {
+            flex: 1;
+            text-align: center;
+        }
+
+        .footer ul li div {
+            width: 90%;
+            margin: 0 auto;
+            border-radius: 1rem;
+            background: rgba(55, 126, 255, 1);
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            text-align: center;
+            color: #fff;
+        }
+
+        .footer ul li:nth-child(2) div {
+            background: rgba(12, 206, 81, 1);
+        }
+        /*文本框*/
+
+        #SurveyRequire {
+            width: 100%;
+            height: 4rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(216, 216, 216, 1);
+            padding: 0.5rem;
+        }
+        /*照片拍照*/
+
+        #zhaopian1 {
+            margin-top: 0.5rem;
+            position: relative;
+        }
+
+        #zhaopian1>div {
+            position: absolute;
+            right: 0.8rem;
+            top: 0rem;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        #zhaopian1>div>img {
+            display: block;
+            width: 100%;
+        }
+
+        .close {
+            width: 1.6rem;
+            height: 1.6rem;
+            background-size: 100%;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-image: url(../image/MeterManage/Posting/shanchu.png);
+            position: absolute;
+            top: -0.5rem;
+            right: -0.1rem;
+        }
+
+        .ImgOrVideo {
+            width: 80%;
+            display: table !important;
+        }
+
+        .ImgOrVideo .imgDiv {
+            width: 3rem!important;
+            height: 3rem;
+            margin-left: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .ImgOrVideo img {
+            width: 3rem!important;
+            height: 3rem;
+        }
+
+        .ImgOrVideo .aui-col-xs-4 {
+            margin-bottom: 0.5rem;
+        }
+
+        #location {
+            padding: 0.2rem auto;
+        }
+
+        #location .addressIcon {
+            background: url(../image/MeterManage/Posting/dingwei.png) no-repeat 0 0;
+            background-size: 100% 100%;
+            width: .6rem;
+            height: .7rem;
+            display: inline-block;
+        }
+
+        #location .textColor {
+            color: #2045FF;
+            font-size: 0.8rem;
+        }
+
+        .flex-con-bluer {
+            margin-bottom: 12rem!important;
+        }
+
+        .colorActive {
+            background: #ccc!important;
+        }
+
+        .task-title {
+            color: #1F1F1F;
+            width: 34%;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .task-cont {
+            color: #626262;
+            width: 64%;
+            display: inline-block;
+        }
+
+        .w2 {
+            letter-spacing: 2em;
+            /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+            margin-right: -2em;
+            /*同上*/
+        }
+
+        .row {
+            border-bottom: 1px solid #F2F2F2;
+        }
+        .not_border_bottom{
+          border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode data-action="back">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">张贴停水通知单</div>
+            <div class="aui-pull-right aui-btn aui-hide" tapmode data-action="CodeScanning" id=CodeScanning>
+                <img src="../image/MeterManage/Posting/wenhao.png" alt="">
+            </div>
+        </header>
+        <div class="aui-info">
+            <div class="aui-info-item">
+                <span class="aui-margin-l-5">张贴停水通知单</span>
+            </div>
+            <div class="aui-info-item" id="OperatedTime">2015-07-13</div>
+        </div>
+        <div id="main" class="flex-con">
+            <section class="section_one">
+                <div class="aui-card-list">
+                    <div class="section_one_box">
+                        <div class="box" id="dataListEdit">
+                          <!-- <div class="row">
+                              <div class="task-title">
+                                  <span class="w2">户号</span>:
+                              </div>
+                              <div class="task-cont">
+                                  {{listdataLst.CustomerCode}}
+                              </div>
+                          </div> -->
+                        </div>
+                        <div class="box" id="dataListimag">
+                            <!-- <div class="textareaBox">
+                        备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 注
+                      </div> -->
+                            <div class="row not_border_bottom">
+                                <div class="task-title">
+                                    <span class="w2">备注</span>:
+                                </div>
+                            </div>
+                            <div class="textareaBox">
+                                <textarea type="text" id="SurveyRequire" placeholder="请输入备注说明" onkeydown="checknum()" onkeyup="checknum()"></textarea>
+                                <div id="in">100</div>
+                            </div>
+                            <div class="row not_border_bottom" style="margin-top: 0.3rem; padding-top: 0.3rem;">
+                                <div class="task-title">
+                                    <span class="w2">照片</span>
+                                </div>
+                                <div style='width: 1.5rem;height: 1.5rem;display: inline-block;margin-top: 0.1rem; float: right;' tapmode data-action="Photograph"><img src="../image/MeterManage/Posting/zhaopian1.png" alt=""></div>
+                            </div>
+                            <!-- <div class="textareaBox" id="zhaopian1">
+                        照&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 片
+                        <div tapmode data-action="Photograph"><img src="../image/MeterManage/Posting/zhaopian1.png" alt=""></div>
+                      </div> -->
+                            <div class="ImgOrVideo" id="ImgOrVideo">
+
+                            </div>
+                            <div class="textareaBox " id="location" onclick='getLocation()'>
+                                <i class="addressIcon"></i>
+                                <span class="textColor"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <div class="footer">
+            <ul>
+                <li>
+                    <div id="FirstHousehold" tapmode data-action="FirstHousehold">上一户</div>
+                </li>
+                <li>
+                    <div id="submit" tapmode data-action="submitData">完成</div>
+                </li>
+                <li>
+                    <div id="LastHousehold" tapmode data-action="LastHousehold">下一户</div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/hammer.min.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/template" id="Booksdata">
+    <div parse="{{listdataLst}}" id='CustomerName' class="row">
+        <div class="task-title">
+            <span class="w2">户名</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.CustomerName}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="w2">户号</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.CustomerCode}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="w2">地址</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.Address}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="w2">表位</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.Location}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="">用水性质</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.Nature}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="w2">用量</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.Amount}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="w2">起度</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.BeginScale}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="w2">止度</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.EndScale}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="task-title">
+            <span class="">抄表类型</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.Nature}}
+        </div>
+    </div>
+    {{if listdataLst.ArrearMoney==""||listdataLst.ArrearMoney==" "}}
+    <div class="row">
+        <div class="task-title">
+            <span class="">欠费金额</span>:
+        </div>
+        <div class="task-cont">
+            0
+        </div>
+    </div>
+    {{else}}
+    <div class="row">
+        <div class="task-title">
+            <span class="">欠费金额</span>:
+        </div>
+        <div class="task-cont">
+            {{listdataLst.ArrearMoney}}
+        </div>
+    </div>
+    {{/if}}
+    <!-- <div parse="{{listdataLst}}" id='CustomerName'>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名 {{listdataLst.CustomerName}}</div>
+  <div>户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 号 {{listdataLst.CustomerCode}}</div>
+  <div id="changeAddressSb">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 置 {{listdataLst.Address}}</div>
+  <div>表&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 位 {{listdataLst.Location}}</div>
+  <div>用水性质 {{listdataLst.Nature}}</div>
+  <div>用&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 量 {{listdataLst.Amount}}</div>
+  <div>起&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度 {{listdataLst.BeginScale}}</div>
+  <div>止&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 度 {{listdataLst.EndScale}}</div>
+  <div>抄表类型 {{listdataLst.Nature}}</div>
+  {{if listdataLst.ArrearMoney==""||listdataLst.ArrearMoney==" "}}
+  <div class="ArrearMoney">欠费金额 0</div>
+  {{else}}
+  <div class="ArrearMoney">欠费金额 {{listdataLst.ArrearMoney}}</div>
+  {{/if}} -->
+</script>
+<script type="text/template" id="orderHistoryTpl">
+    {{each items value i}}
+    <div class="aui-col-xs-2 imgDiv">
+        <img src="{{value.imageFileUrl}}" alt="{{value.imageIsNew}}" data-param="{{value.locationSJ}}" lon="{{value.locationJD}}" lat="{{value.locationWD}}" lostory="{{value.imageAnnexType}}" tapmode data-action="fnOpenFile" class="imgfile" idImg="{{value._id}}">
+        <div class="close closeHide" tapmode data-action="clearImg" data-param="{{value.imageFileUrl}}" lostory="{{value.imageAnnexType}}" idImg="{{value._id}}"></div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    var headerH, db, bMap;
+    var onlineName = []; //图片类型名称数据。
+    var onlineId = []; //图片类型值数据。
+    var UsersDatalis;
+    var UserNumbers = 0;
+    var deleteImgData = []
+    var WorkTypeId, WorkTypeCode, WorkTypeSource, dataListSend, TaskId, OneId, userName;
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        userName = $api.getStorage('loginData').userName
+        db = api.require("db");
+        bMap = api.require("bMap");
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        // center = $api.offset($api.byId('center')).h;
+
+        $('#center').css('margin-top', '' + headerH + 'px');
+        dataListSend = JSON.parse(api.pageParam.data)
+        WorkTypeId = dataListSend.TaskNo;
+        WorkTypeCode = '4'
+        WorkTypeSource = '营销系统'
+        var imageList = dataListSend.Files
+        console.log(JSON.stringify(api.pageParam));
+        TaskId = api.pageParam.TaskId;
+        if (api.pageParam.pageNameCode == 0) {
+            selectDate() //待张贴
+        } else {
+            selectDatesave() //已保存
+        }
+
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            if (ret) {
+                var Remark = $("#SurveyRequire").val();
+                var imgList = $(".imgfile");
+                if (Remark != '' || imgList.length > 0) {
+                    var TypeNumer = '0'
+                    saveDataFun(TypeNumer)
+                        // 监听返回
+                    deleteImg()
+
+                } else {
+                    deleteImg()
+                }
+            } else {
+                //  alert( JSON.stringify( err ) );
+            }
+        });
+
+        //左滑监听优化 2020-06-30 zlx
+        var app = document.querySelector('#wrap');
+        var hammertime = new Hammer(app);
+        hammertime.on('swipeleft', function(ret, err) {
+            if (api.connectionType != "none") {
+                api.openWin({
+                    name: 'CustomerDetails',
+                    url: '../CustomerSearch/CustomerDetails.html',
+                    pageParam: {
+                        CustomerCode: UsersDatalis[UserNumbers].CustomerCode
+                    }
+                });
+            } else {
+                api.toast({
+                    msg: '网络无法连接，请检查网络配置',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+
+        var sectionOne = document.querySelector('.section_one');
+        var hammertime1 = new Hammer(sectionOne);
+        hammertime1.on('swipeleft', function(ret, err) {
+            if (api.connectionType != "none") {
+                api.openWin({
+                    name: 'CustomerDetails',
+                    url: '../CustomerSearch/CustomerDetails.html',
+                    pageParam: {
+                        CustomerCode: UsersDatalis[UserNumbers].CustomerCode
+                    }
+                });
+            } else {
+                api.toast({
+                    msg: '网络无法连接，请检查网络配置',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+        });
+
+        // api.addEventListener({
+        //     name:'swipeleft'
+        // }, function(ret, err){
+        //   if(api.connectionType!="none"){
+        //     api.openWin({
+        //           name: 'CustomerDetails',
+        //           url: '../CustomerSearch/CustomerDetails.html',
+        //           pageParam: {
+        //               CustomerCode:  UsersDatalis[UserNumbers].CustomerCode
+        //           }
+        //       });
+        //   }else {
+        //     api.toast({
+        //         msg: '网络无法连接，请检查网络配置',
+        //         duration: 2000,
+        //         location: 'middle'
+        //     });
+        //
+        //   }
+        //
+        //
+        // });
+
+
+    };
+    var actionList = {
+        'back': function() {
+            var Remark = $("#SurveyRequire").val();
+            var imgList = $(".imgfile");
+            if (Remark != '' || imgList.length > 0) {
+                var TypeNumer = '0'
+                saveDataFun(TypeNumer)
+                deleteImg()
+            } else {
+                deleteImg()
+            }
+
+        },
+        'CodeScanning': function() {
+            var mark = JSON.parse($("#CustomerName").attr("parse"))
+            var remark
+            if (mark.RemarkText.length > 0) {
+                remark = mark.RemarkText
+            } else {
+                remark = "暂无"
+            }
+            api.alert({
+                title: '任务未通过',
+                msg: "未通过原因：" + remark,
+            }, function(ret, err) {
+                if (ret) {
+                    //  alert( JSON.stringify( ret ) );
+                } else {
+                    //  alert( JSON.stringify( err ) );
+                }
+            });
+        },
+        'Photograph': function() {
+            if (UsersDatalis[UserNumbers].StatusUser == "1") { //StatusUser用于判断任务是否被终止
+
+            } else {
+                var list = $api.domAll('.ImgOrVideo img');
+                $('.section_three').removeClass('section_hidden')
+                if (list.length >= 5) {
+                    api.toast({
+                        msg: '仅支持五张图片',
+                        duration: 2000,
+                        location: 'top'
+                    });
+                } else {
+                    api.actionSheet({
+                        buttons: ['拍照', '相册选择']
+                    }, function(ret, err) {
+                        var index = ret.buttonIndex;
+                        if (index == 1) {
+                            getCamera("camera", " ");
+                        }
+                        if (index == 2) {
+                            getCamera('pic', " ");
+                        }
+                    });
+                }
+                // 拍照
+            }
+
+
+        },
+        'fnOpenFile': function() {
+            // 图片放大阅览功能
+            var index;
+            var list = $api.domAll('.ImgOrVideo img');
+            var data = []
+            for (var i = 0; i < list.length; i++) {
+                var img = $(list[i]).attr('src')
+                data.push(img)
+                if ($(this).attr('src') == $(list[i]).attr('src')) {
+                    index = i
+                }
+            }
+            pBrowserPicture(index, data)
+        },
+        'clearImg': function() {
+            // 图片删除
+            if (UsersDatalis[UserNumbers].NotUploader == "1") {
+
+            } else {
+                var path = $(this).attr('idImg'); //通过id删除
+                var pathtwo = $(this).attr('lostory');
+                var list = $api.domAll('.ImgOrVideo img');
+                var parentList = $(this).parent();
+
+                api.confirm({
+                    title: '提示',
+                    msg: '确认要删除照片',
+                    buttons: ['确认', '取消']
+                }, function(ret, err) {
+                    if (ret) {
+                        if (ret.buttonIndex == 1) {
+                            var photos = db.executeSqlSync({
+                                name: 'Wsdatabase',
+                                sql: 'delete from POSTING_IMAGE where _id="' + path + '" AND userName = "' + userName + '"'
+                            });
+                            var list = $api.domAll('.ImgOrVideo img');
+                            if (list.length == 1) {
+                                parentList.remove();
+                                $('.section_three').addClass('section_hidden')
+                            } else {
+                                parentList.remove();
+                            }
+                        }
+                    }
+                });
+
+
+            }
+
+        },
+        'submitData': function() {
+            if (UsersDatalis[UserNumbers].StatusUser == "1") {
+
+            } else {
+                if (UsersDatalis[UserNumbers].NotUploader == "1") {
+                    api.toast({
+                        msg: '工单已提交,请勿重复操作',
+                        duration: 2000,
+                        location: 'middle'
+                    });
+
+                } else {
+                    SubimgData()
+                }
+
+            }
+        },
+        'FirstHousehold': function() {
+            var Remark = $("#SurveyRequire").val();
+            var imgList = $(".imgfile");
+            if (Remark != '' || imgList.length > 0) {
+                var TypeNumer = '0'
+                saveDataFun(TypeNumer)
+            } else {
+
+            }
+
+            if (UserNumbers < 1) {
+                //UserNumbers==0
+                api.toast({
+                    msg: '没有上一户了',
+                    duration: 2000,
+                    location: 'middle'
+                });
+                return;
+            } else {
+                UserNumbers--;
+                $("#dataListEdit").empty();
+                $("#ImgOrVideo").empty();
+                var dataList = UsersDatalis[UserNumbers];
+                var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+                $('#OperatedTime').text(dataTime.slice(0, 10))
+                $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+                handleAnnotData(dataList);
+                DloadPostingData(UsersDatalis[UserNumbers].Id)
+                checknum();
+                if (UsersDatalis[UserNumbers].StatusUser == "1") {
+                    $("#SurveyRequire").attr("readonly", "readonly");
+                } else {
+                    $("#SurveyRequire").removeAttr("readonly")
+                }
+                if (api.connectionType != 'none') { //判断费用是否缴费和任务是否终止
+                    if (UsersDatalis[UserNumbers].NotUploader == "1") { //是否提交，提交不走清费和终止判断
+
+                    } else {
+                        TaskNotTermination(UsersDatalis[UserNumbers].Id)
+                    }
+
+                } else { //没有网络的提示
+                    if (UsersDatalis[UserNumbers].ArrearMoney == " " || UsersDatalis[UserNumbers].ArrearMoney == "" || UsersDatalis[UserNumbers].ArrearMoney == "0") {
+                        alert('用户已缴费,无需处理可直接点击完成')
+                    } else {
+                        alert('网络未连接无法判断是否缴费，是否处理?')
+                    }
+
+                    // $("#SurveyRequire").removeAttr("disabled")
+                    // StatusUser=1//如果中途断网，是否操作要赋值为1
+                }
+            }
+        },
+        'LastHousehold': function() {
+            var Remark = $("#SurveyRequire").val();
+            var imgList = $(".imgfile");
+            if (Remark != '' || imgList.length > 0) {
+                var TypeNumer = '0'
+                saveDataFun(TypeNumer)
+
+            } else {
+
+            }
+
+
+            if (UserNumbers == UsersDatalis.length - 1) {
+                api.toast({
+                    msg: '没有下一户了',
+                    duration: 2000,
+                    location: 'middle'
+                });
+                return;
+            } else {
+                UserNumbers++;
+                $("#dataListEdit").empty();
+                $("#ImgOrVideo").empty();
+                var dataList = UsersDatalis[UserNumbers];
+                var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+                $('#OperatedTime').text(dataTime.slice(0, 10))
+                $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+                handleAnnotData(dataList);
+                DloadPostingData(UsersDatalis[UserNumbers].Id)
+                checknum();
+                if (UsersDatalis[UserNumbers].StatusUser == "1") {
+                    $("#SurveyRequire").attr("readonly", "readonly");
+                } else {
+                    $("#SurveyRequire").removeAttr("readonly")
+                }
+                if (api.connectionType != 'none') {
+                    if (UsersDatalis[UserNumbers].NotUploader == "1") { //是否提交，提交不走清费和终止判断
+
+                    } else {
+                        TaskNotTermination(UsersDatalis[UserNumbers].Id)
+                    }
+                } else {
+                    if (UsersDatalis[UserNumbers].ArrearMoney == " " || UsersDatalis[UserNumbers].ArrearMoney == "" || UsersDatalis[UserNumbers].ArrearMoney == "0") {
+                        alert('用户已缴费,无需处理可直接点击完成')
+                    } else {
+                        alert('网络未连接无法判断是否缴费，是否处理?')
+                    }
+
+                    // $("#SurveyRequire").removeAttr("disabled")
+                    // StatusUser=1//如果中途断网，是否操作要赋值为1
+                }
+            }
+        }
+    }
+
+    function deleteImg() {
+        if (deleteImgData.length > 0) {
+            for (var j = 0; j < deleteImgData.length; j++) { //
+                var fs = api.require('fs');
+                var retimg1 = fs.removeSync({
+                    path: deleteImgData[j].imageAnnexType
+                });
+                var retimg = fs.removeSync({
+                    path: deleteImgData[j].imageFileUrl
+                });
+                if (retimg.status) {
+                    console.log('删除成功！');
+                } else {
+                    console.log('删除失败！');
+                }
+                var retImgList = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: 'DELETE FROM POSTING_IMAGE where imageFileUrl="' + deleteImgData[j].imageFileUrl + '" AND userName = "' + userName + '"'
+                });
+                // console.log(JSON.stringify(retImgList))
+            }
+            api.sendEvent({
+                name: 'ReflashSave',
+                extra: {
+                    key1: 'value1',
+                    key2: 'value2'
+                }
+            });
+
+            api.closeWin({});
+        } else {
+            api.sendEvent({
+                name: 'ReflashSave',
+                extra: {
+                    key1: 'value1',
+                    key2: 'value2'
+                }
+            });
+            api.closeWin({});
+        }
+
+        // if($api.getStorage('meterManageSaveLocation')==1){
+        //   api.closeWin({});
+        // }else {
+        //   var retImg = db.selectSqlSync({
+        //     name: 'Wsdatabase',
+        //     sql: 'SELECT * FROM POSTING_IMAGE where NotSubmit="1" AND TaskNo="'+WorkTypeId+'" AND userName = "'+userName+'"'
+        //    });
+        //    if(retImg.data.length>0){
+        //      for(var i=0;i<retImg.data.length;i++){
+        //        var fs = api.require('fs');
+        //         var retimg = fs.removeSync({
+        //             path: retImg.data[i].imageFileUrl
+        //         });
+        //         if (retimg.status) {
+        //             console.log('删除成功！');
+        //         } else {
+        //             console.log('删除失败！');
+        //         }
+        //        var retImgList = db.executeSqlSync({
+        //          name: 'Wsdatabase',
+        //          sql: 'DELETE FROM POSTING_IMAGE where Id="'+retImg.data[i].Id+'" AND userName = "'+userName+'"'
+        //        });
+        //
+        //      }
+        //      api.closeWin({});
+        //    }else {
+        //      api.closeWin({});
+        //    }
+        // }
+    }
+    // 限制文本框输入
+    function checknum() {
+        var nMax = 100;
+        var textDom = document.getElementById("SurveyRequire");
+        var len = textDom.value.length;
+        if (len > nMax) {
+            textDom.value = textDom.value.substring(0, nMax);
+            return;
+        }
+        $('#in').text("你还可以输入" + (nMax - len) + "个字");
+    }
+    // 聚焦事件
+    $('#SurveyRequire').focus(function() {
+        $('#location').addClass('flex-con-bluer')
+    })
+    $('#SurveyRequire').blur(function() {
+        $('#location').removeClass('flex-con-bluer')
+    })
+
+    function handleAnnotData(dataList) {
+        var list = {
+            listdataLst: dataList
+        }
+        var str = template('Booksdata', list)
+        $api.append($api.byId('dataListEdit'), str);
+        if (dataList.AuditTimes > 0) {
+            $("#CodeScanning").removeClass("aui-hide")
+        } else {
+            $("#CodeScanning").addClass("aui-hide")
+        }
+        if (dataList.PostringLon != "") {
+            $(".textColor").attr("PostringLon", dataList.PostringLon);
+            $(".textColor").attr("PostringLat", dataList.PostringLat)
+            $(".textColor").text(dataList.PostringLoction)
+        } else {
+            getLocationNew()
+        }
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+
+    function handImageData(dataList) {
+        var list = {
+            list: dataList
+        }
+        var str = template('Imagedata', list)
+        $api.append($api.byId('ImageList'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+        api.hideProgress();
+    }
+    // 拍照功能
+    function getCamera(id, name) {
+        bMap.getLocation({
+            accuracy: '100m',
+            autoStop: true,
+            filter: 1
+        }, function(ret, err) {
+            if (ret.status) {
+                var lon = ret.lon;
+                var lat = ret.lat;
+                var londata = lon + ',' + lat;
+                ImgLogo(id, lon, lat)
+            } else {
+                var lon = " ";
+                var lat = " ";
+                ImgLogo(id, lon, lat)
+            }
+        });
+
+
+    }
+    var timer;
+
+    // 照片水印
+    function ImgLogo(id, lon, lat) {
+        // var list = list;
+        var dataList = JSON.parse($('#CustomerName').attr('parse'))
+        var londata = lon + ',' + lat;
+        options = {
+            type: id,
+            waterMark: true,
+            maxNumber:5,
+            waterMarkData: {
+                code: dataList.CustomerCode
+            }
+        }
+        pGetPicture(options, function(ret, err) {
+            if (ret.status) {
+                // console.log(JSON.stringify(ret.imgList))
+                for (var i = 0; i < ret.imgList.length; i++) {
+                    var zpljList = ret.imgList[i];
+                    var fs = api.require("fs");
+                    var retImg = fs.copyToSync({ //拷贝文件以免图片丢失同步
+                        oldPath: zpljList,
+                        newPath: 'fs://MeterManagePicture'
+                    });
+                    if (retImg.status) {
+                        var picName = zpljList.substring(zpljList.lastIndexOf("/") + 1);
+                        var url = api.fsDir + "/MeterManagePicture/" + picName;
+                        var list = url;
+                        // console.log(list)
+                        $api.append($api.domAll('.ImgOrVideo')[0], '<div class="aui-col-xs-2 imgDiv">' +
+                            '<img src="' + list + '" alt="' + londata + '" lon="' + lon + '" lat="' + lat + '" data-param="" lostory="' + zpljList + '" class="imgfile" tapmode data-action="fnOpenFile">' +
+                            '<div class="close closeHide" tapmode data-action="clearImg" data-param="' + list + '" lostory="' + zpljList + '"></div>' +
+                            '</div>');
+                        api.parseTapmode();
+                        operationDom();
+                    } else {
+                        // alert('拷贝失败！');
+                    }
+
+                }
+
+            }
+        })
+
+    }
+
+    // 照片渲染
+    function DloadPostingData(CustomerCode) {
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_IMAGE where Id = "' + CustomerCode + '" AND userName = "' + userName + '"'
+        }, function(ret, err) {
+            if (ret.status) {
+                if (ret.data.length > 0) {
+                    var dataList = ret.data
+                    var items = {
+                        items: ret.data
+                    }
+                    var str = template('orderHistoryTpl', items)
+                    $api.html($api.byId('ImgOrVideo'), str);
+                    api.parseTapmode();
+                    operationDom();
+                }
+
+            } else {
+                // console.log( JSON.stringify( err ) );
+            }
+        });
+
+    }
+
+    //上一户方法封装 2020-05-24 zlx
+    function previousHouseFnc() {
+        if (UserNumbers < 1) {
+            api.toast({
+                msg: '没有上一户了',
+                duration: 2000,
+                location: 'middle'
+            });
+        } else {
+            UserNumbers--;
+            $("#dataListEdit").empty();
+            $("#ImgOrVideo").empty();
+            var dataList = UsersDatalis[UserNumbers];
+            var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+            $('#OperatedTime').text(dataTime.slice(0, 10))
+            $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+            handleAnnotData(dataList);
+            DloadPostingData(UsersDatalis[UserNumbers].Id)
+            checknum();
+            if (UsersDatalis[UserNumbers].StatusUser == "1") {
+                $("#SurveyRequire").attr("readonly", "readonly");
+            } else {
+                $("#SurveyRequire").removeAttr("readonly")
+            }
+            if (UsersDatalis[UserNumbers].NotUploader == "1") {
+                $("#submit").addClass("colorActive")
+            } else {
+                $("#submit").removeClass("colorActive")
+            }
+
+            if (api.connectionType != 'none') { //判断费用是否缴费和任务是否终止
+                if (UsersDatalis[UserNumbers].NotUploader == "1") {
+
+                } else {
+                    TaskNotTermination(UsersDatalis[UserNumbers].Id)
+                }
+
+            } else { //没有网络的提示
+                if (UsersDatalis[UserNumbers].ArrearMoney == " " || UsersDatalis[UserNumbers].ArrearMoney == "" || UsersDatalis[UserNumbers].ArrearMoney == "0") {
+                    alert('用户已缴费,无需处理可直接点击完成')
+                } else {
+                    alert('网络未连接无法判断是否缴费，是否处理?')
+                }
+            }
+        }
+    }
+
+    //上一户方法封装 2020-05-24 zlx
+    function nextHouseFnc() {
+        if (UserNumbers == UsersDatalis.length - 1) {
+            api.toast({
+                msg: '没有下一户了',
+                duration: 2000,
+                location: 'middle'
+            });
+        } else {
+            UserNumbers++;
+            $("#dataListEdit").empty();
+            $("#ImgOrVideo").empty();
+            var dataList = UsersDatalis[UserNumbers];
+            var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+            $('#OperatedTime').text(dataTime.slice(0, 10))
+            $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+            handleAnnotData(dataList);
+            DloadPostingData(UsersDatalis[UserNumbers].Id)
+            checknum();
+            if (UsersDatalis[UserNumbers].StatusUser == "1") {
+                $("#SurveyRequire").attr("readonly", "readonly");
+            } else {
+                $("#SurveyRequire").removeAttr("readonly")
+            }
+            if (UsersDatalis[UserNumbers].NotUploader == "1") {
+                $("#submit").addClass("colorActive")
+            } else {
+                $("#submit").removeClass("colorActive")
+            }
+            if (api.connectionType != 'none') {
+                if (UsersDatalis[UserNumbers].NotUploader == "1") { //是否提交，提交不走清费和终止判断
+
+                } else {
+                    TaskNotTermination(UsersDatalis[UserNumbers].Id)
+                }
+            } else {
+                if (UsersDatalis[UserNumbers].ArrearMoney == " " || UsersDatalis[UserNumbers].ArrearMoney == "" || UsersDatalis[UserNumbers].ArrearMoney == "0") {
+                    alert('用户已缴费,无需处理可直接点击完成')
+                } else {
+                    alert('网络未连接无法判断是否缴费，是否处理?')
+                }
+            }
+        }
+    }
+
+    // 数据完成提交或保存本地
+    function SubimgData() {
+        var FileUrl = "";
+        var FileType = "";
+        var FilesUrlArr = []; //图片
+        var LodataType = ''; //图片位置
+        var Remark = $("#SurveyRequire").val();
+        var PostingList = $('#CustomerName').attr("parse")
+        var PostingListdata = JSON.parse(PostingList) //id
+            // if ($("#SurveyRequire").val() == "") {
+            //   alert("请填写备注");
+            //   return;
+            // }
+
+        var imgList = $(".imgfile");
+        for (var i = 0; i < imgList.length; i++) {
+            if (imgList.length > 0) {
+                LodataType += imgList[i].alt + '|';
+            } else {
+                LodataType = imgList[i].alt
+            }
+            if (i == (imgList.length - 1)) {
+                FileUrl += imgList[i].src.substring(7, imgList[i].src.length);
+                FileType += imgList[i].src.slice(imgList[i].src.lastIndexOf("."));
+            } else {
+                FileUrl += imgList[i].src.substring(7, imgList[i].src.length) + "|";
+                FileType += imgList[i].src.slice(imgList[i].src.lastIndexOf(".")) + "|";
+            }
+            FilesUrlArr.push(imgList[i].src.substring(7, imgList[i].src.length));
+        }
+        if (imgList.length > 0) {
+            var lastlocton = LodataType.slice(0, LodataType.lastIndexOf('|'))
+            var firstLoction = lastlocton.substr(0)
+            LodataType = firstLoction
+        } else {
+            LodataType = LodataType.substr(0)
+        }
+        if (UsersDatalis[UserNumbers].ArrearMoney == " " || UsersDatalis[UserNumbers].ArrearMoney == "" || UsersDatalis[UserNumbers].ArrearMoney == "0") {
+
+        } else {
+            if (FilesUrlArr.length < 2 && FilesUrlArr.length > 0) {
+                api.toast({
+                    msg: '照片未达两张',
+                    duration: 2000,
+                    location: 'middle'
+                });
+
+                return;
+            }
+            if (FilesUrlArr.length == 0) {
+                api.toast({
+                    msg: '未拍摄照片',
+                    duration: 2000,
+                    location: 'middle'
+                });
+
+                return;
+            }
+        }
+        var dataTimeNew = $(".imgfile").attr('data-param')
+        var Time = dataTime();
+
+        if (dataTimeNew != '' && dataTimeNew != undefined) {
+            Time = dataTimeNew
+        }
+        api.showProgress({
+            style: 'default',
+            animationType: 'fade',
+            title: '努力加载中...',
+            modal: true
+        });
+
+        if ($api.getStorage("stopWaterDataUpload") == 1) { //贴单数据单独上传
+            api.confirm({
+                title: '提示',
+                msg: '当前设置为数据单独上传，确定保存数据？',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    if (ret.buttonIndex == 1) {
+                        if (UsersDatalis[UserNumbers].PostringLoction != "") {
+                            submitGps();
+                        }
+                        //数据保存到本地
+                        saveDataFun('3');
+                        // nextHouseFnc();
+                    } else {
+                        api.hideProgress();
+                    }
+                }
+            });
+            return;
+        }
+
+        // 判断是否联网
+        if (api.connectionType != 'none') {
+            api.confirm({
+                title: '提示',
+                msg: '确认提交吗？',
+                buttons: ['确定', '取消']
+            }, function(ret, err) {
+                if (ret) {
+                    var index = ret.buttonIndex;
+                    if (index == 1) {
+                        if (UsersDatalis[UserNumbers].PostringLoction != "") {
+                            submitGps()
+                        } else {
+
+                        }
+                        var data = {
+                            "Id": PostingListdata.Id,
+                            "OperatedTime": Time,
+                            "Status": '',
+                            "Remark": Remark,
+                            "FileLocation": LodataType,
+                            "Type": ""
+                        }
+                        var dataList, NotSubmitPicture;
+                        NotSubmitPicture = 0 //用于判断图片是否上传了上传了删除
+                        dataList = {
+                            values: {
+                                Method: "MMS006",
+                                UserName: $api.getStorage("bwUserName"), //"01012"
+                                Password: $api.getStorage("bwPassWord"), // "g6OuZomFp3E="
+                                SerialNo: '11111111',
+                                KeyCode: '', //营业
+                                Parameter: JSON.stringify(data)
+                            },
+                            files: {
+                                "file": FilesUrlArr
+                            }
+                        }
+
+                        api.ajax({
+                            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+                            method: 'post',
+                            dataType: "json",
+                            data: dataList
+                        }, function(ret, err) {
+                            api.hideProgress();
+                            if (ret) {
+                                if (ret.Status == '0') {
+                                    api.sendEvent({
+                                        name: 'SuccessEvent',
+                                        extra: {
+                                            key1: PostingListdata.TaskNo,
+                                        }
+                                    });
+                                    // 查询是否只有一户把时间和数量传给张贴列表页面
+                                    var selectSqlret = db.selectSqlSync({
+                                        name: 'Wsdatabase',
+                                        sql: 'SELECT * FROM POSTING_LIST WHERE TaskNo="' + PostingListdata.TaskNo + '" AND NotUploader ="0" AND userName = "' + userName + '"'
+                                    });
+                                    if (selectSqlret.status) {
+                                        if (selectSqlret.data.length == 1) {
+                                            if (UsersDatalis.length > 0) {
+                                                $api.setStorage('contentNumer', UsersDatalis[UserNumbers].NotSubmit);
+                                                $api.setStorage('contentDate', UsersDatalis[UserNumbers].OperatedTime);
+                                            } else {
+
+                                            }
+
+                                        }
+                                    }
+                                    // 提交成功更改本地数据标识
+                                    if (NotSubmitPicture == 0) {
+                                        var imgret = db.executeSqlSync({
+                                            name: 'Wsdatabase',
+                                            sql: 'UPDATE POSTING_IMAGE SET NotSubmit="1" WHERE Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+                                        });
+                                    } else {
+                                        db.selectSql({
+                                            name: 'Wsdatabase',
+                                            sql: 'SELECT * FROM POSTING_IMAGE WHERE NotSubmit!="1" AND Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+                                        }, function(ret, err) {
+                                            if (ret.status) {
+                                                if (ret.data.length > 0) {
+                                                    api.toast({
+                                                        msg: '有未上传照片，可到数据上传上传照片',
+                                                        duration: 2000,
+                                                        location: 'middle'
+                                                    });
+                                                }
+                                            } else {
+                                                console.log(JSON.stringify(err));
+                                            }
+                                        });
+                                    }
+
+                                    var listret = db.executeSqlSync({
+                                        name: 'Wsdatabase',
+                                        sql: 'UPDATE POSTING_LIST SET NotUploader="1" WHERE Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+                                    });
+                                    if (listret.status) {
+                                        if (NotSubmitPicture == 0) {
+                                            api.toast({
+                                                msg: '数据上传成功',
+                                                duration: 2000,
+                                                location: 'middle'
+                                            });
+                                        } else {
+                                            api.toast({
+                                                msg: '有未上传照片，可到数据上传上传照片',
+                                                duration: 2000,
+                                                location: 'middle'
+                                            });
+
+                                        }
+                                        saveImageLocation() //保存图片
+                                        db.selectSql({ //查询是否是最后一户
+                                            name: 'Wsdatabase',
+                                            sql: 'SELECT * FROM POSTING_LIST WHERE TaskNo="' + PostingListdata.TaskNo + '" and NotUploader ="0" AND userName = "' + userName + '"'
+                                        }, function(ret, err) {
+                                            if (ret.status) {
+                                                if (ret.data.length > 0) {
+                                                    api.sendEvent({
+                                                        name: 'SuccessEvent',
+                                                        extra: {
+                                                            key1: PostingListdata.TaskNo,
+                                                            key2: 'value2'
+                                                        }
+                                                    });
+
+                                                } else {
+                                                    api.sendEvent({
+                                                        name: 'refreshCloudMyTask',
+                                                        extra: {
+                                                            key1: PostingListdata.TaskNo,
+                                                            key2: 'value2'
+                                                        }
+                                                    });
+                                                    api.sendEvent({
+                                                        name: 'LastEvent',
+                                                        extra: {
+                                                            key1: $api.getStorage('contentNumer'),
+                                                            key2: $api.getStorage('contentDate')
+
+                                                        }
+                                                    });
+                                                    var DeleteTask = db.executeSqlSync({ //最后一户删除云平台停水通知单数据
+                                                        name: 'Wsdatabase',
+                                                        sql: 'DELETE FROM myTaskSheet where taskId="' + TaskId + '" AND userName = "' + userName + '"'
+                                                    });
+
+                                                    alert("任务已全部处理完成")
+                                                }
+
+                                            } else {
+                                                // alert( JSON.stringify( err ) );
+                                            }
+                                        });
+
+                                    }
+                                } else {
+                                    var TypeNumer = '1'
+                                    saveDataFun(TypeNumer)
+                                    api.toast({
+                                        msg: ret.Message,
+                                        duration: 2000,
+                                        location: 'middle'
+                                    }); // saveDataFun()
+                                }
+                            } else {
+                                api.toast({
+                                    msg: JSON.stringify(err),
+                                    duration: 2000,
+                                    location: 'middle'
+                                });
+                                var TypeNumer = '1'
+                                saveDataFun(TypeNumer)
+
+
+                            }
+
+                        });
+                    } else {
+                        api.hideProgress();
+                    }
+                } else {
+                    //  alert( JSON.stringify( err ) );
+                }
+            });
+
+        } else {
+            var TypeNumer = '1'
+            saveDataFun(TypeNumer)
+        }
+
+    }
+
+    function saveDataFun(TypeNumer) {
+        var imgList = $(".imgfile");
+        var Remark = $("#SurveyRequire").val();
+        var PostingList = $('#CustomerName').attr("parse");
+        var PostingListdata = JSON.parse(PostingList) //id
+        if (TypeNumer == '1') {
+            api.toast({
+                msg: '提交失败，保存本地',
+                duration: 2000,
+                location: 'middle'
+            });
+        }
+        if (TypeNumer == '0') {
+
+        } else {
+            api.showProgress({
+                style: 'default',
+                animationType: 'fade',
+                title: '正在保存...',
+                modal: false
+            });
+        }
+
+
+        // 失败存储到本地数据库
+        var UpdateList = db.executeSqlSync({
+            name: 'Wsdatabase',
+            sql: 'UPDATE POSTING_LIST SET Remark="' + Remark + '",NotSave="1" WHERE Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+        });
+        // alert(JSON.stringify(UpdateList))
+        // 查询图片表这个id如果有全部删除再插入，没有则插入
+        var chaxunIMG = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_IMAGE where Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+        });
+        if (chaxunIMG.data.length > 0) {
+            var DeleteData = db.executeSqlSync({
+                name: 'Wsdatabase',
+                sql: 'DELETE FROM POSTING_IMAGE where Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+            });
+            for (var i = 0; i < imgList.length; i++) {
+
+                var locationJD = $(imgList[i]).attr('lon')
+                var imageFileUrl = $(imgList[i]).attr('src')
+                var locationWD = $(imgList[i]).attr('lat')
+                var imageIsNew = $(imgList[i]).attr('alt')
+                var imageAnnexType = $(imgList[i]).attr('lostory')
+
+                var sqlimg = 'INSERT INTO POSTING_IMAGE(Id,CustomerCode,imageId,' +
+                    'imageType,' +
+                    'imageTypeName,' +
+                    'imageFileName,' +
+                    'imageFileUrl,' +
+                    'imageAnnexType,' +
+                    'imageAnnexTypeName,' +
+                    'imageOrderNo,' +
+                    'imageIsNew,' +
+                    'imageOperatorName,' +
+                    'imageOperatedTime,' +
+                    'TaskNo,' +
+                    'locationJD,' +
+                    'locationWD,' +
+                    'locationSJ,' +
+                    'userName,' +
+                    'NotSubmit) VALUES ("' + PostingListdata.Id + '","' + PostingListdata.CustomerCode + '","",' +
+                    '"",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageFileUrl + '",' +
+                    '"' + imageAnnexType + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageIsNew + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + PostingListdata.TaskNo + '",' +
+                    '"' + locationJD + '",' +
+                    '"' + locationWD + '",' +
+                    '"' + dataTime() + '",' +
+                    '"' + userName + '",' +
+                    '"0")';
+                var Postingimgdata = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: sqlimg
+                });
+                // alert(JSON.stringify(Postingimgdata))
+            }
+            api.hideProgress();
+            if (TypeNumer == '1' || TypeNumer == '3') {
+                api.toast({
+                    msg: '保存成功',
+                    duration: 1000,
+                    location: 'middle'
+                });
+            }
+
+        } else {
+            for (var i = 0; i < imgList.length; i++) {
+
+                var locationJD = $(imgList[i]).attr('lon')
+                var imageFileUrl = $(imgList[i]).attr('src')
+                var locationWD = $(imgList[i]).attr('lat')
+                var imageIsNew = $(imgList[i]).attr('alt')
+                var imageAnnexType = $(imgList[i]).attr('lostory')
+                var sqlimg = 'INSERT INTO POSTING_IMAGE(Id,CustomerCode,imageId,' +
+                    'imageType,' +
+                    'imageTypeName,' +
+                    'imageFileName,' +
+                    'imageFileUrl,' +
+                    'imageAnnexType,' +
+                    'imageAnnexTypeName,' +
+                    'imageOrderNo,' +
+                    'imageIsNew,' +
+                    'imageOperatorName,' +
+                    'imageOperatedTime,' +
+                    'TaskNo,' +
+                    'locationJD,' +
+                    'locationWD,' +
+                    'locationSJ,' +
+                    'userName,' +
+                    'NotSubmit) VALUES ("' + PostingListdata.Id + '","' + PostingListdata.CustomerCode + '","",' +
+                    '"",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageFileUrl + '",' +
+                    '"' + imageAnnexType + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageIsNew + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + PostingListdata.TaskNo + '",' +
+                    '"' + locationJD + '",' +
+                    '"' + locationWD + '",' +
+                    '"' + dataTime() + '",' +
+                    '"' + userName + '",' +
+                    '"0")';
+                var Postingimgdata = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: sqlimg
+                });
+                // alert(JSON.stringify(Postingimgdata))
+            }
+            if (TypeNumer == '0') {
+
+            } else {
+                api.hideProgress();
+                api.toast({
+                    msg: '保存成功',
+                    duration: 2000,
+                    location: 'middle'
+                });
+            }
+
+        }
+        if (UsersDatalis.length > 0) {
+            if (UsersDatalis.length == UserNumbers) {
+
+            } else {
+                UsersDatalis[UserNumbers].OperatedTime = PostingListdata.OperatedTime
+                UsersDatalis[UserNumbers].Remark = Remark
+            }
+
+        } else {
+
+        }
+    }
+    //图片保存到本地  2020-05-20 zlx
+    function saveImageLocation() {
+        var imgList = $(".imgfile");
+        var Remark = $("#SurveyRequire").val();
+        var PostingList = $('#CustomerName').attr("parse");
+        var PostingListdata = JSON.parse(PostingList) //id
+
+        // 查询图片表这个id
+        var chaxunIMG = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_IMAGE where Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+        });
+
+        if (chaxunIMG.data.length > 0) {
+            var DeleteData = db.executeSqlSync({
+                name: 'Wsdatabase',
+                sql: 'DELETE FROM POSTING_IMAGE where Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+            });
+            for (var i = 0; i < imgList.length; i++) {
+
+                var locationJD = $(imgList[i]).attr('lon');
+                var imageFileUrl = $(imgList[i]).attr('src');
+                var locationWD = $(imgList[i]).attr('lat');
+                var imageIsNew = $(imgList[i]).attr('alt');
+                var imageAnnexType = $(imgList[i]).attr('lostory')
+                var sqlimg = 'INSERT INTO POSTING_IMAGE(Id,CustomerCode,imageId,' +
+                    'imageType,' +
+                    'imageTypeName,' +
+                    'imageFileName,' +
+                    'imageFileUrl,' +
+                    'imageAnnexType,' +
+                    'imageAnnexTypeName,' +
+                    'imageOrderNo,' +
+                    'imageIsNew,' +
+                    'imageOperatorName,' +
+                    'imageOperatedTime,' +
+                    'TaskNo,' +
+                    'locationJD,' +
+                    'locationWD,' +
+                    'locationSJ,' +
+                    'userName,' +
+                    'NotSubmit) VALUES ("' + PostingListdata.Id + '","' + PostingListdata.CustomerCode + '","",' +
+                    '"",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageFileUrl + '",' +
+                    '"' + imageAnnexType + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageIsNew + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + PostingListdata.TaskNo + '",' +
+                    '"' + locationJD + '",' +
+                    '"' + locationWD + '",' +
+                    '"' + dataTime() + '",' +
+                    '"' + userName + '",' +
+                    '"1")';
+                var Postingimgdata = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: sqlimg
+                });
+            }
+        } else {
+            for (var i = 0; i < imgList.length; i++) {
+
+                var locationJD = $(imgList[i]).attr('lon');
+                var imageFileUrl = $(imgList[i]).attr('src');
+                var locationWD = $(imgList[i]).attr('lat');
+                var imageIsNew = $(imgList[i]).attr('alt');
+                var imageAnnexType = $(imgList[i]).attr('lostory')
+                var sqlimg = 'INSERT INTO POSTING_IMAGE(Id,CustomerCode,imageId,' +
+                    'imageType,' +
+                    'imageTypeName,' +
+                    'imageFileName,' +
+                    'imageFileUrl,' +
+                    'imageAnnexType,' +
+                    'imageAnnexTypeName,' +
+                    'imageOrderNo,' +
+                    'imageIsNew,' +
+                    'imageOperatorName,' +
+                    'imageOperatedTime,' +
+                    'TaskNo,' +
+                    'locationJD,' +
+                    'locationWD,' +
+                    'locationSJ,' +
+                    'userName,' +
+                    'NotSubmit) VALUES ("' + PostingListdata.Id + '","' + PostingListdata.CustomerCode + '","",' +
+                    '"",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageFileUrl + '",' +
+                    '"' + imageAnnexType + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + imageIsNew + '",' +
+                    '"",' +
+                    '"",' +
+                    '"' + PostingListdata.TaskNo + '",' +
+                    '"' + locationJD + '",' +
+                    '"' + locationWD + '",' +
+                    '"' + dataTime() + '",' +
+                    '"' + userName + '",' +
+                    '"1")';
+                var Postingimgdata = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: sqlimg
+                });
+            }
+        }
+        if ($api.getStorage('meterManageSaveLocation') == 1) {
+            //判断是否删除照片，将满足条件要删除照片放在全局数组，返回的时候删除
+
+        } else {
+            var chaxunIMGData = db.selectSqlSync({
+                name: 'Wsdatabase',
+                sql: 'SELECT * FROM POSTING_IMAGE where Id="' + PostingListdata.Id + '" AND userName = "' + userName + '"'
+            });
+            // console.log(JSON.stringify(chaxunIMGData.data))
+            if (chaxunIMGData.data.length > 0) {
+                for (var i = 0; i < chaxunIMGData.data.length; i++) {
+                    var obj = {}
+                    obj.Id = chaxunIMGData.data[i].Id
+                    obj.imageFileUrl = chaxunIMGData.data[i].imageFileUrl
+                    obj.imageAnnexType = chaxunIMGData.data[i].imageAnnexType
+                    deleteImgData.push(obj)
+                }
+
+            }
+
+        }
+
+        if (UsersDatalis.length > 0) {
+            if (UsersDatalis.length == UserNumbers) {
+
+            } else {
+                UsersDatalis[UserNumbers].OperatedTime = PostingListdata.OperatedTime
+                UsersDatalis[UserNumbers].Remark = Remark;
+                UsersDatalis[UserNumbers].NotUploader = '1'
+            }
+
+        } else {
+
+        }
+        $("#submit").addClass("colorActive")
+    }
+
+    // 离线数据查询渲染列表查询带张贴
+    function selectDate() {
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_LIST where TaskNo = "' + WorkTypeId + '" and Status ="7" and NotUploader ="0" AND NotSave ="0" AND userName = "' + userName + '"'
+        });
+        UsersDatalis = ret.data
+        // console.log(JSON.stringify(UsersDatalis))
+            // 循环匹配UsersDatalis的数据对应UserNumbers
+        for (var i = 0; i < UsersDatalis.length; i++) {
+            if (dataListSend.Id == UsersDatalis[i].Id) {
+                UserNumbers = i;
+                break;
+            }
+        }
+        var dataList = UsersDatalis[UserNumbers]
+        var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+        $('#OperatedTime').text(dataTime.slice(0, 10))
+        $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+        handleAnnotData(dataList)
+        DloadPostingData(UsersDatalis[UserNumbers].Id)
+        checknum(UsersDatalis[UserNumbers].Id)
+
+        if (api.connectionType != 'none') { //判断费用是否缴费和任务是否终止
+            TaskNotTermination(UsersDatalis[UserNumbers].Id)
+        } else { //没有网络的提示
+            if (UsersDatalis[UserNumbers].ArrearMoney == " " || UsersDatalis[UserNumbers].ArrearMoney == "0") {
+                alert('用户已缴费,无需处理可直接点击完成')
+            } else {
+                alert('网络未连接无法判断是否缴费，是否处理?')
+            }
+
+            // $("#SurveyRequire").removeAttr("disabled")
+            // StatusUser=1//如果中途断网，是否操作要赋值为1
+        }
+
+
+    }
+    // 查询已保存
+    function selectDatesave() {
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM POSTING_LIST where TaskNo = "' + WorkTypeId + '" and Status ="7" and NotUploader ="0" and NotSave ="1" AND userName = "' + userName + '"'
+        });
+        UsersDatalis = ret.data
+        // console.log(JSON.stringify(UsersDatalis))
+            // 循环匹配UsersDatalis的数据对应UserNumbers
+        for (var i = 0; i < UsersDatalis.length; i++) {
+            if (dataListSend.Id == UsersDatalis[i].Id) {
+                UserNumbers = i;
+                break;
+            }
+        }
+        var dataList = UsersDatalis[UserNumbers]
+        var dataTime = UsersDatalis[UserNumbers].OperatedTime;
+        $('#OperatedTime').text(dataTime.slice(0, 10))
+        $("#SurveyRequire").val(UsersDatalis[UserNumbers].Remark);
+        handleAnnotData(dataList)
+        DloadPostingData(UsersDatalis[UserNumbers].Id)
+        checknum(UsersDatalis[UserNumbers].Id)
+
+        if (api.connectionType != 'none') { //判断费用是否缴费和任务是否终止
+            TaskNotTermination(UsersDatalis[UserNumbers].Id)
+        } else { //没有网络的提示
+            if (UsersDatalis[UserNumbers].ArrearMoney == " " || UsersDatalis[UserNumbers].ArrearMoney == "0") {
+                alert('用户已缴费,无需处理可直接点击完成')
+            } else {
+                alert('网络未连接无法判断是否缴费，是否处理?')
+            }
+
+            // $("#SurveyRequire").removeAttr("disabled")
+            // StatusUser=1//如果中途断网，是否操作要赋值为1
+        }
+
+
+    }
+    // 查询任务是否被终止
+    function TaskNotTermination(UserID) {
+        api.showProgress({
+            style: 'default',
+            animationType: 'fade',
+            title: '加载中...',
+            modal: false
+        });
+        // 接口调整 20200804 zxf
+        var Account = $api.getStorage('bwUserName');
+        var PassWord = $api.getStorage('bwPassWord');
+        api.ajax({
+            url: 'http://' + $api.getStorage('apiUrl') + '/api/services/app/WorkFlow/GetTaskStatus?TaskCode=' + TaskId + '&Account='+Account+'&PassWord='+PassWord,
+            method: 'get',
+            dataType: "json",
+            returnAll: false,
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": $api.getStorage('loginInfo')
+            }
+        }, function(ret, err) {
+            api.hideProgress();
+
+            if (ret) {
+                if (ret.success) {
+                    if (ret.result == true) { //为true时便要进行单条数据查看
+                        // 调用单个任务是否被终止
+                        var body = {
+                            Id: UserID,
+                        }
+                        fnPost('MMS009', body, 'application/json', false, false, function(ret, err) {
+                            api.hideProgress();
+                            if (ret && ret.Status == '0') {
+                                // 如果被终止不可进行操作
+                                if (JSON.parse(ret.Data).StatusId != 7) {
+                                    UsersDatalis[UserNumbers].StatusUser = "1"
+                                    var UpdateList = db.executeSqlSync({
+                                        name: 'Wsdatabase',
+                                        sql: 'UPDATE POSTING_LIST SET StatusUser="1"  WHERE Id = "' + UsersDatalis[UserNumbers].Id + '" AND userName = "' + userName + '"'
+                                    });
+                                    if (UsersDatalis[UserNumbers].StatusUser == "1") { //StatusUser用于判断任务是否被终止
+                                        $("#SurveyRequire").attr("readonly", "readonly");
+                                    } else {
+
+                                    }
+
+                                    api.alert({
+                                        title: '工单终止',
+                                        msg: '终止原因：' + JSON.parse(ret.Data).Message,
+                                    }, function(ret, err) {
+                                        if (ret) {
+                                            var index = ret.buttonIndex;
+                                            if (index == 1) {
+                                                //  如果
+                                                var DeleteData = db.executeSqlSync({
+                                                    name: 'Wsdatabase',
+                                                    sql: 'DELETE FROM POSTING_LIST where Id = "' + UsersDatalis[UserNumbers].Id + '" AND userName = "' + userName + '"'
+                                                }); //
+                                                api.sendEvent({
+                                                    name: 'reFlashPostingTask',
+                                                    extra: {
+                                                        key1: 'value1',
+                                                        key2: 'value2'
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            //  alert( JSON.stringify( err ) );
+                                        }
+                                    });
+                                } else {
+                                    var UpdateList = db.executeSqlSync({
+                                        name: 'Wsdatabase',
+                                        sql: 'UPDATE POSTING_LIST SET ArrearMoney="' + JSON.parse(ret.Data).ArrearMoney + '"  WHERE Id = "' + UsersDatalis[UserNumbers].Id + '" AND userName = "' + userName + '"'
+                                    });
+                                    UsersDatalis[UserNumbers].ArrearMoney = JSON.parse(ret.Data).ArrearMoney
+                                    var text = "欠费金额 " + JSON.parse(ret.Data).ArrearMoney
+                                    $(".ArrearMoney").text(text)
+
+                                    if (JSON.parse(ret.Data).ArrearMoney == '' || JSON.parse(ret.Data).ArrearMoney == ' ' || JSON.parse(ret.Data).ArrearMoney == "0") {
+                                        alert('用户已缴费,无需处理可直接点击完成')
+                                        api.sendEvent({
+                                            name: 'reFlashPostingTask',
+                                            extra: {
+                                                key1: 'value1',
+                                                key2: 'value2'
+                                            }
+                                        });
+                                    }
+                                    $("#SurveyRequire").removeAttr("readonly")
+                                }
+
+
+                            }
+                        })
+                    } else {
+                        // 未false任务结束
+                        var DeleteData = db.executeSqlSync({
+                            name: 'Wsdatabase',
+                            sql: 'DELETE FROM POSTING_LIST where TaskId = "' + UsersDatalis[UserNumbers].TaskId + '" AND userName = "' + userName + '"'
+                        }); //
+                        api.alert({
+                            title: '提示',
+                            msg: '此任务所有相关工单已被终止',
+                        }, function(ret, err) {
+                            if (ret) {
+                                var index = ret.buttonIndex;
+                                if (index == 1) {
+                                    api.sendEvent({
+                                        name: 'reFlashPosting',
+                                        extra: {
+                                            key1: 'value1',
+                                            key2: 'value2'
+                                        }
+                                    });
+                                    api.closeWin({});
+
+
+                                }
+                            } else {
+                                //  alert( JSON.stringify( err ) );
+                            }
+                        });
+
+                    }
+                }
+            }
+        })
+    }
+
+    function getLocation() {
+        api.confirm({
+            title: '提示',
+            msg: '确认要重新更新定位',
+            buttons: ['确定', '取消']
+        }, function(ret, err) {
+            if (ret) {
+                var index = ret.buttonIndex;
+                if (index == 1) {
+                    getLocationNew()
+                }
+            } else {
+
+            }
+        });
+
+    }
+
+    function getLocationNew() {
+        var gpsmodel = api.require('gpsState');
+        gpsmodel.gpsstate(function(ret) {
+            if (!ret.gps) {
+                api.openFrame({
+                    name: 'checkOpenGPS_frm',
+                    url: 'widget://html/mine/checkOpenGPS_frm.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: 'auto',
+                        h: 'auto'
+                    },
+                    bounces: false,
+                    bgColor: 'rgba(0,0,0,0.1)',
+                });
+                return;
+            } else {
+                $(".textColor").html("正在定位...");
+                bMap.getLocation({
+                    accuracy: '10m',
+                    autoStop: true,
+                }, function(ret, err) {
+                    if (ret.status) {
+                        var Longitude = ret.lon;
+                        var Latitude = ret.lat;
+                        // if (api.connectionType == 'none') {
+                        //   $(".textColor").attr("lon",ret.lon +','+ ret.lat);
+                        //   return;
+                        // }
+                        bMap.getNameFromCoords({
+                            lon: ret.lon,
+                            lat: ret.lat
+                        }, (ret, err) => {
+                            if (ret.status) {
+                                var db = api.require("db");
+                                var UpdateList = db.executeSqlSync({
+                                    name: 'Wsdatabase',
+                                    sql: 'UPDATE POSTING_LIST SET PostringLoction="' + ret.address + '" , PostringLon="' + Longitude + '" , PostringLat="' + Latitude + '" WHERE Id = "' + UsersDatalis[UserNumbers].Id +
+                                        '" AND userName = "' + userName + '"'
+                                });
+                                $(".textColor").attr("PostringLon", Longitude);
+                                $(".textColor").attr("PostringLat", Latitude)
+                                $(".textColor").html(ret.address);
+                                UsersDatalis[UserNumbers].PostringLon = Longitude
+                                UsersDatalis[UserNumbers].PostringLat = Latitude
+                                UsersDatalis[UserNumbers].PostringLoction = ret.address
+                            } else {
+                                $(".textColor").html("定位失败");
+                            }
+                        });
+                    } else {
+                        $(".textColor").html("定位失败");
+                    }
+                });
+            }
+        });
+    }
+    // 定位上传
+    function submitGps() {
+        var PostringLon = $(".textColor").attr("PostringLon");
+        var PostringLat = $(".textColor").attr("PostringLat")
+        var PostringLoction = $(".textColor").text()
+        var dataTimeNew = $(".imgfile").attr('data-param')
+        var datatime;
+        if (dataTimeNew == '') {
+            datatime = dataTime()
+        } else {
+            datatime = dataTimeNew
+        }
+        api.ajax({
+            url: $api.getStorage("bwapipath") + '/api/waterMeters/info',
+            method: 'post',
+            dataType: 'json',
+            // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+            data: {
+                values: {
+                    "UserName": $api.getStorage("bwUserName"),
+                    "Password": $api.getStorage("bwPassWord"),
+                    "SerialNo": datatime,
+                    "Method": "MMS010",
+                    "Longitude": PostringLon,
+                    "Latitude": PostringLat,
+                    "Parameter": "{'Type':'4','TaskId':'" + UsersDatalis[UserNumbers].Id + "','CustomerCode':'" + UsersDatalis[UserNumbers].CustomerCode + "', 'Longitude':'" + PostringLon + "','Latitude':'" + PostringLat + "','Address':'" +
+                        PostringLoction + "','ClientId':'" + api.deviceId + "', 'ClientName':'" + api.deviceModel + "','CollectedTime':'" + datatime + "'}"
+                }
+            }
+        }, function(ret, err) {
+            if (ret) {
+
+            } else {
+                // console.log( JSON.stringify( err ) );
+            }
+        });
+    }
+</script>
+
+</html>

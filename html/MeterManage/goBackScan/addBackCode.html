@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>退库扫码</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+    <link rel="stylesheet" href="../../public/css/dialogAlert.css">
+    <link rel="stylesheet" href="./css/time.css">
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            overflow: hidden;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .c-body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            overflow-y: scroll;
+            background: #fff;
+            margin-bottom: 1rem;
+            padding-top: 0.5rem;
+        }
+
+        .c-row {
+            width: 100%;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            padding-left: 1.53rem;
+            position: relative;
+        }
+
+        .c-dot {
+            display: inline-block;
+            width: 0.3rem;
+            height: 0.3rem;
+            border-radius: 50%;
+            background-color: #CECECE;
+            position: absolute;
+            left: 0.75rem;
+            top: 1.1rem;
+        }
+
+        .c-content-span {
+            width: 2.88rem;
+            display: inline-block;
+            margin-right: 0.68rem;
+            color: #1C1C1C;
+            font-size: 0.9rem;
+        }
+
+        .c-content {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            color: rgba(98, 98, 98, 1);
+        }
+
+        .c-content-right {
+            font-size: 0.7rem;
+            color: #AAAAAA;
+            float: right;
+            padding-right: 0.78rem;
+        }
+
+        .c-list-box {
+            width: 17.25rem;
+            margin: 0 auto;
+            background: #F5F5F5;
+            border-radius: 0.3rem 0.3rem 0 0;
+        }
+
+        .c-list-box .van-row {
+            width: 100%;
+            height: 2.05rem;
+            line-height: 2.05rem;
+            padding: 0 0 0 1.5rem;
+            font-size: 0.9rem;
+            color: #585858;
+            position: relative;
+            background: #F5F5F5;
+        }
+
+        .c-list-box .van-row:first-child {
+            background: #DFDFDF;
+            border-radius: 0.3rem 0.3rem 0 0;
+        }
+
+        .c-list-box .van-row:after {
+            content: "";
+            width: 14.59rem;
+            height: 0.03rem;
+            background: rgba(230, 230, 230, 1);
+            margin: 0 auto;
+            display: block;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .c-list-box .van-row:first-child:after,
+        .c-list-box .van-row:last-child:after {
+            display: none;
+        }
+
+        .c-text-center {
+            text-align: center;
+        }
+
+        .c-list-box .c-dot {
+            width: 0.2rem;
+            height: 0.2rem;
+            top: 0.9rem;
+        }
+
+        .c-body .van-row.c-row-other {
+            height: auto;
+        }
+
+        .formField {
+            float: right;
+            width: 71.7vw;
+            height: 2.5rem;
+            line-height: 2.5rem;
+            padding: 5px 16px;
+        }
+
+        .formField .van-field__body {
+            border-bottom: 1px solid #D8D8D8;
+        }
+
+        .formField .van-field__body input {
+            height: 1.5rem;
+        }
+
+        .textareaField {
+            width: 71.7vw;
+            float: right;
+            margin-top: 0.3rem;
+        }
+
+        .textareaField textarea {
+            font-size: 0.9rem;
+            color: #626262;
+            padding-left: 0.5rem;
+        }
+
+        .textareaField .van-field__value {
+            border: 0.03rem solid #D8D8D8;
+            border-radius: 0.1rem;
+        }
+
+        .textareaField .van-field__word-limit {
+            padding-right: 0.3rem;
+            padding-bottom: 0.2rem;
+            color: #E2E2E2;
+        }
+
+        .footer {
+            width: 100vw;
+            height: 4.08rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.35rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer .van-button {
+            width: 5.5rem;
+            height: 1.86rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .footer .van-button:first-child {
+            background-color: #377EFF;
+        }
+
+        .footer .van-button:last-child {
+            border: none;
+            background-color: #FFA517;
+        }
+
+        .van-action-sheet {
+            max-height: 11rem!important;
+            min-height: 3rem!important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">退库扫码</div>
+        </header>
+
+        <section class='c-body'>
+            <van-row class='c-row' @click='selectShow=true;'>
+                <van-col span="24"><span class='c-dot'></span><span class="c-content-span">仓&nbsp;&nbsp;&nbsp;&nbsp;库</span>
+                    <van-field class="formField" :border="false" readonly clickable v-model="submitData.WarehouseName" placeholder="请选择" @click="showWarehouseSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+                </van-col>
+            </van-row>
+            <van-row class='c-row c-row-other'>
+                <van-col span="24"><span class='c-dot'></span><span class="c-content-span">备&nbsp;&nbsp;&nbsp;&nbsp;注</span>
+                    <van-field class=" textareaField" type="textarea" name="Description" :border="false" maxlength="200" show-word-limit v-model="submitData.Description" rows="2" autosize></van-field>
+                </van-col>
+            </van-row>
+            <van-row class='c-row'>
+                <van-col span="24"><span class='c-dot'></span><span class="c-content-span">{{submitData.BackCode}}</span><span class='c-content-right'>{{getCodeNumber}}</span></van-col>
+            </van-row>
+            <div class="c-list-box">
+                <van-row v-for='(item,index) in codeDataList' :key='index'>
+                    <van-col span='5'><span class='c-dot'></span>{{item.NamePlate}}</van-col>
+                    <van-col span='8' class='c-text-center'>{{item.Caliber}}</van-col>
+                    <van-col span='11' class='c-text-center'>{{item.MeterCode}}</van-col>
+                </van-row>
+
+            </div>
+        </section>
+        <div class="footer">
+
+            <van-button round block type="info" @click='saveBackCode'>
+                提交
+            </van-button>
+
+            <van-button round block type="danger" @click='ewSweep'>
+                扫码
+            </van-button>
+
+        </div>
+        <!-- 下拉菜单 -->
+        <van-action-sheet v-model="selectShow" :round=false :actions="WarehouseActions" :close-on-click-action=true cancel-text="取消" @cancel="onCancelSelect" @select="onSelect" />
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+
+    };
+
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                showWarehouseSelectL: false,
+                selectShow: false,
+                WarehouseActions: [],
+                codeDataList: [],
+                MeterCode: '',
+                submitData: {
+                    WarehouseName: '',
+                    WarehouseId: '',
+                    Description: '',
+                    BackCode: 'KDHBUI0064',
+                },
+                oldScanCode:''
+            },
+            computed: {
+                getCodeNumber: function() {
+                    return this.codeDataList.length;
+                }
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                onCancelSelect() {
+                    this.selectShow = false;
+                },
+                onSelect(item) {
+                    this.submitData.WarehouseName = item.name;
+                    this.submitData.WarehouseId = item.id;
+                },
+                getWarehouseSelect() {
+                    // 获取仓库信息
+                    fnPost('WMM003', {}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                        if (ret) {
+                                var data = JSON.parse(ret.Data);
+                                if (data.length > 0) {
+                                    data.forEach(e => {
+                                        var item = {
+                                            name: e.HouseName,
+                                            id: e.HouseId
+                                        }
+                                        this.WarehouseActions.push(item);
+                                    })
+
+                                } else {
+                                    this.WarehouseActions = [];
+                                }
+
+                        }
+                    });
+                    // 获取退库扫码编号
+                    fnPost('WMM004', {}, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                        if (ret) {
+                            if (ret.Status == 0) {
+                                if (ret.Data != "") {
+                                    var data = JSON.parse(ret.Data);
+                                    this.submitData.BackCode = data.BillNo;
+                                }
+                            }
+                        }
+                    });
+                },
+                getWaterCodeInfo() {
+                    // 获取水表信息
+                    fnPost('WMM005', {
+                        MeterCode: this.MeterCode
+                    }, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                        if (ret) {
+                            if (ret.Status == 0) {
+                                if (ret.Data.length != 0) {
+                                    var data = JSON.parse(ret.Data);
+                                    this.codeDataList.push(data[0]);
+                                    this.MeterCode = "";
+                                }
+                            }else {
+                              this.MeterCode ="";
+                              this.oldScanCode ="";
+                              api.toast({
+                                  msg: ret.Message,
+                                  duration: 2000,
+                                  location: 'bottom'
+                              });
+                            }
+                        }
+                    });
+                },
+                saveBackCode() {
+                    // 保存扫码退库
+
+                    dialogAlert({
+                        title: '提示',
+                        content: '是否确认提交？提交后不可更改',
+                        buttons: ['确定', '取消'],
+                    }, (ret)=>{
+                        if (ret.buttonIndex == 1) {
+                          var Ids = "";
+                          if(this.codeDataList.length >1){
+                            this.codeDataList.forEach(e => {
+                                Ids += e.MeterId + ",";
+                            });
+                          }
+
+                          if(this.submitData.WarehouseId ==""){
+                            api.toast({
+                                msg: '仓库不能为空',
+                                duration: 2000,
+                                location: 'top'
+                            });
+                            return
+                          }
+                          var body = {
+                              Ids: Ids.substring(0,Ids.length-1),
+                              BillNo: this.submitData.BackCode,
+                              HouseId: this.submitData.WarehouseId,
+                              Remark: this.submitData.Description,
+                          };
+                          fnPost('WMM001', body, 'application/json', false, false, (ret, err) => {
+                            api.hideProgress();
+                              if (ret && ret.Status==0) {
+                                    vant.Toast('提交成功!');
+                                    api.sendEvent({
+                                        name: 'refreshList',
+                                    });
+                                    api.closeWin();
+                              } else{
+                                vant.Toast(ret.Message);
+                              }
+                          });
+                        }
+                    });
+                },
+                ewSweep() {
+                    var FNScanner = api.require('FNScanner');
+                    FNScanner.open({
+                        autorotation: true,
+                        saveToAlbum: true,
+                    }, (ret, err) => {
+                        if (ret) {
+                            if (ret.eventType == 'success') { //扫描成功
+                              var content = ret.content;
+                              if(this.oldScanCode!=content){
+                                this.MeterCode = ret.content;
+                                this.oldScanCode = ret.content;
+                                this.getWaterCodeInfo();
+                              } else {
+                                vant.Toast('该表号已经存在');
+                              }
+
+                            }
+                            return
+
+                            if (ret.eventType == 'cameraError') {
+                                api.toast({
+                                    msg: '请开启app访问手机摄像头权限',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                setTimeout(function() {
+                                    // 关闭扫码器  关闭扫码界面
+                                    back();
+                                }, 300);
+                                return;
+                            }
+                            if (ret.eventType == 'albumError') {
+                                api.toast({
+                                    msg: '请开启app访问手机相册权限',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                setTimeout(function() {
+                                    back();
+                                }, 300);
+                                return;
+                            }
+                            if (ret.eventType == 'fail') {
+                                api.toast({
+                                    msg: '扫码失败,请从新扫码',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                                setTimeout(function() {
+                                    back();
+                                }, 300);
+
+                                return;
+                            }
+                        } else {
+                            api.toast({
+                                msg: '扫码错误请稍后再试',
+                                duration: 2000,
+                                location: 'bottom'
+                            });
+                            setTimeout(function() {
+                                back();
+                            }, 300);
+                        }
+                    });
+                },
+
+
+            },
+            mounted: function() {
+                this.getWarehouseSelect();
+            }
+        })
+    }
+</script>
+
+</html>

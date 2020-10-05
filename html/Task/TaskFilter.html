@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>筛选界面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #FFF;
+            padding: 1rem 1.55rem;
+        }
+
+        .typeLabel {
+            width: calc((100vw - 4.8rem)/2);
+            height: 1.85rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            border: 0.03rem solid #8F8F8F;
+            color: #737373;
+            font-size: 0.8rem;
+            border-radius: 0.2rem;
+            margin-bottom: 0.63rem;
+        }
+
+        .typeLabel.allType {
+            width: calc(100vw - 3.1rem);
+            margin: 1.9rem 0;
+        }
+
+        .typeLabel.active {
+            background-color: #197AFF;
+            border-color: #197AFF;
+            color: #fff;
+        }
+
+        .productTypes {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-flow: row wrap;
+        }
+
+        .productType {
+            margin-bottom: 0.9rem;
+        }
+
+        .productName {
+            margin-bottom: 0.78rem;
+            font-size: 0.95rem;
+            color: #070707;
+        }
+
+        .van-button {
+            height: 1.85rem;
+            line-height: 1.85rem;
+            width: 14.75rem;
+            margin: 0.5rem auto;
+            text-align: center;
+            border: 0.03rem solid #8F8F8F;
+            color: #737373;
+            font-size: 0.8rem;
+            border-radius: 0.2rem;
+            background: #fff;
+            margin-top: 1rem;
+        }
+
+        .info {
+            color: #fff;
+            background-color: #1989fa;
+            border: 1px solid #1989fa;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-pull-right aui-btn" tapmode @click="getActive(false)">
+                取消
+            </div>
+        </header>
+        <van-button :class="{info:allClick}" tapmode @click="getActive(true)">全部任务</van-button>
+        <div id="main" class="flex-con">
+            <div class="productType" v-for="(product,index1) in filterData" :key="index1">
+                <div class="productType">
+                    <div class="productName">
+                        {{product.productName}}
+                    </div>
+                    <div class="productTypes">
+                        <div class="typeLabel" v-for="(type,index2) in product.classifys" :key="index2" :class="{active:activeType.typeId == type.id}" @click="getActive(false,type,product.productId)">
+                            {{type.name}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                activeType: {
+                    typeName: "全部任务",
+                    typeId: 1,
+                    productId: 0,
+                },
+                productId: 0,
+                allType: {
+                    typeName: "全部任务",
+                    typeId: 0
+                },
+                filterData: [],
+                allClick: false,
+
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+
+                GetClassify() {
+                  var _this = this;
+                    if (api.connectionType != 'none') {
+                      onCommentGetClassify(function(ret){
+                        if (ret) {
+                            if (ret.success) {
+                                _this.filterData = [];
+                                _this.filterData = ret.result;
+                                $api.setStorage('myTaskfilterData', _this.filterData);
+                            }
+                        }
+                      });
+                    } else {
+                        this.filterData = $api.getStorage('myTaskfilterData');
+                    }
+                },
+                getActive(all = false, type = {
+                    id: 0,
+                    name: "全部任务"
+                }, productId = 0) {
+                    if (all) {
+                        this.allClick = true;
+                        var datas = {
+                            productId: 0,
+                            classifys: {
+                                id: 0,
+                                name: "全部任务"
+                            }
+                        }
+                    } else {
+                        this.allClick = false;
+                        var datas = {
+                            productId: productId == 0 ? api.pageParam.activeType.productId : productId,
+                            classifys: {
+                                id: productId == 0 ? api.pageParam.activeType.typeId : type.id,
+                                name: productId == 0 ? api.pageParam.activeType.typeName : type.name
+                            }
+                        }
+                    }
+                    if (api.pageParam.from != undefined) {
+                        api.sendEvent({
+                            name: 'filterRefreshSum',
+                            extra: {
+                                data: datas,
+                            }
+                        });
+                    } else {
+                        api.sendEvent({
+                            name: 'filterRefresh',
+                            extra: {
+                                data: datas,
+                            }
+                        });
+                    }
+                    api.closeWin({});
+
+                }
+
+            },
+            mounted: function() {
+                this.activeType = api.pageParam.activeType;
+                this.allClick = this.activeType.productId == 0 ? true : false;
+                this.GetClassify();
+            }
+        })
+    }
+</script>
+
+</html>

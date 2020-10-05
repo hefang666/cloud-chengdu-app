@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>我的任务界面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-weight: 900;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .aui-tab {
+            width: 100%;
+        }
+
+        .aui-tab-item {
+            font-size: 0.95rem;
+            color: #363636;
+            padding: 1.2rem 0;
+            line-height: normal;
+            height: auto;
+        }
+
+        .aui-tab-item:first-child:after {
+            content: '';
+            position: absolute;
+            left: auto;
+            top: 1.6rem;
+            bottom: 0;
+            right: 0;
+            height: 0.73rem;
+            width: 0.03rem;
+            background-color: #DCDCDC;
+        }
+
+        .aui-tab-item.auiActive {
+            color: #2F81F6;
+            border-bottom: none;
+        }
+
+        .filter {
+            padding: 0.5rem 0.43rem;
+            background-color: #F3F3F3;
+            position: relative;
+        }
+
+        .filterBtn {
+            background-color: #fff;
+            border-radius: 0.25rem;
+            padding: 0.88rem 1.65rem 0.9rem 2.25rem;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .filterBtn:active {
+            opacity: 0.7;
+        }
+
+        .filterText {
+            font-size: 0.9rem;
+            color: #5B5B5B;
+        }
+
+        .filterIcon {
+            width: 0.4rem;
+            height: 0.23rem;
+            background: url("../../image/Task/xiala.png") no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .aui-list {
+            background-image: none !important;
+            background-color: #F3F3F3;
+            /*padding-bottom: 3rem;*/
+        }
+
+        .aui-media-list .aui-list-item {
+            display: flex;
+            padding-left: 0.75rem;
+            margin-bottom: 0.33rem;
+            background-color: #fff;
+            background-image: none;
+        }
+
+        .aui-media-list-item-inner {
+            width: 90vw;
+        }
+
+        .aui-list .aui-list-item-inner {
+            padding-right: 0.65rem;
+            padding-top: 1.2rem;
+            padding-bottom: 1.2rem;
+        }
+
+        .aui-list .aui-list-item-title {
+            font-size: 0.9rem;
+            color: #1C1C1C;
+        }
+
+        .aui-list .aui-list-item-media.systemIcon {
+            width: auto;
+            padding: 1.27rem 0.35rem 0.75rem 0;
+            align-items: flex-start;
+        }
+
+        .aui-list .aui-list-item-text:first-child,
+        .aui-list .aui-list-item-text:last-child {
+            padding: 0;
+        }
+
+        .aui-list .aui-list-item-text {
+            /*padding: 0.5rem 0 0.6rem 0;*/
+            padding: 0.2rem 0 0.1rem 0;
+            font-size: 0.75rem;
+            color: #A7A7A7;
+        }
+
+        .aui-list .aui-list-item-right,
+        .aui-list-item-title-row em {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 0.1rem;
+            font-size: 0.7rem;
+            color: #A7A7A7;
+        }
+
+        .aui-list .aui-list-item-text.projectName {
+            color: #4D4D4D
+        }
+
+        .avatar {
+            width: 1.33rem;
+            height: 1.33rem;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .biaowu {
+            background: url("../../image/Task/biaowu.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .yinxiao {
+            background: url("../../image/Task/yingye@2x.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .chaobiao {
+            background: url("../../image/Task/chaobiao.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .biaoqian {
+            width: 0.9rem;
+            height: 1.88rem;
+            position: absolute;
+            top: 0;
+            right: 1.18rem;
+            color: #fff;
+            font-size: 0.88rem;
+            text-align: center;
+            background: url("../../image/Task/biaoqian.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .sousuo {
+            width: 0.78rem;
+            height: 0.78rem;
+            background: url("../../image/Task/sousuo.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .c-header-right {
+            position: absolute;
+            right: 1.2rem;
+            top: 1.5rem;
+            font-size: 0.95rem;
+            color: #1E7BFA;
+        }
+
+        .aui-tab-item.auiActive {
+            color: #2F81F6;
+            border-bottom: none;
+        }
+
+        .c-bar {
+            width: 0.1rem;
+            height: 0.8rem;
+            background: #fff;
+            margin-right: 0.3rem;
+            opacity: 0.5;
+        }
+
+        .no-data {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+        }
+
+        .has_save_local {
+            color: #167CFB!important;
+        }
+
+        .no_save_local {
+            color: #FF9320!important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">我的任务</div>
+            <div class="aui-pull-right aui-btn">
+                <div class="sousuo" tapmode @click="openSearch"></div>
+            </div>
+        </header>
+
+        <div class="aui-tab">
+            <div class="aui-tab-item" :class="{auiActive:active==7}" tapmode @click='changeTab(7)'>待办任务</div>
+            <div class="aui-tab-item" :class="{auiActive:active==4}" tapmode @click='changeTab(4)'>已办任务</div>
+        </div>
+
+        <div class="filter">
+            <div class="filterBtn" @click="openFilter">
+                <div class="filterText">
+                    {{filterType.typeName}}
+                </div>
+                <div class="filterIcon"></div>
+            </div>
+            <div class="c-header-right" tapmode @click="openSummary">
+                汇总
+            </div>
+        </div>
+
+        <div id="main" class="flex-con">
+            <div class="aui-content">
+                <ul class="aui-list aui-media-list" v-show='taskTypeArray.length > 0'>
+                    <li class="aui-list-item aui-list-item-middle" v-for="(item,index) in taskTypeArray" :key='index' @click="openTaskDispose(item)" tapmode>
+                        <div class="aui-list-item-media systemIcon">
+                            <div class="avatar" :class="item.picType"></div>
+                        </div>
+                        <div class="aui-media-list-item-inner">
+                            <div class="aui-list-item-inner">
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-title">任务编号：{{item.taskCode}}</div>
+                                </div>
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-text projectName">工程名称：{{item.name!=null && item.name!='null' && item.name!=undefined?item.name:''}}</div>
+                                    <div class="aui-list-item-right" :class="{'has_save_local':item.statusFlagText=='已保存','no_save_local':item.statusFlagText!='已保存'}">{{item.statusFlagText!=null && item.statusFlagText!='null' && item.statusFlagText!=undefined?item.statusFlagText:''}}</div>
+                                </div>
+                                <div v-show='item.isBatch == false'>
+                                    <div class="aui-list-item-text">
+                                        <div class="aui-list-item-text">用户编号：{{item.customerCode}}</div>
+                                    </div>
+                                    <div class="aui-list-item-text">
+                                        <div class="aui-list-item-text">用户名称：{{item.customerName}}</div>
+                                    </div>
+                                    <div class="aui-list-item-text">
+                                        <div class="aui-list-item-text">用户地址：{{item.customerAddress}}</div>
+                                    </div>
+                                </div>
+                                <div class="aui-list-item-text" v-show='item.templateId == 43 || item.templateId == 45 '>
+                                    <div class="aui-list-item-text">表册名称：{{item.bookName}}</div>
+                                </div>
+
+                                <div class="aui-list-item-text">
+                                    <div class="aui-list-item-text">创建时间：{{moment(item.creationTime).format("YYYY-MM-DD HH:mm:ss")}}</div>
+                                </div>
+                                <div class="aui-list-item-text" v-show='item.panTime!=null'>
+                                    <div class="aui-list-item-text">到期时间：{{moment(item.panTime).format("YYYY-MM-DD HH:mm:ss")}}</div>
+                                </div>
+                                <div class="aui-list-item-text" v-show='item.isBatch'>
+                                    <div class="aui-list-item-text">待&nbsp;&nbsp;认&nbsp;&nbsp;领：{{item.unconFirmedCount}}个</div>
+                                    <div class="aui-list-item-text" v-show='item.templateId != 4'>待&nbsp;&nbsp;办&nbsp;&nbsp;理：{{item.tbdCount}}个</div>
+                                    <div class="aui-list-item-text" v-show='item.templateId == 4'>待&nbsp;&nbsp;办&nbsp;&nbsp;理：{{item.notUploadNumber ==item.tbdCount?0 :(item.tbdCount-item.notUploadNumber)}}个</div>
+                                </div>
+                                <div class="aui-list-item-text" v-show='item.templateId == 4'>
+                                    <div class="aui-list-item-text">已&nbsp;&nbsp;保&nbsp;&nbsp;存：{{item.notUploadNumber}}个</div>
+                                    <div class="aui-list-item-text">已&nbsp;&nbsp;上&nbsp;&nbsp;传：{{item.ybCount}}个</div>
+                                </div>
+                                <div class="aui-list-item-text" v-show='item.isBatch'>
+                                    <div class="aui-list-item-text" v-show='item.templateId != 4'>已&nbsp;&nbsp;办&nbsp;&nbsp;理：{{item.ybCount}}个</div>
+                                    <div class="aui-list-item-text" v-show='item.templateId == 4'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                                    <div class="aui-list-item-text">总&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;数：{{item.taskCount}}个</div>
+                                </div>
+                                <div class="aui-list-item-text" v-if="active == 0">
+                                    <div class="aui-list-item-text">提交次数：{{item.submitNum}}&nbsp;次</div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div v-show='noDataIsShow'>
+                    <div class="no-data">没有更多的搜索结果!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../script/moment.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.parseTapmode();
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+        api.addEventListener({
+            name: 'filterRefresh'
+        }, function(ret, err) {
+            if (ret) {
+                TaskVue.taskListAddPostingNum = 0;
+                var data = ret.value.data;
+                TaskVue.filterType.typeName = data.classifys.name;
+                TaskVue.filterType.typeId = data.classifys.id;
+                TaskVue.filterType.productId = data.productId;
+                var historyMyTaskFilter = $api.getStorage('historyMyTaskFilter');
+                historyMyTaskFilter.typeName = data.classifys.name;
+                historyMyTaskFilter.typeId = data.classifys.id;
+                historyMyTaskFilter.productId = data.productId;
+                $api.setStorage('historyMyTaskFilter', historyMyTaskFilter);
+                TaskVue.PageIndex = 1;
+                TaskVue.taskTypeArray = [];
+                TaskVue.GetMyTasks();
+            }
+        });
+        api.addEventListener({
+            name: 'refreshCloudMyTask'
+        }, function(ret, err) {
+            if (ret) {
+                TaskVue.taskListAddPostingNum = 0;
+                TaskVue.PageIndex = 1;
+                TaskVue.taskTypeArray = [];
+                TaskVue.GetMyTasks();
+            }
+        });
+        api.addEventListener({
+            name: 'searchContents'
+        }, function(ret, err) {
+            if (ret) {
+                var data = ret.value.data;
+                if (data.length == 0) {
+                    TaskVue.noDataIsShow = true;
+                } else {
+                    TaskVue.noDataIsShow = false;
+                }
+                TaskVue.searchValue = ret.value.searchValue;
+                var historyMyTaskFilter = $api.getStorage('historyMyTaskFilter');
+                historyMyTaskFilter.searchValue = ret.value.searchValue;
+                $api.setStorage('historyMyTaskFilter', historyMyTaskFilter);
+                TaskVue.taskTypeArray = [];
+                TaskVue.handleData(data);
+            }
+        });
+        // 监听网络开启 zxf 2020-04-14
+        api.addEventListener({
+            name: 'online'
+        }, function(ret, err) {
+            if (ret) {
+                setTimeout(() => {
+                    TaskVue.PageIndex = 1;
+                    TaskVue.taskTypeArray = [];
+                    TaskVue.taskListAddPostingNum = 0;
+                    TaskVue.GetMyTasks();
+                }, 500);
+
+            }
+        });
+        // 监听网络关闭 zxf 2020-04-14
+        api.addEventListener({
+            name: 'offline'
+        }, function(ret, err) {
+            if (ret) {
+                TaskVue.PageIndex = 1;
+                TaskVue.taskTypeArray = [];
+                TaskVue.taskListAddPostingNum = 0;
+                TaskVue.GetMyTasks();
+            }
+        });
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            if (ret) {
+                if (ret.keyCode == 4) {
+                    TaskVue.back();
+                }
+            }
+        });
+
+        // api.addEventListener({
+        //     name: 'scrolltobottom',
+        //     extra: {
+        //         threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
+        //     }
+        // }, function(ret, err) {
+        //     TaskVue.PageIndex++;
+        //     TaskVue.GetMyTasks();
+        // });
+        // 监听是否滚动到底部
+        stopTouchendPropagationAfterScroll('main',function(ret){
+          if(ret){
+            if(TaskVue.isHasMoreDate){
+              TaskVue.PageIndex++;
+              TaskVue.GetMyTasks();
+            }else{
+              vant.Toast('没有更多数据了!');
+            }
+          }
+        });
+    };
+
+    function fnIntVue() {
+        window.TaskVue = new Vue({
+            el: '#wrap',
+            data: {
+                searchValue: "",
+                active: 7,
+                filterType: {
+                    typeName: "全部任务",
+                    typeId: 0,
+                    productId: 0,
+                },
+                taskTypeArray: [],
+                taskListData: [],
+                noDataIsShow: false,
+                PageIndex: 1,
+                taskListAddPostingNum: 0,
+                isHasMoreDate:false,
+
+            },
+            watch: {
+                taskListData: function(newData, old) {
+                    var _this = this;
+                    newData.forEach(function(item, index) {
+                        _this.taskTypeArray.push(item);
+                    });
+                    //  divScrollEv();
+                }
+            },
+            computed: {},
+            methods: {
+                back() { //返回上一个页面
+                    api.sendEvent({
+                        name: 'updataConFirmedNumber',
+                    });
+                    api.closeToWin({
+                        name: 'main'
+                    })
+
+                },
+                openSearch() {
+                    var params = this.filterType;
+                    params.Status = this.active;
+                    api.openWin({
+                        name: 'Search',
+                        url: './Search.html',
+                        pageParam: {
+                            data: params,
+                            from: "myTask"
+                        }
+                    });
+                },
+                changeTab(type) {
+                    this.taskListAddPostingNum = 0;
+                    this.active = type;
+                    this.PageIndex = 1;
+                    this.taskTypeArray = [];
+                    this.initFilter();
+                    this.GetMyTasks();
+                },
+                openFilter() {
+                    api.openWin({
+                        name: 'TaskFilter',
+                        url: './TaskFilter.html',
+                        pageParam: {
+                            activeType: this.filterType
+                        }
+                    });
+                },
+                openSummary() { //任务汇总页面
+                    api.openWin({
+                        name: 'TaskSummary',
+                        url: './TaskSummary.html',
+                    });
+                },
+                turnTime(time, type) {
+                    if (type == 'YYYY-MM-DD') {
+                        return time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate();
+                    } else if (type == 'YYYY-MM-DD HH:mm:ss') {
+                        return time.getFullYear() + '-' + (time.getMonth() + 1) + '-' + time.getDate() + ' ' +
+                            time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds();
+                    } else if (type == 'MM-DD HH:mm') {
+                        return (time.getMonth() + 1) + '-' + time.getDate() + ' ' +
+                            time.getHours() + ':' + time.getMinutes();
+                    }
+                },
+                GetMyTasks() {
+                    // 获取我的任务列表
+                    // 判断是否有网络。没有网络查询本地数据库
+                    var _this = this;
+                    if (api.connectionType != 'none') {
+                        var CurrentLocation = $api.getStorage('CurrentLocation');
+                        if (this.searchValue.length == 0) {
+                            var url =
+                                `services/app/WorkFlow/GetMyTasks?Lng=${CurrentLocation.lon}&Lat=${CurrentLocation.lat}&Account=${$api.getStorage("thirdPartyAccount")}&PassWord=${$api.getStorage("thirdPartyPassWord")}&Status=${this.active}&ProductID=${this.filterType.productId}&TemplateId=${this.filterType.typeId}&PageIndex=${this.PageIndex}&MaxResultCount=50`;
+                        } else {
+                            var url =
+                                `services/app/WorkFlow/GetMyTasks?Lng=${CurrentLocation.lon}&Lat=${CurrentLocation.lat}&Account=${$api.getStorage("thirdPartyAccount")}&PassWord=${$api.getStorage("thirdPartyPassWord")}&Status=${this.active}&ProductID=${this.filterType.productId}&TemplateId=${this.filterType.typeId}&Filter=${this.searchValue}&PageIndex=${this.PageIndex}&MaxResultCount=50`;
+                        }
+
+                        fnGet(url, {}, false, (ret, err) => {
+                            api.hideProgress();
+                            if (ret) {
+                                if (ret.success) {
+                                    if (ret.result.items.length > 0) {
+                                        var result = ret.result.items;
+                                        result.forEach(function(item, index) {
+                                            item.isSaveLocal = 0;
+                                        });
+                                        _this.taskListAddPostingNum = 0;
+                                        _this.isHasMoreDate=true;
+                                        _this.taskListAddPostingNumber(result, true);
+                                    } else {
+                                      _this.isHasMoreDate=false;
+                                        if (this.PageIndex == 1) {
+                                            vant.Toast('暂无数据!')
+                                            this.taskListData = [];
+                                            this.taskTypeArray = [];
+                                            var historyMyTaskFilter = {
+                                                typeName: "全部任务",
+                                                typeId: 0,
+                                                productId: 0,
+                                                searchValue: ""
+                                            };
+                                            $api.setStorage('historyMyTaskFilter', historyMyTaskFilter);
+                                        } else {
+                                            vant.Toast('没有更多数据了!');
+                                        }
+
+                                    }
+                                }
+                            } else {
+
+                            }
+                        });
+                    } else {
+                        if (this.active == 7) { //待处理
+                            api.showProgress({
+                                style: 'default',
+                                animationType: 'fade',
+                                title: '加载中...',
+                                modal: false
+                            });
+                            offLineGetMyTask(this.searchValue, this.filterType, this.PageIndex, (ret) => {
+                                if (ret) {
+                                    if (ret.taskListData.length != 0) {
+                                        _this.taskListAddPostingNumber(ret.taskListData, function(newData) {
+                                            _this.taskListData = newData;
+                                        });
+                                        this.noDataIsShow = ret.noDataIsShow;
+
+                                    } else {
+                                        if (this.PageIndex == 1) {
+                                            _this.taskListAddPostingNumber(ret.taskListData, function(newData) {
+                                                _this.taskListData = newData;
+                                            });
+                                            this.noDataIsShow = ret.noDataIsShow;
+                                        } else {
+                                            vant.Toast('没有更多数据了!')
+                                        }
+
+                                    }
+                                }
+                            });
+                        } else {
+                            this.taskListData = [];
+                            vant.Toast('网络连接错误,请检查网络是否连接!')
+                        }
+                    }
+                },
+                handleData(result) {
+                    //  console.log(JSON.stringify(result))
+                    this.taskListData = [];
+                    result.forEach(e => {
+                        if (e.url != undefined) {
+                            var time = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+                            e.ClaimTime = time;
+                            if (e.url != "" && e.url != null && e.url != 'string') {
+                                var urlAarry = e.url.split('|');
+                                var detailUrl = urlAarry[1].substring(2, urlAarry[1].length);
+                                e.handleUrl = urlAarry[0].substring(2, urlAarry[0].length);
+                                e.detailUrl = urlAarry[1].substring(2, urlAarry[1].length);
+                            } else {
+                                e.handleUrl = "";
+                                e.detailUrl = "";
+                            }
+                            if (e.taskCode == null || e.taskCode == undefined) {
+                                e.taskCode = "";
+                            }
+                            switch (true) {
+                                case e.productCode == 'WaterStarOne-MMS-S8':
+                                    e.picType = 'biaowu';
+                                    break;
+                                case e.productCode == 'WaterStarOne-AM-S8':
+                                    e.picType = 'yinxiao';
+                                    break;
+                                case e.productCode == 'WaterStarOne-MRH-S8':
+                                    e.picType = 'chaobiao';
+                                    break;
+                            }
+                        }
+                    });
+                    this.taskListData = result;
+                },
+                openTaskDispose(item) {
+                    var time = new Date();
+                    item.time = moment(time).format('YYYY-MM-DD HH:mm:ss');
+                    if (this.active == 7) {
+                        openTaskDispose(item, 'handle', 'handle');
+                    } else {
+                        openTaskDispose(item, '', 'detail');
+                    }
+
+                },
+                timeFormat(time) {
+                    var nowDate = new Date();
+                    if (time != "") {
+                        var dataTime = new Date(time);
+                        nowDate.setHours(23, 59, 59);
+                        var HasDate = new Date(nowDate);
+                        var days = HasDate.getTime() - dataTime.getTime(); 
+                        var day = parseInt(days / (1000 * 60 * 60 * 24)); 
+                        var newtime = '' ;
+                        if (day === 0) {
+                            newtime = moment(time).format('HH:mm');
+                        } else if (day === 1) {
+                            newtime = '昨天 ' + moment(time).format('HH:mm');
+                        } else {
+                            newtime = moment(time).format('MM-DD HH:mm');
+                        }
+                        return newtime;
+                    } else {
+                        var newtime = moment(nowDate).format('HH:mm');
+                        return newtime;
+                    }
+                },
+                initFilter() {
+                    if ($api.getStorage('historyMyTaskFilter') != undefined) {
+                        var historyMyTaskFilter = $api.getStorage('historyMyTaskFilter');
+                        this.filterType.typeName = historyMyTaskFilter.typeName;
+                        this.filterType.typeId = historyMyTaskFilter.typeId;
+                        this.filterType.productId = historyMyTaskFilter.productId;
+                        this.searchValue = historyMyTaskFilter.searchValue;
+                    }
+                },
+                onArraySort(data, callback) {
+                    var isSaveArray = [],
+                        notSaveArray = [];
+                    var number = 0;
+                    data.forEach(function(item, index) {
+                        number++;
+                        if (item.isSaveLocal == 1) {
+                            var nu = 0;
+                            if (isSaveArray.length == 0) {
+                                isSaveArray.push(item);
+                            } else {
+                                for (let i = 0; i < isSaveArray.length; i++) {
+                                    if (isSaveArray[i].taskCode != item.taskCode) {
+                                        nu++;
+                                    }
+                                    if (nu == isSaveArray.length) {
+                                        isSaveArray.push(item);
+                                    }
+                                }
+                            }
+                        } else {
+                            var nu = 0;
+                            if (notSaveArray.length == 0) {
+                                notSaveArray.push(item);
+                            } else {
+                                for (let i = 0; i < notSaveArray.length; i++) {
+                                    if (notSaveArray[i].taskCode != item.taskCode) {
+                                        nu++;
+                                    }
+                                    if (nu == notSaveArray.length) {
+                                        notSaveArray.push(item);
+                                    }
+                                }
+                            }
+                        }
+                        if (number == data.length) {
+                            // console.log(isSaveArray.length);
+                            // console.log(notSaveArray.length);
+                            var newArray = [...notSaveArray, ...isSaveArray];
+                            callback(newArray);
+                        }
+                    })
+                },
+                taskListAddPostingNumber(data, offline = false) {
+                    var _this = this;
+                    if (data.length == 0) {
+                        if (_this.taskTypeArray.length == 0) {
+                            _this.noDataIsShow = true;
+                        }
+                        return
+                    }
+                    var db = api.require("db");
+                    var CurentUserName = $api.getStorage('loginData').userName;
+                    var data = data;
+                    if (data[_this.taskListAddPostingNum].templateId == 4) {
+                        var uploadedNumber = 0,
+                            notUploadNumber = 0;
+                        var ret1 = db.selectSqlSync({
+                            name: 'Wsdatabase',
+                            sql: 'SELECT * FROM POSTING_LIST where TaskNo="' + data[_this.taskListAddPostingNum].taskCode + '" and NotUploader="0" and NotSave="1" and userName ="' + CurentUserName + '"'
+                        });
+                        if (ret1.status) {
+                            if (ret1.data.length > 0) {
+                                notUploadNumber += ret1.data.length;
+                                var postListData = ret1.data;
+                                for (let j = 0; j < postListData.length; j++) {
+                                    db.selectSql({
+                                        name: 'Wsdatabase',
+                                        sql: 'SELECT * FROM POSTING_IMAGE where TaskNo="' + postListData[j].TaskNo + '" and CustomerCode="' + postListData[j].CustomerCode + '" and NotSubmit="0" and userName ="' + CurentUserName + '"'
+                                    }, function(ret1, err) {
+                                        if (ret1.status) {
+                                            if (ret1.data.length > 0) {
+                                                notUploadNumber += 1;
+                                            }
+                                        }
+                                    });
+                                }
+                                data[_this.taskListAddPostingNum].notUploadNumber = notUploadNumber;
+                            } else {
+                                notUploadNumber = 0;
+                                data[_this.taskListAddPostingNum].notUploadNumber = notUploadNumber;
+                            }
+                        }
+                        var ret2 = db.selectSqlSync({
+                            name: 'Wsdatabase',
+                            sql: 'SELECT * FROM POSTING_LIST where TaskNo="' + data[_this.taskListAddPostingNum].taskCode + '" and NotUploader="1" and NotSave="1" and userName ="' + CurentUserName + '"'
+                        });
+                        if (ret2.status) {
+                            if (ret2.data.length > 0) {
+                                uploadedNumber += ret2.data.length;
+                                var postListData = ret2.data;
+                                for (let j = 0; j < postListData.length; j++) {
+                                    db.selectSql({
+                                        name: 'Wsdatabase',
+                                        sql: 'SELECT * FROM POSTING_IMAGE where TaskNo="' + postListData[j].TaskNo + '" and CustomerCode="' + postListData[j].CustomerCode + '" and NotSubmit="1" and userName ="' + CurentUserName + '"'
+                                    }, function(ret1, err) {
+                                        if (ret1.status) {
+                                            if (ret1.data.length > 0) {
+                                                uploadedNumber += 1;
+                                            }
+                                        }
+                                    });
+                                }
+                                data[_this.taskListAddPostingNum].uploadedNumber = uploadedNumber;
+                            } else {
+                                uploadedNumber = 0;
+                                data[_this.taskListAddPostingNum].uploadedNumber = uploadedNumber;
+                            }
+                        }
+                    } else {
+                        data[_this.taskListAddPostingNum].uploadedNumber = 0;
+                        data[_this.taskListAddPostingNum].notUploadNumber = 0;
+
+                    }
+                    if (_this.active == 4) {
+                        if (_this.taskListAddPostingNum == data.length - 1) {
+                            _this.handleData(data);
+                            return
+                        }
+                        if (_this.taskListAddPostingNum < data.length - 1) {
+                            _this.taskListAddPostingNum++;
+                            _this.taskListAddPostingNumber(data);
+                        }
+                        return
+                    }
+                    if (offline && _this.active == 7) {
+                        db.selectSql({
+                            name: 'Wsdatabase',
+                            sql: 'SELECT * FROM myTaskSheet where taskCode ="' + data[_this.taskListAddPostingNum].taskCode + '" and statusFlagText="已保存"'
+                        }, function(ret, err) {
+                            if (ret.status) {
+                                if (ret.data.length != 0) {
+                                    data[_this.taskListAddPostingNum].statusFlagText = "已保存";
+                                }
+                                if (_this.taskListAddPostingNum == data.length - 1) {
+                                    var updateNumber = 0;
+                                    data.forEach(function(items, index) {
+                                        updateNumber++;
+                                        if (items.statusFlagText == '已保存') {
+                                            items.isSaveLocal = 1;
+                                        }
+                                        if (updateNumber == data.length) {
+                                            _this.onArraySort(data, function(retNewArray) {
+                                                _this.handleData(retNewArray);
+                                            });
+                                        }
+                                    });
+
+                                }
+                                if (_this.taskListAddPostingNum < data.length - 1) {
+                                    _this.taskListAddPostingNum++;
+                                    _this.taskListAddPostingNumber(data, true);
+                                }
+
+                            }
+                        });
+                    }
+
+
+                },
+            },
+            mounted: function() {
+                this.active = api.pageParam.type != undefined ? api.pageParam.type : 7;
+                this.initFilter();
+                setTimeout(() => {
+                    this.GetMyTasks();
+                }, 500);
+            }
+        })
+    }
+</script>
+
+</html>

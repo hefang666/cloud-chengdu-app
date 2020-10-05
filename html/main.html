@@ -1,0 +1,306 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>主页面</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/vant.css" />
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <div id="main" class="flex-con">
+        </div>
+        <van-tabbar v-model="active" active-color="#4f79e8" inactive-color="#666" safe-area-inset-bottom>
+            <van-tabbar-item>
+                <span>首页</span>
+                <img slot="icon" slot-scope="props" :src="props.active ? icon.main.active : icon.main.normal">
+            </van-tabbar-item>
+            <van-tabbar-item :info="messageNum">
+                <span>消息</span>
+                <img slot="icon" slot-scope="props" :src="props.active ? icon.message.active : icon.message.normal">
+            </van-tabbar-item>
+            <van-tabbar-item>
+                <span>统计图</span>
+                <img slot="icon" slot-scope="props" :src="props.active ? icon.statistics.active : icon.statistics.normal">
+            </van-tabbar-item>
+            <van-tabbar-item>
+                <span>通讯录</span>
+                <img slot="icon" slot-scope="props" :src="props.active ? icon.phoneBook.active : icon.phoneBook.normal">
+            </van-tabbar-item>
+            <van-tabbar-item>
+                <span>我的</span>
+                <img slot="icon" slot-scope="props" :src="props.active ? icon.mine.active : icon.mine.normal">
+            </van-tabbar-item>
+        </van-tabbar>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/common.js"></script>
+<script type="text/javascript" src="../script/zepto.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../script/vue/vant.min.js"></script>
+<script type="text/javascript">
+    var first = null;
+    //租户和用户信息数据存放
+    var infoData = {
+        tenantInfo: {},
+        userInfo: {},
+        contactInfo: {}
+    };
+    apiready = function() {
+        fnIntVue(); //初始化vue实例
+        api.closeFrameGroup({
+            name: 'group'
+        });
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        funIniGroup();
+        if (api.systemType == 'ios') {
+            api.setStatusBarStyle({
+                style: 'dark',
+                color: 'black'
+            });
+        }
+        //安卓返回键监听，进入编辑模式时按下返回建取消编辑
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            if (!first) {
+                first = new Date().getTime();
+                api.toast({
+                    msg: '再按一次退出',
+                    duration: 1500,
+                    location: 'bottom'
+                });
+                setTimeout(function() {
+                    first = null;
+                }, 2000);
+            } else {
+                if (new Date().getTime() - first < 2000) {
+                    api.closeWidget({
+                        silent: true
+                    });
+                }
+            }
+        });
+
+      jpushVip = api.require('jpushVip');
+
+        api.addEventListener({
+            name: 'changeMainNum'
+        }, function(ret, err) {
+            setRedDotNum(ret.value.data);
+        });
+        api.addEventListener({
+            name: 'changeMessageNum'
+        }, function(ret, err) {
+            setRedDotNum1();
+        });
+
+      jpushVip.setListener(
+            function(ret) {
+                var id = ret.id;
+                var title = ret.title;
+                var content = ret.content;
+                var extra = ret.extra;
+                if (api.systemType == 'ios') {
+                    if (extra.Type != 'Message') {
+                        if ($api.getStorage('isnoinited') == '1') {
+                            if ($api.getStorage('resume') == '1') {
+                                $api.setStorage('resume', '0');
+                            } else {
+                                //弹出状态栏通知
+                                api.notification({
+                                    notify: {
+                                        title: title,
+                                        content: content
+                                    }
+                                });
+                            }
+                        } else {
+                            $api.setStorage('resume', '1');
+                        }
+                    }
+                }
+                api.sendEvent({
+                    name: 'changeMessageNum',
+                    extra: {}
+                });
+            }
+        );
+    };
+
+    function fnIntVue() {
+        window.MainVue = new Vue({
+            el: "#wrap",
+            data: {
+                active: 0,
+                messageNum: '',
+                icon: {
+                    main: {
+                        normal: '../image/main/main.png',
+                        active: '../image/main/main_active.png'
+                    },
+                    message: {
+                        normal: '../image/main/message.png',
+                        active: '../image/main/message_active.png'
+                    },
+                    statistics: {
+                        normal: '../image/main/statistics.png',
+                        active: '../image/main/statistics_active.png'
+                    },
+                    phoneBook: {
+                        normal: '../image/main/phoneBook.png',
+                        active: '../image/main/phoneBook_active.png'
+                    },
+                    mine: {
+                        normal: '../image/main/mine.png',
+                        active: '../image/main/mine_active.png'
+                    }
+                },
+            },
+            watch: {
+                active:function(index) {
+                    api.setFrameGroupIndex({
+                        name: 'group',
+                        index: index,
+                    });
+                }
+            },
+            methods: {
+                onConfirm:function(value) {
+                    this.value = value;
+                    this.showPicker = false;
+                },
+            },
+        })
+    }
+
+
+    //设置底部导航三个页面的framegroup，包括首页、消息、我的
+    function funIniGroup() {
+        var eHeaderLis = $api.domAll('header li');
+        api.openFrameGroup({
+            name: 'group',
+            scrollEnabled: false,
+            rect: {
+                x: 0,
+                y: 0,
+                w: api.winWidth,
+                h: 'auto',
+                marginLeft: 0,
+                marginTop: 0,
+                marginBottom: $api.dom('.van-tabbar').offsetHeight,
+                marginRight: 0
+            },
+            bounces: false,
+            index: 0,
+            preload: 4,
+            reload: true,
+
+            frames: [{
+                name: 'main_frame',
+                url: '../html/work/main_frame.html',
+                scrollEnabled: true,
+                vScrollBarEnabled: true,
+                hScrollBarEnabled: false,
+            }, {
+                name: 'message_frame',
+                url: '../html/message/message_frame.html'
+            }, {
+                name: 'StatisticalCharts_frame',
+                url: '../html/work/StatisticalCharts_frame.html',
+            }, {
+                name: 'MailList_frame',
+                url: '../html/work/MailList_frame.html',
+            }, {
+                name: 'mine_frame',
+                url: '../html/mine/mine_frame.html',
+            }]
+        }, function(ret, err) {});
+
+    }
+
+    //监听设置消息的红点显示
+    var number;
+    var jpushNumber;
+
+    function setRedDotNum(data) {
+        var alarmNum = data.alarm;
+        var messageNum = data.website;
+        var workNum = data.work;
+        var num = alarmNum + messageNum + workNum;
+        var jpushNum = messageNum + workNum;
+        if (api.systemType == 'ios') {
+          jpushVip.setBadge({
+                badge: jpushNum
+            });
+        } else {
+            api.setAppIconBadge({
+                badge: jpushNum
+            });
+        }
+        number = num;
+        jpushNumber = jpushNum;
+        if (num != 0) {
+            if (num > 99) {
+                this.MainVue.$data.messageNum = '99+';
+            } else {
+                this.MainVue.$data.messageNum = num;
+            }
+        } else {
+            this.MainVue.$data.messageNum = '';
+        }
+    }
+
+    function setRedDotNum1() {
+        number--;
+        jpushNumber--;
+        if (number < 0) {
+            number = 0
+        }
+        if (jpushNumber < 0) {
+            jpushNumber = 0
+        }
+        if (api.systemType == 'ios') {
+          jpushVip.setBadge({
+                badge: jpushNumber
+            });
+        } else {
+            api.setAppIconBadge({
+                badge: jpushNumber
+            });
+        }
+        if (number != 0) {
+            if (number > 99) {
+                this.MainVue.$data.messageNum = '99+';
+            } else {
+                this.MainVue.$data.messageNum = number;
+            }
+        } else {
+            this.MainVue.$data.messageNum = '';
+        }
+    }
+</script>
+
+</html>

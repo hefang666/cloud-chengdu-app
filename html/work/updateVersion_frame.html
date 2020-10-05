@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>更新消息frame页面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css">
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+
+        .dilogMarkAlert {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            background: rgba(0, 0, 0, 0.12);
+            width: 100%;
+            height: 100%;
+            z-Index: 9999;
+            /*display: none;*/
+        }
+
+        .dilogMarkAlertBox {
+            width: 15rem;
+            min-height: 7.5rem;
+            max-height: 20rem;
+            overflow: hidden;
+            background: #fff;
+            border-radius: 0.4rem;
+            z-index: 1000;
+            position: absolute;
+            top: 40%;
+            left: 1.5rem;
+            /*margin: 0 auto;*/
+        }
+
+        .dilogMarkAlertBox div {
+            width: 100%;
+        }
+
+        .dilogMarkAlertBox .dialog_title {
+            height: 1.5rem;
+            line-break: 1.5rem;
+            padding-top: 0.3rem;
+            text-align: left;
+        }
+
+        .dilogMarkAlertBox .dialog_title span {
+            height: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .dilogMarkAlertBox .dialog_body {
+            min-height: 4rem;
+            max-height: 15rem;
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            text-align: left;
+            padding-left: 1rem;
+            overflow: hidden;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .dilogMarkAlertBox .dialog_footer {
+            height: 2.5rem;
+            line-height: 2.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: row;
+            text-align: center;
+            color: #2D63FF;
+        }
+
+        .dilogMarkAlertBox .dialog_footer .dialogBtn {
+            border-right: 1px solid #eee;
+        }
+
+        .dilogMarkAlertBox .dialog_footer .dialogBtn.active {
+            background: #eee !important;
+            color: #2D63FF;
+            opacity: 0.8;
+        }
+
+        .dilogMarkAlertBox .dialog_footer .noneBorder {
+            border-right: none;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="versionVm" v-cloak>
+        <div class="dilogMarkAlert" v-show='remarkList.length > 0'>
+            <div class="dilogMarkAlertBox">
+                <div class="dialog_title aui-padded-l-10"><span>本次更新内容如下：</span></div>
+                <div class="dialog_body">
+                    <div v-for='(item,index) in remarkList' :key='index'>
+                        <span v-if='item.remark.length>0'>{{item.moduleName}}：</span>
+                        <p v-if='item.remark.length>0' class='aui-padded-l-10 aui-margin-b-10'>{{item.remark}}</p>
+                    </div>
+                </div>
+                <div class="dialog_footer">
+                    <div class="dialogBtn" @click='btnSure()'>确定</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/versionInfo.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script>
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        initVue();
+    };
+
+    function initVue() {
+        window.updateVersionVue = new Vue({
+            el: '#versionVm',
+            data: {
+                remarkList: [],
+                versionCurentUserName: $api.getStorage('loginData') != undefined ? $api.getStorage('loginData').userName : "", //全局变量 （当前登录用户账号）
+            },
+            methods: {
+                initPage:function() { //初始化
+                    var _this = this;
+                    if (api.pageParam.type == 'update') { //发现新的版本（提示更新）
+                        vant.Dialog.confirm({
+                                title: '提示',
+                                message: '发现新版本，是否立即更新',
+                            })
+                            .then(function() {
+                                // 更新有更新的模块
+                                downDataToLocalZip('update');
+                                // setTimeout(function() {
+                                //     api.closeFrame({
+                                //         name: 'updateVersion_frame0'
+                                //     });
+                                // }, 500)
+
+                            })
+                            .catch(function() { //取消立即更新
+                                vant.Dialog.alert({
+                                    title: '提示',
+                                    message: '若需更新版本，请到我的-设置-关于版本中更新版本',
+                                }).then(function() {
+                                    var gpsmodel = api.require('gpsState'); //检测是否开启了gps定位
+                                    gpsmodel.gpsstate(function(ret) {
+                                        if (ret) {
+                                            if (ret.gps) {
+                                                api.closeFrame();
+                                            } else {
+                                                checkPhoneGPS(false);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+
+                    } else if (api.pageParam.type == 'remark') {
+                        var db = api.require("db");
+                        var params = api.pageParam.data;
+                        db.selectSql({
+                            name: 'Wsdatabase',
+                            sql: 'SELECT * FROM VersionInfoSheets where moduleCode="' + params.moduleCode + '" and isHasNewVersion ="1" and userName ="' + this.versionCurentUserName + '"'
+                        }, function(ret, err) {
+                            if (ret.status) {
+                                if (ret.data.length > 0) {
+                                    _this.remarkList = ret.data;
+                                }
+                            }
+                        });
+                    }
+                },
+                btnSure:function() {
+                    var db = api.require("db");
+                    var gpsmodel = api.require('gpsState');
+                    if (api.pageParam.type = 'all') {
+                        var sql = 'UPDATE  VersionInfoSheets SET newVersionNo = 0,isHasNewVersion = "0",newPackageUrl = "" WHERE  isHasNewVersion = "1" and userName="' + this.versionCurentUserName + '"'
+                    } else if (api.pageParam.type = 'remark') {
+                        var sql = 'UPDATE  VersionInfoSheets SET newVersionNo = 0,isHasNewVersion = "0",newPackageUrl = "" WHERE  isHasNewVersion = "1" and userName="' + this.versionCurentUserName + '"'
+                    }
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    }, function(ret, err) {
+                        if (ret) {
+                            api.sendEvent({
+                                name: 'updateVersionList',
+                            });
+
+                        }
+                    });
+                    gpsmodel.gpsstate(function(ret) {
+                        if (ret) {
+                            if (ret.gps) {
+                                api.closeFrame();
+                            } else {
+                                checkPhoneGPS(false);
+                            }
+                        }
+                    });
+                }
+            },
+            mounted: function() {
+                this.initPage();
+            }
+        });
+    }
+</script>
+
+</html>

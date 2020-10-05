@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>设置页面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background-color: #fff;
+            color: #333333;
+            font-size: 0.9rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333333;
+            font-weight: 900;
+        }
+
+        .aui-list:after {
+            display: none;
+        }
+
+        .aui-list {
+            background-image: none !important;
+        }
+
+        .aui-list-item-arrow:before {
+            border-color: #A2A2A2;
+        }
+
+        .mine_List .aui-list .aui-list-item-media {
+            width: 2.0rem;
+            padding-right: 0 !important;
+        }
+
+        .mine_List .aui-list .aui-list-item {
+            min-height: 2.7rem !important;
+            font-size:0.75rem;
+        }
+
+        .aui-list .aui-list-item-text {
+            font-size: 0.7rem;
+        }
+
+        .audit-hiden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="settingsVue">
+        <header class="aui-bar aui-bar-nav aui-border-b" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click="api.closeWin();">
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">设置</div>
+        </header>
+
+        <div class="aui-content mine_List">
+            <ul class="aui-list">
+                <li class="aui-list-item" v-for='(item,index) in setListData' :key='index' tapmode @click="openFunOrOpenWin(item)">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-inner aui-list-item-arrow">
+                            {{item.name}}
+                            <div class="aui-list-item-text" v-show='item.name=="清除缓存"'>
+                                {{cacheSize}}M
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/diy/public.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+
+<script type="text/javascript">
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        initVue();
+    };
+
+    function initVue() {
+        window.settingsVue = new Vue({
+            el: '#settingsVue',
+            data: {
+                setListData: [{
+                    name: '账号与安全',
+                    openWin: 'accountAndSecurity',
+                    url: './accountAndSecurity.html'
+                }, {
+                    name: '设置服务器',
+                    openWin: 'settingService',
+                    url: '../mine/settingService.html'
+                }, {
+                    name: '清除缓存',
+                    openWin: 'fnClearCache'
+                }, {
+                    name: '关于版本',
+                    openWin: 'aboutVersion_New',
+                    url: './aboutVersion_New.html'
+                }, {
+                    name: '设置GPS',
+                    openWin: 'setGPS'
+                }],
+                cacheSize: '', //缓存大小
+            },
+            methods: {
+                initCachSize:function() { //获取缓存大小
+                    var _this = this;
+                    api.getCacheSize(function(ret, err) {
+                        var size = parseInt(ret.size / 1024 / 1024);
+                        _this.cacheSize = size;
+                    });
+                },
+                initAddList:function() { //判断是否有稽核表务等应用设置
+                    var _this = this;
+                    var userLoginInformation = $api.getStorage('userLoginInformation');
+                    if (userLoginInformation != undefined) {
+                        var appList = userLoginInformation.appList[0].applications;
+                        if (appList != null) {
+                            if (appList.length != 0 && appList != undefined) {
+                                appList.forEach(function(item){
+                                    if (item.coding == 'WaterStarOne-MRH-S8') { //抄表设置
+                                        _this.setListData.push({
+                                            name: '抄表设置',
+                                            openWin: 'MeterReadingSettings',
+                                            url: 'fs://wgt/MeterReading/html/MeterReading_settings.html'
+                                        });
+                                    } else if (item.coding == 'WaterStarOne-AM-S8') { //稽核设置
+                                        _this.setListData.push({
+                                            name: '稽核设置',
+                                            openWin: 'AuditSetting',
+                                            url: 'fs://wgt/Audit/AuditSetting.html' //'fs://wgt/Audit/AuditSetting.html'
+                                        });
+                                    }
+                                    if (item.coding == 'WaterStarOne-MMS-S8') { //白哦无设置
+                                        _this.setListData.push({
+                                            name: '表务设置',
+                                            openWin: 'MeterManageSetting',
+                                            url: 'fs://wgt/MeterManage/setMeter/setMeter.html' //'widget://html/MeterManage/setMeter/setMeter.html'
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    }
+                },
+                openFunOrOpenWin:function(item) {
+                    switch (true) {
+                        case item.openWin == 'fnClearCache':
+                            this.fnClearCache();
+                            break;
+                        case item.openWin == 'setGPS':
+                            this.setGPS();
+                            break;
+                        default:
+                            this.openWin(item);
+                            break;
+
+                    }
+                },
+                openWin:function(options) {
+                    api.openWin({
+                        name: options.name,
+                        url: options.url,
+                    });
+                },
+                fnClearCache:function() {
+                  var _this = this;
+                    vant.Dialog.confirm({
+                        title: '提示',
+                        message: '确定要清楚缓存吗'
+                    }).then(function(){
+                      api.clearCache(function() {
+                          api.toast({
+                              msg: '清除完成',
+                              location: 'top'
+                          });
+                      _this.initCachSize();
+                      });
+                    }).catch(function(){
+                        // on cancel
+                    });
+                },
+                setGPS:function() { // 设置GPS 打开系统设置GPS的页面
+                    if (api.systemType == 'ios') {
+                        var setJumpNew = api.require('setJumpNew');
+                        setJumpNew.open();
+                    }
+                    if (api.systemType == 'android') {
+                        var gpsmodel = api.require('gpsState');
+                        gpsmodel.opengps();
+                        api.closeFrame();
+                    }
+
+                }
+            },
+            mounted: function() {
+                this.initAddList(); // 判断是否有抄表，稽核等应用设置
+                this.initCachSize();
+            }
+        });
+    }
+</script>
+
+</html>

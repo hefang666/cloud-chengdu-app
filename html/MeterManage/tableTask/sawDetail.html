@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>任务详情-停/复水</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: calc(100% - .53rem);
+            background-color: #F3F3F3;
+        }
+        .ri{
+          float: right
+        }
+        .le{
+          float: left;
+        }
+        .cl{
+          clear:both;
+        }
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.9rem;
+            color: #626262;
+        }
+
+        .unusualTypePicker.van-cell {
+            padding: 0 1.3rem;
+            height: 2.87rem;
+            line-height: 2.87rem;
+        }
+
+        .aui-list-item , .aui-list-item-middle{
+          border: none !important
+        }
+        .footer{
+          width: 100%;
+          background-color: #fff;
+          padding: .8rem 0 1.2rem 0;
+          bottom: 0;
+          position:fixed;
+
+          /*width: 100vw;
+          height: 6.08rem;
+          background-color: #fff;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 1.35rem;
+          bottom: 0;*/
+        }
+        .footer-title{
+          margin-left: 1rem;
+          font-size: .9rem;
+        }
+        .footer-title label{
+          color: #656265;
+        }
+        .progressDiv{
+          width: calc(100% - 2rem);
+          height: .35rem;
+          margin: .8rem 1rem .5rem 1rem;
+          background-color: #A5A5A5 ;
+          border-radius: 4px;
+        }
+        .progress{
+          width: 100%;
+          height: .35rem;
+          background-image: linear-gradient(to right, #6DE5A5 0, #00D665 50%);
+          border-radius: 4px;
+        }
+        .progressHalf{
+          width: 50% ;
+          background-image: linear-gradient(to right, #6DE5A5 0, #00D665 50%);
+        }
+        .progressText{
+          margin: .5rem 1rem 0 1rem;
+        }
+        .progressText>div{
+          display: inline-block;
+          /*width: 33.33%;*/
+        }
+        .progressText>div p{
+          color: #6C6C6C;
+        }
+        .progressText>div span{
+          font-size: .5rem;
+          color: #ACACAC;
+          position: relative;
+          top: -9px;
+        }
+        .progressText>div:nth-child(2){
+          margin: 0 3.3rem 0 3.9rem;
+        }
+        .progressActive{
+          color: #00C45D !important;
+        }
+
+        .content{
+          min-height: 125vw;
+
+          margin: .8rem 1rem 7.8rem 1rem;
+          background-color: #fff;
+          border-radius: 0.8rem;
+          padding-top: .7rem;
+          padding-bottom: 0.9rem;
+        }
+
+        .tfsContent{
+          min-height: 129vw;
+          margin: .8rem 1rem !important;
+        }
+        .row{
+          /*margin: 15px 25px 0 25px;*/
+          margin: 0px 25px 0 25px;
+          line-height: 2rem;
+          border-bottom: 1px solid #F2F2F2;
+        }
+        .text-left{
+          font-size: 0.9rem;
+          color: #000;
+          display: inline-block;
+          width: 31%;
+          /*letter-spacing: -1px;*/
+        }
+        .text-right{
+          margin-left: 0px;
+          font-size: 0.9rem;
+          color: #656265;
+          display: inline-block;
+          width: calc(65% - 0px);
+          text-overflow:ellipsis;
+           white-space:nowrap;
+           overflow:hidden;
+           vertical-align: top;
+        }
+        .text-two{
+          letter-spacing: 1.65rem;
+        }
+        .textColor{
+          color: #2045FF;
+        }
+
+        .photoList{
+          margin-top: 8px;
+          margin-bottom: 14px;
+        }
+        .phont{
+          width: 3.6rem;
+          height: 2.8rem;
+          position: relative;
+          display: inline-block;
+          margin-right: .7rem;
+        }
+        .phont img{
+          width: 100%;
+          height: 100%;
+        }
+        .addressIcon{
+          background: url(../image/MeterManage/dingwei.png) no-repeat 0 0;
+          background-size: 100% 100%;
+          width: 0.5rem;
+          height: 0.65rem;
+          display: inline-block;
+          margin-top: 0.15rem;
+        }
+
+        .content-head{
+          background-color: #fff;
+          height: 2.9rem;
+          line-height: 2.9rem;
+        }
+        .content-head span{
+          margin-left: 0.9rem;
+          float: left;
+          font-size: 1.0rem;
+          color: #000;
+        }
+        .content-head label{
+          margin-right: 0.9rem;
+          float: right;
+          font-size: 0.7rem;
+          color: #C5C5C5;
+        }
+        .cause{
+            white-space: inherit !important;
+        }
+
+        .w2{
+          letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+          margin-right:-2em; /*同上*/
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-swipeleft="openUserDetails">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">任务详情</div>
+        </header>
+
+        <div id="main" class="aui-content ">
+            <div class="content-head">
+              <span>{{projectName}}</span>
+              <label for="">{{DispatchTime}}</label>
+            </div>
+
+            <div class="content" >
+                <div class="row">
+                  <div class="text-left">
+                    <!-- <label for="">户号</label> -->
+                    <span class="w2">户号</span>:
+                  </div>
+                  <div class="text-right ">
+                    <span>{{CustomerCode}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left">
+                    <!-- <label for="">户名</label> -->
+                    <span class="w2">户名</span>:
+                  </div>
+                  <div class="text-right cause">
+                    <span>{{CustomerName}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left ">
+                    <!-- <label for="">用户地址</label> -->
+                    <span class="">用户地址</span>:
+                  </div>
+                  <div class="text-right cause">
+                    <span>{{Address}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left">
+                    <!-- <label for="">表位</label> -->
+                    <span class="w2">表位</span>:
+                  </div>
+                  <div class="text-right cause">
+                    <span>{{tableLocation}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left ">
+                    <!-- <label for="">用水性质</label> -->
+                    <span>用水性质</span>:
+                  </div>
+                  <div class="text-right cause">
+                    <span>{{Nature}}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="text-left">
+                    <!-- <label for="">口径</label> -->
+                    <span class="w2">口径</span>:
+                  </div>
+                  <div class="text-right">
+                    <span>{{Caliber}}</span>
+                  </div>
+                </div>
+
+                <!-- 停复水 -->
+                <div class="" >
+                  <div class="row" >
+                    <div class="text-left">
+                      <!-- <label for="">处理结果</label> -->
+                      <span class="">处理结果</span>:
+                    </div>
+                    <div class="text-right">
+                      <span>{{disResult}}</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- 停复水 -->
+                <div class="row" v-if="showPhoto">
+                  <div class="text-left">
+                      <!-- <label for="">照片</label> -->
+                      <span class="w2">照片</span>
+                  </div>
+                  <div class="photoList">
+                      <div class="phont" v-for="(item,index) in pic" :key="index">
+                          <img :src="item" alt="" @click="pBrowserPicture(index,pic)">
+                      </div>
+                  </div>
+                </div>
+                <div class="row" style="border-bottom: none;">
+                  <p>
+                      <i class="addressIcon"></i>
+                      <span class="textColor">{{appAdress}}</span>
+                  </p>
+                </div>
+
+            </div>
+        </div>
+
+        <footer id="footer" class="footer">
+          <div class="footer-title">
+            <span>任务进度:</span>
+            <label for="">{{StatusName}}</label>
+          </div>
+          <div class="progressDiv">
+            <div class="progress" ref='progressbg' :class="{progressHalf:taskStatus==true}"></div>
+          </div>
+          <div class="progressText">
+            <div class="le">
+              <p>提交</p>
+              <span>{{submitTime}}</span>
+            </div>
+            <div class="">
+              <p :class="{progressActive:taskStatus==true}">审核中</p>
+              <span :class="{progressActive:taskStatus==true}">{{auditTime}}</span>
+            </div>
+            <div class="ri ">
+              <p :class="{progressActive:taskStatus==false}">已结束</p>
+              <span :class="{progressActive:taskStatus==false}">{{finishTime}}</span>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        dataObj = api.pageParam.data,
+        taskType = api.pageParam.type;
+
+        //3换表 13移改提 14校表 15三来工单 16其他工单 停水通知单4 通水任务42 通水任务(先通水)41 停水办理2 ServiceTypeId
+
+        api.parseTapmode();
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+        //home键监听
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+          if (taskType == 'handle') { //任务处理 返回事件
+            api.sendEvent({
+                name: 'refreshCloudMyTask',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'MyTask'
+            });
+          } else if (taskType == 'claimTask') { //任务领用 返回事件
+            api.sendEvent({
+                name: 'refreshCloudClaim',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeToWin({
+                name: 'ClaimTask'
+            });
+          }  else {  //代办列表进入详情
+            api.closeWin();
+          }
+        });
+    };
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                dataObj:dataObj,
+                projectName:'',
+                // Id:dataObj.id,
+
+                DispatchTime:'',//分派时间
+                CustomerCode:'',//户号
+                CustomerName:'',//户名
+                Address:'',//用户地址
+                tableLocation:'',//水表位置
+                Nature:'',//用水性质
+                Caliber:'',//口径
+                submitTime:'',
+                auditTime:'',
+                finishTime:'',
+                disResult:'',//处理结果
+
+                taskStatus:false,
+
+                appAdress: '', //定位
+
+                pic: [], //图片
+                showPhoto: false,  //是否显示照片
+
+                StatusName: '',
+
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    if (taskType == 'handle') { //任务处理 返回事件
+                      api.sendEvent({
+                          name: 'refreshCloudMyTask',
+                          extra: {
+                              type: '1'
+                          }
+                      });
+                      api.closeToWin({
+                          name: 'MyTask'
+                      });
+                    } else if (taskType == 'claimTask') { //任务领用 返回事件
+                      api.sendEvent({
+                          name: 'refreshCloudClaim',
+                          extra: {
+                              type: '1'
+                          }
+                      });
+                      api.closeToWin({
+                          name: 'ClaimTask'
+                      });
+                    }  else {  //代办列表进入详情
+                      api.closeWin();
+                    }
+                    api.closeWin({});
+                },
+
+                getDetail(){//获取详情信息
+                     var body = {
+                         'Id': this.dataObj.thirdTaskId,//第三方系统任务id
+                     };
+                        this.projectName = this.dataObj.name;//工单类型名称
+                     fnPost('MMS002', body, 'application/json', false, false, (ret, err)=>{
+                         api.hideProgress();
+                         console.log(JSON.stringify(ret));
+                         if (ret && ret.Status == 0) {
+                             var data = JSON.parse(ret.Data);
+                             this.projectName = data[0].Name;//工单类型名称
+                             this.CustomerCode = data[0].CustomerCode;//户号
+                             this.CustomerName = data[0].CustomerName;//户名
+                             this.Address = data[0].Address;//用户地址
+                             this.tableLocation = data[0].Location;//水表位置 submitTime
+                             this.Nature = data[0].Nature;//用水性质
+                             this.Caliber = data[0].Caliber;//口径
+                             this.DispatchTime = data[0].DispatchTime.substring(0,10); //分派时间
+                             if (data[0].Code == 2) { //通水任务42 通水任务(先通水)41 停水办理2
+                              this.showPhoto = false;
+                              if (data[0].AuditStatus == '0') {
+                                this.disResult = '关阀成功';
+                              } else if (data[0].AuditStatus == '1') {
+                                this.disResult = '关阀失败';
+                              } else if (data[0].AuditStatus == '2') {
+                                this.disResult = '无需处理';
+                              }
+                             } else {
+                              this.showPhoto = true;
+                              if (data[0].AuditStatus == '0') {
+                                this.disResult = '开阀成功';
+                              } else if (data[0].AuditStatus == '1') {
+                                this.disResult = '开阀失败';
+                              } else if (data[0].AuditStatus == '2') {
+                                this.disResult = '无需处理';
+                              }
+                             }
+
+                             this.submitTime = moment(data[0].DispatchTime).format('YYYY-MM-DD');
+
+                             if(data[0].Status == 2){//待审核
+                               this.taskStatus = true;
+                               this.auditTime = data[0].Handles[0].OperatedTime.substring(0,10);
+                               this.StatusName = '审核中';
+                             }else {
+                               this.taskStatus = false;
+                               this.$refs.progressbg.style.width = "100%";
+                               this.auditTime = data[0].Handles[1].OperatedTime.substring(0,10);
+                               this.finishTime = data[0].Handles[0].OperatedTime.substring(0,10);
+                               this.StatusName = '已结束('+data[0].Handles[0].StatusName+')';
+                             }
+
+                             if(data[0].Coordinates.length > 0){
+                               this.appAdress = data[0].Coordinates[0].Address;
+                             }
+
+                             for (var i = 0; i < data[0].Files.length; i++) {
+                               this.pic.push("http://" + $api.getStorage('apiUrl') + data[0].Files[i].Path);
+                             }
+                         }
+                     });
+                  },
+                  onChange(xh) { //图片预览
+                    api.openWin({
+                        name: 'pictureBrowser',
+                        url: '../pictureBrowser.html',
+                        pageParam: {
+                            images: FilterVue.pic,
+                            index: xh
+                        },
+                        animation:{
+                            type: "fade", //动画类型（详见动画类型常量）
+                            duration: 300 //动画过渡时间，默认300毫秒
+                        }
+                    });
+                  },
+                  openUserDetails() {  //打开用户详情界面
+                    var body = {
+                        BookId: '',
+                        ReaderId: '',
+                        Code: this.CustomerCode,
+                        BeginTime: '',
+                        EndTime: '',
+                        Obscure: '',
+                        isWater: '',
+                    };
+
+                    fnPost('OSM002', body, 'application/json', false, false, (ret, err) => {
+                      if(ret && ret.Status == 0) {
+                        var data = JSON.parse(ret.Data);
+                        if (data.length > 0 && data.length == 1) {
+                            var result = JSON.parse(JSON.stringify(data[0]));
+                            api.openWin({
+                                name: 'CustomerDetails',
+                                url: '../CustomerSearch/CustomerDetails.html',
+                                pageParam: result,
+                                allowEdit: true
+                            });
+                            api.hideProgress();
+                        } else {
+                          api.hideProgress();
+                          vant.Toast("用户查询失败");
+                        }
+                      } else {
+                        api.hideProgress();
+                        vant.Toast("用户查询失败");
+                      }
+                    });
+                  }
+            },
+            mounted: function() {
+                this.getDetail();
+            }
+        })
+    }
+</script>
+
+</html>

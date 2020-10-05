@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>稽核APP主界面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F5F5F5;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-content: flex-start;
+        }
+
+        .card {
+            width: 49.33vw;
+            height: 53.07vw;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.34vw;
+        }
+
+        .card:active {
+            opacity: 0.7;
+        }
+
+        .card:nth-last-child(1),
+        .card:nth-last-child(2) {
+            margin-bottom: 0;
+        }
+
+        .title {
+            font-size: 1rem;
+            color: #606060;
+            margin-top: 0.98rem;
+        }
+
+        .ApplyTask {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("../../image/MeterManage/ApplyTask.png") no-repeat center;
+            background-size: 3.5rem 4rem;
+        }
+
+        .MeterNo {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("../../image/MeterManage/MeterNo.png") no-repeat center;
+            background-size: 3.38rem 3.38rem;
+        }
+
+        .Scan {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("../../image/MeterManage/Scan.png") no-repeat center;
+            background-size: 3.85rem 3.85rem;
+        }
+
+        .CustomerSearch {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("../../image/MeterManage/Search.png") no-repeat center;
+            background-size: 3.53rem 3.53rem;
+        }
+
+        .Log {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("../../image/MeterManage/Log.png") no-repeat center;
+            background-size: 2.9rem 3.7rem;
+        }
+
+        .Upload {
+            width: 3.85rem;
+            height: 4rem;
+            background: url("../../image/MeterManage/Upload.png") no-repeat center;
+            background-size: 3.85rem 2.88rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">稽核工作</div>
+        </header>
+
+        <div id="main" class="flex-con">
+
+            <div class="card" @click="openWin('1')">
+                <div class="ApplyTask">
+
+                </div>
+                <div class="title">
+                    任务认领
+                </div>
+            </div>
+
+            <div class="card" @click="openWin('2')">
+                <div class="Log">
+
+                </div>
+                <div class="title">
+                    我的任务
+                </div>
+            </div>
+
+            <div class="card" @click="openWin('3')">
+                <div class="MeterNo">
+
+                </div>
+                <div class="title">
+                    稽核管理
+                </div>
+            </div>
+
+            <div class="card" @click="openWin('4')">
+                <div class="MeterNo">
+
+                </div>
+                <div class="title">
+                    清空数据
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.MainVue = new Vue({
+            el: '#wrap',
+            data: {
+                name: "",
+                url: ""
+            },
+            computed: {
+
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                openWin(type) {
+                    if (type == "1") {
+                        api.openWin({
+                            name: 'TaskClaim',
+                            url: './TaskClaim/TaskClaim.html',
+                        });
+                    } else if (type == "2") {
+                      api.openWin({
+                          name: 'MyTask',
+                          url: './TaskProces/MyTask.html',
+                      });
+                    } else if (type == "3") {
+                      api.openWin({
+                          name: 'ReviewManagement',
+                          url: './ReviewManagement/ReviewManagement.html',
+                      });
+                   } else if (type == "4") {
+                     api.openWin({
+                         name: 'DeleteLocalData',
+                         url: './DeleteLocalData.html',
+                     });
+                  }
+                }
+            },
+            mounted: function() {
+
+            }
+        })
+    }
+</script>
+
+</html>

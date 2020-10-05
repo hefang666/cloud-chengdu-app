@@ -1,0 +1,1748 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>抄表质量复核任务处理</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css"/>
+    <link rel="stylesheet" href="../../public/css/aui.css">
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #F3F3F3;
+      }
+
+      .aui-bar-nav {
+        top: 0;
+        z-index: 1;
+        background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+        color: #FFF;
+        font-size: 0.95rem;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0rem;
+      }
+
+      #header {
+        position: fixed;
+      }
+
+      .aui-title {
+        font-size: 1.18rem;
+      }
+
+      #footer1, #footer2 {
+        width: 100%;
+        height: 6.08rem;
+        background-color: #fff;
+        border-top: 1px solid #CCCCCC;
+      }
+
+      .footer-btn {
+        border-radius: 1rem;
+        width: 5.5rem;
+        height: 1.86rem;
+        line-height: 1.86rem;
+        font-size: 0.90rem;
+        color: #fff;
+      }
+
+      .task-main {
+        width: calc(100% - 1.5rem);
+        height: auto;
+        background: #FFFFFF;
+        border-radius:0.75rem;
+        margin: 0.83rem 0.75rem 6.91rem 0.75rem;
+        padding: 1rem 1.3rem;
+        box-sizing: border-box;
+      }
+
+      .task-info {
+        width: 100%;
+        height: auto;
+      }
+
+      .info-item {
+        /*margin-bottom: 0.6rem;*/
+        width: 100%;
+        /*box-sizing: border-box;*/
+        /*height: 2rem;*/
+        line-height: 2rem;
+        border-bottom: 1px solid #F2F2F2;
+      }
+
+      .task-title {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #1F1F1F;
+        width: 28%;
+        display: inline-block;
+        vertical-align: top;
+      }
+
+      .task-cont {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #626262;
+        width: 68%;
+        display: inline-block;
+      }
+
+      .w2{
+        letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+        margin-right:-2em; /*同上*/
+      }
+
+      .img-list {
+        width: 100%;
+        height: auto;
+      }
+
+      .img-item {
+        width: 30%;
+        height: 2.8rem;
+        margin-right: 5%;
+        margin-top: 0.5rem;
+        display: inline-block;
+        position: relative;
+        vertical-align: top;
+      }
+
+      .img-item-last {
+        margin-right: 0;
+      }
+
+      .img-delete {
+        position: absolute;
+        right: -8px;
+        top: -8px;
+      }
+
+      .img-item img {
+        width: 100%;
+        height: 100%;
+      }
+
+      .img-type {
+        font-size: 0.55rem;
+        color: #707070;
+        margin-top: 0.25rem;
+      }
+
+      #remark {
+        width: 100%;
+        height: 2.95rem;
+        border-radius:6px;
+        border: 1px solid #D8D8D8;
+        box-sizing: border-box;
+        padding: 0.45rem 0.48rem;
+        font-size: 0.65rem;
+      }
+
+      #dialogInput {
+        height: 6.05rem;
+        box-sizing: border-box;
+        padding: 0.45rem 0.48rem;
+        font-size: 0.8rem;
+        border: 1px solid #CCCCCC;
+      }
+
+      .addressIcon {
+          background: url(./image/dingwei.png) no-repeat 0 0;
+          background-size: 100% 100%;
+          width: .6rem;
+          height: .7rem;
+          display: inline-block;
+          /*vertical-align: text-bottom;*/
+      }
+
+      .textColor {
+          color: #2045FF;
+      }
+
+      .isTurn {
+        display: none;
+      }
+    </style>
+  </head>
+  <body id="app">
+    <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务处理</div>
+    </header>
+    <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务处理</div>
+    </header>
+
+    <div class="task-main">
+        <div class="task-info">
+            <div class="info-item">
+              <div class="task-title">
+                <span>任务类型</span>:
+              </div>
+              <div class="task-cont">
+                <span class="task-type"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户名</span>:
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountname"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户号</span>:
+              </div>
+              <div class="task-cont">
+                <span class="" id="accountnumber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">地址</span>:
+              </div>
+              <div class="task-cont">
+                <span class="" id="address"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">表位</span>:
+              </div>
+              <div class="task-cont">
+                <span class="" id="wmlocation"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>用水性质</span>:
+              </div>
+              <div class="task-cont">
+                <span class="" id="nature"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">口径</span>:
+              </div>
+              <div class="task-cont">
+                <span class="" id="caliber"></span>
+              </div>
+            </div>
+            <div class="info-item isTurn">
+              <div class="task-title">
+                <span class="">审核失败</span>:
+              </div>
+              <div class="task-cont">
+                <span class="" id="turnremark"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: 45%;">
+                <span >最后抄表止度</span>:
+              </div>
+              <div class="task-cont" style="width: 43%;">
+                <span class="" id="lastreadscale"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>稽核止度</span>:
+              </div>
+              <div class="task-cont" style="border-bottom: 1px solid #D8D8D8;">
+                <input id="jhendscale" style="width: 100%; height: 27px;" type="number" placeholder="请填写止度" />
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>稽核状态</span>:
+              </div>
+              <div class="task-cont" id="mrselect" style="border-bottom: 1px solid #D8D8D8;position: relative;">
+                <input id="reviewstate" readonly style="width: 100%; height: 27px;" type="text" value="请选择"/>
+                <i class="aui-iconfont aui-icon-down" style="position: absolute;right: 0;top: -20%;"></i>
+              </div>
+            </div>
+            <div class="info-item" style="height: auto;">
+              <div class="task-title" style="display: block;">
+                <span class="w2">备注</span>:
+              </div>
+              <div class="task-cont" style="margin_top: 11px; width: 100%;height: 2.95rem; position: relative;">
+                <textarea id="remark" maxlength="200"></textarea>
+                <span class="fontnum" style="color: #E2E2E2; font-size:0.65rem;position: absolute;right: 0.45rem;bottom: 0.48rem;line-height: 0;">200</span>
+              </div>
+            </div>
+            <div class="info-item" style="height: auto;">
+              <div class="task-title" style="width: 100%;height: 1.5rem;">
+                <span class="w2">照片</span>
+                <img id="mrimg" src="./image/zhaopian.png" style="float: right; width: 0.95rem; margin-top: 0.6rem;"/>
+              </div>
+              <div class="task-cont" id='img-div' style="margin_top: 11px; width: 100%;">
+                <div class="img-list" id="imgList">
+
+                </div>
+              </div>
+            </div>
+            <p onclick='getLocation()' style="margin-top: 0.6rem;">
+                <i class="addressIcon"></i>
+                <span class="textColor"></span>
+            </p>
+        </div>
+    </div>
+
+    <footer class="aui-bar aui-bar-tab" id="footer1">
+      <div class="aui-bar-tab-item" tapmode>
+          <div class="aui-btn footer-btn" style='background-color: #FFA836' onclick="TaskUserList()">转办</div>
+      </div>
+        <div class="aui-bar-tab-item" tapmode>
+            <div class="aui-btn footer-btn" style='background-color: #FF4141' tapmode onclick="TaskSubmit()">提交</div>
+        </div>
+    </footer>
+    <footer class="aui-bar aui-bar-tab" id="footer2">
+      <div class="aui-bar-tab-item" tapmode>
+          <div id='returnbtn' class="aui-btn footer-btn" style='background-color: #377EFF' tapmode onclick="TaskReturn()">退回</div>
+      </div>
+      <div class="aui-bar-tab-item" tapmode>
+          <div id='claimbtn' class="aui-btn footer-btn" style='background-color: #FF4141' onclick="ClaimOk()">认领</div>
+      </div>
+    </footer>
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/zepto.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/hammer.min.js"></script>
+  <script type="text/javascript" src="../../public/script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/remote.js"></script>
+  <script type="text/javascript" src="./js/auidialog.js"></script>
+  <script type="text/javascript" src="./js/meterManageLocalData.js"></script>
+  <script type="text/javascript" src="../../public/script/moment.js"></script>
+  <script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+  <script type="text/javascript">
+    var TaskData = {};
+    var getTaskType = '';
+    var taskInfoData = {};
+    var meterStatus = "";
+    var Longitude = "";
+    var Latitude = "";
+    var nowTime = '';
+    var FileLocation = '';
+
+    var AuditStatuText = [];// 稽核状态文本
+    var AuditStatuData = [];// 稽核状态
+
+    var db;
+
+    var imgUrlArr = []; //当前图片路径
+
+    apiready = function(){
+      api.addEventListener({
+          name: 'changedFontSize'
+      }, function(ret, err) {
+          if (ret) {
+              changeFontSize();
+          }
+      });
+      api.parseTapmode();
+      var header = $api.byId('header');
+      // 实现沉浸式状态栏效果
+      $api.fixStatusBar(header);
+      headerH = $api.offset(header).h;
+      var hideheader = $api.byId('hideheader');
+      // 实现沉浸式状态栏效果
+      $api.fixStatusBar(hideheader);
+
+      fnReady();
+      fnReadyOpenWin();
+
+      TaskData = api.pageParam.data;
+      getTaskType = api.pageParam.type;
+
+      if (getTaskType == 'claimTask') {  //认领详情
+        $("#footer1").css('display', 'none');
+        $("#footer2").css('display', 'table');
+
+        $('#jhendscale').attr("readonly",true);
+        $('#remark').attr("readonly",true);
+      } else if (getTaskType == 'handle') {  //任务处理
+        $("#footer2").css('display', 'none');
+
+        $("#mrimg").click(function(){
+          showPopup();
+        });
+
+        $("#mrselect").click(function(){
+          showState();
+        });
+      }
+
+      //home键监听
+      api.addEventListener({
+          name: 'keyback'
+      }, function(ret, err) {
+        if (getTaskType == 'handle') { //任务处理 返回事件
+          api.sendEvent({
+              name: 'refreshCloudMyTask',
+              extra: {
+                  type: '1'
+              }
+          });
+        } else if (getTaskType == 'claimTask') { //任务领用 返回事件
+          api.sendEvent({
+              name: 'refreshCloudClaim',
+              extra: {
+                  type: '1'
+              }
+          });
+        }
+        api.closeWin();
+      });
+
+      bMap = api.require("bMap");
+      db = api.require('db');
+
+      //判断当前网络情况
+      isInternet();
+
+      WinSize();
+
+      var app = document.querySelector('#app');
+      var hammertime = new Hammer(app);
+      hammertime.on('swipeleft', function(ev) {
+        if (api.connectionType != 'none') {
+          api.showProgress({
+              title: '加载中',
+              text:'',
+              modal: false
+          });
+          api.ajax({
+              url: $api.getStorage("jhapipath") + 'waterMeters/info',
+              method: 'post',
+              dataType: 'json',
+              data: {
+                  values: {
+                    "UserName": $api.getStorage("jhUserName"),
+                    "Password": $api.getStorage("jhPassWord"),
+                    "SerialNo": dataTime(),
+                    "Method": "OSM002",
+                    "Longitude": Longitude,
+                    "Latitude": Latitude,
+                    "Parameter": "{'BookId':'', 'ReaderId':'', 'Code':'"+taskInfoData.CustomerCode+"', 'BeginTime':'', 'EndTime':'', 'Obscure':'','isWater':'isWater'}"
+                  }
+              }
+          },function(ret, err){
+              if (ret && ret.Status == 0) {
+                  var data = JSON.parse(ret.Data);
+                  if (data.length > 0 && data.length == 1) {
+                    var result = JSON.parse(JSON.stringify(data[0]));
+                    api.openWin({
+                        name: 'CustomerDetails',
+                        url: '../CustomerSearch/CustomerDetails.html',
+                        pageParam: result,
+                        allowEdit: true
+                    });
+                    api.hideProgress();
+                  } else {
+                    api.hideProgress();
+                    api.toast({
+                        msg: "用户查询失败",
+                        duration: 2000,
+                        location: 'top'
+                    });
+                  }
+              } else {
+                api.hideProgress();
+                api.toast({
+                    msg: "用户查询失败",
+                    duration: 2000,
+                    location: 'top'
+                });
+              }
+          });
+        } else {
+          api.toast({
+              msg: "无网络，无法查询",
+              duration: 2000,
+              location: 'top'
+          });
+        }
+      });
+    };
+
+    function getLocation() {
+      var gpsmodel = api.require('gpsState');
+      gpsmodel.gpsstate(function(ret) {
+          if (!ret.gps) {
+            api.openFrame({
+                name: 'checkOpenGPS_frm',
+                url: 'widget://html/mine/checkOpenGPS_frm.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                bounces: false,
+                bgColor: 'rgba(0,0,0,0.1)',
+            });
+            return;
+          } else {
+            $(".textColor").html("正在定位...");
+            bMap.getLocation({
+                accuracy: '10m',
+                autoStop: true,
+            }, function(ret, err) {
+                if (ret.status) {
+                    Longitude = ret.lon;
+                    Latitude = ret.lat;
+                    if (api.connectionType == 'none') {
+                      $(".textColor").html(ret.lon +','+ ret.lat);
+                      return;
+                    }
+                    bMap.getNameFromCoords({
+                        lon: ret.lon,
+                        lat: ret.lat
+                    }, (ret, err) => {
+                        if (ret.status) {
+                          $(".textColor").html(ret.address);
+                        } else {
+                          $(".textColor").html("定位失败");
+                        }
+                    });
+                } else {
+                  $(".textColor").html("定位失败");
+                }
+            });
+          }
+      });
+    }
+
+    var actionList = {
+        'back': function() {
+            if (getTaskType == 'handle') { //任务处理 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudMyTask',
+                  extra: {
+                      type: '1'
+                  }
+              });
+            } else if (getTaskType == 'claimTask') { //任务领用 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudClaim',
+                  extra: {
+                      type: '1'
+                  }
+              });
+            }
+
+            api.closeWin();
+        },
+        'scanner': function() {
+            var FNScanner = api.require('FNScanner');
+            FNScanner.open({
+                autorotation: true
+            }, function(ret, err) {
+              console.log(JSON.stringify(ret));
+            });
+
+        }
+    }
+
+    function WinSize() {
+      var winHeight = $(window).height(); //获取当前页面高度
+      $(window).resize(function(){
+            //当窗体大小变化时
+            var thisHeight = $(this).height();  //窗体变化后的高度
+            if (winHeight - thisHeight > 50) {
+                $('body').css('height', winHeight + 'px');
+                $("#footer1").css("bottom","-100px")//修改底部按钮条的位置
+                $("#footer2").css("bottom","-100px")//修改底部按钮条的位置
+            } else {
+                $('body').css('height', '100%');
+                $("#footer1").css("bottom","0px")//还原底部按钮条位置
+                $("#footer2").css("bottom","0px")//还原底部按钮条位置
+            }
+      });
+    }
+
+    function getTaskInfo(taskId) {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+        url: $api.getStorage("jhapipath") + 'waterMeters/info',
+        method: 'post',
+        dataType: 'json',
+        timeout: 15,
+        data: {
+          values: {
+            "UserName": $api.getStorage("jhUserName"),
+            "Password": $api.getStorage("jhPassWord"),
+            "SerialNo": dataTime(),
+            "Method": "MMS002",
+            "Longitude": Longitude,
+            "Latitude": Latitude,
+            "Parameter": "{'Id': '" + taskId + "', 'Code':'45', 'Status':'', 'Source':'', 'BookId':'', 'ReaderId':'', 'CustomerCode':'', 'BeginTime':'', 'EndTime':''}"
+          }
+        }
+      }, function(ret, err) {
+        api.hideProgress();
+        if (ret) {
+          console.log(JSON.stringify(ret));
+          if (ret.Status == '0') {
+            if (ret.Data == "") {
+              api.toast({
+                  msg: "暂无数据",
+                  duration: 2000,
+                  location: 'top'
+              });
+              return;
+            }
+            var allList = JSON.parse(ret.Data);
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskId + "' AND userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave != '1'"
+            }, function(ret, err){
+                if( ret.status ){
+                    if (ret.data.length > 0) {  //本地数据库有数据
+                      updateAuditData(allList[0], ret.data[0]);
+                    } else if (ret.data.length == 0) {  //本地数据库无数据
+                      insertAuditData(allList[0]);
+                    }
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+            });
+          }
+        } else {
+          //网络请求失败
+          selectData(taskId);
+        }
+      });
+    }
+
+    function showHtml (taskInfo, type) {
+      if (type == 1) {
+        AuditStatuData = JSON.parse(taskInfo.SelectData);
+        for (var i = 0; i < AuditStatuData.length; i++) {
+          AuditStatuText.push(AuditStatuData[i].Name);
+        }
+      }
+
+      if (JSON.parse(taskInfo.Handles)[1].StatusId == '5' || JSON.parse(taskInfo.Handles)[1].StatusId == '2') {  //StatusId - '5'，上一条处理详情为转办
+        $(".isTurn").css('display', 'block');
+        $("#turnremark").html(JSON.parse(taskInfo.Handles)[0].Remark);
+      } else {
+        $(".isTurn").css('display', 'none');
+        $("#turnremark").html('');
+      }
+      $(".task-type").html(taskInfo.Name);
+      $("#accountname").html(taskInfo.CustomerName);
+      $("#accountnumber").html(taskInfo.CustomerCode);
+      $("#wmlocation").html(taskInfo.Location);
+      $("#nature").html(taskInfo.Nature);
+      $("#caliber").html(taskInfo.Caliber);
+      $("#address").html(taskInfo.Address);
+      $("#lastreadscale").html(taskInfo.LastReadScale);
+
+      if (taskInfo.LocationAddress != '') {
+        var locationArr = taskInfo.LocationAddress.split(",");
+        Longitude = locationArr[0];
+        Latitude = locationArr[1];
+
+        if (api.connectionType == 'none') {
+          $(".textColor").html(Longitude +','+ Latitude);
+        } else {
+          bMap.getNameFromCoords({
+              lon: Longitude,
+              lat: Latitude
+          }, (ret, err) => {
+              if (ret.status) {
+                $(".textColor").html(ret.address);
+              } else {
+                $(".textColor").html("定位失败");
+              }
+          });
+        }
+      } else {
+        getLocation();
+      }
+
+      if (taskInfo.ReviewStateText == '') {
+        meterStatus = '1';
+        $("#reviewstate").val('正常');
+      }
+
+      if (taskInfo.ReviewStateText != '') {
+        $("#reviewstate").val(taskInfo.ReviewStateText);
+        meterStatus = taskInfo.UsedTypeId;
+        $("#jhendscale").val(taskInfo.UserScale);
+        $("#remark").html(taskInfo.UserRemark);
+
+        nowTime = taskInfo.ReadTime;
+
+        if (taskInfo.FileUrl.length > 0) {
+          var imgList = taskInfo.FileUrl.split("|");
+          var LocationFile = taskInfo.FileLocation.split("|");
+          for (var i = 0; i < imgList.length; i++) {
+            var suffix = imgList[i].substring(imgList[i].lastIndexOf("."));
+            if(suffix == '.jpg' || suffix == '.png') {
+               var imgItem = '';
+               imgUrlArr.push(imgList[i]);
+               if ((i+1)%3 == 0) {
+                 imgItem =
+                   "<div class='img-item img-item-last' data-Location='"+ LocationFile[i] +"'>"+
+                    "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgList[i] + "'  onclick='DeleteImg(this)' /> " +
+                    "<img class='imgfile' src='"+ imgList[i] +"' onclick='previewImg("+i+")'>" +
+                   "</div>";
+               } else {
+                 imgItem =
+                   "<div class='img-item' data-Location='"+ LocationFile[i] +"'>"+
+                    "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgList[i] + "'  onclick='DeleteImg(this)' /> " +
+                    "<img class='imgfile' src='"+ imgList[i] +"' onclick='previewImg("+i+")'>" +
+                   "</div>";
+               }
+               if ($(".img-item").length < 5) {
+                 $("#imgList").append(imgItem);
+                 api.parseTapmode();
+                 operationDom();
+               }
+            }
+          }
+        } else {
+          $("#img-div").hide();
+        }
+      }  else {
+        $("#img-div").hide();
+      }
+    }
+
+    //查询本地数据库有无 AUDIT_TASK_LIST 表
+    function isInternet() {
+      if (api.connectionType == 'none') {
+        //无网络状态下-查询本地数据
+        selectData(TaskData.thirdTaskId);
+      } else {
+        //有网络状态下-请求最新数据
+        getTaskInfo(TaskData.thirdTaskId);
+      }
+    }
+
+    //无网络 - 查询本地数据
+    function selectData(taskId) {
+      db.selectSql({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskId + "' AND userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave != '1'"
+      }, function(ret, err){
+          if( ret.status ){
+              if (ret.data.length > 0) {
+                taskInfoData = ret.data[0];
+                showHtml(ret.data[0], 1);
+              }
+          }else{
+              console.log( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    //获取数据 -- 本地无该任务数据，保存数据到本地
+    function insertAuditData(taskItem) {
+      var insertSql = "INSERT INTO AUDIT_TASK_LIST VALUES ("+
+                      "'"+ taskItem.Id +"',"+
+                      "'"+ taskItem.Source +"',"+
+                      "'"+ taskItem.Code +"',"+
+                      "'"+ taskItem.Name +"',"+
+                      "'"+ taskItem.Status +"',"+
+                      "'"+ taskItem.StatusName +"',"+
+                      "'"+ taskItem.CustomerCode +"',"+
+                      "'"+ taskItem.CustomerName +"',"+
+                      "'"+ taskItem.Mobile +"',"+
+                      "'"+ taskItem.Telphone +"',"+
+                      "'"+ taskItem.Address +"',"+
+                      "'"+ taskItem.Location +"',"+
+                      "'"+ taskItem.Nature +"',"+
+                      "'"+ taskItem.SubNature +"',"+
+                      "'"+ taskItem.Caliber +"',"+
+                      "'"+ taskItem.Nameplate +"',"+
+                      "'"+ taskItem.MeterType +"',"+
+                      "'"+ taskItem.StampNo +"',"+
+                      "'"+ taskItem.LastScale +"',"+
+                      "'"+ taskItem.BeginScale +"',"+
+                      "'"+ taskItem.EndScale +"',"+
+                      "'"+ taskItem.Amount +"',"+
+                      "'"+ taskItem.ArrearMoney +"',"+
+                      "'"+ taskItem.Description +"',"+
+                      "'"+ taskItem.Remark +"',"+
+                      "'"+ taskItem.OperatorId +"',"+
+                      "'"+ taskItem.OperatedTime +"',"+
+                      "'"+ taskItem.TaskNo +"',"+
+                      "'"+ taskItem.RecordBeginScale +"',"+
+                      "'"+ taskItem.RecordEndScale +"',"+
+                      "'"+ taskItem.RecordAmount +"',"+
+                      "'"+ taskItem.RecordTypdId +"',"+
+                      "'"+ taskItem.RecordTypdName +"',"+
+                      "'"+ taskItem.LastReadScale +"',"+
+                      "'"+ taskItem.AuditReadScale +"',"+
+                      "'"+ taskItem.DispatchTime +"',"+
+                      "'"+ taskItem.UseTime +"',"+
+                      "'"+ taskItem.HandleTime +"',"+
+                      "'"+ taskItem.AuditTime +"',"+
+                      "'"+ taskItem.AuditTimes +"',"+
+                      "'"+ JSON.stringify(taskItem.Files) +"',"+
+                      "'"+ JSON.stringify(taskItem.Handles) +"',"+
+                      "'"+ JSON.stringify(taskItem.Coordinates) +"',"+
+                      "'','','','','','','','','','','','','','','','','0','','"+ $api.getStorage('loginData').userName +"','','0','','','','','','')";
+      db.executeSql({
+          name: 'Wsdatabase',
+          sql: insertSql
+      }, function(ret, err){
+          if( ret.status ){
+              db.selectSql({
+                  name: 'Wsdatabase',
+                  sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskItem.Id + "' AND userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave != '1'"
+              }, function(ret, err){
+                  if( ret.status ){
+                      console.log( JSON.stringify( ret ) );
+                      getSelectData(TaskData.thirdTaskId);
+                      taskInfoData = ret.data[0];
+                      showHtml(ret.data[0], 2);
+                  }else{
+                      console.log( JSON.stringify( err ) );
+                  }
+              });
+          }else{
+              console.log( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    //获取数据 -- 本地有该任务数据，修改数据到本地
+    function updateAuditData(taskItem, localData) {
+      var updateSql = "UPDATE AUDIT_TASK_LIST SET "+
+                      "Source = '"+ taskItem.Source +"',"+
+                      "Code = '"+ taskItem.Code +"',"+
+                      "Name = '"+ taskItem.Name +"',"+
+                      "Status = '"+ taskItem.Status +"',"+
+                      "StatusName = '"+ taskItem.StatusName +"',"+
+                      "CustomerCode = '"+ taskItem.CustomerCode +"',"+
+                      "CustomerName = '"+ taskItem.CustomerName +"',"+
+                      "Mobile = '"+ taskItem.Mobile +"',"+
+                      "Telphone = '"+ taskItem.Telphone +"',"+
+                      "Address = '"+ taskItem.Address +"',"+
+                      "Location = '"+ taskItem.Location +"',"+
+                      "Nature = '"+ taskItem.Nature +"',"+
+                      "SubNature = '"+ taskItem.SubNature +"',"+
+                      "Caliber = '"+ taskItem.Caliber +"',"+
+                      "Nameplate = '"+ taskItem.Nameplate +"',"+
+                      "MeterType = '"+ taskItem.MeterType +"',"+
+                      "StampNo = '"+ taskItem.StampNo +"',"+
+                      "LastScale = '"+ taskItem.LastScale +"',"+
+                      "BeginScale = '"+ taskItem.BeginScale +"',"+
+                      "EndScale = '"+ taskItem.EndScale +"',"+
+                      "Amount = '"+ taskItem.Amount +"',"+
+                      "ArrearMoney = '"+ taskItem.ArrearMoney +"',"+
+                      "Description = '"+ taskItem.Description +"',"+
+                      "Remark = '"+ taskItem.Remark +"',"+
+                      "OperatorId = '"+ taskItem.OperatorId +"',"+
+                      "OperatedTime = '"+ taskItem.OperatedTime +"',"+
+                      "RecordBeginScale = '"+ taskItem.RecordBeginScale +"',"+
+                      "RecordEndScale = '"+ taskItem.RecordEndScale +"',"+
+                      "RecordAmount = '"+ taskItem.RecordAmount +"',"+
+                      "RecordTypdId = '"+ taskItem.RecordTypdId +"',"+
+                      "RecordTypdName = '"+ taskItem.RecordTypdName +"',"+
+                      "LastReadScale = '"+ taskItem.LastReadScale +"',"+
+                      "AuditReadScale = '"+ taskItem.AuditReadScale +"',"+
+                      "DispatchTime = '"+ taskItem.DispatchTime +"',"+
+                      "UseTime = '"+ taskItem.UseTime +"',"+
+                      "HandleTime = '"+ taskItem.HandleTime +"',"+
+                      "AuditTime = '"+ taskItem.AuditTime +"',"+
+                      "AuditTimes = '"+ taskItem.AuditTimes +"',"+
+                      "Handles = '"+ JSON.stringify(taskItem.Handles) +"' WHERE Id = '"+ taskItem.Id +"'";
+      db.executeSql({
+          name: 'Wsdatabase',
+          sql: updateSql
+      }, function(ret, err) {
+          if (ret.status) {
+              if (taskItem.Status == '7' && localData.isUploadAndSave == '1') {
+                db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: "UPDATE AUDIT_TASK_LIST SET isUploadAndSave = '0' WHERE Id = '"+ taskItem.Id +"' AND userName = '"+ $api.getStorage('loginData').userName +"'"
+                });
+              }
+              var result = db.selectSqlSync({
+                  name: 'Wsdatabase',
+                  sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskItem.Id + "' AND userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave != '1'"
+              });
+
+              if (result.status) {
+                getSelectData(TaskData.thirdTaskId);
+                taskInfoData = result.data[0];
+                showHtml(result.data[0], 2);
+              } else {
+                console.log( JSON.stringify( result ) );
+              }
+          } else {
+              console.log(JSON.stringify(err));
+          }
+      });
+    }
+
+    function showPopup(){
+      if ($(".img-item").length < 5) {
+        api.actionSheet({
+          title: '',
+          cancelTitle: '取消',
+          buttons: ['拍照', '相册']
+        }, function(ret, err) {
+            if (ret) {
+              if(ret.buttonIndex == 1){
+                getPicture('camera');
+              } else if (ret.buttonIndex == 2) {
+                getPicture('pic');
+              }
+            }
+        });
+      } else {
+        api.toast({
+            msg: "只能选择5张照片",
+            duration: 2000,
+            location: 'top'
+        });
+      }
+    }
+
+    //调用手机相册和相机
+    var imgSrc="";
+    //获取相机还是相册
+    function getPicture(optionType) {
+      var options = {
+          type: optionType,
+          waterMark: true,
+          waterMarkData: {
+              code: $("#accountnumber").html(),
+          }
+      };
+
+      pGetPicture(options, function(ret, err) {
+          if (ret.status) {
+              var location = ',';
+              var imgArrs = ret.imgList;
+              bMap.getLocation({
+                  accuracy: '10m',
+                  autoStop: true
+              }, function(ret, err){
+                  if(ret.status){
+                    location = ret.lon + "," + ret.lat;
+                  }
+                  imgArrs.forEach(function(item, index){
+                    imgSrc = item;
+                    if (imgSrc != '' && index < 5) {
+                      var index = $(".imgfile").length;
+                      var imgItem = '';
+                      imgUrlArr.push(imgSrc);
+                      if ((index + 1)%3 == 0) {
+                        imgItem =
+                          "<div class='img-item img-item-last' data-Location='"+ location +"'>"+
+                            "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgSrc + "'  onclick='DeleteImg(this)' /> " +
+                            "<img class='imgfile' src='"+ imgSrc +"' onclick='previewImg("+index+")'>" +
+                          "</div>";
+                      } else {
+                        imgItem =
+                          "<div class='img-item' data-Location='"+ location +"'>"+
+                            "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgSrc + "'  onclick='DeleteImg(this)' /> " +
+                            "<img class='imgfile' src='"+ imgSrc +"' onclick='previewImg("+index+")'>" +
+                          "</div>";
+                      }
+                      $("#img-div").show();
+                      if ($(".img-item").length < 5) {
+                        $("#imgList").append(imgItem);
+                        api.parseTapmode();
+                        operationDom();
+                      }
+                    }
+                  });
+
+              });
+          }
+      });
+    }
+
+    function transPathArr(list, callback) {
+        var imgList = [];
+        var num = 0;
+        // 循环
+        for (var i in list) {
+            UIAlbumBrowser.transPath({
+                path: list.path,
+
+            }, function(ret, err) {
+                if (ret.path) {
+                    var url = ret.path;
+                    num++;
+                    if (num == list.length) {
+                        imgList.push(ret.path);
+                        callback(imgList);
+                    } else {
+                        imgList.push(ret.path);
+                    }
+                }
+            });
+        }
+    }
+
+    function DeleteImg(obj) {
+      api.confirm({
+            title: '提示',
+            msg: '确认删除照片',
+            buttons: ['确定', '取消']
+        }, function(ret, err){
+            if(ret.buttonIndex == 1) {
+              $(obj).parent().remove();
+              $(".img-item").removeClass('img-item-last');
+              $.each($(".img-item"),function(key,val) {
+                if ((key+1)%3==0) {
+                  $(this).addClass('img-item-last');
+                }
+              });
+            }
+        });
+    }
+
+    function getSelectData(taskId) {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+        url:  $api.getStorage("jhapipath") + 'waterMeters/info',
+        method: 'post',
+        dataType: 'json',
+        // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+        data: {
+          values: {
+            "UserName": $api.getStorage("jhUserName"),
+            "Password": $api.getStorage("jhPassWord"),
+            "SerialNo": dataTime(),
+            "Longitude": Longitude,
+            "Latitude": Latitude,
+            "Method": "MMS103",
+            "Parameter": "{'TypeId':'JHZT'}"
+          }
+        }
+      },function(ret, err){
+          api.hideProgress();
+          console.log(JSON.stringify(ret));
+          if (ret) {
+              if(ret.Status == 0) {
+                AuditStatuData = JSON.parse(ret.Data);
+                for (var i = 0; i < AuditStatuData.length; i++) {
+                  AuditStatuText.push(AuditStatuData[i].Name);
+                }
+                var sql = "UPDATE AUDIT_TASK_LIST SET " +
+                          "SelectData = '" + JSON.stringify(AuditStatuData) + "' WHERE Id = '" +taskId+ "'";
+                db.executeSql({
+                    name: 'Wsdatabase',
+                    sql: sql
+                }, function(ret, err) {
+                    if (ret.status) {
+                        console.log(JSON.stringify(ret));
+                    } else {
+                        console.log(JSON.stringify(err));
+                    }
+                });
+              }
+          } else {
+              api.toast({
+                  msg: err.msg,
+                  duration: 2000,
+                  location: 'top'
+              });
+              console.log( JSON.stringify(err));
+          }
+        });
+    }
+
+    function showState() {
+      api.actionSheet({
+        title: '',
+        cancelTitle: '取消',
+        buttons: AuditStatuText
+      }, function(ret, err) {
+        if (ret.buttonIndex > 0 && ret.buttonIndex < (AuditStatuText.length + 1)) {
+          for (var i = 0; i < AuditStatuData.length; i++) {
+            if (AuditStatuText[ret.buttonIndex - 1] == AuditStatuData[i].Name) {
+              meterStatus = AuditStatuData[i].Id;
+              $("#reviewstate").val(AuditStatuData[i].Name);
+              if(AuditStatuData[i].Id == '5') {//未见表状态
+                $('#jhendscale').attr("readonly",true);
+                $("#jhendscale").val('');
+              } else {
+                $('#jhendscale').removeAttr("readonly");
+              }
+            }
+          }
+        }
+      });
+    }
+
+    var FileUrl = "";
+    var FileType = "";
+    var FilesUrlArr = [];
+
+    //是否提交中
+    var isSubmit = false;
+
+    function TaskSubmit() {
+
+      if (isSubmit) {
+        api.toast({
+            msg: '正在提交中。。。',
+            duration: 2000,
+            location: 'top'
+        });
+        return;
+      }
+
+      FileUrl = "";
+      FileType = "";
+      FilesUrlArr = [];
+
+      var gpsmodel = api.require('gpsState');
+      gpsmodel.gpsstate(function(ret){
+        if (!ret.gps) {
+          api.openFrame({
+              name: 'checkOpenGPS_frm',
+              url: 'widget://html/mine/checkOpenGPS_frm.html',
+              rect: {
+                  x: 0,
+                  y: 0,
+                  w: 'auto',
+                  h: 'auto'
+              },
+              bounces: false,
+              bgColor: 'rgba(0,0,0,0.1)',
+          });
+        } else {
+          if (Longitude == '' || Latitude == '') {
+            bMap.getLocation({
+                accuracy: '10m',
+                autoStop: true,
+            }, function(ret, err){
+              if (ret.status) {
+                  Longitude = ret.lon;
+                  Latitude = ret.lat;
+                  console.log(Longitude +','+ Latitude);
+              } else {
+                  api.toast({
+                      msg: '定位失败',
+                      duration: 2000,
+                      location: 'top'
+                  });
+                  return;
+              }
+            });
+          }
+
+          var imgList = $(".imgfile");
+
+          var auditScale = '';
+          if (meterStatus != '5') {
+            if ($("#jhendscale").val() == "") {
+              api.toast({
+                  msg: "请填写稽核止度",
+                  duration: 2000,
+                  location: 'top'
+              });
+              return;
+            }
+            auditScale = $("#jhendscale").val();
+          }
+
+          if (parseInt($("#jhendscale").val()) < 0) {
+            api.toast({
+                msg: "稽核止度不能小于0!",
+                duration: 2000,
+                location: 'top'
+            });
+            return;
+          }
+
+          api.showProgress({
+              title: '加载中',
+              text:'',
+              modal: false
+          });
+          for (var i = 0; i < imgList.length; i++) {
+            var imgNameOne = imgList[i].src.substring(imgList[i].src.lastIndexOf("/")+1);
+            for (var j = 0; j < imgUrlArr.length; j++) {
+              var imgNameTwo = imgUrlArr[j].substring(imgUrlArr[j].lastIndexOf("/")+1);
+              if (imgNameOne == imgNameTwo) {
+                FileUrl += imgUrlArr[j] + "|";
+                FileType += imgList[i].src.substring(imgList[i].src.lastIndexOf(".")+1) + "|";
+                FilesUrlArr.push(imgUrlArr[j]);
+
+                break;
+              }
+            }
+          }
+
+          if (FileUrl != "") {
+            FileUrl = FileUrl.substring(0,FileUrl.length - 1);
+          }
+          if (FileType != "") {
+            FileType = FileType.substring(0,FileType.length - 1);
+          }
+
+          FileLocation = "";
+          var imgItemList = $('.img-item');
+          for(var i = 0; i < imgItemList.length; i++) {
+            if (i == 0) {
+              FileLocation += $(imgItemList[i]).attr('data-Location');
+            } else {
+              FileLocation += "|" + $(imgItemList[i]).attr('data-Location');
+            }
+          }
+
+          var myDate = new Date();
+          if (nowTime == '') {
+            nowTime = myDate.getFullYear() + "-" +
+            ((myDate.getMonth() + 1) < 10 ? "0"+(myDate.getMonth() + 1) : (myDate.getMonth() + 1)) + "-" +
+            (myDate.getDate() < 10 ? "0"+(myDate.getDate()) : (myDate.getDate())) + "  " +
+            myDate.getHours() + ":" +
+            myDate.getMinutes()+ ":" +
+            myDate.getSeconds();
+          }
+
+          if (($api.getStorage('auditImgsUpload') == 1) || (api.connectionType == 'none')) {
+            // 数据及照片单独上传 或 无网络情况下 - 保存至本地
+            if (api.connectionType != 'none') {
+              //提交定位信息
+              submitGps();
+            }
+            var msg = '';
+            if ($api.getStorage('auditImgsUpload') == 1) {
+              msg = '当前设置为数据及图片单独上传，是否确定保存？';
+            } else {
+              msg = '当前无网络，数据将保存至本地，是否保存？';
+            }
+
+            api.confirm({
+                title: '提示',
+                msg: msg,
+                buttons: ['确定', '取消']
+            }, function(ret, err){
+                if( ret ){
+                  if (ret.buttonIndex == 1) {
+                    saveDataLocal(meterStatus, FileUrl, FileType, FileLocation, nowTime, Longitude, Latitude, '1', auditScale);
+                  }
+                }
+            });
+            return;
+          } else {
+            isSubmit = true;
+            //提交定位信息
+            submitGps();
+
+            api.ajax({
+              url: $api.getStorage("jhapipath") + 'waterMeters/info',
+              method: 'post',
+              dataType: 'json',
+              data: {
+                values: {
+                  "UserName": $api.getStorage("jhUserName"),
+                  "Password": $api.getStorage("jhPassWord"),
+                  "SerialNo": dataTime(),
+                  "Longitude": Longitude,
+                  "Latitude": Latitude,
+                  "Method": "MMS006",
+                  "Parameter": "{'Id': '" + taskInfoData.Id + "','Status': '1','OperatedTime': '" + nowTime +
+                  "','Remark': '" + $("#remark").val() + "', 'BeginScale': '', 'EndScale': '" + $("#jhendscale").val() + "', 'Amount': '','UsedTypeId': '','ReadTime': '" +
+                  nowTime + "','IsModifiedWater': '1','AuditStatus':'"+ meterStatus +"', 'FileUrl': '" +
+                  FileUrl + "', 'FileLocation':'"+ FileLocation +"','FileType': '" + FileType + "','Type': ''}"
+                },
+                files: {"file": FilesUrlArr}
+              }
+            }, function(ret, err) {
+                console.log(JSON.stringify(ret));
+                console.log(JSON.stringify(err));
+                api.hideProgress();
+                if(ret) {
+                  if (ret.Status == 0) {
+                    //根据设置判断是否删除本地照片 0 - 删除本地照片  且照片不单独上传
+                    if (($api.getStorage('auditSaveLocation') != 1) && ($api.getStorage('auditImgsUpload') != 1)) {
+                      var fs = api.require("fs");
+                      for (var i = 0; i < FilesUrlArr.length; i++) {
+                        fs.remove({
+                            path: FilesUrlArr[i]
+                        }, function(ret, err){
+                            if( ret.status ){
+                                console.log( JSON.stringify( ret ) );
+                            }else{
+                                console.log( JSON.stringify( err ) );
+                            }
+                        });
+                      }
+                    }
+
+                    //提交成功 修改本地数据为   已上传
+                    var sql = "UPDATE AUDIT_TASK_LIST SET isUploadAndSave = '1' WHERE Id='"+ taskInfoData.Id +"' AND userName = '"+ $api.getStorage('loginData').userName +"'";
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            console.log(JSON.stringify(ret));
+                        } else {
+                            console.log(JSON.stringify(err));
+                        }
+                    });
+                    //删除云平台本地数据
+                    var sql1 = "DELETE FROM myTaskSheet WHERE taskCode='" + TaskData.taskCode + "'";
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            console.log(JSON.stringify(ret));
+                        } else {
+                            console.log(JSON.stringify(err));
+                        }
+                    });
+                    api.openWin({
+                        name: 'MeterReadDetails',
+                        url: './MeterReadDetails.html',
+                        pageParam: {
+                            data: TaskData,
+                            type: getTaskType
+                        }
+                    });
+                  } else {
+                    isSubmit = false;
+                    //提交失败 - 数据保存至本地
+                    saveDataLocal(meterStatus, FileUrl, FileType, FileLocation, nowTime, Longitude, Latitude, '0', auditScale);
+                  }
+                } else {
+                  isSubmit = false;
+                  //提交失败 - 数据保存至本地
+                  saveDataLocal(meterStatus, FileUrl, FileType, FileLocation, nowTime, Longitude, Latitude, '0', auditScale);
+                }
+              }
+            );
+          }
+          return;
+          if (api.connectionType == 'none' ) {
+            var sql = "UPDATE AUDIT_TASK_LIST SET "+
+            "UsedTypeId='"+meterStatus+"',"+
+            "AuditReadScale='" + $("#jhendscale").val() + "',"+
+            "Remark='"+ $("#remark").val() +"',"+
+            "FileUrl='"+FileUrl+"',"+
+            "FileType='" + FileType + "',"+
+            "Type='',"+
+            "FileLocation='" + FileLocation + "',"+
+            "ReadTime='" +nowTime + "',"+
+            "ReviewStateText='" + $("#reviewstate").val() +
+            "',LocationAddress = '"+ Longitude +","+ Latitude +"' WHERE Id='"+ taskInfoData.Id +"'";
+            db.executeSql({
+                name: 'Wsdatabase',
+                sql: sql
+            }, function(ret, err) {
+                api.hideProgress();
+                if (ret.status) {
+                    api.toast({
+                        msg: "无网络，数据保存本地成功",
+                        duration: 2000,
+                        location: 'top'
+                    });
+                } else {
+                    console.log(JSON.stringify(err));
+                    api.toast({
+                        msg: "无网络，数据保存本地失败",
+                        duration: 2000,
+                        location: 'top'
+                    });
+                }
+            });
+          } else {
+            submitGps();
+
+            api.ajax({
+              url: $api.getStorage("jhapipath") + 'waterMeters/info',
+              method: 'post',
+              dataType: 'json',
+              data: {
+                values: {
+                  "UserName": $api.getStorage("jhUserName"),
+                  "Password": $api.getStorage("jhPassWord"),
+                  "SerialNo": dataTime(),
+                  "Longitude": Longitude,
+                  "Latitude": Latitude,
+                  "Method": "MMS006",
+                  "Parameter": "{'Id': '" + taskInfoData.Id + "','Status': '1','OperatedTime': '" + nowTime +
+                  "','Remark': '" + $("#remark").val() + "', 'BeginScale': '', 'EndScale': '" + $("#jhendscale").val() + "', 'Amount': '','UsedTypeId': '','ReadTime': '" +
+                  nowTime + "','IsModifiedWater': '1','AuditStatus':'"+ meterStatus +"', 'FileUrl': '" +
+                  FileUrl + "', 'FileLocation':'"+ FileLocation +"','FileType': '" + FileType + "','Type': ''}"
+                },
+                files: {"file": FilesUrlArr}
+              }
+            }, function(ret, err) {
+                api.hideProgress();
+                console.log(JSON.stringify(err));
+                console.log(JSON.stringify(ret));
+                if(ret) {
+                  if (ret.Status == 0) {
+
+                    //根据设置判断是否删除本地照片 0 - 删除本地照片  且照片不单独上传
+                    if (($api.getStorage('auditSaveLocation') != 1) && ($api.getStorage('auditImgsUpload') != 1)) {
+                      var fs = api.require("fs");
+                      for (var i = 0; i < FilesUrlArr.length; i++) {
+                        fs.remove({
+                            path: FilesUrlArr[i]
+                        }, function(ret, err){
+                            if( ret.status ){
+                                console.log( JSON.stringify( ret ) );
+                            }else{
+                                console.log( JSON.stringify( err ) );
+                            }
+                        });
+                      }
+                    }
+
+                    //提交成功 删除稽核APP数据
+                    var sql = "DELETE FROM AUDIT_TASK_LIST WHERE Id='"+ taskInfoData.Id +"'";
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    }, function(ret, err) {
+                        api.hideProgress();
+                        if (ret.status) {
+                            console.log(JSON.stringify(ret));
+                        } else {
+                            console.log(JSON.stringify(err));
+                        }
+                    });
+                    //删除云平台本地数据
+                    var sql1 = "DELETE FROM myTaskSheet WHERE taskCode='" + TaskData.taskCode + "'";
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: sql
+                    }, function(ret, err) {
+                        api.hideProgress();
+                        if (ret.status) {
+                            console.log(JSON.stringify(ret));
+                        } else {
+                            console.log(JSON.stringify(err));
+                        }
+                    });
+                    api.openWin({
+                        name: 'MeterReadDetails',
+                        url: './MeterReadDetails.html',
+                        pageParam: {
+                            data: TaskData,
+                            type: getTaskType
+                        }
+                    });
+                  }
+                } else {
+                  api.toast({
+                      msg: err.msg,
+                      duration: 2000,
+                      location: 'top'
+                  });
+                }
+              }
+            );
+          }
+        }
+      });
+
+
+    }
+
+    //认领
+    function ClaimOk() {
+      // 单个任务认领
+      var body = {
+          body: JSON.stringify({
+              taskCode: TaskData.taskCode, // 云平台传的taskCode 修改id 为 taskCode 20200807 15:24 zxf
+              lng:Longitude,
+              lat:Latitude,
+              account:$api.getStorage("jhUserName"),
+              passWord:$api.getStorage("jhPassWord")
+          })
+      };
+      fnPost("services/app/WorkFlow/ConfirmTaskById",body,'application/json',true,false,(ret,err)=>{
+        api.hideProgress();
+        if(ret){
+          if(ret.success){
+            var result = ret.result;
+            db.executeSql({
+                name: 'Wsdatabase',
+                sql: "UPDATE AUDIT_TASK_LIST SET Status = '7' WHERE Id ='" + taskInfoData.Id + "'"//任务状态变更
+            }, function(ret, err) {
+                if (ret.status) {
+                    api.toast({
+                        msg: "认领成功",
+                        duration: 1000,
+                        location: 'top'
+                    });
+                      updateMyTaskSheets(result); //添加数据到云平台我的任务本地数据 2020810 11:08 zxf
+                    // 认领成功  任务可处理
+                    $("#footer1").css("display","table");
+                    $("#footer2").css("display","none");
+
+                    $('#jhendscale').removeAttr("readonly");
+                    $('#remark').removeAttr("readonly");
+
+                    $("#mrimg").click(function(){
+                      showPopup();
+                    });
+
+                    $("#mrselect").click(function(){
+                      showState();
+                    });
+                } else {
+                    console.log(JSON.stringify(err));
+                }
+            });
+            // 任务认领，需要存在本地
+          }
+        }
+      });
+    }
+
+    //转办
+    function TaskUserList() {
+      api.openWin({
+          name: 'TurnToUser',
+          url: './TurnToUser.html',
+          pageParam: {
+              data: taskInfoData,
+              ydata: TaskData,
+              type: getTaskType
+          }
+      });
+    }
+
+    function previewImg(index) {  //图片预览
+      var imgData = $(".imgfile");
+      var imgArr = [];
+      for (var i = 0; i < imgData.length; i++) {
+        imgArr.push(imgData[i].src.substring(7, imgData[i].src.length));
+      }
+      api.openWin({
+          name: 'pictureBrowser',
+          url: '../pictureBrowser.html',
+          pageParam: {
+              images: imgArr,
+              index: index
+          },
+          animation:{
+              type: "fade", //动画类型（详见动画类型常量）
+              duration: 300 //动画过渡时间，默认300毫秒
+          }
+      });
+    }
+
+    //退回
+    function TaskReturn() {
+      var dialog = new auiDialog();
+      dialog.prompt({
+          title:"退回",
+          text:'请填写退回原因',
+          input:true,
+          buttons:['取消','确定']
+      },function(ret){
+          if(ret.buttonIndex == 2){
+              api.showProgress({
+                  title: '加载中',
+                  text:'',
+                  modal: false
+              });
+              api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                timeout: '100',
+                dataType: 'json',
+                returnAll: false,
+                data: {
+                  values: {
+                    "UserName": $api.getStorage("jhUserName"),
+                    "Password": $api.getStorage("jhPassWord"),
+                    "SerialNo": dataTime(),
+                    "Method": "MMS004",
+                    "Longitude": Longitude,
+                    "Latitude": Latitude,
+                    "Parameter": "{'Id': '" + taskInfoData.Id + "', 'Remark': '" + ret.text + "'}"
+                  },
+                }
+              }, function(ret, err) {
+                api.hideProgress();
+                if(ret){
+                  if (ret.Status == 0) {
+
+                      //退回成功 删除该条本地数据
+                      var sql = "DELETE FROM AUDIT_TASK_LIST WHERE Id='"+ taskInfoData.Id +"' AND Name = '"+ taskInfoData.Name +"'";
+                      db.executeSql({
+                          name: 'Wsdatabase',
+                          sql: sql
+                      }, function(ret, err) {
+                          if (ret.status) {
+                              console.log(JSON.stringify(ret));
+                          } else {
+                              console.log(JSON.stringify(err));
+                          }
+                      });
+                      //删除云平台本地数据
+                      var sql1 = "DELETE FROM myTaskSheet WHERE taskCode='" + TaskData.taskCode + "'";
+                      db.executeSql({
+                          name: 'Wsdatabase',
+                          sql: sql
+                      }, function(ret, err) {
+                          if (ret.status) {
+                              console.log(JSON.stringify(ret));
+                          } else {
+                              console.log(JSON.stringify(err));
+                          }
+                      });
+                      api.toast({
+                          msg: '退回成功',
+                          duration: 2000,
+                          location: 'top'
+                      });
+                      api.sendEvent({
+                          name: 'refreshCloudClaim',
+                          extra: {
+                              type: '1'
+                          }
+                      });
+                      setTimeout(function(){
+                        api.closeWin();
+                      }, 1000);
+                  }
+                } else{
+                  api.toast({
+                      msg: err.msg,
+                      duration: 2000,
+                      location: 'top'
+                  });
+                }
+              }
+            );
+          }
+      });
+    }
+
+    function submitGps() {
+      bMap.getLocation({
+          accuracy: '10m',
+          autoStop: true,
+      }, function(ret, err) {
+          if (ret.status) {
+              var nowLon = ret.lon;
+              var nowLat = ret.lat;
+              if (ret.lon != "" && ret.lat != "") {  //未获取到经纬度
+                bMap.getNameFromCoords({
+                    lon: nowLon,
+                    lat: nowLat
+                }, function(ret, err) {
+                    if (ret.status) {
+                      var address = ret.address;
+                      var myDate = new Date();
+                      var nowTime = myDate.getFullYear() + "-" +
+                        ((myDate.getMonth() + 1) < 10 ? "0"+(myDate.getMonth() + 1) : (myDate.getMonth() + 1)) + "-" +
+                        (myDate.getDate() < 10 ? "0"+(myDate.getDate()) : (myDate.getDate())) + "  " +
+                        myDate.getHours() + ":" +
+                        myDate.getMinutes()+ ":" +
+                        myDate.getSeconds();
+                      api.ajax({
+                        url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                        method: 'post',
+                        dataType: 'json',
+                        // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+                        data: {
+                          values: {
+                            "UserName": $api.getStorage("jhUserName"),
+                            "Password": $api.getStorage("jhPassWord"),
+                            "SerialNo": dataTime(),
+                            "Method": "MMS010",
+                            "Longitude": ret.lon,
+                            "Latitude": ret.lat,
+                            "Parameter": "{'Type':'45','TaskId':'"+ taskInfoData.Id +"','CustomerCode':'"+ taskInfoData.CustomerCode +"', 'Longitude':'"+ nowLon +"','Latitude':'"+ nowLat +"','Address':'"+ address +"','ClientId':'"+ api.deviceId +"', 'ClientName':'"+ api.deviceModel +"','CollectedTime':'"+ nowTime +"'}"
+                          }
+                        }
+                      },function(ret, err){
+                          if (ret) {
+                              console.log( JSON.stringify( ret ) );
+                          } else {
+                              console.log( JSON.stringify( err ) );
+                          }
+                      });
+                    }
+                });
+              }
+          } else {
+              // alert(err.code);
+          }
+      });
+    }
+
+    //数据保存至本地
+    function saveDataLocal(meterStatus, FileUrl, FileType, FileLocation, nowTime, Longitude, Latitude, saveType, auditScale) {
+      api.hideProgress();
+      var myDate = new Date();
+      var SaveTime = myDate.getFullYear() + "-" + ((myDate.getMonth() + 1) < 10 ? "0"+(myDate.getMonth() + 1) : (myDate.getMonth() + 1)) + "-" + (myDate.getDate() < 10 ? "0"+(myDate.getDate()) : (myDate.getDate()));
+      var saveSql = "UPDATE AUDIT_TASK_LIST SET "+
+                    "UsedTypeId = '"+ meterStatus +"',"+
+                    "UserScale = '"+ auditScale +"',"+
+                    "UserRemark = '"+ $("#remark").val() +"',"+
+                    "FileUrl = '"+ FileUrl +"',"+
+                    "FileType = '"+ FileType +"',"+
+                    "Type = '',"+
+                    "FileLocation = '"+ FileLocation +"',"+
+                    "ReadTime = '"+ nowTime +"',"+
+                    "ReviewStateText = '"+ $("#reviewstate").val() +"',"+
+                    "LocationAddress = '"+ Longitude +","+ Latitude +"', isUploadAndSave = '2', SaveTime = '"+ SaveTime +"' WHERE Id = '"+ taskInfoData.Id +"'";
+      db.executeSql({
+          name: 'Wsdatabase',
+          sql: saveSql
+      }, function(ret, err){
+          if( ret.status ){
+              console.log( JSON.stringify( ret ) );
+              var msg = '';
+              if (saveType == '1') {
+                pUpdataMytaskSheetsStatus(TaskData); //修改云平台数据状态 6-6 zxf
+                msg = '数据保存本地成功';
+              } else if (saveType == '0') {
+                msg = '提交数据失败，数据保存本地成功';
+              }
+              api.toast({
+                  msg: msg,
+                  duration: 2000,
+                  location: 'top'
+              });
+          }else{
+              console.log( JSON.stringify( err ) );
+              api.toast({
+                  msg: '数据保存本地失败',
+                  duration: 2000,
+                  location: 'top'
+              });
+          }
+      });
+    }
+  </script>
+</html>

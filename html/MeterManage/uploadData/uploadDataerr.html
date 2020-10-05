@@ -1,0 +1,1571 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>转办</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+            overflow-y: hidden;
+            display: flex;
+            flex-flow: column;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 3;
+            background-color: #fff;
+            color: #333333;
+            font-size: 0.85rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            border: none;
+            background-size: 100% 1px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-image: linear-gradient(0, #dddddd, #dddddd 50%, transparent 50%);
+            background-image: -webkit-linear-gradient(90deg, #dddddd, #dddddd 50%, transparent 50%);
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333;
+            font-weight: 900;
+            width: 0.6rem;
+            height: 1.05rem;
+        }
+        /*顶部导航栏*/
+
+        #header {
+            position: fixed;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+        }
+
+        .aui-bar-nav .aui-title {
+            color: #fff;
+        }
+
+        .aui-icon-left:before {
+            color: #fff;
+        }
+
+        #header .add {
+            width: 1rem;
+            height: 1rem;
+            background: url('../../image/Customer/mail-add.png');
+            background-size: 1rem 1rem;
+            position: absolute;
+            right: 0.9rem;
+            bottom: 0.7rem;
+        }
+
+        #header .aui-bar-nav,
+        .aui-bar.aui-bar-light {
+            background-image: none;
+        }
+
+        #center {
+            flex: 1;
+            overflow: scroll;
+            background-color: #F4F4F4;
+            margin-bottom: 100px;
+            -webkit-overflow-scrolling: touch; //移动端滑动流畅设置。
+        }
+
+        #footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            background-color: #ffffff;
+        }
+
+        .dv1 {
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid #F3F3FF;
+            font-size: 0.8rem;
+            padding-left: 8%;
+            padding-right: 10%;
+            margin-top: 20px;
+        }
+
+        .dv2 {
+            margin-bottom: 20px;
+        }
+
+        .image {
+            float: left;
+            width: 10px;
+            height: 10px;
+            margin-top: 20px;
+        }
+
+        .sp {
+            margin-top: 0.7rem;
+            margin-left: 5px;
+        }
+
+        .sp-no {
+            margin-top: 0.7rem;
+            float: right;
+            margin-right: 10px;
+        }
+
+        .aui-checkbox-1 {
+            margin-top: 0.7rem;
+            float: right;
+        }
+
+        .aui-checkbox {
+            float: right;
+        }
+
+        .dv {
+            width: 80%;
+            height: 40px;
+            display: flex;
+            border-bottom: 1px solid #F3F3FF;
+            margin-left: 10%;
+        }
+
+        .dv-1 {
+            flex: 2;
+            margin-top: 0.5rem;
+        }
+
+        .dv-2 {
+            flex: 3;
+            margin-top: 0.5rem;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .dv-3 {
+            flex: 3;
+            margin-top: 0.5rem;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .dv-4 {
+            margin-top: 0.5rem;
+        }
+
+        .dv-5 {
+            width: 1px;
+            height: 16px;
+            margin-top: 13px;
+            background-color: #000;
+        }
+
+        .gundongBox {
+            width: 300px;
+            height: 30px;
+            margin: 200px auto;
+            position: relative;
+            overflow: hidden;
+            background: pink;
+        }
+
+        .gundongList {
+            position: absolute;
+            animation: geiwogun 12s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes geiwogun {
+            from {
+                transform: translate(0, 0);
+            }
+            to {
+                transform: translate(0, 0);
+            }
+        }
+
+        #btn {
+            width: 40%;
+            height: 50px;
+            margin-left: calc(20%/3);
+            margin-top: 20px;
+            border-radius: 20px;
+            background-color: #377EFF;
+            color: #fff;
+            text-align: center;
+            line-height: 50px;
+            font-size: 18px;
+            float: left;
+        }
+
+        .header_right {
+            position: relative;
+            float: right;
+            width: 50px;
+            height: 45px;
+        }
+
+        .image2 {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            margin-top: 15px;
+        }
+
+        .badge2 {
+            position: absolute;
+            height: 20px;
+            margin-left: 10px;
+            z-index: 10;
+            background-color: #FF3024;
+            border-radius: 10px;
+            line-height: 20px;
+        }
+
+        .badge2 span {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        .box {
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .content p {
+            display: inline-block;
+            font-size: 15px;
+            color: #000000;
+        }
+
+        .content p.padding {
+            padding-right: 50px;
+        }
+
+        .aui-list-item-arrow {
+            color: #C2C2C2;
+            font-size: 18px;
+            height: 40px;
+        }
+
+        .center_dv {
+            margin: 20px;
+            border-radius: 20px;
+            background-color: #ffffff;
+            padding: 10px;
+        }
+
+        .center_dv1_span {
+            margin-left: 5px;
+            color: #2F7CF5;
+            font-size: 18px;
+        }
+
+        .center_dv1_checkbox {
+            float: right;
+            margin-right: 10px;
+        }
+
+        .center_dv2 {
+            height: 2px;
+            background-color: #DEDEDE;
+            margin-top: 10px;
+        }
+
+        .center_dv3 {
+            margin-top: 10px;
+        }
+
+        .center_dv3_dv {
+            background-color: #F4F4F4;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .dv_top {
+            display: flex;
+        }
+
+        .dv_bottom {
+            margin-top: 10px;
+            display: flex;
+        }
+
+        .dv_top_dv1 {
+            flex: 1;
+            color: #000000;
+            overflow: scroll;
+            font-size: 18px;
+            flex-direction: row;
+            white-space: nowrap;
+        }
+
+        .item-item {
+            width: 100%;
+            line-height: 30px;
+            color: #000000;
+            x overflow: scroll;
+            font-size: 16px;
+        }
+
+        .dv_top_dv2 {}
+
+        .dv_bottom_dv1 {
+            flex: 1;
+            text-align: left;
+            flex-direction: row;
+            white-space: nowrap;
+            overflow: scroll;
+            color: #6D6D6D;
+        }
+
+        .dv_bottom_dv2 {
+            flex: 1;
+            text-align: left;
+            flex-direction: row;
+            white-space: nowrap;
+            overflow: scroll;
+            color: #6D6D6D;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="aui-bar aui-bar-nav aui-bar-light" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action="back">
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <!-- <div class="aui-pull-left aui-btn" tapmode data-action="back">
+
+        </div> -->
+        <div class="aui-title">数据上传</div>
+        <div class="aui-pull-right add open-win" win='creatContacts'>
+        </div>
+    </header>
+
+    <div id="center">
+        <div id="allupload">
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">预停水任务数据上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-1" onclick="setAllNo(1)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="positionList">
+                    <!--
+                    <div class="center_dv3_dv">
+                        <div class="dv_top">
+                            <div class="dv_top_dv1">
+                                2019/11/30
+                            </div>
+                            <div class="dv_top_dv2">
+                                <input name="Fruit" type="checkbox" value="12345678" class="aui-checkbox" onclick="setOthers(1)" />
+                            </div>
+                        </div>
+
+                        <div class="dv_bottom">
+                            <div class="dv_bottom_dv1">已张贴：1</div>
+                            <div class="dv_bottom_dv2">已上传：3</div>
+                        </div>
+                    </div>
+                    <div class="center_dv3_dv">
+                        <div class="dv_top">
+                            <div class="dv_top_dv1">
+                                2019/11/30
+                            </div>
+                            <div class="dv_top_dv2">
+                                <input name="Fruit" type="checkbox" value="12345678" class="aui-checkbox" onclick="setOthers(1)" />
+                            </div>
+                        </div>
+
+                        <div class="dv_bottom">
+                            <div class="dv_bottom_dv1">已张贴：1</div>
+                            <div class="dv_bottom_dv2">已上传：3</div>
+                        </div>
+                    </div>
+-->
+                </div>
+            </div>
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">表号维护数据上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-2" onclick="setAllNo(2)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="books">
+                    <!--
+                    <div class="center_dv3_dv">
+                        <div class="dv_top">
+                            <div class="dv_top_dv1">
+                                2019/11/30
+                            </div>
+                            <div class="dv_top_dv2">
+                                <input name="Fruit2" type="checkbox" value="12345678" class="aui-checkbox" onclick="setOthers(2)" />
+                            </div>
+                        </div>
+
+                        <div class="dv_bottom">
+                            <div class="dv_bottom_dv1">已张贴：1</div>
+                            <div class="dv_bottom_dv2">已上传：3</div>
+                        </div>
+                    </div>
+                    <div class="center_dv3_dv">
+                        <div class="dv_top">
+                            <div class="dv_top_dv1">
+                                2019/11/30
+                            </div>
+                            <div class="dv_top_dv2">
+                                <input name="Fruit2" type="checkbox" value="12345678" class="aui-checkbox" onclick="setOthers(2)" />
+                            </div>
+                        </div>
+
+                        <div class="dv_bottom">
+                            <div class="dv_bottom_dv1">已张贴：1</div>
+                            <div class="dv_bottom_dv2">已上传：3</div>
+                        </div>
+                    </div>
+-->
+                </div>
+            </div>
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">工单申请照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-3" onclick="setAllNo(3)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="applyimages">
+
+                </div>
+            </div>
+            <!-- <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">表务办理照片上传</span>
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="meterimages">
+
+                </div>
+            </div> -->
+            <div class="center_dv">
+                <div class="center_dv1">
+                    <span class="center_dv1_span">停复水办理数据及照片上传</span>
+                    <input type="checkbox" class="aui-checkbox center_dv1_checkbox" id="checkbox-4" onclick="setAllNo(4)" />
+                </div>
+                <div class="center_dv2"></div>
+                <div class="center_dv3" id="stopAndOpen">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div id="btn" onclick="upload()">上&nbsp;&nbsp;传</div>
+        <div id="btn" style='background-color: #FFA836' onclick="emptyList()">清空失败列表</div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/hammer.min.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/template" id='postingList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1" onclick="openErrDetail({{value}})">
+                {{value.DATE}}张贴任务
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit" type="checkbox" value="{{value.DATE}}" class="aui-checkbox" onclick="setOthers(1)" />
+            </div>
+        </div>
+
+        <div class="dv_bottom">
+            <div class="dv_bottom_dv1">已张贴：{{value.SUM}}</div>
+            <div class="dv_bottom_dv2">已上传：{{value.YSC}}/{{value.SUM}}</div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='BookList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="dv_top">
+            <div class="dv_top_dv1" onclick="openError({{value.cloudTaskCode}})">
+                {{value.cloudTaskCode}}
+            </div>
+            <div class="dv_top_dv2">
+                <input name="Fruit2" type="checkbox" value="{{value.cloudTaskCode}}" class="aui-checkbox" onclick="setOthers(2)" />
+            </div>
+        </div>
+
+        <div class="dv_bottom">
+            <div class="dv_bottom_dv1">已扫码：{{value.YSM}}</div>
+            <div class="dv_bottom_dv2">未上传：{{value.YSC}}</div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='MeterHandleList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="item-item">
+            办理日期：{{value.HandleTime}}
+        </div>
+        <div class="item-item">
+            用户编号：{{value.CustomerCode}}
+        </div>
+        <div class="item-item">
+            失败原因：<span style="color: red;">{{value.FailFailRemark}}</span>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='MeterApplyList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="item-item">
+            申请日期：{{value.ApplayTime}}
+            <input name="Fruit3" type="checkbox" value="{{value.ReqCode}}" class="aui-checkbox" onclick="setOthers(3)" />
+        </div>
+        <div class="item-item">
+            用户编号：{{value.CustomerCode}}
+        </div>
+        <div class="item-item">
+            失败原因：<span style="color: red;">{{value.FailRemark}}</span>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/template" id='StopAndOpenList'>
+    {{each datas value i}}
+    <div class="center_dv3_dv">
+        <div class="item-item">
+            办理日期：{{value.SaveTime}}
+            <input name="Fruit4" type="checkbox" value="{{value.Id}}" class="aui-checkbox" onclick="setOthers(4)" />
+        </div>
+        <div class="item-item">
+            用户编号：{{value.CustomerCode}}
+        </div>
+        <div class="item-item">
+            失败原因：<span style="color: red;">{{value.FailRemark}}</span>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    var headerH;
+    var CurentUserName = "";
+    apiready = function() {
+        CurentUserName = $api.getStorage('loginData').userName;
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        // api.setWinAttr({
+        //     bounces: false
+        // });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        // center = $api.offset($api.byId('center')).h;
+        $('#center').css('margin-top', '' + headerH + 'px');
+
+        initListView();
+        initListView2();
+        // initMeterHandleFail();
+        initMeterApplyFail();
+        initStopAndOpenFail();
+
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err){
+          api.sendEvent({
+              name: 'refreshList',
+              extra: {
+                  type: '1'
+              }
+          });
+          api.closeWin();
+        });
+    };
+
+    var actionList = {
+        'back': function() {
+            api.sendEvent({
+                name: 'refreshList',
+                extra: {
+                    type: '1'
+                }
+            });
+            api.closeWin();
+        }
+    }
+
+    //全选
+    function setAllNo(index) {
+        if (index == 1) {
+            var box = document.getElementById("checkbox-1");
+            var loves = document.getElementsByName("Fruit");
+            if (box.checked == false) {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = false;
+                }
+            } else {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = true;
+                }
+            }
+        } else if (index == 2) {
+            var box = document.getElementById("checkbox-2");
+            var loves = document.getElementsByName("Fruit2");
+            if (box.checked == false) {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = false;
+                }
+            } else {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = true;
+                }
+            }
+        } else if (index == 3) {
+            var box = document.getElementById("checkbox-3");
+            var loves = document.getElementsByName("Fruit3");
+            if (box.checked == false) {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = false;
+                }
+            } else {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = true;
+                }
+            }
+        } else if (index == 4) {
+            var box = document.getElementById("checkbox-4");
+            var loves = document.getElementsByName("Fruit4");
+            if (box.checked == false) {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = false;
+                }
+            } else {
+                for (var i = 0; i < loves.length; i++) {
+                    loves[i].checked = true;
+                }
+            }
+        }
+    }
+
+    //勾选抄表册
+    function setOthers(index) {
+        if (index == 1) {
+            var loves = document.getElementsByName("Fruit");
+            for (var i = 0; i < loves.length; i++) {
+                if (loves[i].checked == false) {
+                    var box = document.getElementById("checkbox-1");
+                    box.checked = false;
+                    return;
+                }
+            }
+        } else if (index == 2) {
+            var loves = document.getElementsByName("Fruit2");
+            for (var i = 0; i < loves.length; i++) {
+                if (loves[i].checked == false) {
+                    var box = document.getElementById("checkbox-2");
+                    box.checked = false;
+                    return;
+                }
+            }
+        } else if (index == 3) {
+            var loves = document.getElementsByName("Fruit3");
+            for (var i = 0; i < loves.length; i++) {
+                if (loves[i].checked == false) {
+                    var box = document.getElementById("checkbox-3");
+                    box.checked = false;
+                    return;
+                }
+            }
+        } else if (index == 4) {
+            var loves = document.getElementsByName("Fruit4");
+            for (var i = 0; i < loves.length; i++) {
+                if (loves[i].checked == false) {
+                    var box = document.getElementById("checkbox-4");
+                    box.checked = false;
+                    return;
+                }
+            }
+        }
+    }
+
+    var postingList = []; //预停水分类数组。
+    var postingListCheckeds = []; //选中的预停水分类数组。
+    var qbPosting = []; //当前要上传的预停水任务的所有数据。
+
+    var bookList = []; //抄表册分类数组。
+    var bookListCheckeds = []; //选中的预停水分类数组。
+    var qbUsers = []; //当前要上传的预停水任务的所有数据。
+
+    var postingListUploadIndex = 0; //正在上传的预停水分类数组
+    var bookListUploadIndex = 0; //正在上传的抄表册分类数组
+
+    var mPageSize = 100; //分页数。
+    var mPageNo = 1; //页码。
+    var Index = 0;
+
+    //渲染预停水任务数据
+    function initListView() {
+        var box = document.getElementById("checkbox-1");
+        box.checked = false;
+        postingList = [];
+
+        var db = api.require('db');
+        var postdata = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'select substr(OperatedTime,1,10) date,count(1) sum from POSTING_LIST where NotSave="1" and NotUploader="0" and Files!="" and userName="' + CurentUserName + '" group by substr(OperatedTime,1,10)'
+        });
+        if (postdata.status) {
+            if (postdata.data.length > 0) {
+                for (var i = 0; i < postdata.data.length; i++) {
+                    //已上传数
+                    var YSCdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select count(*) as YSC from POSTING_LIST where NotSave="1" and NotUploader="1" and userName="' + CurentUserName + '" and substr(OperatedTime,1,10)="' + postdata.data[i].date + '"'
+                    });
+                    //总数
+                    var SUMdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select count(*) as SUM from POSTING_LIST where NotSave="1" and NotUploader="0" and Files!="" and userName="' + CurentUserName + '" and substr(OperatedTime,1,10)="' + postdata.data[i].date + '"'
+                    });
+
+                    postingList.push({
+                        DATE: postdata.data[i].date,
+                        YSC: YSCdata.data[0].YSC,
+                        SUM: SUMdata.data[0].SUM,
+                    });
+                }
+
+                if (postingList.length > 0) {
+                    var datas = {
+                        datas: postingList
+                    }
+
+                    var str = template('postingList', datas);
+                    //console.log(JSON.stringify(str));
+                    $('#positionList div').remove();
+                    $('#positionList').append(str);
+                    fnReady();
+                    // operationDom();
+                    operationDom();
+                    api.hideProgress();
+                } else {
+                    var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                    $('#positionList div').remove();
+                    $('#positionList').append(str);
+                }
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#positionList div').remove();
+                $('#positionList').append(str);
+            }
+        }
+    }
+
+    //上传数据。
+    function upload() {
+        postingListCheckeds = [];
+        postingListUploadIndex = 0;
+
+        var loves = document.getElementsByName("Fruit"); //获取抄表数据
+
+        for (var i = 0; i < loves.length; i++) {
+            if (loves[i].checked == true) {
+                postingListCheckeds.push(loves[i].value);
+            }
+        }
+
+        bookListCheckeds = [];
+        bookListUploadIndex = 0;
+
+        var loves2 = document.getElementsByName("Fruit2"); //获取抄表数据
+
+        for (var i = 0; i < loves2.length; i++) {
+            if (loves2[i].checked == true) {
+                bookListCheckeds.push(loves2[i].value);
+            }
+        }
+
+        if (postingListCheckeds.length > 0) {
+            resetQueryBuilder(); //获取当前抄表册所有要上传的用户数据。
+            continueUpdateData(); //获取当前上传的抄表数据。
+        } else if (bookListCheckeds.length > 0) {
+            resetQueryBuilder2(); //获取当前抄表册所有要上传的用户数据。
+            continueUpdateData2(); //获取当前上传的抄表数据。
+        }
+    }
+
+    //获取当前抄表册所有要上传的用户数据。
+    function resetQueryBuilder() {
+        mPageNo = 1; //将页码重新置为1
+        Index = 0;
+
+        var db = api.require('db');
+        var postingdata = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: "select * from POSTING_LIST where NotSave='1' and Files!='' and userName='" + CurentUserName + "' and substr(OperatedTime,1,10)='" + postingListCheckeds[postingListUploadIndex] + "'"
+        });
+        qbPosting = postingdata.data;
+    }
+
+    //获取当前上传的抄表数据。
+    function continueUpdateData() {
+        var Posting = qbPosting[Index];
+
+        var db = api.require('db');
+        var postingImageData = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: "select * from POSTING_IMAGE where Id='" + Posting.Id + "' and NotSubmit=0 and userName='" + CurentUserName + "'"
+        });
+        var FileLocation = "";
+        var FileType = "";
+        var FileUrlArr = [];
+        var postingImages = [];
+        if (postingImageData.status) {
+            if (postingImageData.data.length > 0) {
+                postingImages = postingImageData.data;
+                for (var i = 0; i < postingImageData.data.length; i++) {
+                    if (FileLocation == "") {
+                        FileLocation = postingImageData.data[i].locationJD + "," + postingImageData.data[i].locationWD;
+                    } else {
+                        FileLocation += "|" + postingImageData.data[i].locationJD + "," + postingImageData.data[i].locationWD;
+                    }
+
+                    var startIndex = postingImageData.data[i].imageFileUrl.lastIndexOf(".");
+                    if (startIndex != -1) {
+                        var lx = postingImageData.data[i].imageFileUrl.substring(startIndex + 1, postingImageData.data[i].imageFileUrl.length).toLowerCase();
+                        if (FileType == "") {
+                            FileType = lx;
+                        } else {
+                            FileType = "|" + lx;
+                        }
+                    } else {
+
+                    }
+
+                    FileUrlArr.push(postingImageData.data[i].imageFileUrl);
+                }
+            }
+        }
+
+        var body = {
+            "Id": Posting.Id,
+            "OperatedTime": dataTime(),
+            "Remark": Posting.Remark,
+            "FileLocation": FileLocation,
+            "Type": ""
+        }
+        var files = {
+            file: FileUrlArr
+        };
+
+        fnPost('MMS006', body, 'application/json', false, false, (ret, err) => {
+            if (ret) {
+                var db = api.require('db');
+                if (ret.Status == 0) {
+                    //alert("预停水上传成功：" + JSON.stringify(ret));
+                    //成功后删除数据
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'delete from POSTING_LIST where Id="' + Posting.Id + '" and userName="' + CurentUserName + '"'
+                    });
+                    for (var i = 0; i < postingImages.length; i++) {
+                        var postingimagedata = db.executeSqlSync({
+                            name: 'Wsdatabase',
+                            sql: 'update POSTING_IMAGE set NotSubmit="1" where _id="' + postingImages[i]._id + '" and userName="' + CurentUserName + '"'
+                        });
+                    }
+                } else {
+                    //alert("预停水上传失败：" + JSON.stringify(ret));
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'update POSTING_LIST set Files="' + ret.Message + '" where Id="' + Posting.Id + '" and userName="' + CurentUserName + '"'
+                    });
+                }
+            } else {
+                //alert(JSON.stringify(err));
+                api.toast({
+                    msg: JSON.stringify(err),
+                    duration: 3000,
+                    location: 'bottom'
+                });
+                api.hideProgress();
+                initListView();
+                initListView2();
+                return;
+            }
+            Index++;
+            if (Index < qbPosting.length) {
+                setTimeout(continueUpdateData(), 3000);
+            } else {
+                postingListUploadIndex++;
+                postingListCheckeds[postingListUploadIndex]
+                if (postingListUploadIndex + 1 <= postingListCheckeds.length) {
+                    resetQueryBuilder(); //获取当前抄表册所有要上传的用户数据。
+                    continueUpdateData(); //获取当前上传的抄表数据。
+                } else {
+                    //抄表册上传完毕
+                    postingListCheckeds = [];
+                    if (bookListCheckeds.length > 0) {
+                        resetQueryBuilder2(); //获取当前抄表册所有要上传的用户数据。
+                        continueUpdateData2(); //获取当前上传的抄表数据。
+                    } else {
+                        //alert("上传完成");
+                        api.toast({
+                            msg: "上传完成",
+                            duration: 3000,
+                            location: 'bottom'
+                        });
+                        api.hideProgress();
+                        initListView();
+                        initListView2();
+                    }
+                }
+
+            }
+        }, files);
+    }
+
+    //渲染表号维护数据
+    function initListView2() {
+        var box = document.getElementById("checkbox-2");
+        box.checked = false;
+        bookList = [];
+        var db = api.require('db');
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'select cloudTaskCode from meterNoSheets where userName="' + CurentUserName + '" GROUP BY cloudTaskCode'
+        });
+        if (ret.status) {
+            if (ret.data.length > 0) {
+                for (var i = 0; i < ret.data.length; i++) {
+                    //已抄数
+                    var YSMdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select * from meterNoSheets where StampNo!="" and userName="' + CurentUserName + '" and UploadErrMsg!="" and cloudTaskCode=' + ret.data[i].cloudTaskCode + ''
+                    });
+                    var YSCdata = db.selectSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'select * from meterNoSheets where StampNo!="" and userName="' + CurentUserName + '" and UploadErrMsg!="" and isUpload="0" and cloudTaskCode=' + ret.data[i].cloudTaskCode + ''
+                    });
+
+                    if (YSMdata.data.length > 0) {
+                        bookList.push({
+                            cloudTaskCode: ret.data[i].cloudTaskCode,
+                            YSM: YSMdata.data.length,
+                            YSC: YSCdata.data.length
+                        });
+                    }
+                }
+
+                if (bookList.length > 0) {
+                    var datas = {
+                        datas: bookList
+                    }
+
+                    var str = template('BookList', datas);
+                    //console.log(JSON.stringify(str));
+                    $('#books div').remove();
+                    $('#books').append(str);
+                    fnReady();
+                    // operationDom();
+                    operationDom();
+                    api.hideProgress();
+                } else {
+                    var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                    $('#books div').remove();
+                    $('#books').append(str);
+                }
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#books div').remove();
+                $('#books').append(str);
+            }
+        }
+    }
+
+    //获取当前抄表册所有要上传的用户数据。
+    function resetQueryBuilder2() {
+        mPageNo = 1; //将页码重新置为1
+        Index = 0;
+
+        var db = api.require('db');
+        var userdata = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'select * from meterNoSheets where StampNo!="" and UploadErrMsg!="" and cloudTaskCode=' + bookListCheckeds[bookListUploadIndex] + ' and userName="' + CurentUserName + '"'
+        });
+        qbUsers = userdata.data;
+    }
+
+    //获取当前上传的抄表数据。
+    function continueUpdateData2() {
+        var user = qbUsers[Index];
+
+        //组装要上传的数据
+        var body = {
+            "TaskId": user.taskId,
+            "CustomerCode": user.CustomerCode,
+            "StampNo": user.StampNo,
+            "Longitude": user.waterLon,
+            "Latitude": user.waterlat,
+            "Location": user.Location,
+            "FileLocation": "",
+            "Remark": ""
+        };
+
+        //获取要上传的图片数据
+        var imagePath = [];
+        var db = api.require('db');
+        var ret = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'Select * from meterNoImageSheets where CustomerCode="' + user.CustomerCode + '" and userName="' + CurentUserName + '"'
+        });
+        if (ret.status) {
+            if (ret.data.length > 0) {
+                for (var i = 0; i < ret.data.length; i++) {
+                    imagePath.push(ret.data[i].url);
+                }
+            }
+        }
+        var files = {
+            "file": imagePath
+        };
+
+        // var body = {
+        //     CustomerCode: user.CustomerCode,
+        //     AreaId: user.AreaId,
+        //     OrganizationCode: user.OrganizationCode,
+        //     StampNo: user.StampNo,
+        //     Longitude: user.Longitude != "" ? user.Longitude : user.Longitude,
+        //     Latitude: user.Latitude != "" ? user.Latitude : user.Latitude,
+        //     Remark: user.Remark
+        // }
+        //
+        // var imagePath = [];
+        // if (user.ImageUrl.length != 0) {
+        //     var imgArray = user.ImageUrl.split(",");
+        //     imgArray.forEach(e => {
+        //         imagePath.push(url);
+        //     })
+        // } else {
+        //     imagePath = [];
+        // }
+        //
+        // var files = {
+        //     file: imagePath
+        // };
+        fnPost('OSM004', body, 'application/json', true, false, function(ret, err) {
+            if (ret) {
+                var db = api.require('db');
+                if (ret.Status == 0) {
+                    //alert("表号维护上传成功：" + JSON.stringify(ret));
+                    //删除用户
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'DELETE FROM meterNoSheets where CustomerCode="' + user.CustomerCode + '" and cloudTaskCode="' + user.cloudTaskCode + '" and userName="' + CurentUserName + '"'
+                    });
+                    //删除图片
+                    for (var i = 0; i < imagePath.length; i++) {
+                        var fs = api.require('fs');
+                        fs.remove({
+                            path: imagePath[i]
+                        }, function(ret, err) {
+                            if (ret.status) {
+                                //alert("表号维护图片删除成功：" + JSON.stringify(ret));
+                            } else {
+                                //alert("表号维护图片删除失败：" + JSON.stringify(err));
+                            }
+                        });
+                    }
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'DELETE FROM meterNoImageSheets where CustomerCode="' + user.CustomerCode + '" and userName="' + CurentUserName + '"'
+                    });
+                } else {
+                    var postinglistdata = db.executeSqlSync({
+                        name: 'Wsdatabase',
+                        sql: 'UPDATE meterNoSheets SET UploadErrMsg="' + ret.Message + '" where CustomerCode="' + user.CustomerCode + '" and cloudTaskCode="' + user.cloudTaskCode + '" and userName="' + CurentUserName + '"'
+                    });
+                    api.toast({
+                        msg: ret.Message,
+                        duration: 2000,
+                        location: 'bottom'
+                    });
+                }
+            } else {
+                api.toast({
+                    msg: err.msg,
+                    duration: 3000,
+                    location: 'bottom'
+                });
+                api.hideProgress();
+                initListView();
+                initListView2();
+                return;
+            }
+
+            Index++;
+            if (Index < qbUsers.length) {
+                setTimeout(continueUpdateData2(), 3000);
+            } else {
+                var logId = "123456";
+                db.executeSql({
+                    name: 'Wsdatabase',
+                    sql: 'INSERT into Logsheet (userName,Id,content,time) values ("' + CurentUserName + '",' + logId + ',"表号维护数据上传成功","' + dataTime() + '")'
+                }, function(ret, err) {
+                    if (ret.status) {
+                        //  console.log( "日志添加成功");
+                    } else {
+                        console.log(JSON.stringify(err));
+                    }
+                });
+                bookListUploadIndex++;
+                bookListCheckeds[bookListUploadIndex]
+                if (bookListUploadIndex + 1 <= bookListCheckeds.length) {
+                    //继续执行上传
+                    resetQueryBuilder2(); //获取当前抄表册所有要上传的用户数据。
+                    continueUpdateData2(); //获取当前上传的抄表数据。
+                } else {
+                    //抄表册上传完毕
+                    bookListCheckeds = [];
+                    if (postingListCheckeds.length > 0) {
+                        resetQueryBuilder(); //获取当前抄表册所有要上传的用户数据。
+                        continueUpdateData(); //获取当前上传的抄表数据。
+                    } else {
+                        api.toast({
+                            msg: "上传完成",
+                            duration: 3000,
+                            location: 'bottom'
+                        });
+                        api.hideProgress();
+                        initListView();
+                        initListView2();
+                    }
+                }
+            }
+        }, files);
+    }
+
+    function openErrDetail(item) {
+        api.openWin({
+            name: 'uploadErrorList',
+            url: './uploadErrorList.html',
+            pageParam: {
+                item: item
+            }
+        });
+    }
+
+    function openError(cloudTaskCode) {
+        // alert(cloudTaskCode);
+        api.openWin({
+            name: 'uploadErrorList',
+            url: './uploadErrorList.html',
+            pageParam: {
+                cloudTaskCode: cloudTaskCode
+            }
+        });
+    }
+
+    function initMeterHandleFail() {
+        var db = api.require('db');
+        var result = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM METER_PHOTO_UPLOAD WHERE isFail = "1" and userName="' + CurentUserName + '"'
+        });
+
+        if (result.status) {
+            if (result.data.length > 0) {
+
+                var datas = {
+                    datas: result.data
+                }
+                var str = template('MeterHandleList', datas);
+                $('#meterimages div').remove();
+                $('#meterimages').append(str);
+                fnReady();
+                operationDom();
+                api.hideProgress();
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#meterimages div').remove();
+                $('#meterimages').append(str);
+            }
+        } else {
+            var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+            $('#meterimages div').remove();
+            $('#meterimages').append(str);
+        }
+    }
+
+    function initMeterApplyFail() {
+        var db = api.require('db');
+        var result = db.selectSqlSync({
+            name: 'Wsdatabase',
+            sql: 'SELECT * FROM APPLY_TASK_IMAGES_S WHERE isFail = "1" and userName="' + CurentUserName + '"'
+        });
+        console.log(JSON.stringify(result));
+        if (result.status) {
+            if (result.data.length > 0) {
+
+                var datas = {
+                    datas: result.data
+                }
+                var str = template('MeterApplyList', datas);
+                $('#applyimages div').remove();
+                $('#applyimages').append(str);
+                fnReady();
+                operationDom();
+                api.hideProgress();
+            } else {
+                var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+                $('#applyimages div').remove();
+                $('#applyimages').append(str);
+            }
+        } else {
+            var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+            $('#applyimages div').remove();
+            $('#applyimages').append(str);
+        }
+    }
+
+    function initStopAndOpenFail() {
+      var db = api.require('db');
+      var result = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM AUDIT_TASK_LIST WHERE isFail = '1' AND userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave = '2'"
+      });
+      console.log(JSON.stringify(result));
+      if (result.status) {
+          var stopOpenArr = [];
+          for (var i = 0; i < result.data.length; i++) {
+            if (result.data[i].Code == 41 || result.data[i].Code == 42 || result.data[i].Code == 2) {
+              stopOpenArr.push(result.data[i]);
+            }
+          }
+          if (stopOpenArr.length > 0) {
+            var datas = {
+                datas: stopOpenArr
+            }
+            var str = template('StopAndOpenList', datas);
+            $('#stopAndOpen div').remove();
+            $('#stopAndOpen').append(str);
+            fnReady();
+            operationDom();
+            api.hideProgress();
+          } else {
+            var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+            $('#stopAndOpen div').remove();
+            $('#stopAndOpen').append(str);
+          }
+      } else {
+          var str = '<div style="width:100%;height:100px;text-align:center;line-height: 100px;">暂无可上传数据</div>';
+          $('#stopAndOpen div').remove();
+          $('#stopAndOpen').append(str);
+      }
+    }
+
+    //预停水任务数据及照片
+    var checkedTime = '';
+    //表号维护数据上传
+    var cloudTaskCode = '';
+    //申请照片数据
+    var applyImgsReqCode = '';
+    //停复水数据及照片
+    var stopAndOpenId = '';
+
+    function emptyList() {
+      //预停水任务数据及照片
+      checkedTime = '';
+      var loves = document.getElementsByName("Fruit");
+      for (var i = 0; i < loves.length; i++) {
+          if (loves[i].checked == true) {
+              postingListCheckeds.push(loves[i].value);
+              checkedTime += "'"+ loves[i].value + "',";
+          }
+      }
+
+      //表号维护数据上传
+      cloudTaskCode = '';
+      var loves1 = document.getElementsByName("Fruit2");
+      for (var i = 0; i < loves1.length; i++) {
+          if (loves1[i].checked == true) {
+              cloudTaskCode += "'" + loves1[i].value+ "',";
+          }
+      }
+
+      //申请照片数据
+      applyImgsReqCode = '';
+      var loves2 = document.getElementsByName("Fruit3");
+      for (var i = 0; i < loves2.length; i++) {
+          if (loves2[i].checked == true) {
+              applyImgsReqCode += "'" + loves2[i].value+ "',";
+          }
+      }
+
+      //停复水数据及照片
+      stopAndOpenId = '';
+      var loves3 = document.getElementsByName("Fruit4");
+      for (var i = 0; i < loves3.length; i++) {
+          if (loves3[i].checked == true) {
+              stopAndOpenId += "'" + loves3[i].value+ "',";
+          }
+      }
+
+      if (checkedTime != '') {
+        api.showProgress({
+            title: '数据删除中',
+            text:'',
+            modal: false
+        });
+        checkedTime = checkedTime.substring(0,checkedTime.length - 1);
+        console.log(checkedTime);
+        deleteLocalPostingFail(checkedTime);
+      } else if (cloudTaskCode != '') {
+        api.showProgress({
+            title: '数据删除中',
+            text:'',
+            modal: false
+        });
+        cloudTaskCode = cloudTaskCode.substring(0,cloudTaskCode.length - 1);
+        console.log(cloudTaskCode);
+        deleteLocalBooksFail(cloudTaskCode);
+      } else if (applyImgsReqCode != '') {
+        api.showProgress({
+            title: '数据删除中',
+            text:'',
+            modal: false
+        });
+        applyImgsReqCode = applyImgsReqCode.substring(0,applyImgsReqCode.length - 1);
+        console.log(applyImgsReqCode);
+        deleteLocalApplyFail(applyImgsReqCode);
+      } else if (stopAndOpenId != '') {
+        api.showProgress({
+            title: '数据删除中',
+            text:'',
+            modal: false
+        });
+        stopAndOpenId = stopAndOpenId.substring(0,stopAndOpenId.length - 1);
+        console.log(stopAndOpenId);
+        deleteLocalStopAndOpenFail(stopAndOpenId);
+      }
+    }
+
+    //删除选中的  预停水任务数据及照片  数据
+    function deleteLocalPostingFail(checkedTime) {
+      var db = api.require('db');
+      var postingdata = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: "select * from POSTING_LIST where NotSave='1' and Files!='' and userName='" + CurentUserName + "' and substr(OperatedTime,1,10) IN ("+ checkedTime +")"
+      });
+      console.log(JSON.stringify(postingdata));
+      if (postingdata.status) {
+        if (postingdata.data.length > 0) {
+          qbPosting = postingdata.data;
+          for (let i = 0; i < qbPosting.length; i++) {
+            db.selectSql({
+              name: 'Wsdatabase',
+              sql: "select * from POSTING_IMAGE where Id='" + qbPosting[i].Id + "' and NotSubmit=0 and userName='" + CurentUserName + "'"
+            }, function(ret, err){
+                if( ret.status ){
+                    console.log( JSON.stringify( ret ) );
+                    if (ret.data.length > 0) {
+                      var deleteImg = db.executeSqlSync({
+                          name: 'Wsdatabase',
+                          sql: "DELETE FROM POSTING_IMAGE WHERE Id = "+ qbPosting[i].Id
+                      });
+                      console.log(JSON.stringify(deleteImg));
+                    }
+                } else {
+                    console.log( JSON.stringify( err ) );
+                }
+
+                var deleteData = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: "DELETE FROM POSTING_LIST WHERE Id = "+ qbPosting[i].Id
+                });
+                console.log(JSON.stringify(deleteData));
+                if (i == (qbPosting.length - 1)) {
+                  if (cloudTaskCode != '') {
+                    cloudTaskCode = cloudTaskCode.substring(0,cloudTaskCode.length - 1);
+                    console.log(JSON.stringify(cloudTaskCode));
+                    deleteLocalBooksFail(cloudTaskCode);
+                  } else {
+                    api.toast({
+                        msg: "清空失败数据完成",
+                        duration: 3000,
+                        location: 'bottom'
+                    });
+                    api.hideProgress();
+                    initListView();
+                    initListView2();
+                    initMeterApplyFail();
+                    initStopAndOpenFail();
+                  }
+                }
+            });
+          }
+        }
+      }
+    }
+
+    //删除选中的  号维护数据
+    function deleteLocalBooksFail(cloudTaskCode) {
+      var db = api.require('db');
+      var userdata = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: 'select * from meterNoSheets where StampNo!="" and UploadErrMsg!="" and cloudTaskCode IN ('+ cloudTaskCode +') and userName="' + CurentUserName + '"'
+      });
+      console.log(JSON.stringify(userdata));
+      if (userdata.status) {
+        if (userdata.data.length > 0) {
+          qbUsers = userdata.data;
+          for (let i = 0; i < qbUsers.length; i++) {
+            console.log(qbUsers[i].CustomerCode);
+            db.selectSql({
+              name: 'Wsdatabase',
+              sql: 'Select * from meterNoImageSheets where CustomerCode="' + qbUsers[i].CustomerCode + '" and userName="' + CurentUserName + '"'
+            }, function(ret, err){
+                if( ret.status ){
+                    console.log( JSON.stringify( ret ) );
+                    if (ret.data.length > 0) {
+                      var deleteImg = db.executeSqlSync({
+                          name: 'Wsdatabase',
+                          sql: "DELETE FROM meterNoImageSheets WHERE CustomerCode = '"+ qbUsers[i].CustomerCode +"'"
+                      });
+                      console.log(JSON.stringify(deleteImg));
+                    }
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+
+                var deleteData = db.executeSqlSync({
+                    name: 'Wsdatabase',
+                    sql: "DELETE FROM meterNoSheets WHERE CustomerCode = '"+ qbUsers[i].CustomerCode +"'"
+                });
+                console.log(JSON.stringify(deleteData));
+
+                if (i == (qbUsers.length - 1)) {
+                  api.toast({
+                      msg: "清空失败数据完成",
+                      duration: 3000,
+                      location: 'bottom'
+                  });
+                  api.hideProgress();
+                  initListView();
+                  initListView2();
+                  initMeterApplyFail();
+                  initStopAndOpenFail();
+                }
+            });
+          }
+        }
+      }
+    }
+
+    //清空申请照片失败数据
+    function deleteLocalApplyFail(applyImgsReqCode) {
+      var db = api.require('db');
+      var result = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: 'SELECT * FROM APPLY_TASK_IMAGES_S WHERE isFail = "1" and userName="' + CurentUserName + '" and ReqCode IN ('+ applyImgsReqCode +')'
+      });
+      console.log(JSON.stringify(result));
+      if (result.status) {
+        if (result.data.length > 0) {
+          var applyImgs = result.data;
+          for (let i = 0; i < applyImgs.length; i++) {
+            var deleteApplyImgs = db.executeSqlSync({
+                name: 'Wsdatabase',
+                sql: "DELETE FROM APPLY_TASK_IMAGES_S WHERE isFail = '1' and userName = '"+ CurentUserName +"' and ReqCode = '"+ applyImgs[i].ReqCode +"'"
+            });
+            console.log(JSON.stringify(deleteApplyImgs));
+
+            if (i == (applyImgs.length - 1)) {
+              api.toast({
+                  msg: "清空失败数据完成",
+                  duration: 3000,
+                  location: 'bottom'
+              });
+              api.hideProgress();
+              initListView();
+              initListView2();
+              initMeterApplyFail();
+              initStopAndOpenFail();
+            }
+          }
+        }
+      }
+    }
+
+    //删除停复水数据及照片本地数据
+    function deleteLocalStopAndOpenFail(stopAndOpenId) {
+      var db = api.require('db');
+      var result = db.selectSqlSync({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM AUDIT_TASK_LIST WHERE isFail = '1' AND userName = '"+ $api.getStorage('loginData').userName +"' AND isUploadAndSave = '2' AND Id IN ("+ stopAndOpenId +")"
+      });
+      console.log(JSON.stringify(result));
+      if (result.status) {
+        if (result.data.length > 0) {
+          var stopAndOpenArr = result.data;
+          for (let i = 0; i < stopAndOpenArr.length; i++) {
+            if (stopAndOpenArr[i].Code == 41 || stopAndOpenArr[i].Code == 42 || stopAndOpenArr[i].Code == 2) {
+              var retsult = db.executeSqlSync({
+                  name: 'Wsdatabase',
+                  sql: "DELETE FROM AUDIT_TASK_LIST WHERE Id = '"+ stopAndOpenArr[i].Id +"'"
+              });
+              console.log(JSON.stringify(retsult));
+              var result2 = db.executeSqlSync({
+                name: 'Wsdatabase',
+                sql: "DELETE FROM myTaskSheet WHERE thirdTaskId = "+ stopAndOpenArr[i].Id
+              });
+              console.log(JSON.stringify(result2));
+            }
+            if (i == (stopAndOpenArr.length - 1)) {
+              api.toast({
+                  msg: "清空失败数据完成",
+                  duration: 3000,
+                  location: 'bottom'
+              });
+              api.hideProgress();
+              initListView();
+              initListView2();
+              initMeterApplyFail();
+              initStopAndOpenFail();
+            }
+          }
+        }
+      }
+    }
+</script>
+
+</html>

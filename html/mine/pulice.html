@@ -1,0 +1,309 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>我的frame页面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/dialog.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+        }
+
+        .body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .aui-bar.aui-bar-btn {
+            margin-top: 1rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .c-picture-box {
+            width: 100%;
+            padding-left: 1.2rem;
+        }
+
+        .c-picture-box .aui-col-xs-3 {
+            float: left;
+            width: 18vw;
+            margin: 0.2rem 0.2rem;
+            text-align: center;
+            height: 3rem;
+            position: relative;
+        }
+
+        .c-picture-box .aui-col-xs-3 img {
+            width: 18vw;
+            height: 3rem;
+        }
+
+        .c-picture-box .aui-col-xs-3.c-video {
+            border: 1px solid #eee;
+            position: relative;
+        }
+
+        .c-picture-box .aui-col-xs-3.c-video img {
+            width: 12.5vw;
+            height: 2rem;
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="body" id='body' v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">公共方法封装</div>
+        </header>
+        <div class="aui-bar aui-bar-btn" id='tabBar' style="width:80%;">
+            <div class="aui-bar-btn-item aui-active" ontouchstart='initTab(1,this);'>定位</div>
+            <div class="aui-bar-btn-item" ontouchstart='initTab(2,this);'>经纬度获取地址</div>
+            <div class="aui-bar-btn-item" ontouchstart='initTab(3,this);'>拍照</div>
+            <div class="aui-bar-btn-item" ontouchstart='initTab(4,this);'>定位</div>
+            <div class="aui-bar-btn-item" ontouchstart='initTab(5,this);'>导航</div>
+        </div>
+        <div class="aui-bar aui-bar-btn" id='tabBar' style="width:80%;">
+            <div class="aui-bar-btn-item" ontouchstart='initTab(6,this);'>文件搜索</div>
+            <div class="aui-bar-btn-item" ontouchstart='initTab(7,this);'>删除图片</div>
+            <div class="aui-bar-btn-item" ontouchstart='initTab(8,this)'>语音播放</div>
+        </div>
+        <div class="aui-row c-picture-box">
+            <div class="aui-col-xs-3" v-for='(item,index) in imageArray' :key='index' @click.stop.prevent='pBrowserPicture(index,imageArray)'> <img :src="item" alt="">
+            </div>
+        </div>
+        <div class="aui-row c-picture-box" v-show='videoArray.length > 0'>
+            <div class="aui-col-xs-3 c-video" v-for='(item,index) in videoArray' :key='index' @click.stop.prevent='pBrowserVideo(item)'> <img src="../../image/video.png" alt="">
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/diy/public.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/aui-tab.js"></script>
+<script type="text/javascript" src="../../script/moment.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../script/publicMethod.js"></script>
+<script type="text/javascript" src="../../script/vconsole.min.js"></script>
+<script type="text/javascript" src="../../script/zknight_h5texttospeech_common.js"></script>
+<script type="text/javascript">
+    var vConsole = new VConsole();
+</script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        initVue();
+    };
+    // initVue();
+
+    function initVue() {
+        window.publivVue = new Vue({
+            el: '#body',
+            data: {
+                imageArray: [],
+                videoArray: [],
+            },
+            methods: {
+                back() {
+                    api.closeWin();
+                }
+            }
+        });
+    }
+
+    function initTab(index, that) {
+        $(that).addClass('aui-active').siblings().removeClass('aui-active');
+        switch (true) {
+            case index == 1:
+                pGetLocation(function(ret, err) {
+                    console.log(JSON.stringify(ret));
+                });
+                break;
+            case index == 2:
+                var options = {
+                    lon: '103.456',
+                    lat: '29.33'
+                };
+                pGetNameFromCoords(function(ret, err) {
+                    console.log(JSON.stringify(ret));
+                });
+                break;
+            case index == 3:
+                pGetMultiMedia();
+                break;
+            case index == 4:
+                pGetLocationGPS(false, function(ret, err) {
+                    if (ret.gps) {
+                        vant.Toast('定位已开启');
+                    } else {
+                        vant.Dialog.confirm({
+                            title: '提示',
+                            message: 'GPS定位尚未开启,是否前往开启?'
+                        }).then(() => {
+                            pGetLocationGPS(true);
+                        }).catch(() => {
+
+                        });
+                    }
+                });
+                break;
+            case index == 5:
+                var options = {
+                    // startLon:'',
+                    // startLat:'',
+                    // startAddreesName:'',
+                    endLon: '103.36256',
+                    endLat: '29.33699',
+                    endAddreesName: '',
+                }
+                pNavigation(options);
+                break;
+            case index == 6:
+                var fileBrowser = api.require('fileBrowser');
+                fileBrowser.open(function(ret) {
+                    if (ret) {
+                        alert(JSON.stringify(ret));
+                        console.log(JSON.stringify(ret));
+                        // var fs = api.require("fs");
+                        // fs.remove({
+                        //     path: ret.url
+                        // }, function(ret, err) {
+                        //     if (ret.status) {
+                        //         alert(JSON.stringify(ret));
+                        //     } else {
+                        //         alert(JSON.stringify(err));
+                        //     }
+                        // });
+                    }
+                });
+                break;
+            case index == 7:
+                ///var/mobile/Containers/Data/Application/4E89704F-4D75-4F88-9F2C-789BE2A52405/Library/Caches/APICloud/Cache/getPicture/A1BAFA82-870B-438F-821F-DAE07E3B8A4F-2627-000004B7909F764A.jpg
+                var fs = api.require("fs");
+                fs.remove({
+                    path: '/var/mobile/Containers/Data/Application/4E89704F-4D75-4F88-9F2C-789BE2A52405/Library/Caches/APICloud/Cache/getPicture/88B21CEE-4411-4A62-95B0-0A5030CFFED5-2858-000004BF84C9550B.jpg'
+                }, function(ret, err) {
+                    if (ret.status) {
+                        alert(JSON.stringify(ret));
+                    } else {
+                        alert(JSON.stringify(err));
+                    }
+                });
+                break;
+            case index == 8:
+                var uscVoiceRecognizer = api.require('uscVoiceRecognizer');
+                uscVoiceRecognizer.configuration({
+                    appKey: '2qsrurizb4sf3f2xr62jenorhbctbr6cwgrklbqu',
+                    secret: '455cc859c0ff8308080e99ac524db20c'
+                });
+                uscVoiceRecognizer.playText({
+                    text: '1'
+                }, function(ret) {
+                    if (ret) {
+
+                    }
+                });
+                break;
+
+
+
+        }
+    }
+    // "/storage/emulated/0/DCIM/Camera/综合水务平台/p-78bca423.jpg"
+
+    // 拍照
+    function pGetMultiMedia() {
+        api.actionSheet({
+            cancelTitle: '取消',
+            buttons: ['拍照', '相册', '视频', '录制视频']
+        }, function(ret, err) {
+            var index = ret.buttonIndex;
+            switch (true) {
+                case index == 1:
+                    var options = {
+                        type: 'camera',
+                        waterMark: true,
+                        waterMarkData: {
+                            code: '0000963229',
+                            picType: '换表'
+                        }
+                    }
+                    pGetPicture(options, function(ret, err) {
+                        if (ret.status) {
+                            ret.imgList.forEach(function(item, index) {
+                                console.log(JSON.stringify(item));
+                                publivVue.imageArray.push(item);
+                            })
+                        }
+
+                    });
+                    break;
+                case index == 2:
+                    var options = {
+                        type: 'pic',
+                        waterMark: true,
+                        waterMarkData: {
+                            code: '0000963229',
+                            picType: '异常用水提示单',
+                            picType1: '异常用水提示单1',
+                        }
+                    }
+                    pGetPicture(options, function(ret, err) {
+                        if (ret.status) {
+                            ret.imgList.forEach(function(item, index) {
+                                publivVue.imageArray.push(item);
+                            })
+                        }
+                    });
+                    break;
+                case index == 3:
+                    var options = {
+                        type: 'video',
+                    }
+                    pGetPicture(options, function(ret, err) {
+                        if (ret.status) {
+                            publivVue.videoArray.push(ret.data);
+                        }
+                    });
+                    break;
+                case index == 4:
+                    var options = {
+                        type: 'RecordingVideo',
+                    }
+                    pGetPicture(options, function(ret, err) {
+                        if (ret.status) {
+                            publivVue.videoArray.push(ret.data);
+                        }
+                    });
+                    break;
+            }
+        });
+    }
+</script>
+
+</html>

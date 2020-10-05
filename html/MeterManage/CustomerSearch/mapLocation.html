@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>位置信息</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: calc(100% - .25rem);
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF !important;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF !important;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">位置信息</div>
+        </header>
+        <div id="main" class="aui-content "></div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        bMap = api.require("bMap");
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+    };
+
+    function fnIntVue() {
+        window.ApplyTaskVue = new Vue({
+            el: '#wrap',
+            data: {
+                customerInfo: ""
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                openMap() { //打开百度地图
+                    var _this = this;
+                    bMap.open({
+                        rect: {
+                            x: 0,
+                            y: 80,
+                            w: 375,
+                            h: 700
+                        },
+                        center: {
+                            lon: _this.customerInfo.Longitude,
+                            lat: _this.customerInfo.Latitude
+                        },
+                        zoomLevel: 14,
+                        showUserLocation: false,
+                        fixedOn: api.frameName,
+                        fixed: true
+                    }, function(ret) {
+                        if (ret.status) {
+                            bMap.setCenter({
+                                coords: {
+                                    lon: _this.customerInfo.Longitude,
+                                    lat: _this.customerInfo.Latitude
+                                },
+                                animation: false
+                            });
+                            bMap.setWebBubble({
+                                id: 1,
+                                size: {
+                                    width: 340,
+                                    height: 190
+                                },
+                                bg: 'widget://image/MeterManage/mapbg.png', // android此参数必须传背景图
+                                url: '',
+                                data: ` <div class="aui-row">
+                                            <span">户名:</span>
+                                            <span>${_this.customerInfo.CustomerName}</span>
+
+                                      </div> <div class="aui-row">
+                                            <span>户号:</span>
+                                            <span>${_this.customerInfo.CustomerCode}</span>
+                                      </div>
+                                          <div class="aui-row">
+                                            <span>地址:</span>
+                                            <span>${_this.customerInfo.Address}</span>
+
+                                      </div>
+                                        <div class="aui-row">
+                                            <span>表位:</span>
+                                            <span>${_this.customerInfo.Location}</span>
+                                      </div>
+                                        <div class="aui-row">
+                                            <span>用水性质:</span>
+                                            <span>${_this.customerInfo.NatureName}</span>
+                                      </div>
+                                        <div class="aui-row">
+                                            <span>口径:</span>
+                                            <span>${_this.customerInfo.Caliber}</span>
+                                      </div>
+                                      `
+                            });
+                            bMap.annotationExist({
+                                id: 1
+                            }, function(ret) {
+                                if (ret.status) {
+                                  bMap.popupBubble({
+                                      id: 1
+                                  }, (ret) => {});
+                                }
+                            });
+                            bMap.addAnnotations({ //添加标注点
+                                annotations: [{
+                                    id: 1,
+                                    lon: _this.customerInfo.Longitude,
+                                    lat: _this.customerInfo.Latitude,
+                                    // size: 26
+                                }],
+                                icon: 'widget://image/MeterManage/dingwei.png',
+                                // icon: 'widget://image/MeterManage/dingwei@2x.png',
+                                draggable: true
+                            }, (ret) => {
+                                if (ret) {
+                                    if (ret.eventType == "click") {
+                                        bMap.popupBubble({
+                                            id: 1
+                                        }, (ret) => {});
+                                    }
+                                }
+
+                            });
+
+                        }
+                    });
+                },
+
+            },
+            mounted: function() {
+                this.openMap();
+                this.customerInfo = api.pageParam;
+            }
+        })
+    }
+</script>
+
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>退库扫码</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+    <link rel="stylesheet" href="./css/time.css">
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+            overflow: hidden;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .sousuo {
+            width: 0.78rem;
+            height: 0.78rem;
+            background: url("../image/MeterManage/sousuo.png")no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .c-top-box {
+            width: 100%;
+            height: 3.3rem;
+            line-height: 3.3rem;
+            background: #fff;
+            margin-bottom: 0.6rem;
+            position: relative;
+        }
+
+        .c-top-box .van-col:last-child {
+            text-align: right;
+            font-size: 0.85rem;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            padding-right: 0.78rem;
+            color: #2F60FF;
+        }
+
+        .c-shijian {
+            width: 0.73rem;
+            height: 0.7rem;
+            background: url("../image/MeterManage/shijian.png") no-repeat center;
+            background-size: 0.73rem 0.7rem;
+            position: absolute;
+            top: 1.25rem;
+            left: 0.75rem;
+        }
+
+        .c-body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            overflow-y: scroll;
+            background: #F3F3F3;
+            margin-bottom: 1rem;
+        }
+
+        .c-body .van-row {
+            width: 100%;
+            height: 5.85rem;
+            background: #fff;
+            border-bottom: 0.33rem solid #F3F3F3;
+            padding-left: 1.58rem;
+            position: relative;
+        }
+
+        .c-row-title {
+            margin-top: 1.2rem;
+            font-size: 0.9rem;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            color: rgba(28, 28, 28, 1);
+        }
+
+        .c-title-number {
+            display: inline-block;
+            font-size: 0.95rem;
+            color: #363636;
+            margin-left: 0.68rem;
+        }
+
+        .c-dot {
+            display: inline-block;
+            width: 0.3rem;
+            height: 0.3rem;
+            border-radius: 50%;
+            background-color: #2F60FF;
+            position: absolute;
+            left: 0.75rem;
+            top: 1.68rem;
+        }
+
+        .c-row-content {
+            font-size: 0.75rem;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            color: rgba(77, 77, 77, 1);
+        }
+
+        .c-row-content .van-col:last-child {
+            text-align: right;
+            padding-right: 0.73rem;
+        }
+
+        .c-content-span {
+            display: inline-block;
+            margin-right: 0.68rem;
+        }
+
+        .c-row-time {
+            font-size: 0.75rem;
+            font-family: Source Han Sans CN;
+            font-weight: 400;
+            color: rgba(167, 167, 167, 1)
+        }
+
+        .c-nodata {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+            margin-top: 0.5rem;
+            margin-right: 0.78rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">退库扫码</div>
+            <div class="aui-pull-right aui-btn" tapmode @click="openSearch">
+                <div class="sousuo"></div>
+            </div>
+        </header>
+        <van-row class="c-top-box">
+            <van-col span='12' @click="showTimePicker = true">
+                <div class="c-shijian"></div><span class='c-month-span'>{{month}}</span></van-col>
+            <van-col span='12' @click='addBackCode'>新建退库</van-col>
+        </van-row>
+        <section class='c-body'>
+            <div v-if='scanList.length >0'>
+                <van-row v-for='(item,index) in scanList' :key='index' @click='openScanDetail(item)'>
+                    <van-col span="24" class='c-row-title'><span class='c-dot'></span><span>退库单号:</span><span class='c-title-number'>{{item.BillNo}}</span></van-col>
+                    <van-col span="24" class='c-row-content'>
+                        <van-col span="12"><span class='c-content-span'>仓库:</span><span>{{item.HouseName}}</span></van-col>
+                        <van-col span="12"><span class='c-content-span'>水表数量:</span><span>{{item.Amount}}</span></van-col>
+                    </van-col>
+                    <van-col span="24" class='c-row-time'><span class='c-content-span'>退库时间:</span><span>{{item.HouseTime}}</span></van-col>
+                </van-row>
+            </div>
+            <div v-else class='c-nodata'>暂无退库记录!</div>
+
+        </section>
+        <van-dialog v-model="showTimePicker" title="" show-cancel-button @close="closePicker" :before-close="beforeClose">
+            <div class="timeType">
+                <van-radio-group v-model="timeSelectType">
+                    <div class='c-time-title'>时间选择</div>
+                </van-radio-group>
+            </div>
+            <div class="timeValue">
+                <div class="timeField">
+                    <van-field input-align="center" :class="{active:showMonth}" readonly clickable label="" :value="monthPicker" placeholder="选择月份" @click="showMonthPicker"></van-field>
+                </div>
+            </div>
+            <div class="timeSelect">
+                <van-datetime-picker v-show="showMonth && timeSelectType == '1'" v-model="currentMonth" type="year-month" :show-toolbar="false" :formatter="formatter" item-height="32" visible-item-count="4"></van-datetime-picker>
+            </div>
+        </van-dialog>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        api.addEventListener({
+            name: 'refreshList'
+        }, function(ret, err) {
+            if (ret) {
+                FilterVue.getDataList();
+            }
+        });
+        api.addEventListener({
+            name: 'searchContent'
+        }, function(ret, err) {
+            if (ret) {
+                FilterVue.month = '全部';
+                FilterVue.scanList = ret.value.data;
+            }
+        });
+    };
+
+
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: {
+                showTimePicker: false,
+                showMonth: false,
+                timeType: "1",
+                timeSelectType: "1",
+                beginTime: "",
+                endTime: "",
+                month: monthFormat(new Date()),
+                currentMonth: new Date(),
+                beginTimePicker: "",
+                endTimePicker: "",
+                monthPicker: "",
+                scanList: [],
+            },
+            computed: {
+
+            },
+            watch: {
+                currentMonth: function(newVal, oldVal) {
+                    if (this.compareDate(newVal, oldVal)) {
+                        if (this.showTimePicker && this.showMonth) {
+                            this.monthPicker = monthFormat(newVal);
+                        }
+                    }
+                },
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                openSearch() {
+                    api.openWin({
+                        name: 'serachCode',
+                        url: './serachCode.html',
+                    });
+
+                },
+                addBackCode() {
+                    api.openWin({
+                        name: 'addBackCode',
+                        url: './addBackCode.html',
+                    });
+                },
+                openScanDetail(data) {
+                    api.openWin({
+                        name: 'ScanCodeDetail',
+                        url: './ScanCodeDetail.html',
+                        pageParam: {
+                            data: data
+                        }
+                    });
+
+                },
+
+                getDataList() {
+                    var body = {
+                        Month: this.month
+                    };
+                    fnPost('WMM002', body, 'application/json', false, false, (ret, err) => {
+                      api.hideProgress();
+                        if (ret) {
+                            if (ret.Status == 0) {
+                                if (ret.Data.length > 0) {
+                                    var data = JSON.parse(ret.Data);
+                                    this.scanList = data;
+                                } else {
+                                    this.scanList = [];
+                                }
+                            }
+                        }
+                    });
+
+                },
+
+                showMonthPicker() {
+                    if (!this.showMonth) {
+                        this.showMonth = true;
+                        if (this.monthPicker == "") {
+                            this.monthPicker = monthFormat(this.currentMonth);
+                        }
+                    }
+                },
+                formatter(type, val) {
+                    if (type === 'year') {
+                        return `${val}年`;
+                    } else if (type === 'month') {
+                        return `${val}月`
+                    } else if (type === 'day') {
+                        return `${val}日`
+                    }
+                    return val;
+                },
+                compareDate(date1, date2) {   
+                    var result = false;   
+                    if (date1.getFullYear() != date2.getFullYear()) {      
+                        result = true;   
+                    } else if (date1.getFullYear() ==  date2.getFullYear()) {       
+                        if (date1.getMonth() != date2.getMonth()) {          
+                            result = true;       
+                        } else if (date1.getMonth() ==  date2.getMonth()) {          
+                            if (date1.getDate() != date2.getDate()) {             
+                                result = true;          
+                            }       
+                        }   
+                    }   
+                    return result;
+                },
+                closePicker() {
+                    this.showMonth = false;
+                    this.showBeginTime = false;
+                    this.showEndTime = false;
+                },
+                beforeClose(action, done) {
+                    if (action == "confirm") {
+                        var close = this.confirmPick();
+                        if (close) {
+                            done();
+                        } else {
+                            done(false);
+                        }
+                    } else if (action == 'cancel') {
+                        this.cancelPick();
+                        done();
+                    }
+                },
+                cancelPick() {
+                    this.monthPicker = this.month == "" ? "" : this.month.toString().replace(new RegExp('/', 'g'), "-");
+                    this.currentMonth = this.month == "" ? new Date() : new Date(this.month);
+                    this.timeSelectType = this.timeType;
+                },
+                confirmPick() {
+                    var close = true;
+                    this.month = this.monthPicker;
+                    this.getDataList();
+                    return close;
+                },
+                getjb(color, endColor) {
+                    return {
+                        barBorderRadius: [10, 10, 0, 0],
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1, [{
+                                offset: 0,
+                                color: color
+                            }, {
+                                offset: 1,
+                                color: endColor
+                            }]
+                        )
+                    };
+                },
+            },
+            mounted: function() {
+                this.getDataList();
+            }
+        })
+    }
+
+    function monthFormat(time) {
+        var year = time.getFullYear();
+        var month = time.getMonth() + 1;
+        return year + '-' + (month < 10 ? '0' + month : month);
+    }
+</script>
+
+</html>

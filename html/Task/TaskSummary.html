@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>任务汇总界面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F5F5F5;
+            padding: 0.75rem;
+        }
+        /* 任务类型选择和任务时间选择样式 */
+
+        .van-field__label {
+            font-size: 0.85rem;
+            color: #3B3B3B;
+        }
+
+        .pickerField .van-field__control[type=text] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.85rem;
+            color: #6E6E6E;
+        }
+
+        .pickerField.van-cell {
+            padding: 0 0.78rem 0 0.88rem;
+            height: 2.78rem;
+            line-height: 2.78rem;
+        }
+
+        .firstField {
+            margin-bottom: 0.25rem;
+        }
+
+        .pickerField .van-field__left-icon {
+            margin-right: 0.45rem;
+            display: flex;
+            align-items: center;
+        }
+        /* 任务类型选择和任务时间选择样式 */
+        /* 时间选择组件样式 */
+
+        .timeText .placeholder {
+            font-size: 0.85rem;
+            color: #6E6E6E;
+        }
+
+        .timeText .time {
+            font-size: 0.75rem;
+            color: #6E6E6E;
+        }
+
+        .timeText .text {
+            font-size: 0.8rem;
+            color: #BABABA;
+            margin: 0 0.2rem;
+        }
+
+        .timeType .van-radio-group {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.8rem;
+            font-size: 0.85rem;
+            color: #414141;
+        }
+
+        .van-dialog {
+            border-radius: 0;
+            width: 86vw;
+        }
+
+        .van-dialog .van-button {
+            font-size: 0.95rem;
+            height: 2.75rem;
+            line-height: 2.75rem;
+        }
+
+        .van-dialog__confirm,
+        .van-dialog__confirm:active {
+            color: #2F7DF5;
+        }
+
+        .van-dialog__cancel,
+        .van-dialog__cancel:active {
+            color: #F52F2F;
+        }
+
+        .van-radio__label {
+            margin-left: 0.8rem;
+        }
+
+        .van-radio__icon .van-icon {
+            width: 0.95rem;
+            height: 0.95rem;
+            border: none;
+            background: url("../../image/MeterManage/gouxuankuang.png") no-repeat center;
+            background-size: 0.95rem 0.95rem;
+        }
+
+        .van-radio__icon .van-icon::before {
+            display: none;
+        }
+
+        .van-radio__icon--checked .van-icon {
+            background: url("../../image/MeterManage/xuanzhong.png") no-repeat center;
+            background-size: 0.95rem 0.95rem;
+        }
+
+        .timeValue .timeField {
+            display: flex;
+            align-items: flex-end;
+            padding: 0 0.9rem;
+        }
+
+        .timeValue .timeField .van-field__control[type=text] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.75rem;
+            color: #D4D4D4;
+        }
+
+        .timeValue .timeField .active .van-field__control[type=text] {
+            color: #3883FF;
+        }
+
+        .timeValue .timeField .van-cell {
+            padding: 0.5rem 0;
+            border-bottom: 0.03rem solid #C9C9C9;
+        }
+
+        .timeValue .timeField .van-cell.active {
+            border-color: #347CFF
+        }
+
+        .timeValue .timeField span {
+            font-size: 0.75rem;
+            color: #595959;
+            margin: 0 0.98rem;
+        }
+
+        .timeSelect {
+            padding: 2.3rem 0.98rem;
+        }
+        /* 时间选择组件样式 */
+
+        .card {
+            width: 100%;
+            border-radius: 1rem;
+            background-color: #fff;
+            margin-bottom: 0.75rem;
+        }
+
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+        .cardTitle {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 1.02rem;
+            font-size: 0.9rem;
+            color: #707070;
+        }
+
+        .dot {
+            width: 0.3rem;
+            height: 0.3rem;
+            border-radius: 50%;
+            margin-right: 0.75rem;
+        }
+
+        .cardNum {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            padding-bottom: 1rem;
+        }
+
+        .cardNum .num {
+            font-size: 2rem;
+            margin-right: 0.5rem;
+        }
+
+        .cardNum .text {
+            font-size: 0.9rem;
+        }
+
+        .blue .dot {
+            background-color: #1D7DFF;
+        }
+
+        .blue .cardNum .num,
+        .blue .cardNum .text {
+            color: #1D7DFF;
+        }
+
+        .orange .dot {
+            background-color: #FF9E14;
+        }
+
+        .orange .cardNum .num,
+        .orange .cardNum .text {
+            color: #FF9E14;
+        }
+
+        .red .dot {
+            background-color: #FF4646;
+        }
+
+        .red .cardNum .num,
+        .red .cardNum .text {
+            color: #FF4646;
+        }
+
+        .blue2 {
+            background-color: #446DFF;
+        }
+
+        .border {
+            width: calc(100% - 1.36rem);
+            height: 0.08rem;
+            background-color: #DEDEDE;
+            margin: 0 auto;
+        }
+
+        .cardFooter {
+            padding: 0 0.68rem;
+            height: 2.75rem;
+            line-height: 2.75rem;
+            font-size: 0.8rem;
+            color: #515151;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cardFooter .left,
+        .cardFooter .right {
+            width: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cardFooter .right::after {
+            position: absolute;
+            box-sizing: border-box;
+            content: ' ';
+            pointer-events: none;
+            top: 0;
+            right: -50%;
+            bottom: 0;
+            left: -50%;
+            border: 0 solid #ebedf0;
+            -webkit-transform: scale(.5);
+            transform: scale(.5);
+            border-left-width: 1px;
+        }
+
+        .chart {
+            width: 100%;
+        }
+
+        .cardContent {
+            padding: 1rem 1.5rem;
+            padding-top: 0;
+        }
+
+        .no-data {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">任务汇总</div>
+        </header>
+
+        <van-field :border="false" class="pickerField firstField" readonly clickable label="任务类型：" :value="filterType.typeName" placeholder="选择类型" @click="openTaskFilter" left-icon="../../image/Task/taskType.png" right-icon="../../image/MeterManage/xiala.png"></van-field>
+
+        <van-field :border="false" class="pickerField" readonly clickable label="任务时间：" left-icon="../../image/Task/time.png" right-icon="../../image/MeterManage/xiala.png" @click="showTimePicker = true">
+            <div class="timeText" slot="input">
+                <span class="placeholder" v-show="beginTime == '' && endTime == '' && timeType == '2'">请选择时间</span>
+                <span class="placeholder" v-show="timeType == '1' && month == ''">请选择时间</span>
+                <span v-show="timeType == '1' && month != ''" class="time">{{month}}</span>
+                <span v-show="timeType == '2' && beginTime != '' && endTime != ''">
+                  <span class="time">{{beginTime}}</span>
+                <span class="text">至</span>
+                <span class="time">{{endTime}}</span>
+                </span>
+            </div>
+        </van-field>
+
+        <van-dialog v-model="showTimePicker" title="" show-cancel-button @close="closePicker" :before-close="beforeClose">
+            <div class="timeType">
+                <van-radio-group v-model="timeSelectType">
+                    <van-radio name="1" shape="square">按月选择</van-radio>
+                    <van-radio name="2" shape="square">按日选择</van-radio>
+                </van-radio-group>
+            </div>
+            <div class="timeValue">
+                <div class="timeField" v-show="timeSelectType == '1'">
+                    <van-field input-align="center" :class="{active:showMonth}" readonly clickable label="" :value="monthPicker" placeholder="选择月份" @click="showMonthPicker"></van-field>
+                </div>
+                <div class="timeField" v-show="timeSelectType == '2'">
+                    <van-field input-align="center" :class="{active:showBeginTime}" readonly clickable label="" :value="beginTimePicker" placeholder="开始时间" @click="showBeginTimePicker"></van-field>
+                    <span>至</span>
+                    <van-field input-align="center" :class="{active:showEndTime}" readonly clickable label="" :value="endTimePicker" placeholder="结束时间" @click="showEndTimePicker"></van-field>
+                </div>
+            </div>
+            <div class="timeSelect">
+                <van-datetime-picker v-show="showMonth && timeSelectType == '1'" v-model="currentMonth" type="year-month" :show-toolbar="false" :formatter="formatter" item-height="32" visible-item-count="4"></van-datetime-picker>
+                <van-datetime-picker v-show="showBeginTime && timeSelectType == '2'" v-model="currentBeginDate" type="date" :show-toolbar="false" :formatter="formatter" item-height="32" visible-item-count="4" :min-date="tenYearBefore" :max-date="maxDate"></van-datetime-picker>
+                <van-datetime-picker v-show="showEndTime && timeSelectType == '2'" v-model="currentEndDate" type="date" :formatter="formatter" :show-toolbar="false" item-height="32" visible-item-count="4" :min-date="minDate" :max-date="tenYearAfter"></van-datetime-picker>
+            </div>
+        </van-dialog>
+
+        <div id="main" class="flex-con">
+
+            <div class="card blue" v-if='isShowMyApply'>
+                <div class="cardTitle">
+                    <div class="dot"></div>
+                    我申请的
+                </div>
+                <div class="cardNum">
+                    <span class="num">{{sumData.myApplyNumber}}</span>
+                    <span class="text">个</span>
+                </div>
+                <div class="border"></div>
+                <!-- <div class="cardFooter">
+                    <div class="left">
+                        已结束：30
+                    </div>
+                    <div class="right">
+                        未通过：0
+                    </div>
+                </div> -->
+            </div>
+
+            <div class="card orange">
+                <div class="cardTitle">
+                    <div class="dot"></div>
+                    派发我的
+                </div>
+                <div class="cardNum">
+                    <span class="num">{{sumData.distributeNumber}}</span>
+                    <span class="text">个</span>
+                </div>
+                <div class="border"></div>
+
+            </div>
+
+            <div class="card red">
+                <div class="cardTitle">
+                    <div class="dot"></div>
+                    我处理的
+                </div>
+                <div class="cardNum">
+                    <span class="num">{{sumData.myHandleNumber}}</span>
+                    <span class="text">个</span>
+                </div>
+                <div class="border"></div>
+
+            </div>
+
+            <div class="card">
+                <div class="cardTitle">
+                    <div class="dot blue2"></div>
+                    表务任务
+                </div>
+                <div class="cardContent">
+                    <div class="chart" id="barChart" ref="barChart"></div>
+                    <div v-show='isNotData' class='no-data'>
+                        暂无数据!
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../script/echarts.min.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+        api.addEventListener({
+            name: 'filterRefreshSum'
+        }, function(ret, err) {
+            if (ret) {
+                var data = ret.value.data;
+                if(data.productId == '10122'){
+                    SummaryVue.isShowMyApply = false;
+                } else {
+                    SummaryVue.isShowMyApply = true;
+                }
+                SummaryVue.filterType.typeName = data.classifys.name;
+                SummaryVue.filterType.typeId = data.classifys.id;
+                SummaryVue.filterType.productId = data.productId;
+                SummaryVue.GetGather();
+            }
+        });
+
+    };
+    // fnIntVue();
+
+    function fnIntVue() {
+        window.SummaryVue = new Vue({
+            el: '#wrap',
+            data: {
+                showTimePicker: false,
+                showBeginTime: false,
+                showEndTime: false,
+                showMonth: false,
+                filterType: {
+                    typeName: "全部任务",
+                    typeId: 0,
+                    productId: 0,
+                },
+                timeType: "1",
+                timeSelectType: "1",
+                beginTime: "",
+                endTime: "",
+                month: "",
+                beginTimePicker: "",
+                endTimePicker: "",
+                monthPicker: "",
+                currentBeginDate: new Date(),
+                currentEndDate: new Date(),
+                currentMonth: new Date(),
+                echartsDom: null,
+                colors: ["#38B5FF", "#FFB453", "#FF7C53"],
+                endColors: ["#1B6BFF", "#FFB555", "#FF7C54"],
+                sumData: {
+                    myApplyNumber: 0,
+                    distributeNumber: 0, //派发给我的
+                    myHandleNumber: 0
+                },
+                echartData: {
+                    legendData: [],
+                    xAxisArray: [],
+                    seriesData: []
+                },
+                isNotData: false,
+                isShowMyApply:true,
+
+            },
+            watch: {
+                currentMonth: function(newVal, oldVal) {
+                    if (this.compareDate(newVal, oldVal)) {
+                        if (this.showTimePicker && this.showMonth) {
+                            this.monthPicker = this.monthFormat(newVal);
+                        }
+                    }
+                },
+                currentBeginDate: function(newVal, oldVal) {
+                    if (this.compareDate(newVal, oldVal)) {
+                        if (this.showTimePicker && this.showBeginTime) {
+                            this.beginTimePicker = this.dayFormat(newVal);
+                        }
+                    }
+                },
+                currentEndDate: function(newVal, oldVal) {
+                    if (this.compareDate(newVal, oldVal)) {
+                        if (this.showTimePicker && this.showEndTime) {
+                            this.endTimePicker = this.dayFormat(newVal);
+                        }
+                    }
+                },
+            },
+            computed: {
+                tenYearBefore: function() {
+                    var date = new Date();
+                    var currentYear = date.getFullYear();
+                    return new Date(currentYear - 10, 0, 1);
+                },
+                tenYearAfter: function() {
+                    var date = new Date();
+                    var currentYear = date.getFullYear();
+                    return new Date(currentYear + 10, 11, 31);
+                },
+                minDate: function() {
+                    if (this.beginTimePicker != "") {
+                        var date = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                    } else {
+                        return this.tenYearBefore;
+                    }
+                },
+                maxDate: function() {
+                    if (this.endTimePicker != "") {
+                        var date = new Date(this.endTimePicker.replace(/-/g, "/"));
+                        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                    } else {
+                        return this.tenYearAfter;
+                    }
+                }
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                openTaskFilter() {
+                    api.openWin({
+                        name: 'TaskFilter',
+                        url: './TaskFilter.html',
+                        pageParam: {
+                            activeType: this.filterType,
+                            from: 'sum'
+                        }
+                    });
+                },
+                showBeginTimePicker() {
+                    if (!this.showBeginTime) {
+                        this.showBeginTime = true;
+                        this.showEndTime = false;
+                        if (this.beginTimePicker == "" && this.endTimePicker != "") {
+                            this.currentBeginDate = new Date(this.endTimePicker.replace(/-/g, "/"));
+                            this.beginTimePicker = this.endTimePicker;
+                        } else if (this.beginTimePicker != "" && this.endTimePicker != "") {
+                            if (new Date(this.beginTimePicker) > new Date(this.endTimePicker.replace(/-/g, "/"))) {
+                                this.currentBeginDate = new Date(this.endTimePicker);
+                                this.beginTimePicker = this.endTimePicker;
+                            } else {
+                                this.currentBeginDate = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                            }
+                        } else if (this.beginTimePicker == "" && this.endTimePicker == "") {
+                            this.beginTimePicker = this.dayFormat(this.currentBeginDate);
+                        }
+                    }
+                },
+                showEndTimePicker() {
+                    if (!this.showEndTime) {
+                        this.showBeginTime = false;
+                        this.showEndTime = true;
+                        if (this.endTimePicker == "" && this.beginTimePicker != "") {
+                            this.currentEndDate = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                            this.endTimePicker = this.beginTimePicker;
+                        } else if (this.endTimePicker != "" && this.beginTimePicker != "") {
+                            if (new Date(this.beginTimePicker) > new Date(this.endTimePicker)) {
+                                this.currentEndDate = new Date(this.beginTimePicker.replace(/-/g, "/"));
+                                this.endTimePicker = this.beginTimePicker;
+                            } else {
+                                this.currentEndDate = new Date(this.endTimePicker.replace(/-/g, "/"));
+                            }
+                        } else if (this.endTimePicker == "" && this.beginTimePicker == "") {
+                            this.endTimePicker = this.dayFormat(this.currentEndDate);
+                        }
+                    }
+                },
+                showMonthPicker() {
+                    if (!this.showMonth) {
+                        this.showMonth = true;
+                        if (this.monthPicker == "") {
+                            this.monthPicker = this.monthFormat(this.currentMonth);
+                        }
+                    }
+                },
+                formatter(type, val) {
+                    if (type === 'year') {
+                        return `${val}年`;
+                    } else if (type === 'month') {
+                        return `${val}月`
+                    } else if (type === 'day') {
+                        return `${val}日`
+                    }
+                    return val;
+                },
+                dayFormat(time) {
+                    var year = time.getFullYear();
+                    var month = time.getMonth() + 1;
+                    var day = time.getDate();
+                    return year + '-' + month + '-' + day;
+                },
+                monthFormat(time) {
+                    var year = time.getFullYear();
+                    var month = time.getMonth() + 1;
+                    return year + '-' + month;
+                },
+                compareDate(date1, date2) {   
+                    var result = false;   
+                    if (date1.getFullYear() != date2.getFullYear()) {      
+                        result = true;   
+                    } else if (date1.getFullYear() ==  date2.getFullYear()) {       
+                        if (date1.getMonth() != date2.getMonth()) {          
+                            result = true;       
+                        } else if (date1.getMonth() ==  date2.getMonth()) {          
+                            if (date1.getDate() != date2.getDate()) {             
+                                result = true;          
+                            }       
+                        }   
+                    }   
+                    return result;
+                },
+                closePicker() {
+                    this.showMonth = false;
+                    this.showBeginTime = false;
+                    this.showEndTime = false;
+                },
+                beforeClose(action, done) {
+                    if (action == "confirm") {
+                        var close = this.confirmPick();
+                        if (close) {
+                            done();
+                        } else {
+                            done(false);
+                        }
+                    } else if (action == 'cancel') {
+                        this.cancelPick();
+                        done();
+                    }
+                },
+                cancelPick() {
+                    this.beginTimePicker = this.endTime == "" ? "" : this.beginTime.toString().replace(new RegExp('/', 'g'), "-");
+                    this.endTimePicker = this.endTime == "" ? "" : this.endTime.toString().replace(new RegExp('/', 'g'), "-");
+                    this.monthPicker = this.month == "" ? "" : this.month.toString().replace(new RegExp('/', 'g'), "-");
+                    this.currentBeginDate = this.beginTime == "" ? new Date() : new Date(this.beginTime);
+                    this.currentEndDate = this.endTime == "" ? new Date() : new Date(this.endTime);
+                    this.currentMonth = this.month == "" ? new Date() : new Date(this.month);
+                    this.timeSelectType = this.timeType;
+                },
+                confirmPick() {
+                    var close = true;
+                    if (this.timeSelectType == '1') {
+                        // this.month = this.monthPicker.replace(/-/g, "/");
+                        this.month = this.monthPicker;
+                        this.beginTime = "";
+                        this.endTime = "";
+                        this.GetGather();
+                    } else {
+                        if (this.beginTimePicker != "" || this.endTimePicker != "") {
+                            if (this.beginTimePicker != "" && this.endTimePicker == "") {
+                                vant.Toast("请选择结束时间！");
+                                close = false;
+                                return;
+                            } else if (this.beginTimePicker == "" && this.endTimePicker != "") {
+                                vant.Toast("请选择开始时间！");
+                                close = false;
+                                return;
+                            } else {
+                                // this.beginTime = this.beginTimePicker.replace(/-/g, "/");
+                                // this.endTime = this.endTimePicker.replace(/-/g, "/");
+                                this.beginTime = this.beginTimePicker;
+                                this.endTime = this.endTimePicker;
+                                this.month = "";
+                                this.GetGather();
+                            }
+                        }
+                    }
+                    if (close) {
+                        this.timeType = this.timeSelectType;
+                    }
+                    return close;
+                },
+                getjb(color, endColor) {
+                    return {
+                        barBorderRadius: [10, 10, 0, 0],
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 0, 1, [{
+                                offset: 0,
+                                color: color
+                            }, {
+                                offset: 1,
+                                color: endColor
+                            }]
+                        )
+                    };
+                },
+                initChart() {
+                    this.echartsDom = echarts.init(this.$refs.barChart);
+                    this.setOption();
+                },
+                setOption() {
+                    var option = {
+                        color: this.colors,
+                        legend: {
+                            data: this.echartData.legendData,
+                            itemGap: 25,
+                            bottom: 0,
+                            x: 'center',
+                            icon: 'rect',
+                            itemWidth: 10,
+                            itemHeight: 10,
+                            textStyle: {
+                                fontSize: 16,
+                                fontWeight: 400,
+                                fontFamily: "SourceHanSansCN-Regular",
+                                color: "#515151"
+                            }
+                        },
+                        grid: {
+                            top: '5%',
+                            left: '0px',
+                            right: '4%',
+                            bottom: '35%',
+                            containLabel: true
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            axisLine: {
+                                show: false
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            data: this.echartData.xAxisArray,
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            nameTextStyle: {
+                                color: "#515151",
+                                fontSize: 16,
+                                fontWeight: 400,
+                                fontFamily: "SourceHanSansCN-Regular",
+                            }
+                        }],
+                        yAxis: [{
+                            axisLine: {
+                                show: false
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: '#DEDEDE'
+                                }
+                            },
+                            type: 'value',
+                            min: 0
+                        }],
+                        series: this.echartData.seriesData
+
+                    };
+                    this.echartsDom.clear();
+                    this.echartsDom.setOption(option);
+                    var length = 10;
+                    var elementLength = this.echartData.seriesData.length;
+                    switch (true) {
+                        case elementLength < 10 && elementLength > 5:
+                            length = 10;
+                            break;
+                        case elementLength < 5 && elementLength > 0:
+                            length = 3;
+                            break;
+                    }
+                    var autoHeight = length * 50 + 180; // counst.length为柱状图的条数，即数据长度。35为我给每个柱状图的高度，50为柱状图x轴内容的高度(大概的)。
+                    this.echartsDom.getDom().style.height = autoHeight + "px";
+                    this.echartsDom.resize();
+                },
+
+                GetGather() {
+                    var CurrentLocation = $api.getStorage('CurrentLocation');
+                    var url =
+                        `services/app/WorkFlow/GetGather?ProductID=${this.filterType.productId}&TemplateId=${this.filterType.typeId}&BeginTime=${this.beginTime}&EndTime=${this.endTime}&QueryMonth=${this.month}&Lng=${CurrentLocation.lon}&Lat=${CurrentLocation.lat}&Account=${$api.getStorage("thirdPartyAccount")}&PassWord=${$api.getStorage("thirdPartyPassWord")}`;
+                    fnGet(url, {}, false, (ret, err) => {
+                        api.hideProgress();
+                        if (ret) {
+                            if (ret.success) {
+                                ret.result.data.forEach(e => {
+                                    switch (true) {
+                                        case e.statusText == '我申请的':
+                                            this.sumData.myApplyNumber = e.count;
+                                            break;
+                                        case e.statusText == '派发我的':
+                                            this.sumData.distributeNumber = e.count;
+                                            break;
+                                        case e.statusText == '我处理的':
+                                            this.sumData.myHandleNumber = e.count;
+                                            break;
+                                    }
+                                });
+                                this.echartData.xAxisArray = ret.result.chartModel.xAxis;
+                                if (ret.result.chartModel.series.length > 0) {
+                                    ret.result.chartModel.series.forEach(e => {
+                                        this.echartData.legendData.push(e.name);
+                                        e.type = 'bar';
+                                        if (e.data.length < 3) {
+                                            e.data.push(0)
+                                        }
+                                    });
+                                    this.echartData.seriesData = JSON.parse(JSON.stringify(ret.result.chartModel.series));
+                                    this.isNotData = false;
+                                    this.initChart();
+
+                                } else {
+                                  if(this.echartsDom!=null){
+                                    this.echartsDom.clear();
+                                    this.echartsDom.getDom().style.height = "20px";
+                                    this.echartsDom.resize();
+                                  }
+                                    this.isNotData = true;
+                                }
+
+                            }
+                        }
+                    });
+                }
+
+
+
+            },
+            mounted: function() {
+                this.GetGather();
+
+            }
+        })
+    }
+</script>
+
+</html>

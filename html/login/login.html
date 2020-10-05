@@ -1,0 +1,899 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>登录页面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .logo {
+            margin: 0 auto;
+            width: 50.93vw;
+            height: 45.59vw;
+            background: url(../../image/login/logo.png);
+            background-repeat: no-repeat;
+            background-size: 100%
+        }
+
+        .logoDiv {
+            width: 100%;
+            padding: 35.53vw 0 0 0;
+            /*margin: 20vw auto;*/
+        }
+
+        .row {
+            width: 80vw;
+            height: 44px;
+            border-radius: 1.57rem;
+            line-height: 44px;
+            margin: 0 auto;
+            margin-bottom: 1.07rem;
+            border: solid 1px rgba(255, 255, 255, 0.6);
+            /*padding: 0 4.8vw;*/
+            padding: 0;
+            /* zxf 2020-6-15*/
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .userRow {
+            width: 75vw;
+            height: 44px;
+            line-height: 44px;
+            margin: 0 auto;
+            margin-bottom: 1.07rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 0 4.8vw;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: space-between;
+            justify-content: space-between;
+        }
+
+        .input {
+            /*width: calc( 100% - 5.07vw);*/
+            margin-right: 10px;
+            height: 6.2vw;
+            border: none;
+            outline: none;
+            font-size: 4.26vw;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0.36vw;
+            color: #fefefe !important;
+            opacity: 0.6;
+            line-height: 6.2vw;
+            /*color: rgba(255, 255, 255, 0.6);*/
+        }
+
+        input::-webkit-input-placeholder {
+            color: #fefefe !important;
+            opacity: 0.6;
+        }
+        /*zxf 2020-6-15*/
+
+        input[type="text"].input,
+        input[type="number"].input,
+        input[type="password"].input {
+            width: 80%!important;
+            margin-left: 1rem;
+        }
+
+        .loginDiv {
+            width: 100%;
+            height: 37vh;
+        }
+
+        .userSelect {
+            width: 5.07vw;
+            height: 2.67vw;
+            background: url(../../image/login/userSelect.png);
+            background-repeat: no-repeat;
+            background-size: 100%;
+            -webkit-transition: 200ms;
+            transition: 200ms;
+            position: absolute;
+            top: 3.54vw;
+            left: 3.5vw;
+        }
+
+        .active {
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .hidePassword {
+            width: 5.07vw;
+            height: 3.07vw;
+            background: url(../../image/login/hidePassword.png);
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        .showPassword {
+            width: 5.07vw;
+            height: 3.07vw;
+            background: url(../../image/login/showPassword.png);
+            background-repeat: no-repeat;
+            background-size: 100%;
+        }
+
+        .login {
+            width: 80vw;
+            height: 44px;
+            line-height: 44px;
+            margin: 0 auto;
+            margin-bottom: 1.07rem;
+            font-size: var(--fontsize8);
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0.36vw;
+            color: #4c87b9;
+            border: 1px solid #fff;
+            border-radius: 1.57rem;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            background-color: #fff;
+        }
+
+        .self {
+            padding: 0 10vw;
+            height: 4vw;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #self-p {
+            width: 4vw;
+            height: 4vw;
+            display: inline-block;
+            border: none;
+            outline: none;
+            margin-right: 1.87vw;
+        }
+
+        .uncheck {
+            background: url(../../image/login/unchecked.png) no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .checked {
+            background: url(../../image/login/checked.png) no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .self label {
+            font-size: var(--fontsize7);
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0.32vw;
+            color: rgba(255, 255, 255, 0.4);
+            vertical-align: text-top;
+        }
+
+        .self a {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: var(--fontsize7);
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0.32vw;
+            cursor: pointer;
+        }
+
+        .left {
+            float: left;
+            width: 26.94vw;
+            height: 4vw;
+            line-height: 4vw;
+        }
+
+        .right {
+            float: right;
+            height: 4vw;
+            line-height: 4vw;
+        }
+
+        .otherLogin {
+            width: 100%;
+            height: 16px;
+            line-height: 16px;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            padding-top: 15%;
+        }
+
+        .otherLogin label {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.3);
+            vertical-align: text-top;
+        }
+
+        .leftLine {
+            float: left;
+            width: 24%;
+            height: 1px;
+            margin-right: 6.9%;
+            background: url(../../image/login/xian.png) no-repeat center;
+            background-size: 100% 1px;
+        }
+
+        .rightLine {
+            float: right;
+            width: 24%;
+            height: 1px;
+            margin-left: 6.9%;
+            background: url(../../image/login/xian.png) no-repeat center;
+            background-size: 100% 100%;
+        }
+
+        .icon {
+            height: auto;
+            padding: 0;
+            margin-top: 8%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .icon .list {
+            float: left;
+            width: 39px;
+            height: 39px;
+            margin: 0 15px;
+        }
+
+        .icon .list:first-child {
+            margin: 0 15px 0 0;
+        }
+
+        .icon .list:last-child {
+            margin: 0 0 0 15px;
+        }
+
+        .list img {
+            width: 100%;
+        }
+
+        .footer {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 2%;
+            width: 100%;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .loginedUsers {
+            min-height: 10rem;
+            max-height: 15rem;
+            overflow-y: auto;
+        }
+
+        .close {
+            width: 20px;
+            height: 20px;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .notchilk {
+            pointer-events: none;
+        }
+
+        .icon_box {
+            width: 20%;
+            height: 100%;
+            position: relative;
+        }
+
+        .icon_box:last-child i {
+            position: absolute;
+            top: 4.5vw;
+            left: 3.5vw;
+        }
+
+        .account_login {
+            width: 0.7rem;
+            height: 0.7rem;
+            float: left;
+            margin-right: 0.6rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loginPage" v-cloak>
+        <div class="logoDiv">
+            <div class="logo">
+            </div>
+        </div>
+
+        <div class="row">
+            <input v-model='username' class="input" :type="accountCheckboxChecked==true?'text':'number'" :placeholder="accountCheckboxChecked==true?'账号':'手机号'" @focus='onfocus' :readonl='usernameReadonly'>
+            <div class="icon_box" tapmode @click="loginedUsers=!loginedUsers;showRememberedUser()">
+                <i class="userSelect" :class='{"active":userSelectActive}'></i>
+            </div>
+        </div>
+        <!-- 登录过的用户 -->
+        <div class="loginedUsers" v-show='loginedUsers'>
+            <div class="userRow" v-for='(item,index) in loginedUserData' :key='index' @click.stop='loginedUsers=false;onCheckLoginedUser(item)'>
+                <span class="input">{{item.account}}</span>
+                <!-- <span style="display:none" id="pw' + i + '">' + data[i].password + '</span> -->
+                <img src="../../image/login/close.png" @click.stop='onDeleteLoginedUser(index,item.account)' class="close">
+            </div>
+        </div>
+
+        <div class="row" v-show="closeSelectUser">
+            <input v-model="password" class="input" :type="isShowOrHidePassword == true?'text':'password'" placeholder="密码">
+            <div class="icon_box" tapmode @click="isShowOrHidePassword = !isShowOrHidePassword;">
+                <i :class="{'hidePassword':isShowOrHidePassword == false,'showPassword':isShowOrHidePassword == true}"></i>
+            </div>
+        </div>
+
+        <div class="login" v-show="closeSelectUser" tapmode @click="Login()">
+            立即登录
+        </div>
+
+        <div class="self" v-show="closeSelectUser">
+            <div id="select" class="left" tapmode @click="autoLogin('login')">
+                <div class="uncheck" :class='{"checked":checkboxChecked}' id="self-p"></div>
+                <label>自动登录</label>
+            </div>
+            <div class="left" tapmode @click="accountCheckboxChecked = !accountCheckboxChecked;autoLogin('account')">
+                <div class="uncheck account_login" :class='{"checked":accountCheckboxChecked}'></div>
+                <label class="account_login_label">账号登录</label>
+            </div>
+            <div class="right"><a @click="openServiceAddress()">设置服务器</a>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/moment.js"></script>
+<script type="text/javascript" src="../../script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript">
+    var checkbox = $api.byId('self-p');
+    apiready = function() {
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+            if (!loginVue.first) {
+                loginVue.first = new Date().getTime();
+                api.toast({
+                    msg: '再按一次退出',
+                    duration: 1500,
+                    location: 'bottom'
+                });
+                setTimeout(function() {
+                    loginVue.first = null;
+                }, 2000);
+            } else {
+                if (new Date().getTime() - loginVue.first < 2000) {
+                    api.closeWidget({
+                        silent: true
+                    });
+                }
+            }
+        });
+        //  监听是否设置了服务器
+        // 监听是否修改了服务器地址
+        api.addEventListener({
+            name: 'changeApiUrl'
+        }, function(ret, err) {
+            if (ret) {
+                var serviceAddress = $api.getStorage('apiUrl');
+                loginVue.apiUrl = 'http://' + serviceAddress;
+            }
+        });
+
+        initVue();
+    };
+
+
+    // initVue();
+
+    function initVue() {
+        window.loginVue = new Vue({
+                el: '#loginPage',
+                data: {
+                    apiUrl: '', //设置服务器页面返回的地址
+                    first: null,
+                    loginedUsers: false,
+                    checkboxChecked: false, //自动登录是否勾选
+                    accountCheckboxChecked: false, //账号登录
+                    recentUserData: $api.getStorage('recentUser') != undefined ? $api.getStorage('recentUser') : '', //当前登录人员信息
+                    username: '', //用户名
+                    password: '', //密码
+                    usernameReadonly: false, //用户输入框是否为只读状态
+                    loginedUserData: [], //登录过的用户
+                    userSelectActive: false, //是否打开用户选择下拉
+                    closeSelectUser: true, //关闭下拉选择用户
+                    isShowOrHidePassword: false, //是否显示密码
+                    passwordInputType: 'password', //密码输入框的类型
+                    loginedData: [], //登陆过的用户数据存放
+                    rememberAutoLogin: false, //是否选择自动登录
+
+
+                },
+                watch: {
+
+                },
+                methods: {
+                    //判断上次是否选择自动登录并默认设置自动登录的checkbox
+                    isAutoLogin() {
+                        var autoLogin = $api.getStorage('autoLogin');
+                        var isAccount = $api.getStorage('isAccount');
+                        if (autoLogin != undefined) {
+                            if (autoLogin == 1) {
+                                this.checkboxChecked = true;
+                            } else {
+                                this.checkboxChecked = false;
+                            }
+                        }
+                        if (isAccount != undefined) {
+                            if (isAccount == 1) {
+                                this.accountCheckboxChecked = true;
+                            } else {
+                                this.accountCheckboxChecked = false;
+                            }
+                        }
+
+                    },
+                    onfocus() { //获取焦点
+                        this.userSelectActive = false;
+                        this.loginedUsers = false;
+                        this.usernameReadonly = false; //用户输入框是否为只读状态
+                        this.closeSelectUser = true;
+                    },
+                    //记录登录过的用户，点击可以选择，点删除图标可以删除
+                    setRememberedUser() {
+                        var data = $api.getStorage('loginUsers');
+                        var _this = this;
+                        if (data != undefined) {
+                            var url = $api.getStorage('apiUrl');
+                            if (_this.recentUserData) {
+                                _this.username = _this.recentUserData.account;
+                            }
+                            _this.loginedUserData = data;
+                        }
+                    },
+                    //下拉显示登录过的用户
+                    showRememberedUser() {
+                        this.userSelectActive = !this.userSelectActive;
+                        if (this.userSelectActive) {
+                            this.usernameReadonly = true;
+                            this.closeSelectUser = false;
+                        } else {
+                            this.usernameReadonly = false;
+                            this.closeSelectUser = true;
+                        }
+                    },
+                    onCheckLoginedUser(item) { //选择登录过的用户
+                        this.userSelectActive = false;
+                        this.usernameReadonly = false; //用户输入框是否为只读状态
+                        this.closeSelectUser = true;
+                        this.username = item.account;
+                    },
+                    onDeleteLoginedUser(index, name) { //删除登录过的用户
+                        var log = $api.getStorage('loginUsers');
+                        var _this = this;
+                        for (var i = 0; i < log.length; i++) {
+                            if (log[i].account == _this.username) {
+                                log.splice(index, 1);
+                                $api.setStorage('loginUsers', log);
+                                _this.username = '';
+                                _this.loginedUserData = [];
+                                _this.loginedUserData = log;
+                                break
+                            }
+                        }
+                    },
+                    //自动登录勾选
+                    autoLogin(type) {
+                        if (type == 'login') {
+                            this.checkboxChecked = !this.checkboxChecked;
+                            if (this.checkboxChecked) { //自动选择登录
+                                this.rememberAutoLogin = true;
+                                $api.setStorage('autoLogin', 1);
+                            } else { //未开启自动登录
+                                this.rememberAutoLogin = false;
+                                $api.setStorage('autoLogin', 2);
+                                $api.rmStorage('loginInfo');
+                            }
+                        } else {
+                            if (this.accountCheckboxChecked) { //自动选择登录
+                                $api.setStorage('isAccount', 1);
+                            } else { //未开启自动登录
+                                $api.setStorage('isAccount', 2);
+                                $api.rmStorage('loginInfo');
+                            }
+                        }
+
+                    },
+                    //点击登录，请求接口
+                    Login() {
+                        var _this = this;
+                        var userName = _this.username;
+                        var password = _this.password;
+                        var loginedData = _this.loginedData;
+                        var rememberAutoLogin = _this.rememberAutoLogin;
+                        if (isEmpty(userName) || isEmpty(password)) {
+                            var name = _this.accountCheckboxChecked ? '账号' : '手机号';
+                            api.toast({
+                                msg: '' + name + '或密码不能为空',
+                                duration: 2000,
+                                location: 'top'
+                            });
+                            return;
+                        }
+                        if (api.connectionType != 'none') {
+                            var serviceAddress = $api.getStorage('apiUrl');
+                            if (serviceAddress == null || serviceAddress == undefined || serviceAddress == ' ') {
+                                api.toast({
+                                    msg: '请先设置服务器',
+                                    duration: 2000,
+                                    location: 'middle'
+                                });
+                                return false;
+                            }
+                            var CurrentLocation = $api.getStorage('CurrentLocation');
+                            var lon = "",
+                                lat = "";
+                            if (CurrentLocation != undefined) {
+                                if (CurrentLocation.lon != undefined && CurrentLocation.lon != "") {
+                                    lon = CurrentLocation.lon;
+                                    lat = CurrentLocation.lat;
+                                }
+                            }
+                            var loginData = {
+                                userName: userName,
+                                password: password,
+                                rememberMe: rememberAutoLogin,
+                                tenantCode: "",
+                                encryptPassword: "",
+                                lng: lon,
+                                lat: lat,
+                                account: "",
+                                passWord: ""
+                            };
+                            var loginDataPc = {
+                                    userName: userName,
+                                    password: password,
+                                    rememberMe: rememberAutoLogin,
+                                    validCode: "",
+                                    tenantCode: "cdzls", //  njjn
+                                    sessionId: "",
+                                    isVerificationCode: true,
+                                    loginType: ""
+                                }
+                                // apiUrl= 'http://' + url;
+                                // app.apipath = apiUrl + '/api/';
+                            var pastuserLoginInformation = $api.getStorage('userLoginInformation');
+                            if (pastuserLoginInformation != undefined) {
+                                var pastLoginData = pastuserLoginInformation.loginData;
+                                if (pastLoginData.userName != userName) {
+                                    deleteLocalVesios(pastuserLoginInformation);
+                                    $api.rmStorage('loginInfo'); //删除本地存储的 云平台token
+                                    $api.rmStorage('userLoginInformation');
+                                    var userLoginInformation = new Object();
+                                    userLoginInformation.loginData = _this.accountCheckboxChecked ? loginDataPc : loginData;
+                                    userLoginInformation.loginUrl = app.apipath + _this.accountCheckboxChecked ? 'TokenAuth/Authenticate' : 'TokenAuth/APPAuthenticate';
+                                    userLoginInformation.newVersionRemark = [];
+                                    userLoginInformation.newVersionNumber = 0;
+                                    userLoginInformation.versionInformation = [];
+                                    userLoginInformation.loginSuccessData = {};
+                                    userLoginInformation.apipath = serviceAddress;
+
+                                    // 本地数据库更新版本方式 20200701
+                                    _this.deleteLocalVesios();
+
+                                } else {
+                                    // 用户登录信息 （用于租户token过期后重新自动登录）zxf 2019.12.9
+                                    var userLoginInformation = $api.getStorage('userLoginInformation');
+                                    if (pastuserLoginInformation.apipath != serviceAddress) {
+                                        deleteLocalVesios(userLoginInformation);
+                                        userLoginInformation.versionInformation = [];
+                                        // 本地数据库更新版本方式 20200701
+                                        _this.deleteLocalVesios();
+                                    }
+                                    userLoginInformation.loginData = _this.accountCheckboxChecked ? loginDataPc : loginData;
+                                    userLoginInformation.loginUrl = app.apipath + _this.accountCheckboxChecked ? 'TokenAuth/Authenticate' : 'TokenAuth/APPAuthenticate';
+                                    userLoginInformation.newVersionRemark = [];
+                                    userLoginInformation.newVersionNumber = 0;
+                                    userLoginInformation.loginSuccessData = {};
+                                    userLoginInformation.apipath = serviceAddress;
+                                }
+                            } else {
+                                var userLoginInformation = new Object();
+                                userLoginInformation.loginData = _this.accountCheckboxChecked ? loginDataPc : loginData;
+                                userLoginInformation.loginUrl = app.apipath + _this.accountCheckboxChecked ? 'TokenAuth/Authenticate' : 'TokenAuth/APPAuthenticate';
+                                userLoginInformation.newVersionRemark = [];
+                                userLoginInformation.newVersionNumber = 0;
+                                userLoginInformation.versionInformation = [];
+                                userLoginInformation.loginSuccessData = {};
+                                userLoginInformation.apipath = serviceAddress;
+                            }
+                            // app
+                            var postUrl = _this.accountCheckboxChecked ? 'TokenAuth/Authenticate' : 'TokenAuth/APPAuthenticate';
+                            fnPost(postUrl, {
+                                body: JSON.stringify(_this.accountCheckboxChecked ? loginDataPc : loginData)
+                            }, 'application/json', false, false, function(ret, err) {
+
+                                //  pc
+                                //  fnPost('TokenAuth/Authenticate', {
+                                //      body: JSON.stringify(loginDataPc)
+                                //  }, 'application/json', false, false, function(ret, err) {
+                                if (ret) {
+                                    if (ret.success) {
+                                        // 为用户表添加数据
+                                        insertUserInfoToTable(userName, password);
+                                        // 保存用户登录成功后所有信息 zxf 2019.12.9
+                                        userLoginInformation.loginSuccessData = ret.result;
+                                        $api.setStorage('userLoginInformation', userLoginInformation);
+                                        var Authorization = 'Bearer ' + ret.result.accessToken;
+                                        $api.setStorage('loginInfo', Authorization);
+                                        $api.setStorage('allTenants', ret.result.allTenants);
+                                        $api.setStorage('tenantId', ret.result.tenantId);
+                                        $api.setStorage('loginData', _this.accountCheckboxChecked ? loginDataPc : loginData);
+                                        $api.setStorage('isChangeApiUrl', "false");
+                                        loginedData = $api.getStorage('loginUsers');
+                                        var userData = {
+                                            account: userName,
+                                            password: password
+                                        }
+                                        var bindData = {
+                                            userId: ret.result.userId,
+                                            machineCode: $api.getStorage('registrationId') //手机唯一编码 index中
+                                        }
+                                        fnPost('services/app/User/UpdateMachineCode', {
+                                            body: JSON.stringify(bindData)
+                                        }, 'application/json', true, true, function(ret, err) {})
+                                        recentUser.account = userName;
+                                        recentUser.password = password;
+                                        $api.setStorage('recentUser', recentUser);
+                                        if (loginedData == undefined) {
+                                            loginedData = [];
+                                        }
+                                        if (loginedData.length == 0) {
+                                            loginedData.push(userData);
+                                        } else {
+                                            for (var i = 0; i < loginedData.length; i++) {
+                                                if (loginedData[i].account == userData.account) {
+                                                    break
+                                                }
+                                                if (i == loginedData.length - 1) {
+                                                    loginedData.push(userData);
+                                                }
+                                            }
+                                        }
+                                        $api.setStorage('loginUsers', loginedData);
+                                        api.openWin({
+                                            name: 'main',
+                                            url: '../../html/main.html', //fs://wgt/public/html/main.html', //'../../html/main.html'
+                                            bounces: false,
+                                            reload: true,
+                                            slidBackEnabled: false,
+                                            animation: {
+                                                type: "reveal", //动画类型（详见动画类型常量）
+                                                subType: "from_bottom", //动画子类型（详见动画子类型常量）
+                                                duration: 300 //动画过渡时间，默认300毫秒
+                                            }
+                                        });
+                                        // openFrameGroup();
+                                        _this.setRememberedUser();
+                                    }
+                                }
+                            })
+
+                        } else {
+                            // 网络的情况
+                            var userLoginInformation = $api.getStorage('userLoginInformation');
+                            var loginData = userLoginInformation.loginData;
+                            if (loginData.userName != userName) {
+                                api.toast({
+                                    msg: '用户名不存在',
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                                return
+                            }
+                            if (loginData.password != password) {
+                                api.toast({
+                                    msg: '密码错误!',
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+                                return
+                            }
+                            if (loginData.userName == userName && loginData.password == password) {
+                                api.showProgress({
+                                    style: 'default',
+                                    animationType: 'fade',
+                                    title: '加载中...',
+                                    modal: false
+                                });
+                                setTimeout(() => {
+                                    api.hideProgress();
+                                    api.openWin({
+                                        name: 'main',
+                                        url: '../../html/main.html', //'../../html/main.html'
+                                        bounces: false,
+                                        reload: true,
+                                        slidBackEnabled: false,
+                                        animation: {
+                                            type: "reveal", //动画类型（详见动画类型常量）
+                                            subType: "from_bottom", //动画子类型（详见动画子类型常量）
+                                            duration: 300 //动画过渡时间，默认300毫秒
+                                        }
+                                    });
+                                }, 1000);
+                            }
+                        }
+                    }
+                ,
+                //  设置服务器
+                openServiceAddress() {
+                    //首先先判断是否设置了服务器，没设置则提示设置服务器
+                    api.openWin({
+                        name: 'settingService',
+                        url: '../mine/settingService.html',
+                    });
+                },
+                deleteLocalVesios() { //本地数据库存储版本更新方式，  删除数据
+                    var db = api.require("db");
+                    var currentUserName = $api.getStorage('loginData').userName;
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: `SELECT * FROM VersionInfoSheets where userName ='${currentUserName}'`
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            if (ret.data.length > 0) {
+                                var data = {
+                                    versionInformation: ret.data
+                                };
+                                deleteLocalVesios(data);
+                                db.executeSql({
+                                    name: 'Wsdatabase',
+                                    sql: 'DELETE FROM VersionInfoSheets'
+                                }, function(ret, err) {
+                                    if (ret.status) {
+
+                                    }
+                                });
+
+                            }
+                        }
+                    });
+
+                }
+
+            },
+            mounted: function() {
+                this.isAutoLogin(); //判断是否自动登录
+                this.setRememberedUser(); //获取登录成功的用户
+            }
+        })
+    }
+
+
+
+    //获取租户code，取账号@后的字符
+    function getTenantCode(data) {
+        var str = data;
+        var num = str.indexOf("@");
+        if (num != -1) {
+            str = str.substr(num + 1);
+            return str;
+        } else {
+            return "";
+        }
+    }
+
+    //获取用户名，取账号@前的字符
+    function getUsername(data) {
+        var str = data;
+        var num = str.indexOf("@");
+        if (num != -1) {
+            str = str.substring(0, num);
+            return str;
+        } else {
+            return "";
+        }
+    }
+
+    var isValued = false;
+    var recentUser = {
+        account: "",
+        password: ""
+    };
+
+    // UserSheets 表添加数据
+    function insertUserInfoToTable(userName, password) {
+        var db = api.require("db");
+        var nowTime = new Date();
+        nowTime = moment(nowTime).format('YYYY-MM-DD HH:mm:ss');
+        var SheetId = 0;
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'select Id from UserSheets order by Id desc limit 1'
+        }, (ret, err) => {
+            if (ret.status) {
+                if (ret.data.length > 0) {
+                    SheetId = ret.data[0].Id;
+                    SheetId++;
+                }
+            }
+        });
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: `SELECT * FROM UserSheets where username = ${userName}`
+        }, function(ret, err) {
+            if (ret.status) {
+                if (ret.data.length == 0) {
+                    db.executeSql({
+                        name: 'Wsdatabase',
+                        sql: `insert into UserSheets (Id,username,userPassword,loginTime,isDelete) values (${SheetId},"${userName}","${password}","${nowTime}",0)`
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            //  console.log( JSON.stringify( ret ) );
+                        }
+                    });
+                }
+            }
+        });
+
+    }
+</script>
+
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../css/aui.css"/>
+
+    <style media="screen">
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #F3F3F3;
+      }
+
+      #header {
+        position: fixed;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      .task-claim-title {
+        width: 100%;
+        height: 3.3rem;
+        background-color: #FFFFFF;
+        box-sizing: border-box;
+        padding: 0rem 0.77rem;
+        line-height: 3.3rem;
+      }
+
+      .one-ok-claim {
+        width: auto;
+        float: right;
+        color: #2F81F6;
+        font-size: 0.85rem;
+      }
+
+      .claim-main {
+        width: 100%;
+        height: auto;
+        margin-top: 0.6rem;
+      }
+
+      .claim-item {
+        width: 100%;
+        height: auto;
+        background-color: #FFFFFF;
+        box-sizing: border-box;
+        padding: 1.27rem 0.75rem;
+        margin-top: 0.33rem;
+      }
+
+      .item-left,.item-center,.item_right{
+        display: inline-block;
+        width: auto;
+        height: auto;
+      }
+
+      .item-left {
+        width: 1.5rem;
+        height: auto;
+        float: left;
+      }
+
+      .task-type-bw,.task-type-yy {
+        display: inline-block;
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        background: linear-gradient(124deg,rgba(46,142,250,1),rgba(12,76,231,1));
+        color: #FFFFFF;
+        font-size: 0.45rem;
+        text-align: center;
+        line-height: 0.55rem;
+      }
+
+      .task-type-yy {
+        background: linear-gradient(124deg,rgba(32,205,255,1),rgba(17,129,244,1));
+      }
+
+      .item-center {
+        width: calc(100% - 1.85rem);
+        margin-left: 0.35rem;
+      }
+
+      .task-no {
+        color: #1C1C1C;
+        font-size: 0.9rem;
+        height: 1.5rem;
+        line-height: 1.5rem;
+      }
+
+      .task-name-text {
+        font-size: 0.75rem;
+        color: #4D4D4D;
+        height: 1.5rem;
+        line-height: 1.5rem;
+      }
+
+      .task-ct-text {
+        font-size: 0.75rem;
+        color: #A7A7A7;
+      }
+
+      .item-right {
+        width: 100%;
+      }
+
+      .task-time {
+        font-size: 0.65rem;
+        color: #A7A7A7;
+        line-height: 1.5rem;
+        height: 1.5rem;
+        display: inline-block;
+      }
+
+      .task-claim {
+        font-size: 0.75rem;
+        color: #FF9320;
+        line-height: 1.5rem;
+        height: 1.5rem;
+        float:right;
+      }
+
+    </style>
+  </head>
+  <body>
+    <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务认领</div>
+    </header>
+    <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务认领</div>
+    </header>
+
+    <div class="task-claim-title">
+        <span class="">待认领任务总数：<span class="TaskNum"></span></span>
+        <span class="one-ok-claim" tapmode data-action="oneOkClaim">一键认领</span>
+    </div>
+
+    <div class="claim-main">
+        <!-- <div class="claim-item" tapmode data-action="claimTaskInfo">
+            <div class="item-left">
+                <div class="task-type-yy"><span style="display:block;margin-top: 5px;">表</span><span>务</span></div>
+            </div>
+            <div class="item-center">
+                <div class="item-right">
+                    <div class="task-time">昨天 10:30</div>
+                    <div data-taskId="1" class="task-claim" tapmode data-action="okClaim">认领</div>
+                </div>
+                <div class="task-no">任务编号：<span>14325378473</span></div>
+                <div class="task-name-text">工程名称：<span class="task-name">移改提</span></div>
+                <div class="task-ct-text">创建时间：<span class="task-create-time">2020/2/27 12:00</span></div>
+            </div>
+        </div> -->
+    </div>
+  </body>
+  <script type="text/javascript" src="../../../script/api.js"></script>
+  <script type="text/javascript" src="../../../script/zepto.js"></script>
+  <script type="text/javascript" src="../../../script/diy/public.js"></script>
+  <script type="text/javascript" src="../../../script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../../script/common.js"></script>
+  <script type="text/javascript" src="../../../script/remote.js"></script>
+  <script type="text/javascript" src="../../../script/template.js"></script>
+  <script type="text/template" id="taskTpl">
+    {{each items value i}}
+      <div class="claim-item" data-code="{{value.Code}}" data-taskId="{{value.Id}}" tapmode data-action="claimTaskInfo">
+          <div class="item-left">
+              {{if value.Source == '营销系统'}}
+              <div class="task-type-yy"><span style="display:block;margin-top: 5px;">{{value.Source.substring(0,1)}}</span><span>{{value.Source.substring(1,2)}}</span></div>
+              {{else}}
+              <div class="task-type-bw"><span style="display:block;margin-top: 5px;">{{value.Source.substring(0,1)}}</span><span>{{value.Source.substring(1,2)}}</span></div>
+              {{/if}}
+          </div>
+          <div class="item-center">
+              <div class="item-right">
+                  <div class="task-time">{{value.showtime}}</div>
+                  <div data-taskId="{{value.Id}}" class="task-claim" tapmode data-action="okClaim">认领</div>
+              </div>
+              <div class="task-no">任务编号：<span>{{value.TaskNo}}</span></div>
+              <div class="task-name-text">工程名称：<span class="task-name">{{value.Name}}</span></div>
+              <div class="task-ct-text">创建时间：<span class="task-create-time">{{value.OperatedTime}}</span></div>
+          </div>
+      </div>
+    {{/each}}
+  </script>
+  <script type="text/javascript">
+      var dataArr = [];
+      var Longitude = "";
+      var Latitude = "";
+      apiready = function(){
+          api.addEventListener({
+              name: 'changedFontSize'
+          }, function(ret, err) {
+              if (ret) {
+                  changeFontSize();
+              }
+          });
+          api.parseTapmode();
+          var header = $api.byId('header');
+          // 实现沉浸式状态栏效果
+          $api.fixStatusBar(header);
+          headerH = $api.offset(header).h;
+          var hideheader = $api.byId('hideheader');
+          // 实现沉浸式状态栏效果
+          $api.fixStatusBar(hideheader);
+
+          fnReady();
+          fnReadyOpenWin();
+
+          bMap = api.require("bMap");
+          bMap.getLocation({
+              accuracy: '10m',
+              autoStop: true,
+          }, function(ret, err) {
+              if (ret.status) {
+                  Longitude = ret.lon;
+                  Latitude = ret.lat;
+              } else {
+                  // alert(err.code);
+              }
+          });
+
+          getTaskList();
+
+          api.addEventListener({
+              name: 'goClaim'
+          }, function(ret, err) {
+              if (ret) {
+                  getTaskList();
+              }
+          });
+
+          //创建-打开本地数据库
+          // var db = api.require('db');
+          // db.openDatabase({
+          //     name: 'TO_BE_DONE'
+          // }, function(ret, err) {
+          //     if (ret.status) {
+          //
+          //         // 创建表
+          //         db.selectSql({
+          //             name: 'TO_BE_DONE',
+          //             sql: 'SELECT * FROM DB_TASK_LIST'
+          //         }, function(ret, err){
+          //             if( ret.status ){
+          //                 console.log( JSON.stringify( ret.data ) );
+          //             }else{
+          //               var sql="CREATE TABLE DB_TASK_LIST("+
+          //               "Id varchar(255),"+
+          //               "Source varchar(255),"+
+          //               "Code varchar(255),"+
+          //               "Name varchar(255),"+
+          //               "Status varchar(255),"+
+          //               "CustomerCode varchar(255),"+
+          //               "CustomerName varchar(255),"+
+          //               "Address varchar(255),"+
+          //               "Location varchar(255),"+
+          //               "Nature varchar(255),"+
+          //               "Caliber varchar(255),"+
+          //               "Nameplate varchar(255),"+
+          //               "MeterType varchar(255),"+
+          //               "StampNo varchar(255),"+
+          //               "LastScale varchar(255),"+
+          //               "BeginScale varchar(255),"+
+          //               "EndScale varchar(255),"+
+          //               "Amount varchar(255),"+
+          //               "ArrearMoney varchar(255),"+
+          //               "Description varchar(255),"+
+          //               "Remark varchar(255),"+
+          //               "TaskNo varchar(255),"+
+          //               "RecordBeginScale varchar(255),"+
+          //               "RecordEndScale varchar(255),"+
+          //               "RecordAmount varchar(255),"+
+          //               "RecordTypdId varchar(255),"+
+          //               "RecordTypdName varchar(255),"+
+          //               "LastReadScale varchar(255),"+
+          //               "AuditReadScale varchar(255),"+
+          //               "OperatedTime varchar(255),"+
+          //               "DispatchTime varchar(255),"+
+          //               "UseTime varchar(255),"+
+          //               "HandleTime varchar(255),"+
+          //               "AuditTime varchar(255),"+
+          //               "AuditTimes varchar(255),"+
+          //               "Files varchar(255),"+
+          //               "Handles varchar(255),"+
+          //               "UsedTypeId varchar(255),"+
+          //               "AuditStatus varchar(255),"+
+          //               "FileUrl varchar(255),"+
+          //               "FileType varchar(255),"+
+          //               "Type varchar(255),"+
+          //               "ReadTime varchar(255),"+
+          //               "ReviewStateText varchar(255),"+
+          //               "SortNo varchar(255),"+
+          //               "VideoPath varchar(255),"+
+          //               "AudioPath varchar(255))";
+          //               db.executeSql({
+          //                   name: 'TO_BE_DONE',
+          //                   sql:sql
+          //               }, function(ret, err) {
+          //                   if (ret.status) {
+          //                       console.log(JSON.stringify(ret));
+          //                   } else {
+          //                       console.log(JSON.stringify(err));
+          //                   }
+          //               });
+          //             }
+          //         });
+          //     } else {
+          //         console.log(JSON.stringify(err));
+          //     }
+          // });
+          // ShowData(dataArr);
+      };
+
+      //插入数据
+      // function insertData(insertData) {
+      //   var db = api.require('db');
+      //   var sql = "";
+      //   var maxSortNo = 0;
+      //   //查询最大序号
+      //   db.selectSql({
+      //       name: 'TO_BE_DONE',
+      //       sql: 'SELECT MAX(SortNo) AS MSortNo FROM DB_TASK_LIST'
+      //   }, function(ret, err) {
+      //       if (ret.status) {
+      //           if (ret.data[0].MSortNo != "") {
+      //             maxSortNo = parseInt(ret.data[0].MSortNo) + 1;
+      //           }
+      //
+      //           for (let i = 0; i < insertData.length; i++) {
+      //             nowSortNo = maxSortNo + i;
+      //             console.log(nowSortNo);
+      //             sql = "INSERT INTO DB_TASK_LIST VALUES ('"+
+      //               insertData[i].Id +"', '"+
+      //               insertData[i].Source +"','"+
+      //               insertData[i].Code +"','"+
+      //               insertData[i].Name +"','"+
+      //               insertData[i].Status +"','"+
+      //               insertData[i].CustomerCode +"','"+
+      //               insertData[i].CustomerName +"','"+
+      //               insertData[i].Address +"','"+
+      //               insertData[i].Location +"','"+
+      //               insertData[i].Nature +"','"+
+      //               insertData[i].Caliber +"','"+
+      //               insertData[i].Nameplate +"','"+
+      //               insertData[i].MeterType +"','"+
+      //               insertData[i].StampNo +"','"+
+      //               insertData[i].LastScale +"','"+
+      //               insertData[i].BeginScale +"','"+
+      //               insertData[i].EndScale +"','"+
+      //               insertData[i].Amount +"','"+
+      //               insertData[i].ArrearMoney +"','"+
+      //               insertData[i].Description +"','"+
+      //               insertData[i].Remark +"','"+
+      //               insertData[i].TaskNo +"','"+
+      //               insertData[i].RecordBeginScale +"','"+
+      //               insertData[i].RecordEndScale +"','"+
+      //               insertData[i].RecordAmount +"','"+
+      //               insertData[i].RecordTypdId +"','"+
+      //               insertData[i].RecordTypdName +"','"+
+      //               insertData[i].LastReadScale +"','"+
+      //               insertData[i].AuditReadScale +"','"+
+      //               insertData[i].OperatedTime +"','"+
+      //               insertData[i].DispatchTime +"','"+
+      //               insertData[i].UseTime +"','"+
+      //               insertData[i].HandleTime +"','"+
+      //               insertData[i].AuditTime +"','"+
+      //               insertData[i].AuditTimes +"','','"+
+      //               JSON.stringify(insertData[i].Handles) +"','','','','','','','','"+ nowSortNo +"','','')";
+      //
+      //             db.executeSql({
+      //                 name: 'TO_BE_DONE',
+      //                 sql: sql
+      //             }, function(ret, err) {
+      //                 if (ret.status) {
+      //                     console.log(JSON.stringify(ret));
+      //                 } else {
+      //                     console.log(JSON.stringify(err));
+      //                 }
+      //             });
+      //             if (i == (insertData.length - 1)) {
+      //               api.hideProgress();
+      //               api.toast({
+      //                   msg: "认领成功",
+      //                   duration: 2000,
+      //                   location: 'top'
+      //               });
+      //               getTaskList();//认领成功 -- 刷新认领界面
+      //             }
+      //           }
+      //       } else {
+      //           console.log(JSON.stringify(err));
+      //       }
+      //   });
+      // }
+
+      var actionList = {
+          'back': function() {
+      //         var db = api.require('db');
+      //         db.closeDatabase({ //关闭页面 - 关闭数据库
+      //             name: 'TO_BE_DONE'
+      //         }, function(ret, err) {
+      //             if (ret.status) {
+      //                 console.log(JSON.stringify(ret));
+      //             } else {
+      //                 console.log(JSON.stringify(err));
+      //             }
+      //         });
+
+              api.closeWin();
+          },
+          'scanner': function() {
+              var FNScanner = api.require('FNScanner');
+              FNScanner.open({
+                  autorotation: true
+              }, function(ret, err) {
+                console.log(JSON.stringify(ret));
+              });
+          },
+          'okClaim': function() { //认领
+              var e = e || window.event;
+              e.stopPropagation();
+
+              var Item = [];
+              for (var i = 0; i < dataArr.length; i++) {
+                if (dataArr[i].Id == $(this).attr('data-taskId')) {
+                  Item.push(dataArr[i]);
+                };
+              }
+              api.showProgress({
+                  title: '加载中',
+                  text:'',
+                  modal: false
+              });
+              api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                  values: {
+                    "UserName": $api.getStorage("jhUserName"),
+                    "Password": $api.getStorage("jhPassWord"),
+                    "SerialNo": "1111111111111",
+                    "Method": "MMS008",
+                    "Longitude": Longitude,
+                    "Latitude": Latitude,
+                    "Parameter": "{'Id': '"+ Item[0].Id +"', 'Remark': ''}"
+                  }
+                }
+              },function(ret, err){
+
+                  if (ret) {
+                      api.hideProgress();
+                      if (ret.Status == '0') {
+                        api.toast({
+                            msg: "认领成功",
+                            duration: 2000,
+                            location: 'top'
+                        });
+                        api.sendEvent({
+                            name: 'goClaim'
+                        });
+                        setTimeout(function(){
+                          api.closeWin();
+                        }, 1000);
+                      } else {
+                        api.toast({
+                            msg: ret.Message,
+                            duration: 2000,
+                            location: 'top'
+                        });
+                      }
+                      console.log( JSON.stringify( ret ) );
+                  } else {
+                      console.log( JSON.stringify( err ) );
+                      api.hideProgress();
+                      api.toast({
+                          msg: err.msg,
+                          duration: 2000,
+                          location: 'top'
+                      });
+                  }
+              });
+          },
+          'oneOkClaim': function() { //一键认领
+              console.log("一键认领");
+              api.showProgress({
+                  title: '加载中',
+                  text:'',
+                  modal: false
+              });
+              var allId = '';
+              for (var i = 0; i < dataArr.length; i++) {
+                if(allId == '') {
+                  allId = dataArr[i].Id;
+                } else {
+                  allId += "," + dataArr[i].Id;
+                }
+              }
+              console.log(allId);
+              api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                dataType: 'json',
+                data: {
+                  values: {
+                    "UserName": $api.getStorage("jhUserName"),
+                    "Password": $api.getStorage("jhPassWord"),
+                    "SerialNo": "1111111111111",
+                    "Method": "MMS008",
+                    "Longitude": Longitude,
+                    "Latitude": Latitude,
+                    "Parameter": "{'Id': '"+ allId +"', 'Remark': ''}"
+                  }
+                }
+              },function(ret, err){
+                  if (ret) {
+                      api.hideProgress();
+                      if (ret.Status == '0') {
+                        api.toast({
+                            msg: "认领成功",
+                            duration: 2000,
+                            location: 'top'
+                        });
+                        api.sendEvent({
+                            name: 'goClaim'
+                        });
+                        setTimeout(function(){
+                          api.closeWin();
+                        }, 1000);
+                      } else {
+                        api.toast({
+                            msg: ret.Message,
+                            duration: 2000,
+                            location: 'top'
+                        });
+                      }
+                      console.log( JSON.stringify( ret ) );
+                  } else {
+                      api.hideProgress();
+                      api.toast({
+                          msg: err.msg,
+                          duration: 2000,
+                          location: 'top'
+                      });
+                      console.log( JSON.stringify( err ) );
+                  }
+              });
+          },
+          'claimTaskInfo': function() {
+            console.log($(this).attr('data-code'));
+            var taskCode = $(this).attr('data-code');
+            var Item = [];
+            for (var i = 0; i < dataArr.length; i++) {
+              if (dataArr[i].Id == $(this).attr('data-taskId')) {
+                Item.push(dataArr[i]);
+              };
+            }
+
+            if (taskCode == '43') { //抄表复核
+              api.openWin({
+                name: 'reviewclaim',
+                url: './ReviewClaimDetails.html',
+                pageParam: {
+                    // data: $(this).attr('data-id')
+                    data: Item
+                }
+              });
+            } else if(taskCode == '45') { //稽核任务
+              api.openWin({
+                name: 'waterclaim',
+                url: './WaterClaimDetails.html',
+                pageParam: {
+                    // data: $(this).attr('data-id')
+                    data: Item
+                }
+              });
+            }
+          }
+      }
+
+      //
+      function getTaskList() {
+          api.showProgress({
+              title: '加载中',
+              text:'',
+              modal: false
+          });
+          console.log($api.getStorage("jhapipath") + 'waterMeters/info');
+          api.ajax({
+            url: $api.getStorage("jhapipath") + 'waterMeters/info',
+            method: 'post',
+            dataType: 'json',
+            returnAll: false,
+            data: {
+              values: {
+                "UserName": $api.getStorage("jhUserName"),
+                "Password": $api.getStorage("jhPassWord"),
+                "SerialNo": "1111111111111",
+                "Method": "MMS002",
+                "Longitude": Longitude,
+                "Latitude": Latitude,
+                "Parameter":"{'Id':'', 'Code':'43,45', 'Status':'1', 'Source':'', 'BookId':'', 'ReaderId':'', 'CustomerCode':'', 'BeginTime':'', 'EndTime':''}" //'Status':'1' -- 已分派任务列表
+              }
+            }
+          },function(ret, err){
+              if (ret) {
+                  api.hideProgress();
+                  console.log( JSON.stringify( ret ) );
+                  if (ret.Status == '0') {
+                    $('.claim-main').html("");
+                    dataArr = [];
+                    var claimList = JSON.parse(ret.Data);
+                    for (var i = 0; i < claimList.length; i++) {
+                      claimList[i].showtime = dateDiff(claimList[i].DispatchTime);
+                      dataArr.push(claimList[i]);
+                    }
+
+                    $('.TaskNum').html(dataArr.length);
+                    var listData = { items: dataArr };
+                    var str = template('taskTpl', listData);
+                    $('.claim-main').append(str);
+                    api.parseTapmode();
+                    operationDom();
+                  }
+              } else {
+                  api.hideProgress();
+                  api.toast({
+                      msg: err.msg,
+                      duration: 2000,
+                      location: 'top'
+                  });
+                  console.log( JSON.stringify( err ) );
+              }
+          });
+      }
+
+      function dateDiff(timeData) {
+        var myDate = new Date();
+        var sDate1 = myDate.getFullYear() + "-" + ((myDate.getMonth()+1) < 10 ? "0"+(myDate.getMonth() + 1) : (myDate.getMonth() + 1) ) + "-" + (myDate.getDate() < 10 ? "0"+myDate.getDate() : myDate.getDate() );
+        var sDate2=timeData.substring(0, 10);
+        var aDate, oDate1, oDate2, iDays;
+        aDate = sDate1.split("-");
+        oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+        aDate = sDate2.split("-");
+        oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
+        iDays = parseInt((oDate1 - oDate2) / 1000 / 60 / 60 / 24); //把相差的毫秒数转换为天数
+        if (iDays == 1) {
+          return "昨天 " + timeData.substring(10, timeData.length - 3);
+        } else if (iDays == 2) {
+          return "前天 " + timeData.substring(10, timeData.length - 3);
+        } else {
+          return "三天前";
+        }
+      }
+
+  </script>
+</html>

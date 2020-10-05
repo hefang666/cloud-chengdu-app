@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>异常水量复核任务处理</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css"/>
+
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background-color: #F3F3F3;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      #header {
+        position: fixed;
+      }
+
+      .aui-title {
+        font-size: 1.18rem;
+      }
+
+      #footer1, #footer2 {
+        width: 100%;
+        height: 6.08rem;
+        background-color: #fff;
+        border-top: 1px solid #CCCCCC;
+      }
+
+      .footer-btn {
+        border-radius: 1rem;
+        width: 5.5rem;
+        height: 1.86rem;
+        line-height: 1.86rem;
+        font-size: 0.90rem;
+        color: #fff;
+      }
+
+      .task-main {
+        width: calc(100% - 1.5rem);
+        height: auto;
+        background: #FFFFFF;
+        border-radius:0.75rem;
+        margin: 0.83rem 0.75rem 6.91rem 0.75rem;
+        padding: 1.5rem 1.3rem;
+        box-sizing: border-box;
+      }
+
+      .task-info {
+        width: 100%;
+        height: auto;
+      }
+
+      .info-item {
+        margin-bottom: 0.6rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .task-title {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #1F1F1F;
+        width: 30%;
+        display: inline-block;
+        vertical-align: top;
+      }
+      .task-cont {
+        font-size: 0.9rem;
+        font-weight: 400;
+        color: #626262;
+        width: 68%;
+        display: inline-block;
+      }
+      .w2{
+        letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+        margin-right:-2em; /*同上*/
+      }
+      .img-list {
+        width: 100%;
+        height: auto;
+      }
+
+      .img-item {
+        width: 30%;
+        height: auto;
+        margin-right: 5%;
+        margin-top: 0.5rem;
+        display: inline-block;
+        position: relative;
+        vertical-align: top;
+      }
+
+      .img-item-last {
+        margin-right: 0;
+      }
+
+      .img-delete {
+        position: absolute;
+        right: -8px;
+        top: -8px;
+      }
+
+      .img-item img {
+        width: 100%;
+        height: 2.8rem;
+      }
+
+      .img-type {
+        font-size: 0.55rem;
+        color: #707070;
+        margin-top: 0.25rem;
+      }
+
+      #remark {
+        width: 100%;
+        height: 2.95rem;
+        border-radius:6px;
+        border: 1px solid #D8D8D8;
+        box-sizing: border-box;
+        padding: 0.45rem 0.48rem;
+        font-size: 0.65rem;
+      }
+
+      #dialogInput {
+        height: 6.05rem;
+        box-sizing: border-box;
+        padding: 0.45rem 0.48rem;
+        font-size: 0.8rem;
+        border: 1px solid #CCCCCC;
+      }
+
+      .fj-item{
+        display:inline-block;
+        width: 30%;
+        text-align: center;
+        font-size: 0.8rem;
+        color: #707070;
+        position: relative;
+      }
+
+      .video-div{
+        margin-right: 5%;
+        display: none;
+      }
+
+      .audio-div{
+        display: none;
+      }
+
+      .popup {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3);
+        position: fixed;
+        z-index: 999;
+        display: none;
+      }
+
+      .audio-popup {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        position: fixed;
+        z-index: 999;
+        display: none;
+      }
+
+      .audio-img {
+        width: 25%;
+        position: absolute;
+        left: 37.5%;
+        bottom: 10%;
+      }
+
+      .audio-popup p{
+        width: 100%;
+        text-align: center;
+        margin-top: 50%;
+        font-size: 36px;
+        color: #CCC;
+      }
+
+      .audio-time-div {
+        width: 100%;
+        height: 1.5rem;
+        text-align: center;
+        line-height: 1.5rem;
+        font-size: 18px;
+        color: #CCC;
+        margin-top: 0.5rem;
+      }
+
+      .audio-time-div span{
+        margin-right: 8px;
+        font-size: 36px;
+        color: rgba(0, 210, 123, 1);
+      }
+
+      .status-popup{
+        width: 100%;
+        height: auto;
+        position: absolute;
+        bottom: 0;
+        background-color: #ccc;
+      }
+
+      .popup-item {
+        width: 100%;
+        height: 3rem;
+        line-height: 3rem;
+        border-bottom: 1px solid #cccccc;
+        box-sizing: border-box;
+        padding: 0rem 1rem;
+        background-color: #fff;
+      }
+
+      .popup-list {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        background-color: #fff;
+      }
+
+      .popup-title {
+        width: 100%;
+        height: 3rem;
+        line-height: 3rem;
+        box-sizing: border-box;
+        padding: 0rem 1rem;
+        background-color: #fff;
+        margin-bottom: 1rem;
+      }
+
+      .popup-title span {
+        color: #3E7BF3;
+        font-size: 0.9rem;
+        display: inline-block;
+      }
+
+      .popup-cont-all {
+        width: 100%;
+        height: auto;
+      }
+
+      .popup-cont-item {
+        width: 100%;
+        height: 2rem;
+        line-height: 2rem;
+        font-size: 0.9rem;
+        text-align: center;
+      }
+
+      .lanse {
+          color: #3A87F7;
+      }
+
+      .popup-cont-all{
+        background-color: #CCCCCC;
+      }
+
+      .actual-item {
+        display: none;
+      }
+
+      .addressIcon {
+          background: url(./image/dingwei.png) no-repeat 0 0;
+          background-size: 100% 100%;
+          width: .6rem;
+          height: .7rem;
+          display: inline-block;
+          /*vertical-align: text-bottom;*/
+      }
+
+      .textColor {
+          color: #2045FF;
+      }
+
+      .isTurn {
+        display: none;
+      }
+
+      .blue {
+        background-color: rgba(198, 220, 255, 1) !important;
+      }
+    </style>
+  </head>
+  <body id="app">
+    <div class="popup" onclick="noClose()">
+      <div class="status-popup">
+        <div class="popup-list" id="popup-lis">
+
+        </div>
+      </div>
+    </div>
+
+    <div class="audio-popup" tapmode data-action='closeAudio'>
+      <p>长按录音<br>松开保存</p>
+      <div class="audio-time-div"><span class='audioTime'>0</span>秒</div>
+      <img ontouchstart='startAudioFnc()' ontouchend='stopAudioFnc()' class='audio-img' src="./image/audio.png" alt="">
+    </div>
+
+    <header class="aui-bar aui-bar-nav" id="hideheader" style="z-index: -1; overflow: hidden;">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务处理</div>
+    </header>
+    <header class="aui-bar aui-bar-nav" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action='back'>
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">任务处理</div>
+    </header>
+
+    <div class="task-main">
+        <div class="task-info">
+            <div class="info-item">
+              <div class="task-title">
+                <span>任务类型</span>
+              </div>
+              <div class="task-cont">
+                <span class="task-type"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户名</span>
+              </div>
+              <div class="task-cont">
+                <span id="accountname"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">户号</span>
+              </div>
+              <div class="task-cont">
+                <span id="accountnumber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">地址</span>
+              </div>
+              <div class="task-cont">
+                <span id="address"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">表位</span>
+              </div>
+              <div class="task-cont">
+                <span id="wmlocation"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>用水性质</span>
+              </div>
+              <div class="task-cont">
+                <span id="nature"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">口径</span>
+              </div>
+              <div class="task-cont">
+                <span id="caliber"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">起度</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="beginscale"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">止度</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="endscale"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span class="w2">用量</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="amount"></span>
+              </div>
+            </div>
+            <div class="info-item isTurn">
+              <div class="task-title">
+                <span class="">审核失败</span>
+              </div>
+              <div class="task-cont">
+                <span class="" id="turnremark"></span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: 45%;">
+                <span>复核水表状态</span>
+              </div>
+              <div id="waselect" class="task-cont" style="width: 53%;border-bottom: 1px solid #D8D8D8;position: relative;">
+                <input id="reviewstate" readonly style="width: 100%; height: 27px;" type="text" value="请选择"/>
+                <i class="aui-iconfont aui-icon-down" style="position: absolute;right: 0;top: 20%;"></i>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>复核止度</span>
+              </div>
+              <div class="task-cont"  style="border-bottom: 1px solid #D8D8D8;">
+                <input id="reviewscale" readonly='true' style="width: 100%; height: 27px;" type="number" onclick="showScaleTip()">
+              </div>
+            </div>
+            <div class="info-item actual-item">
+              <div class="task-title">
+                <span>实际表码</span>
+              </div>
+              <div class="task-cont"  style="border-bottom: 1px solid #D8D8D8;">
+                <input id="actualmeter" style="width: 100%; height: 27px;" type="number">
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title">
+                <span>复核水量</span>
+              </div>
+              <div class="task-cont" style="border-bottom: 1px solid #D8D8D8;">
+                <input id="reviewamount" readonly='true' style="width: 100%; height: 27px;" type="number" onclick="showAmountTip()">
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="display: block;">
+                <span class="w2">备注</span>
+              </div>
+              <div class="task-cont" style="margin_top: 11px; width: 100%;height: 2.95rem; position: relative;">
+                <textarea id="remark" maxlength="200"></textarea>
+                <span class="fontnum" style="color: #E2E2E2; font-size:0.65rem;position: absolute;right: 0.45rem;bottom: 0.48rem;">200</span>
+              </div>
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: 100%;height: 1.5rem;">
+                <span class="w2">照片</span>
+                <img id="waimg" src="./image/zhaopian.png" style="float: right;width: 1.05rem; height: 0.85rem;margin-top: 0.2rem;">
+              </div>
+              <div class="task-cont" style="margin_top: 11px; width: 100%;">
+                <div class="img-list" id="imgList">
+                </div>
+              </div>
+            </div>
+            <div class="info-item" style="width: 100%; height: 1px ;background-color: #C0C0C0;">
+            </div>
+            <div class="info-item">
+              <div class="task-title" style="width: 100%;height: 1.5rem;">
+                <span class="w2">附件</span>
+                <img id="fjimg" src="./image/fujian.png" style="float: right; width: 0.95rem; height: 0.9rem;margin-top: 0.2rem;">
+              </div>
+              <div class="task-cont" style="margin_top: 0.5rem; width: 100%;">
+                <div class="fj-item video-div" onclick="playVideo()">
+                    <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                      <img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' onclick='DeleteVideo()' />
+                      <img src="./image/video.png" style="width: 50%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-25%;" alt=""/>
+                    </div>
+                    视频文件
+                </div>
+                <div class="fj-item audio-div" onclick="startAudio()">
+                    <div class="" style="width: 100%; height: 2.9rem; position: relative;">
+                      <img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' onclick='DeleteAudio()' />
+                      <img src="./image/audio.png" style="width: 25%;position: absolute; top: 50%; left: 50%;margin-top: -15%;margin-left:-12.5%;" alt=""/>
+                    </div>
+                    音频文件
+                </div>
+              </div>
+            </div>
+            <p onclick='getLocation()'>
+                <i class="addressIcon"></i>
+                <span class="textColor"></span>
+            </p>
+        </div>
+    </div>
+
+    <footer class="aui-bar aui-bar-tab" id="footer1">
+        <div class="aui-bar-tab-item" tapmode>
+            <div class="aui-btn footer-btn" style='background-color: #FFA836' onclick="TaskUserList()">转办</div>
+        </div>
+        <div class="aui-bar-tab-item" tapmode>
+            <div class="aui-btn footer-btn" style='background-color: #FF4141' onclick="TaskSubmit()">提交</div>
+        </div>
+    </footer>
+
+    <footer class="aui-bar aui-bar-tab" id="footer2">
+      <div class="aui-bar-tab-item" tapmode>
+          <div id='returnbtn' class="aui-btn footer-btn" style='background-color: #377EFF' tapmode>退回</div>
+      </div>
+      <div class="aui-bar-tab-item" tapmode>
+          <div id="claimbtn" class="aui-btn footer-btn" style='background-color: #FF4141' tapmode>认领</div>
+      </div>
+    </footer>
+  </body>
+  <script type="text/javascript" src="../../public/script/api.js"></script>
+  <script type="text/javascript" src="../../public/script/zepto.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/public.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/hammer.min.js"></script>
+  <script type="text/javascript" src="../../public/script/aui-tab.js"></script>
+  <script type="text/javascript" src="../../public/script/common.js"></script>
+  <script type="text/javascript" src="../../public/script/remote.js"></script>
+  <script type="text/javascript" src="./js/auidialog.js"></script>
+  <script type="text/javascript" src="../../public/script/diy/template.js"></script>
+  <script type="text/javascript" src="../../public/script/moment.js"></script>
+  <script type="text/javascript" src="../../public/script/publicMethod.js"></script>
+  <script type="text/template" id="bookList">
+      {{each list value i}}
+      <div class="popup-item" onclick="alertList({{value.CBZTID}})">
+        <div class="item-title" style="float: left;">{{value.CBZT}}</div>
+        <i id="noe_i{{value.CBZTID}}" class="aui-iconfont aui-icon-right" style="float: right;"></i>
+      </div>
+      <div id="noe_{{value.CBZTID}}" class="popup-cont-all">
+
+      </div>
+      {{/each}}
+  </script>
+  <script type="text/template" id="book2List">
+      {{each list value i}}
+        <div class="popup-cont-item" tapmode data-action="closeStatse" params="{{value}}">{{value.MC}}</div>
+      {{/each}}
+  </script>
+  <script type="text/javascript">
+
+    var arrList = [];
+    var METERSTATE = "";
+    var CBZTID = -1;
+    var arrAll = [];
+
+    var TaskData = {}; //接收传的值
+    var getTaskType = "";
+    var taskInfoData = {}; //获取的任务详情
+
+    var meterStatus = ''; //水表状态
+    var Longitude = "";
+    var Latitude = "";
+    var nowTime = "";
+    var videoPath = "";
+    var audioPath = "";
+
+    var imgData = [];// 图片类型
+    var imgDataText = [];// 图片类型文本
+    var FileLocation = '';
+    var audioLocation = ',';
+    var videoLocation = ',';
+
+    var isPhoto = true;  //强制拍照，默认为是
+
+    var TrajectoryId;  //定时上传轨迹
+
+    apiready = function(){
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        var hideheader = $api.byId('hideheader');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(hideheader);
+
+        fnReady();
+        fnReadyOpenWin();
+
+        //查询本地数据有无 AUDIT_TASK_LIST 表
+        selectLocalAudit();
+
+        createAuditPhoto();
+
+        TaskData = api.pageParam.data;
+        getTaskType = api.pageParam.type;
+        console.log(JSON.stringify(TaskData));
+        if (getTaskType == 'claimTask') {  //认领详情
+          $("#footer1").css('display', 'none');
+
+          $('#reviewscale').attr("readonly",true);
+          $('#reviewamount').attr("readonly",true);
+          $('#remark').attr("readonly",true);
+
+          $("#returnbtn").click(function(){
+            TaskReturn();
+          });
+
+          $("#claimbtn").click(function(){
+            ClaimOk();
+          });
+
+        } else if (getTaskType == 'handle') {  //任务处理
+          $("#footer2").css('display', 'none');
+
+          $("#waimg").click(function(){
+            showPopup();
+          });
+
+          $("#fjimg").click(function(){
+            Enclosure();
+          });
+
+          $("#waselect").click(function(){
+            showState();
+          });
+        }
+
+        WinSize();//键盘弹起
+
+        bMap = api.require("bMap");
+
+        //定时执行复核轨迹上传
+        TrajectoryId = setInterval("userTrajectory();",60000);
+
+        //home键监听
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err) {
+          if (getTaskType == 'handle') { //任务处理 返回事件
+            api.sendEvent({
+                name: 'refreshCloudMyTask',
+                extra: {
+                    type: '1'
+                }
+            });
+          } else if (getTaskType == 'claimTask') { //任务领用 返回事件
+            api.sendEvent({
+                name: 'refreshCloudClaim',
+                extra: {
+                    type: '1'
+                }
+            });
+          }
+          api.closeWin();
+        });
+
+        var app = document.querySelector('#app');
+        var hammertime = new Hammer(app);
+        hammertime.on('swipeleft', function(ev) {
+          api.showProgress({
+              title: '加载中',
+              text:'',
+              modal: false
+          });
+          api.ajax({
+              url: $api.getStorage("jhapipath") + 'waterMeters/info',
+              method: 'post',
+              dataType: 'json',
+              data: {
+                  values: {
+                    "UserName": $api.getStorage("jhUserName"),
+                    "Password": $api.getStorage("jhPassWord"),
+                    "SerialNo": dataTime(),
+                    "Method": "OSM002",
+                    "Longitude": Longitude,
+                    "Latitude": Latitude,
+                    "Parameter": "{'BookId':'', 'ReaderId':'', 'Code':'"+taskInfoData.CustomerCode+"', 'BeginTime':'', 'EndTime':'', 'Obscure':'','isWater':'isWater'}"
+                  }
+              }
+          },function(ret, err){
+              if (ret && ret.Status == 0) {
+                  var data = JSON.parse(ret.Data);
+                  if (data.length > 0 && data.length == 1) {
+                    var result = JSON.parse(JSON.stringify(data[0]));
+                    api.openWin({
+                        name: 'CustomerDetails',
+                        url: '../CustomerSearch/CustomerDetails.html',
+                        pageParam: result,
+                        allowEdit: true
+                    });
+                    api.hideProgress();
+                  } else {
+                    api.hideProgress();
+                    api.toast({
+                        msg: "用户查询失败",
+                        duration: 2000,
+                        location: 'top'
+                    });
+                  }
+              } else {
+                api.hideProgress();
+                api.toast({
+                    msg: "用户查询失败",
+                    duration: 2000,
+                    location: 'top'
+                });
+              }
+          });
+
+        });
+    };
+
+    function getLocation() {
+      var gpsmodel = api.require('gpsState');
+      gpsmodel.gpsstate(function(ret) {
+          if (!ret.gps) {
+            api.openFrame({
+                name: 'checkOpenGPS_frm',
+                url: 'widget://html/mine/checkOpenGPS_frm.html',
+                rect: {
+                    x: 0,
+                    y: 0,
+                    w: 'auto',
+                    h: 'auto'
+                },
+                bounces: false,
+                bgColor: 'rgba(0,0,0,0.1)',
+            });
+            return;
+          } else {
+            $(".textColor").html("正在定位...");
+            bMap.getLocation({
+                accuracy: '10m',
+                autoStop: true,
+            }, function(ret, err) {
+                if (ret.status) {
+                    Longitude = ret.lon;
+                    Latitude = ret.lat;
+                    if (api.connectionType == 'none') {
+                      $(".textColor").html(ret.lon +','+ ret.lat);
+                      return;
+                    }
+                    bMap.getNameFromCoords({
+                        lon: ret.lon,
+                        lat: ret.lat
+                    }, (ret, err) => {
+                        if (ret.status) {
+                          $(".textColor").html(ret.address);
+                        } else {
+                          $(".textColor").html("定位失败");
+                        }
+                    });
+                } else {
+                  $(".textColor").html("定位失败");
+                }
+            });
+          }
+      });
+    }
+
+    var actionList = {
+        'back': function() {
+            if (getTaskType == 'handle') { //任务处理 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudMyTask',
+                  extra: {
+                      type: '1'
+                  }
+              });
+            } else if (getTaskType == 'claimTask') { //任务领用 返回事件
+              api.sendEvent({
+                  name: 'refreshCloudClaim',
+                  extra: {
+                      type: '1'
+                  }
+              });
+            }
+            api.closeWin();
+        },
+        'scanner': function() {
+            var FNScanner = api.require('FNScanner');
+            FNScanner.open({
+                autorotation: true
+            }, function(ret, err) {
+              console.log(JSON.stringify(ret));
+            });
+
+        },
+        'closeStatse': function() {
+          var e = e || window.event;
+          e.stopPropagation();
+
+            $(".popup-cont-item").removeClass('lanse')
+            $(this).addClass('lanse')
+            METERSTATE = $(this).attr('params');
+
+            $('#reviewscale').val('');
+            $('#reviewamount').val('');
+            $('#actualmeter').val('');
+            var selectObj = JSON.parse(METERSTATE);
+            meterStatus = selectObj.BH;
+            $("#reviewstate").val(selectObj.MC);
+            MerterInput(selectObj);
+
+            setTimeout(function(){
+              $('.popup').css('display', 'none');
+            },100);
+        },
+        'closeAudio': function() {
+          setTimeout(function(){
+            $(".audio-popup").css('display', 'none');
+          },100);
+        }
+    }
+
+    function noClose() {
+        $('.popup').css('display', 'none');
+    }
+
+    function MerterInput(selectObj) {
+      isPhoto = true;
+
+      if (selectObj.CBZTID == '0') {  //正常 只输入止度  水量 = 止度 - 起度
+        $(".actual-item").css("display", "none");  //实际表码 -- 隐藏
+
+        $('#reviewscale').addClass('blue');
+        $('#reviewamount').removeClass('blue');
+        $('#actualmeter').removeClass('blue');
+
+        $('#reviewscale').removeAttr("readonly");  //止度可输入
+        $('#reviewamount').attr("readonly", true);  //水量自动计算
+
+        // $("#reviewscale").focus();
+
+        document.getElementById("reviewscale").onblur = function(){  //监听复核止度输入失去焦点
+          $("#reviewamount").val( parseFloat($("#reviewscale").val()) - parseFloat(taskInfoData.RecordBeginScale));
+
+          if (selectObj.BH == 1) {  //正常
+            //异常水量计算规则为：
+            // 当本次用水量大于30并且小于等于100时 --本次水量大于上次水量的1.5倍时，为量高；小于上次水量的一半时，为量低。
+            // 当本次用水量大于100，本次水量大于上次水量的1.3倍时 --为量高；小于上次水量的0.7倍时，为量低。
+            if (parseFloat($("#reviewamount").val()) > 30 && parseFloat($("#reviewamount").val()) <= 100) {
+              if (parseFloat($("#reviewamount").val()) > (taskInfoData.RecordAmount * 1.5) || parseFloat($("#reviewamount").val()) < (taskInfoData.RecordAmount * 0.5)) {
+                alert("异常用水");
+              }
+            } else if (parseFloat($("#reviewamount").val()) > 100) {
+              if (parseFloat($("#reviewamount").val()) > (taskInfoData.RecordAmount * 1.3) || parseFloat($("#reviewamount").val()) < (taskInfoData.RecordAmount * 0.7)) {
+                alert("异常用水");
+              }
+            } else {
+              isPhoto = false;
+            }
+
+          } else if (selectObj.BH == 10040) {  //自抄
+
+          }
+        };
+
+      } else if (selectObj.CBZTID == '1') {  //故障
+        if (selectObj.BH == '11') {  //倒装
+          $('#reviewscale').removeClass('blue');
+          $('#reviewamount').removeClass('blue');
+          $('#actualmeter').addClass('blue');
+
+          $(".actual-item").css("display", "block");  //实际表码
+
+          $('#reviewscale').attr("readonly", true);
+          $('#reviewamount').removeAttr("readonly");
+
+          $('#reviewscale').val(taskInfoData.RecordBeginScale);
+
+          // $("#actualmeter").focus();
+
+        } else {
+          $(".actual-item").css("display", "none");  //实际表码
+
+          $('#reviewscale').removeClass('blue');
+          $('#reviewamount').addClass('blue');
+          $('#actualmeter').removeClass('blue');
+
+          $('#reviewscale').attr("readonly", true);
+          $('#reviewamount').removeAttr("readonly");
+          // $("#reviewamount").focus();
+          document.getElementById("reviewamount").onblur = function(){
+            $('#reviewscale').val(parseFloat(taskInfoData.RecordBeginScale) + parseFloat($('#reviewamount').val()));
+          }
+
+        }
+
+      } else if (selectObj.CBZTID == '2') {  //换表
+        $(".actual-item").css("display", "block");  //实际表码
+
+        $('#reviewscale').attr("readonly", true);
+        $('#reviewamount').attr("readonly", true);
+
+        $('#reviewscale').removeClass('blue');
+        $('#reviewamount').removeClass('blue');
+        $('#actualmeter').addClass('blue');
+
+        $('#reviewscale').val('0');
+        $('#reviewamount').val('0');
+        document.getElementById("reviewscale").onblur = function(){};
+        // $("#actualmeter").focus();
+      } else if (selectObj.CBZTID == '3') {  //无量
+        if (selectObj.BH == '10' || selectObj.BH == '27') {  //多录多抄 -- 其它
+          $(".actual-item").css("display", "block");  //实际表码
+
+          $('#reviewscale').attr("readonly", true);
+          $('#reviewamount').attr("readonly", true);
+
+          $('#reviewscale').removeClass('blue');
+          $('#reviewamount').removeClass('blue');
+          $('#actualmeter').addClass('blue');
+          $('#reviewscale').val(taskInfoData.RecordBeginScale);
+          $('#reviewamount').val('0');
+          // $("#actualmeter").focus();
+        } else {
+          $(".actual-item").css("display", "none");  //实际表码
+
+          $('#reviewscale').attr("readonly", true);
+          $('#reviewamount').attr("readonly", true);
+
+          $('#reviewscale').removeClass('blue');
+          $('#reviewamount').removeClass('blue');
+          $('#actualmeter').removeClass('blue');
+
+          $('#reviewscale').val(taskInfoData.RecordBeginScale);
+          $('#reviewamount').val('0');
+        }
+
+      } else if (selectObj.CBZTID == '4') {  //特殊表位
+        $(".actual-item").css("display", "none");  //实际表码
+
+        $('#reviewscale').removeClass('blue');
+        $('#reviewamount').addClass('blue');
+        $('#actualmeter').removeClass('blue');
+
+        $('#reviewscale').attr("readonly", true);
+        $('#reviewamount').removeAttr("readonly");
+
+        // setTimeout(function(){
+        //     $("#reviewamount").focus();
+        // },150)
+
+        document.getElementById("reviewamount").onblur = function(){
+          $('#reviewscale').val(parseFloat(taskInfoData.RecordBeginScale) + parseFloat($('#reviewamount').val()));
+        }
+
+      }
+    }
+
+    function WinSize() {
+      var winHeight = $(window).height(); //获取当前页面高度
+      $(window).resize(function(){
+            //当窗体大小变化时
+            var thisHeight = $(this).height();  //窗体变化后的高度
+            if (winHeight - thisHeight > 50) {
+                $('body').css('height', winHeight + 'px');
+                $("#footer1").css("bottom","-100px")//修改底部按钮条的位置
+                $("#footer2").css("bottom","-100px")//修改底部按钮条的位置
+            } else {
+                $('body').css('height', '100%');
+                $("#footer1").css("bottom","0px")//还原底部按钮条位置
+                $("#footer2").css("bottom","0px")//还原底部按钮条位置
+            }
+      });
+    }
+
+    //查询本地数据库有无 AUDIT_TASK_LIST 表
+    function selectLocalAudit() {
+      //创建-打开本地数据库
+      var db = api.require('db');
+      db.selectSql({
+          name: 'Wsdatabase',
+          sql: 'SELECT * FROM AUDIT_TASK_LIST'
+      }, function(ret, err){
+          // 本地有 AUDIT_TASK_LIST 表
+          if( ret.status ){
+              if (api.connectionType == 'none') {
+                //无网络 -- 查询本地数据
+                selectData(TaskData.thirdTaskId);
+              }  else {
+                getTaskInfo(TaskData.thirdTaskId);
+              }
+          }else{
+            // 本地无 AUDIT_TASK_LIST 表 -- 创建表
+            var sql="CREATE TABLE AUDIT_TASK_LIST("+
+            "Id varchar(255),"+
+            "Source varchar(255),"+
+            "Code varchar(255),"+
+            "Name varchar(255),"+
+            "Status varchar(255),"+
+            "CustomerCode varchar(255),"+
+            "CustomerName varchar(255),"+
+            "Address varchar(255),"+
+            "Location varchar(255),"+
+            "Nature varchar(255),"+
+            "Caliber varchar(255),"+
+            "Nameplate varchar(255),"+
+            "MeterType varchar(255),"+
+            "StampNo varchar(255),"+
+            "LastScale varchar(255),"+
+            "BeginScale varchar(255),"+
+            "EndScale varchar(255),"+
+            "Amount varchar(255),"+
+            "ArrearMoney varchar(255),"+
+            "Description varchar(255),"+
+            "Remark varchar(255),"+
+            "TaskNo varchar(255),"+
+            "RecordBeginScale varchar(255),"+
+            "RecordEndScale varchar(255),"+
+            "RecordAmount varchar(255),"+
+            "RecordTypdId varchar(255),"+
+            "RecordTypdName varchar(255),"+
+            "LastReadScale varchar(255),"+
+            "AuditReadScale varchar(255),"+
+            "OperatedTime varchar(255),"+
+            "DispatchTime varchar(255),"+
+            "UseTime varchar(255),"+
+            "HandleTime varchar(255),"+
+            "AuditTime varchar(255),"+
+            "AuditTimes varchar(255),"+
+            "Files varchar(255),"+
+            "Handles varchar(255),"+
+            "UsedTypeId varchar(255),"+
+            "AuditStatus varchar(255),"+
+            "FileUrl varchar(255),"+
+            "FileType varchar(255),"+
+            "Type varchar(255),"+
+            "ReadTime varchar(255),"+
+            "ReviewStateText varchar(255),"+
+            "SelectData varchar(255),"+
+            "ImgStatus varchar(255),"+
+            "UserScale varchar(255),"+
+            "UserAmount varchar(255),"+
+            "ActualMeter varchar(255),"+
+            "FileLocation varchar(255),"+
+            "LocationAddress varchar(255),"+
+            "VideoPath varchar(255),"+
+            "AudioPath varchar(255))";
+            db.executeSql({
+                name: 'Wsdatabase',
+                sql:sql
+            }, function(ret, err) {
+                if (ret.status) {
+                    if (api.connectionType != 'none') {
+                      getTaskInfo(TaskData.thirdTaskId);
+                    }
+                } else {
+                    console.log(JSON.stringify(err));
+                }
+            });
+          }
+      });
+    }
+
+    //无网络 - 查询本地数据
+    function selectData(taskId) {
+
+      var db = api.require('db');
+      db.selectSql({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskId + "'"
+      }, function(ret, err){
+          if( ret.status ){
+              if (ret.data.length > 0) {
+                taskInfoData = ret.data[0];
+                showHtml(taskInfoData, 1);
+              }
+          }else{
+              console.log( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    //获取当前任务详情
+    function getTaskInfo(taskId) {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+        url: $api.getStorage("jhapipath") + 'waterMeters/info',
+        method: 'post',
+        dataType: 'json',
+        // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+        data: {
+          values: {
+            "UserName": $api.getStorage("jhUserName"),
+            "Password": $api.getStorage("jhPassWord"),
+            "SerialNo": dataTime(),
+            "Method": "MMS002",
+            "Longitude": Longitude,
+            "Latitude": Latitude,
+            "Parameter": "{'Id': '" + taskId + "', 'Code':'43', 'Status':'', 'Source':'', 'BookId':'', 'ReaderId':'', 'CustomerCode':'', 'BeginTime':'', 'EndTime':''}"
+          }
+        }
+      }, function(ret, err) {
+        if (ret) {
+          api.hideProgress();
+          if (ret.Status == '0') {
+            if (ret.Data == "") {
+              api.toast({
+                  msg: "暂无数据",
+                  duration: 2000,
+                  location: 'top'
+              });
+              return;
+            }
+            var allList = JSON.parse(ret.Data);
+            console.log(JSON.stringify(allList));
+            var db = api.require('db');
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskId + "'"
+            }, function(ret, err){
+                if( ret.status ){
+                    if (ret.data.length > 0) {  //本地数据库有数据
+                      updateAudit(allList[0]);
+                    } else if (ret.data.length == 0) {  //本地数据库无数据
+                      insertAudit(allList[0]);
+                    }
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+            });
+          }
+        } else {
+          api.toast({
+              msg: err.msg,
+              duration: 2000,
+              location: 'top'
+          });
+        }
+      });
+    }
+
+    //页面渲染
+    function showHtml (taskInfo, type) {
+      if (type == 1) {
+        selectState(JSON.parse(taskInfo.SelectData));
+        imgData = JSON.parse(taskInfo.ImgStatus);
+        for (var i = 0; i < imgData.length; i++) {
+          imgDataText.push(imgData[i].Name);
+        }
+        showImage(taskInfo);
+      }
+      if (taskInfo.SelectData.length > 0) {
+        arrList = JSON.parse(taskInfo.SelectData);
+      }
+      if (JSON.parse(taskInfo.Handles)[1].StatusId == '5' || JSON.parse(taskInfo.Handles)[1].StatusId == '4') {  //StatusId - '5'，上一条处理详情为转办
+        $(".isTurn").css('display', 'block');
+        $("#turnremark").html(JSON.parse(taskInfo.Handles)[0].Remark);
+      } else {
+        $(".isTurn").css('display', 'none');
+        $("#turnremark").html('');
+      }
+      $(".task-type").html(taskInfo.Name);
+      $("#accountname").html(taskInfo.CustomerName);
+      $("#accountnumber").html(taskInfo.CustomerCode);
+      $("#wmlocation").html(taskInfo.Location);
+      $("#nature").html(taskInfo.Nature);
+      $("#caliber").html(taskInfo.Caliber);
+      $("#address").html(taskInfo.Address);
+      $("#beginscale").html(taskInfo.RecordBeginScale);
+      $("#endscale").html(taskInfo.RecordEndScale);
+      $("#amount").html(taskInfo.RecordAmount);
+
+      if (taskInfo.LocationAddress != '') {
+        var locationArr = taskInfo.LocationAddress.split(",");
+        Longitude = locationArr[0];
+        Latitude = locationArr[1];
+
+        if (api.connectionType == 'none') {
+          $(".textColor").html(Longitude +','+ Latitude);
+          return;
+        }
+        bMap.getNameFromCoords({
+            lon: Longitude,
+            lat: Latitude
+        }, (ret, err) => {
+            if (ret.status) {
+              $(".textColor").html(ret.address);
+            } else {
+              $(".textColor").html("定位失败");
+            }
+        });
+      } else {
+        getLocation();
+      }
+
+
+      if (taskInfo.ReviewStateText != '') {
+        $("#reviewstate").val(taskInfo.ReviewStateText);
+        meterStatus = taskInfo.UsedTypeId;
+
+        for(var i = 0; i < arrList.length; i++) {
+          if(meterStatus == arrList[i].BH) {
+            MerterInput(arrList[i]);
+            break;
+          }
+        }
+
+        $("#reviewscale").val(taskInfo.UserScale);
+        $("#reviewamount").val(taskInfo.UserAmount);
+        $("#actualmeter").val(taskInfo.ActualMeter);
+        $("#remark").html(taskInfo.Remark);
+
+        nowTime = taskInfo.ReadTime;
+        videoPath = taskInfo.VideoPath;
+        audioPath = taskInfo.AudioPath;
+
+        if (taskInfo.VideoPath != '') {
+            $(".video-div").css('display', 'inline-block');
+        }
+        if (taskInfo.AudioPath != '') {
+            $(".audio-div").css('display', 'inline-block');
+        }
+      }
+    }
+
+    function showImage (taskInfo) {
+      if (taskInfo.FileUrl.length > 0) {
+        var sqlPhoto = '';
+        var typeList = taskInfo.Type.split("|");
+        var imgList = taskInfo.FileUrl.split("|");
+        var LocationFile = taskInfo.FileLocation.split("|");
+        if (taskInfo.AudioPath != '' && taskInfo.VideoPath != '') {
+          videoLocation = LocationFile[LocationFile.length - 2];
+          audioLocation = LocationFile[LocationFile.length - 1];
+        } else if(taskInfo.AudioPath != '') {
+          audioLocation = LocationFile[LocationFile.length];
+        } else if(taskInfo.VideoPath != '') {
+          videoLocation = LocationFile[LocationFile.length];
+        }
+        for (let i = 0; i < imgList.length; i++) {
+          var suffix = imgList[i].substring(imgList[i].lastIndexOf("."));
+          if(suffix == '.jpg' || suffix == '.png') {
+            for (let j = 0; j < imgData.length; j++) {
+              if (imgData[j].Id == typeList[i]) {
+                sqlPhoto = imgData[j].Name;
+              }
+            }
+            var imgItem = '';
+            if ((i+1)%3 == 0) {
+              imgItem =
+                "<div class='img-item img-item-last' data-Location='"+ LocationFile[i] +"'>"+
+                  "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgList[i] + "' onclick='DeleteImg(this)' /> " +
+                  "<img class='imgfile' src='"+ imgList[i] +"' onclick='previewImg("+i+")'>" +
+                  "<span class='img-type'>"+ sqlPhoto +"</span>" +
+                "</div>";
+            } else {
+              imgItem =
+                "<div class='img-item' data-Location='"+ LocationFile[i] +"'>"+
+                  "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgList[i] + "' onclick='DeleteImg(this)' /> " +
+                  "<img class='imgfile' src='"+ imgList[i] +"' onclick='previewImg("+i+")'>" +
+                  "<span class='img-type'>"+ sqlPhoto +"</span>" +
+                "</div>";
+            }
+            $(".img-list").append(imgItem);
+            api.parseTapmode();
+            operationDom();
+          }
+        }
+      }
+    }
+
+    //获取数据 -- 本地有该任务数据，修改数据到本地
+    function updateAudit(taskItem) {
+      var sql = "UPDATE AUDIT_TASK_LIST SET " +
+            "Source = '" + taskItem.Source + "'," +
+            "Code = '" + taskItem.Code + "'," +
+            "Name = '" + taskItem.Name + "'," +
+            "Status = '" + taskItem.Status + "'," +
+            "CustomerCode = '" + taskItem.CustomerCode + "'," +
+            "CustomerName = '" + taskItem.CustomerName + "'," +
+            "Address = '" + taskItem.Address + "'," +
+            "Location = '" + taskItem.Location + "'," +
+            "Nature = '" + taskItem.Nature + "'," +
+            "Caliber = '" + taskItem.Caliber + "'," +
+            "Nameplate = '" + taskItem.Nameplate + "'," +
+            "MeterType = '" + taskItem.MeterType + "'," +
+            "StampNo = '" + taskItem.StampNo + "'," +
+            "LastScale = '" + taskItem.LastScale + "'," +
+            "BeginScale = '" + taskItem.BeginScale + "'," +
+            "EndScale = '" + taskItem.EndScale + "'," +
+            "Amount = '" + taskItem.Amount + "'," +
+            "ArrearMoney = '" + taskItem.ArrearMoney + "'," +
+            "Description = '" + taskItem.Description + "'," +
+            "TaskNo = '" + taskItem.TaskNo + "'," +
+            "RecordBeginScale = '" + taskItem.RecordBeginScale + "'," +
+            "RecordEndScale = '" + taskItem.RecordEndScale + "'," +
+            "RecordAmount = '" + taskItem.RecordAmount + "'," +
+            "RecordTypdId = '" + taskItem.RecordTypdId + "'," +
+            "RecordTypdName = '" + taskItem.RecordTypdName + "'," +
+            "LastReadScale = '" + taskItem.LastReadScale + "'," +
+            "AuditReadScale = '" + taskItem.AuditReadScale + "'," +
+            "OperatedTime = '" + taskItem.OperatedTime + "'," +
+            "DispatchTime = '" + taskItem.DispatchTime + "'," +
+            "UseTime = '" + taskItem.UseTime + "'," +
+            "HandleTime = '" + taskItem.HandleTime + "'," +
+            "AuditTime = '" + taskItem.AuditTime + "'," +
+            "AuditTimes = '" + taskItem.AuditTimes + "'," +
+            "Handles = '" + JSON.stringify(taskItem.Handles) + "' WHERE Id='"+ taskItem.Id +"'";
+      var db = api.require('db');
+      db.executeSql({
+          name: 'Wsdatabase',
+          sql: sql
+      }, function(ret, err) {
+          if (ret.status) {
+              var db = api.require('db');
+              db.selectSql({
+                  name: 'Wsdatabase',
+                  sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskItem.Id + "'"
+              }, function(ret, err){
+                  if( ret.status ){
+                      getSelectData(TaskData.thirdTaskId);
+                      getImgStatus(TaskData.thirdTaskId);
+                      taskInfoData = ret.data[0];
+                      showHtml(ret.data[0], 2);
+                  }else{
+                      console.log( JSON.stringify( err ) );
+                  }
+              });
+
+          } else {
+              console.log(JSON.stringify(err));
+          }
+      });
+    }
+
+    //获取数据 -- 本地无该任务数据，保存数据到本地
+    function insertAudit(taskItem) {
+      var db = api.require('db');
+      var sql = "INSERT INTO AUDIT_TASK_LIST VALUES ('"+
+        taskItem.Id +"', '"+
+        taskItem.Source +"','"+
+        taskItem.Code +"','"+
+        taskItem.Name +"','"+
+        taskItem.Status +"','"+
+        taskItem.CustomerCode +"','"+
+        taskItem.CustomerName +"','"+
+        taskItem.Address +"','"+
+        taskItem.Location +"','"+
+        taskItem.Nature +"','"+
+        taskItem.Caliber +"','"+
+        taskItem.Nameplate +"','"+
+        taskItem.MeterType +"','"+
+        taskItem.StampNo +"','"+
+        taskItem.LastScale +"','"+
+        taskItem.BeginScale +"','"+
+        taskItem.EndScale +"','"+
+        taskItem.Amount +"','"+
+        taskItem.ArrearMoney +"','"+
+        taskItem.Description +"','"+
+        taskItem.Remark +"','"+
+        taskItem.TaskNo +"','"+
+        taskItem.RecordBeginScale +"','"+
+        taskItem.RecordEndScale +"','"+
+        taskItem.RecordAmount +"','"+
+        taskItem.RecordTypdId +"','"+
+        taskItem.RecordTypdName +"','"+
+        taskItem.LastReadScale +"','"+
+        taskItem.AuditReadScale +"','"+
+        taskItem.OperatedTime +"','"+
+        taskItem.DispatchTime +"','"+
+        taskItem.UseTime +"','"+
+        taskItem.HandleTime +"','"+
+        taskItem.AuditTime +"','"+
+        taskItem.AuditTimes +"','','"+
+        JSON.stringify(taskItem.Handles) +"','','','','','','','','','','','','','','','','')";
+
+      db.executeSql({
+          name: 'Wsdatabase',
+          sql: sql
+      }, function(ret, err) {
+          if (ret.status) {
+            var db = api.require('db');
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: "SELECT * FROM AUDIT_TASK_LIST WHERE Id = '" + taskItem.Id + "'"
+            }, function(ret, err){
+                if( ret.status ){
+                    getSelectData(TaskData.thirdTaskId);
+                    getImgStatus(TaskData.thirdTaskId);
+                    taskInfoData = ret.data[0];
+                    showHtml(ret.data[0], 2);
+                }else{
+                    console.log( JSON.stringify( err ) );
+                }
+            });
+          } else {
+              console.log(JSON.stringify(err));
+          }
+      });
+    }
+
+    //视屏播放
+    function playVideo() {
+      api.openVideo({
+          url: videoPath
+      });
+    }
+
+    function startAudio() {
+      var audioStreamer = api.require('audioStreamer');
+      audioStreamer.openPlayer({
+          path: audioPath,
+      }, function(ret) {
+          if (ret.status) {
+            console.log(JSON.stringify(ret));
+          }
+      });
+    }
+
+    function DeleteVideo() {
+      var e = e || window.event;
+      e.stopPropagation();
+      api.confirm({
+            title: '提示',
+            msg: '确认删除视频',
+            buttons: ['确定', '取消']
+        }, function(ret, err){
+            if(ret.buttonIndex == 1) {
+              var fs = api.require('fs');
+              fs.remove({
+                  path: videoPath
+              }, function(ret, err) {
+                  if (ret.status) {
+                    videoPath = "";
+                    $(".video-div").css('display', 'none');
+                  } else {
+                      console.log(JSON.stringify(err));
+                  }
+              });
+            }
+        });
+    }
+
+    function DeleteAudio() {
+      var e = e || window.event;
+      e.stopPropagation();
+
+      api.confirm({
+            title: '提示',
+            msg: '确认删除音频',
+            buttons: ['确定', '取消']
+        }, function(ret, err){
+            if(ret.buttonIndex == 1) {
+              var fs = api.require('fs');
+              fs.remove({
+                  path: audioPath
+              }, function(ret, err) {
+                  if (ret.status) {
+                    audioPath = "";
+                    $(".audio-div").css('display', 'none');
+                  } else {
+                      console.log(JSON.stringify(err));
+                  }
+              });
+            }
+        });
+    }
+
+    //调用手机相册和相机
+    var imgSrc="";
+    function showPopup(){
+      if ($(".img-item").length < 5) {
+        api.actionSheet({
+          title: '',
+          cancelTitle: '取消',
+          buttons: imgDataText
+        }, function(ret, err) {
+          if (ret.buttonIndex > 0 && ret.buttonIndex < (imgDataText.length + 1)) {
+            var photoData = imgData[ret.buttonIndex - 1].Name;
+            getPicture(photoData);
+            // showAction(photoData);
+          }
+        });
+      } else {
+        api.toast({
+            msg: "只能选择5张照片",
+            duration: 2000,
+            location: 'top'
+        });
+      }
+    }
+
+    function showAction(photoData){
+      api.actionSheet({
+        title: '',
+        cancelTitle: '取消',
+        buttons: ['拍照']
+      }, function(ret, err) {
+          if (ret) {
+            getPicture(ret.buttonIndex, photoData);
+          }
+        });
+    }
+
+    //获取相机还是相册
+    function getPicture(photoData) {
+      var options = {
+          type: 'camera',
+          waterMark: true,
+          waterMarkData: {
+              code: $("#accountnumber").html(),
+          }
+      };
+
+      pGetPicture(options, function(ret, err) {
+          if (ret.status) {
+              ret.imgList.forEach(function(item, index) {
+                    var location = ',';
+                    imgSrc = item;
+                    bMap.getLocation({
+                        accuracy: '10m',
+                        autoStop: true,
+                    }, function(ret, err){
+                      if (ret.status) {
+                        location = ret.lon + "," + ret.lat;
+                      }
+                      if(imgSrc != '') {
+                        var index = $(".imgfile").length;
+                        console.log(index);
+                        var imgItem = '';
+                        if ((index + 1)%3 == 0) {
+                          imgItem =
+                            "<div class='img-item img-item-last' data-Location='"+ location +"'>"+
+                              "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgSrc + "'  onclick='DeleteImg(this)' /> " +
+                              "<img class='imgfile' src='"+ imgSrc +"' onclick='previewImg("+index+")'>" +
+                              "<span class='img-type'>"+ photoData +"</span>" +
+                            "</div>";
+                        } else {
+                          imgItem =
+                            "<div class='img-item' data-Location='"+ location +"'>"+
+                              "<img src='./image/shanchu.png' class='img-delete' style='width: 16px; height: 16px;' data-param='" + imgSrc + "'  onclick='DeleteImg(this)' /> " +
+                              "<img class='imgfile' src='"+ imgSrc +"' onclick='previewImg("+index+")'>" +
+                              "<span class='img-type'>"+ photoData +"</span>" +
+                            "</div>";
+                        }
+                        if ($(".img-item").length < 5) {
+                          $("#imgList").append(imgItem);
+                          api.parseTapmode();
+                          operationDom();
+                        }
+                      }
+                    });
+
+              });
+          }
+      });
+    }
+
+    function transPathArr(list, callback) {
+        var imgList = [];
+        var num = 0;
+        // 循环
+        for (var i in list) {
+            UIAlbumBrowser.transPath({
+                path: list.path,
+
+            }, function(ret, err) {
+                if (ret.path) {
+                    var url = ret.path;
+                    num++;
+                    if (num == list.length) {
+                        imgList.push(ret.path);
+                        callback(imgList);
+                    } else {
+                        imgList.push(ret.path);
+                    }
+                }
+            });
+        }
+    }
+
+    function DeleteImg(obj) {
+      api.confirm({
+            title: '提示',
+            msg: '确认删除照片',
+            buttons: ['确定', '取消']
+        }, function(ret, err){
+            if(ret.buttonIndex == 1) {
+              var fs = api.require('fs');
+              fs.remove({
+                  path: $(obj).attr('data-param')
+              }, function(ret, err) {
+                  if (ret.status) {
+                      $(obj).parent().remove();
+                      $(".img-item").removeClass('img-item-last');
+                      $.each($(".img-item"),function(key,val) {
+                        if ((key+1)%3==0) {
+                          $(this).addClass('img-item-last');
+                        }
+                      });
+                  } else {
+                      console.log(JSON.stringify(err));
+                  }
+              });
+            }
+        });
+    }
+
+    var timeId = '';
+    function startAudioFnc() {
+      var e = e || window.event;
+      e.stopPropagation();
+
+      api.startRecord({});
+      timeId = setInterval(function () {
+        $(".audioTime").html(parseInt($(".audioTime").html()) + 1);
+        if (parseInt($(".audioTime").html()) == 60) {
+          clearInterval(timeId);
+          stopAudioFnc();
+        }
+      }, 1000)
+    }
+
+    function stopAudioFnc() {
+      api.stopRecord(function(ret, err) {
+
+          if (ret) {
+              if (ret.path != '') {
+                var selectAudio = ret.path;
+                bMap.getLocation({
+                    accuracy: '10m',
+                    autoStop: true,
+                }, function(ret, err) {
+                    if (ret.status) {
+                        audioLocation = ret.lon + "," + ret.lat;
+                    }
+                    $(".audio-div").css('display', 'inline-block');
+                    audioPath = selectAudio;
+                });
+              }
+
+              $(".audio-popup").css('display', 'none');
+              $(".audioTime").html(0);
+              clearInterval(timeId);
+          }
+      });
+    }
+
+    //附件
+    function Enclosure() {
+      api.actionSheet({
+        title: '',
+        cancelTitle: '取消',
+        buttons: ['音频','视频']
+      }, function(ret, err) {
+        if (ret.buttonIndex == '1') {
+          $(".audio-popup").css('display', 'block');
+        } else if (ret.buttonIndex == '2') {
+          api.getPicture({
+            sourceType: 'camera', //从相册中选择
+            mediaValue: 'video',
+            allowEdit: false,
+            //destinationType: 'base64',  //返回base64地址
+            destinationType: 'base64',
+            videoQuality: 'high',
+            quality: 90,
+            saveToPhotoAlbum: false
+          },function(ret, err) {
+            if (ret) {
+              if (ret.duration > 25) {
+                api.toast({
+                    msg: "视频时长最大为25秒",
+                    duration: 2000,
+                    location: 'top'
+                });
+              } else {
+                if (ret.data != '') {
+                  var selectVideo = ret.data;
+                  bMap.getLocation({
+                      accuracy: '10m',
+                      autoStop: true,
+                  }, function(ret, err) {
+                      if (ret.status) {
+                          videoLocation = ret.lon + "," + ret.lat;
+                      }
+                      $(".video-div").css('display', 'inline-block');
+                      videoPath = selectVideo;
+                  });
+                }
+              }
+            }
+          });
+        }
+      });
+    }
+
+    //退回
+    function TaskReturn() {
+      var dialog = new auiDialog();
+      dialog.prompt({
+          title:"退回",
+          text:'请填写退回原因',
+          input:true,
+          buttons:['取消','确定']
+      },function(ret){
+          if(ret.buttonIndex == 2){
+              api.showProgress({
+                  title: '加载中',
+                  text:'',
+                  modal: false
+              });
+
+              api.ajax({
+                url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                method: 'post',
+                timeout: '100',
+                dataType: 'json',
+                returnAll: false,
+                // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+                // headers: {"Content-Type":"application/json"},
+                data: {
+                  values: {
+                    "UserName": $api.getStorage("jhUserName"),
+                    "Password": $api.getStorage("jhPassWord"),
+                    "SerialNo": dataTime(),
+                    "Method": "MMS004",
+                    "Longitude": Longitude,
+                    "Latitude": Latitude,
+                    "Parameter": "{'Id': '" + taskInfoData.Id + "', 'Remark': '" + ret.text + "'}"
+                  },
+                }
+              }, function(ret, err) {
+                api.hideProgress();
+                if(ret){
+                  if (ret.Status == 0) {
+
+                      var db = api.require('db');//退回成功 删除该条本地数据
+                      var sql = "DELETE FROM AUDIT_TASK_LIST WHERE Id='"+ taskInfoData.Id +"' AND Name = '"+ taskInfoData.Name +"'";
+                      db.executeSql({
+                          name: 'Wsdatabase',
+                          sql: sql
+                      }, function(ret, err) {
+                          api.hideProgress();
+                          if (ret.status) {
+                              console.log(JSON.stringify(ret));
+                          } else {
+                              console.log(JSON.stringify(err));
+                          }
+                      });
+                      //删除云平台本地数据
+                      var sql1 = "DELETE FROM myTaskSheet WHERE taskCode='" + TaskData.taskCode + "'";
+                      db.executeSql({
+                          name: 'Wsdatabase',
+                          sql: sql
+                      }, function(ret, err) {
+                          if (ret.status) {
+                              console.log(JSON.stringify(ret));
+                          } else {
+                              console.log(JSON.stringify(err));
+                          }
+                      });
+                      api.toast({
+                          msg: '退回成功',
+                          duration: 2000,
+                          location: 'top'
+                      });
+                      api.sendEvent({
+                          name: 'refreshCloudClaim',
+                          extra: {
+                              type: '1'
+                          }
+                      });
+                      setTimeout(function(){
+                        api.closeWin();
+                      }, 1000);
+                  }
+                } else{
+                  api.toast({
+                      msg: err.msg,
+                      duration: 2000,
+                      location: 'top'
+                  });
+                }
+              }
+            );
+          }
+      });
+
+    }
+
+    var FileUrl = "";
+    var FileType = "";
+    var FilesUrlArr = [];
+    var FileTypeNum = "";
+    //提交
+    function TaskSubmit() {
+        var gpsmodel = api.require('gpsState');
+        gpsmodel.gpsstate(function(ret) {
+            if (!ret.gps) {
+              api.openFrame({
+                  name: 'checkOpenGPS_frm',
+                  url: 'widget://html/mine/checkOpenGPS_frm.html',
+                  rect: {
+                      x: 0,
+                      y: 0,
+                      w: 'auto',
+                      h: 'auto'
+                  },
+                  bounces: false,
+                  bgColor: 'rgba(0,0,0,0.1)',
+              });
+            } else {
+              if (Longitude == '' || Latitude == '') {
+                bMap.getLocation({
+                    accuracy: '10m',
+                    autoStop: true,
+                }, function(ret, err){
+                  if (ret.status) {
+                      Longitude = ret.lon;
+                      Latitude = ret.lat;
+                      console.log(Longitude +','+ Latitude);
+                  } else {
+                      api.toast({
+                          msg: '定位失败',
+                          duration: 2000,
+                          location: 'top'
+                      });
+                      return;
+                  }
+                });
+              }
+
+              if(meterStatus == "") {
+                api.toast({
+                    msg: "请选择复核水表状态",
+                    duration: 2000,
+                    location: 'top'
+                });
+                return;
+              }
+
+              if ($("#reviewscale").val() == "") {
+                api.toast({
+                    msg: "请填写复核止度",
+                    duration: 2000,
+                    location: 'top'
+                });
+                return;
+              }
+
+              if ($("#reviewamount").val() == "") {
+                api.toast({
+                    msg: "请填写复核水量",
+                    duration: 2000,
+                    location: 'top'
+                });
+                return;
+              }
+
+              FileUrl = "";
+              FileType = "";
+              FilesUrlArr = [];
+              var imgList = $(".imgfile");
+              if (imgList.length == 0) {
+                api.toast({
+                    msg: '请上传照片',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                return;
+              }
+              api.showProgress({
+                  title: '加载中',
+                  text:'',
+                  modal: false
+              });
+              for (var i = 0; i < imgList.length; i++) {
+                if (i == (imgList.length - 1)) {
+                  FileUrl += imgList[i].src.substring(7, imgList[i].src.length);
+                  FileType += imgList[i].src.substring(imgList[i].src.lastIndexOf(".")+1);
+                } else {
+                  FileUrl += imgList[i].src.substring(7, imgList[i].src.length) + "|";
+                  FileType += imgList[i].src.substring(imgList[i].src.lastIndexOf(".")+1) + "|";
+                }
+                FilesUrlArr.push(imgList[i].src.substring(7, imgList[i].src.length));
+              }
+
+              $('.img-type').each(function(key,value){
+                  for(var i = 0;i < imgData.length; i++) {
+                    if($(this).html() == imgData[i].Name) {
+                      FileTypeNum += imgData[i].Id + "|";
+                      break;
+                    }
+                  }
+              });
+              if (FileTypeNum != "") {
+                FileTypeNum = FileTypeNum.substring(0,FileTypeNum.length - 1);
+              }
+
+              FileLocation = "";
+              var imgItemList = $('.img-item');
+              for(var i = 0; i < imgItemList.length; i++) {
+                FileLocation += $(imgItemList[i]).attr('data-Location') + "|";
+              }
+
+              if (videoPath != "") {
+                FileLocation += videoLocation;
+              }
+              if(audioPath != "") {
+                if (FileLocation != '') {
+                  FileLocation += '|' + audioLocation;
+                } else {
+                  FileLocation += audioLocation;
+                }
+              }
+              if(videoPath != "") {
+                FilesUrlArr.push(videoPath);
+                if (FileUrl != "") {
+                  FileUrl += "|" + videoPath;
+                } else {
+                  FileUrl += videoPath;
+                }
+                if (FileTypeNum != "") {
+                  FileTypeNum += "|4";
+                } else {
+                  FileTypeNum += "4";
+                }
+
+                var videoType = videoPath.substring(videoPath.lastIndexOf(".")+1);
+                if (FileType != "") {
+                  FileType += "|" + videoType;
+                } else {
+                  FileType += videoType;
+                }
+              }
+
+              if(audioPath != "") {
+                // FilesUrlArr.push("file://" + audioPath);
+                FilesUrlArr.push(audioPath);
+                if (FileUrl != "") {
+                  FileUrl += "|" + audioPath;
+                } else {
+                  FileUrl += audioPath;
+                }
+                if (FileTypeNum != "") {
+                  FileTypeNum += "|5";
+                } else {
+                  FileTypeNum += "5";
+                }
+                var audioType = audioPath.substring(audioPath.lastIndexOf(".")+1);
+                if (FileType != "") {
+                  FileType += "|" + audioType;
+                } else {
+                  FileType += audioType;
+                }
+              }
+
+              var myDate = new Date();
+              if (nowTime == '') {
+                nowTime = myDate.getFullYear() + "-" +
+                ((myDate.getMonth() + 1) < 10 ? "0"+(myDate.getMonth() + 1) : (myDate.getMonth() + 1)) + "-" +
+                (myDate.getDate() < 10 ? "0"+(myDate.getDate()) : (myDate.getDate())) + "  " +
+                myDate.getHours() + ":" +
+                myDate.getMinutes()+ ":" +
+                myDate.getSeconds();
+              }
+
+              if ($(".actual-item").css("display") == 'none') {
+                $("#actualmeter").val($("#reviewscale").val());
+              }
+
+              if (api.connectionType == 'none') {  //无网络情况
+                var db = api.require('db');//
+                var sql = "UPDATE AUDIT_TASK_LIST SET UsedTypeId='"+meterStatus+"',UserScale='" + $("#reviewscale").val() + "',UserAmount='"+ $("#reviewamount").val() +"',ActualMeter='"+ $("#actualmeter").val() +
+                          "',Remark='"+ $("#remark").val() +"',FileUrl='"+FileUrl+"',FileType='" + FileType + "',Type='" + FileTypeNum + "',ReadTime='" +nowTime + "',ReviewStateText='"+ $("#reviewstate").val()
+                          +"',VideoPath='"+videoPath+"',AudioPath='"+audioPath+"',FileLocation='"+FileLocation+"', LocationAddress = '"+ Longitude +","+ Latitude +"' WHERE Id='"+ taskInfoData.Id +"' AND Name = '"+ taskInfoData.Name +"'";
+                db.executeSql({
+                    name: 'Wsdatabase',
+                    sql: sql
+                }, function(ret, err) {
+                    api.hideProgress();
+                    if (ret.status) {
+                        api.toast({
+                            msg: "无网络，本地保存成功",
+                            duration: 2000,
+                            location: 'top'
+                        });
+                    } else {
+                        api.toast({
+                            msg: "无网络，本地保存失败",
+                            duration: 2000,
+                            location: 'top'
+                        });
+                    }
+                });
+              } else {
+                userTrajectory();
+
+                if ($api.getStorage('auditImgsUpload') == 1) {  //是否设置照片单独上传
+                  insertAuditPhoto(FileUrl, FileLocation, FileTypeNum);
+                  FilesUrlArr = [];
+                }
+
+                api.ajax({
+                  url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                  method: 'post',
+                  dataType: 'json',
+                  // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+                  data: {
+                    values: {
+                      "UserName": $api.getStorage("jhUserName"),
+                      "Password": $api.getStorage("jhPassWord"),
+                      "SerialNo": dataTime(),
+                      "Method": "MMS010",
+                      "Longitude": Longitude,
+                      "Latitude": Latitude,
+                      "Parameter": "{'Type':'43','TaskId':'"+ taskInfoData.Id +
+                      "','CustomerCode':'"+ taskInfoData.CustomerCode +
+                      "', 'Longitude':'"+ Longitude +
+                      "','Latitude':'"+ Latitude +
+                      "','Address':'"+ $(".textColor").html() +
+                      "','ClientId':'"+ api.deviceId +
+                      "', 'ClientName':'"+ api.deviceModel +
+                      "','CollectedTime':'"+ nowTime +"'}"
+                    }
+                  }
+                },function(ret, err){
+                    if (ret) {
+                        console.log( JSON.stringify( ret ) );
+                        api.ajax({
+                            url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                            method: 'post',
+                            dataType: 'json',
+                            // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+                            data: {
+                              values: {
+                                "UserName": $api.getStorage("jhUserName"),
+                                "Password": $api.getStorage("jhPassWord"),
+                                "SerialNo": dataTime(),
+                                "Method": "MMS006",
+                                "Longitude": Longitude,
+                                "Latitude": Latitude,
+                                "Parameter": "{'Id': '" + taskInfoData.Id + "','Status': '1','OperatedTime': '" + nowTime + "','Remark': '" + $("#remark").val() +
+                                "', 'BeginScale': '" + taskInfoData.RecordBeginScale + "', 'EndScale': '" + $("#reviewscale").val() + "', 'Amount': '" + $("#reviewamount").val() +
+                                "','UsedTypeId': '" + meterStatus + "','ReadTime': '" + nowTime + "','IsModifiedWater': '1','AuditStatus':'', 'FileUrl': '" +
+                                FileUrl + "', 'FileLocation':'"+ FileLocation +"','FileType': '" + FileType + "','Type': '" + FileTypeNum + "', 'ConcreteScale': '"+ $("#actualmeter").val() +"'}"
+                              },
+                              files: {"file": FilesUrlArr}
+                            }
+                          }, function(ret, err) {
+                            api.hideProgress();
+                            console.log(JSON.stringify(ret));
+                            if (ret) {
+                              if(ret.Status == 0) {
+                                clearInterval(TrajectoryId);
+
+                                //根据设置判断是否删除本地照片 0 - 删除本地照片  且照片不单独上传
+                                if (($api.getStorage('auditSaveLocation') != 1) && ($api.getStorage('auditImgsUpload') != 1)) {
+                                  var fs = api.require("fs");
+                                  for (var i = 0; i < FilesUrlArr.length; i++) {
+                                    fs.remove({
+                                        path: FilesUrlArr[i]
+                                    }, function(ret, err){
+                                        if( ret.status ){
+                                            console.log( JSON.stringify( ret ) );
+                                        }else{
+                                            console.log( JSON.stringify( err ) );
+                                        }
+                                    });
+                                  }
+                                }
+
+                                var db = api.require('db');//提交成功 删除该条本地数据
+                                var sql = "DELETE FROM AUDIT_TASK_LIST WHERE Id='"+ taskInfoData.Id +"' AND Name = '"+ taskInfoData.Name +"'";
+                                db.executeSql({
+                                    name: 'Wsdatabase',
+                                    sql: sql
+                                }, function(ret, err) {
+                                    api.hideProgress();
+                                    if (ret.status) {
+                                        console.log(JSON.stringify(ret));
+                                    } else {
+                                        console.log(JSON.stringify(err));
+                                    }
+                                });
+
+                                //删除云平台本地数据
+                                var sql1 = "DELETE FROM myTaskSheet WHERE taskCode='" + TaskData.taskCode + "'";
+                                db.executeSql({
+                                    name: 'Wsdatabase',
+                                    sql: sql
+                                }, function(ret, err) {
+                                    if (ret.status) {
+                                        console.log(JSON.stringify(ret));
+                                    } else {
+                                        console.log(JSON.stringify(err));
+                                    }
+                                });
+
+                                api.openWin({
+                                    name: 'WaterAbnormalDetails',
+                                    url: './WaterAbnormalDetails.html',
+                                    pageParam: {
+                                        data: TaskData,
+                                        type: getTaskType
+                                    }
+                                });
+                              }
+                            } else {
+                              api.toast({
+                                  msg: err.msg,
+                                  duration: 2000,
+                                  location: 'top'
+                              });
+                            }
+                          }
+                        );
+                    } else {
+                        console.log( JSON.stringify( err ) );
+                    }
+                });
+              }
+            }
+        });
+    }
+
+    function getImgStatus(taskId) {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+        url:  $api.getStorage("jhapipath") + 'waterMeters/info',
+        method: 'post',
+        dataType: 'json',
+        // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+        data: {
+          values: {
+            "UserName": $api.getStorage("jhUserName"),
+            "Password": $api.getStorage("jhPassWord"),
+            "SerialNo": dataTime(),
+            "Longitude": Longitude,
+            "Latitude": Latitude,
+            "Method": "MMS103",
+            "Parameter": "{'TypeId':'RWWJLX'}"
+          }
+        }
+      },function(ret, err){
+          api.hideProgress();
+          if (ret) {
+              if(ret.Status == 0) {
+                var wjData = JSON.parse(ret.Data);
+                for (var i = 0; i < wjData.length; i++) {
+                  if (wjData[i].Id != '4' && wjData[i].Id != '5') {
+                    imgData.push(wjData[i]);
+                    imgDataText.push(wjData[i].Name);
+                  }
+                }
+                showImage(taskInfoData);
+                var db = api.require('db');
+                var sql = "UPDATE AUDIT_TASK_LIST SET " +
+                          "ImgStatus = '" + JSON.stringify(imgData) + "' WHERE Id = '" +taskId+ "'";
+                db.executeSql({
+                    name: 'Wsdatabase',
+                    sql: sql
+                }, function(ret, err) {
+                    if (ret.status) {
+                        console.log(JSON.stringify(ret))
+                    } else {
+                        console.log(JSON.stringify(err));
+                    }
+                });
+              }
+          } else {
+              api.toast({
+                  msg: err.msg,
+                  duration: 2000,
+                  location: 'top'
+              });
+          }
+        });
+    }
+
+
+    function getSelectData(taskId) {
+      api.showProgress({
+          title: '加载中',
+          text:'',
+          modal: false
+      });
+      api.ajax({
+        "url": $api.getStorage("jhapipath") + 'waterMeters/info',//
+        "method":"post",
+        "timeout":100,
+        "dataType":"json",
+        "returnAll":false,
+        headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+        "data":{
+          "body":
+            "{\"UserName\":\""+$api.getStorage("jhUserName")+"\",\"Password\":\""+$api.getStorage("jhPassWord")+"\",\"SerialNo\":\""+ dataTime() +"\",\"Method\":\"R999\"," +
+            "\"Parameter\":\"{\\\"ClientId\\\":\\\""+api.deviceId+"\\\",\\\"ClientName\\\":\\\""+api.deviceModel+"\\\",\\\"OperatorId\\\":\\\""+$api.getStorage('jhUserId')+"\\\",\\\"OperatorName\\\":\\\""+ $api.getStorage('jhUserName') +"\\\",\\\"Required\\\":\\\"\\\",\\\"Type\\\":\\\"104\\\"}\"}"
+      }
+    },function(ret, err){
+          api.hideProgress();
+          if (ret) {
+              if(ret.Status == 0) {
+                var db = api.require('db');
+                var sql = "UPDATE AUDIT_TASK_LIST SET " +
+                          "SelectData = '" + ret.Data + "' WHERE Id = '" +taskId+ "'";
+                db.executeSql({
+                    name: 'Wsdatabase',
+                    sql: sql
+                }, function(ret, err) {
+                    if (ret.status) {
+                        console.log(JSON.stringify(ret))
+                    } else {
+                        console.log(JSON.stringify(err));
+                    }
+                });
+                arrList = JSON.parse(ret.Data);
+                selectState(JSON.parse(ret.Data));
+              }
+          } else {
+              api.toast({
+                  msg: err.msg,
+                  duration: 2000,
+                  location: 'top'
+              });
+          }
+      });
+    }
+
+    function selectState(selectData) {
+      arrAll = selectData;
+      for (var i = 0; i < arrAll.length - 1; i++) {
+          for (var j = i + 1; j < arrAll.length; j++) {
+              if (arrAll[i].CBZTID == arrAll[j].CBZTID) {
+                  arrAll.splice(j, 1);
+                  //因为数组长度减小1，所以直接 j++ 会漏掉一个元素，所以要 j--
+                  j--;
+              }
+          }
+      }
+      var list = {
+          list: arrAll
+      }
+
+      //一级菜单高度
+      $(".status-popup").css("height", arrAll.length * 3 + 'rem');
+
+      var str = template('bookList',list );
+      $api.append($api.byId('popup-lis'), str);
+      fnReady();
+      // operationDom();
+      operationDom();
+      api.hideProgress();
+    }
+    function alertList(index) {
+
+        var e = e || window.event;
+        e.stopPropagation();
+
+        if (index == CBZTID) {
+            $(".item-title").removeClass("lanse");
+            $(".popup-item i").removeClass("aui-icon-down");
+            $(".popup-item i").addClass("aui-icon-right");
+            $(".popup-cont-all div").remove();
+            $(".status-popup").css("height", arrAll.length * 3 + 'rem');
+            CBZTID = -1
+        } else {
+            CBZTID = index;
+            $(".item-title").removeClass("lanse");
+            $(".popup-item i").removeClass("aui-icon-down");
+            $(".popup-item i").addClass("aui-icon-right");
+            $(".popup-cont-all div").remove();
+
+            $("#noe_name" + index + "").addClass('lanse');
+            $("#noe_i" + index + "").removeClass('aui-icon-right');
+            $("#noe_i" + index + "").addClass('aui-icon-down');
+
+            var itemList = [];
+            for (var i = 0; i < arrList.length; i++) {
+              if(arrList[i].CBZTID == index) {
+                itemList.push(arrList[i]);
+              }
+            }
+
+            console.log(JSON.stringify(itemList));
+
+            var list = {
+                list: itemList
+            }
+
+            $(".status-popup").css("height", (arrAll.length * 3) + (itemList.length * 2) + 'rem');
+
+            var str = template('book2List', list)
+            $("#noe_" + index + "").append(str);
+            //$api.append($api.byId("#noe_" + index + ""), str);
+            fnReady();
+            // operationDom();
+            operationDom();
+            api.hideProgress();
+        }
+    }
+    function showState() {
+      if ($('.popup').css('display') == 'none') {
+        $('.popup').css('display', 'block');
+      } else {
+        $('.popup').css('display', 'none');
+      }
+    }
+
+    function TaskUserList() {
+      api.openWin({
+          name: 'TurnToUser',
+          url: './TurnToUser.html',
+          pageParam: {
+              data: taskInfoData,
+              ydata: TaskData,
+              type: getTaskType
+          }
+      });
+    }
+
+    //认领
+    function ClaimOk() {
+      // 单个任务认领
+      var body = {
+          body: JSON.stringify({
+              taskCode: TaskData.taskCode, // // 云平台传的taskCode 修改id 为 taskCode 20200807 15:24 zxf
+              lng:Longitude,
+              lat:Latitude,
+              account:$api.getStorage("jhUserName"),
+              passWord:$api.getStorage("jhPassWord")
+          })
+      };
+      fnPost("services/app/WorkFlow/ConfirmTaskById",body,'application/json',true,false,(ret,err)=>{
+        api.hideProgress();
+        if(ret){
+          if(ret.success){
+            var db = api.require('db');
+            db.executeSql({
+                name: 'Wsdatabase',
+                sql: "UPDATE AUDIT_TASK_LIST SET Status = '7' WHERE Id ='" + taskInfoData.Id + "'"//任务状态变更
+            }, function(ret, err) {
+                if (ret.status) {
+                    api.toast({
+                        msg: "认领成功",
+                        duration: 1000,
+                        location: 'top'
+                    });
+                    $("#footer1").css('display', 'table');
+                    $("#footer2").css('display', 'none');
+
+                    $('#remark').removeAttr("readonly");
+
+                    $("#waimg").click(function(){
+                      showPopup();
+                    });
+
+                    $("#fjimg").click(function(){
+                      Enclosure();
+                    });
+
+                    $("#waselect").click(function(){
+                      showState();
+                    });
+                } else {
+                }
+            });
+            // 任务认领，需要存在本地
+          }
+        }
+      });
+    }
+
+    function previewImg(index) {  //图片预览
+      var imgData = $(".imgfile");
+      var imgArr = [];
+      for (var i = 0; i < imgData.length; i++) {
+        imgArr.push(imgData[i].src.substring(7, imgData[i].src.length));
+      }
+      api.openWin({
+          name: 'pictureBrowser',
+          url: '../pictureBrowser.html',
+          pageParam: {
+              images: imgArr,
+              index: index
+          },
+          animation:{
+              type: "fade", //动画类型（详见动画类型常量）
+              duration: 300 //动画过渡时间，默认300毫秒
+          }
+      });
+    }
+
+    //复核人员轨迹   每分钟执行   无网络、无经纬度--不上传
+    function userTrajectory() {
+      if(api.connectionType == 'none') {
+        return;
+      }
+      bMap.getLocation({
+          accuracy: '10m',
+          autoStop: true,
+      }, function(ret, err) {
+          if (ret.status) {
+              var nowLon = ret.lon;
+              var nowLat = ret.lat;
+              if (ret.lon != "" && ret.lat != "") {  //未获取到经纬度
+                bMap.getNameFromCoords({
+                    lon: nowLon,
+                    lat: nowLat
+                }, function(ret, err) {
+                    if (ret.status) {
+                      var address = ret.address;
+                      var myDate = new Date();
+                      var nowTime = myDate.getFullYear() + "-" +
+                        ((myDate.getMonth() + 1) < 10 ? "0"+(myDate.getMonth() + 1) : (myDate.getMonth() + 1)) + "-" +
+                        (myDate.getDate() < 10 ? "0"+(myDate.getDate()) : (myDate.getDate())) + "  " +
+                        myDate.getHours() + ":" +
+                        myDate.getMinutes()+ ":" +
+                        myDate.getSeconds();
+                      api.ajax({
+                        url: $api.getStorage("jhapipath") + 'waterMeters/info',
+                        method: 'post',
+                        dataType: 'json',
+                        // headers:{"Content-Type":"application/json","Authorization": $api.getStorage('jhHeaders')},
+                        data: {
+                          values: {
+                            "UserName": $api.getStorage("jhUserName"),
+                            "Password": $api.getStorage("jhPassWord"),
+                            "SerialNo": dataTime(),
+                            "Method": "MMS010",
+                            "Longitude": ret.lon,
+                            "Latitude": ret.lat,
+                            "Parameter": "{'Type':'-43','TaskId':'-1','CustomerCode':'"+ taskInfoData.CustomerCode +"', 'Longitude':'"+ nowLon +"','Latitude':'"+ nowLat +"','Address':'"+ address +"','ClientId':'"+ api.deviceId +"', 'ClientName':'"+ api.deviceModel +"','CollectedTime':'"+ nowTime +"'}"
+                          }
+                        }
+                      },function(ret, err){
+                          if (ret) {
+                              console.log( JSON.stringify( ret ) );
+                          } else {
+                              console.log( JSON.stringify( err ) );
+                          }
+                      });
+                    }
+                });
+              }
+          } else {
+              // alert(err.code);
+          }
+      });
+    }
+
+    function showScaleTip() {
+      if ($("#reviewscale").attr("readonly")) {
+        api.toast({
+            msg: "该状态下，不能录入止度",
+            duration: 1000,
+            location: 'top'
+        });
+      }
+    }
+
+    function showAmountTip() {
+      if ($("#reviewamount").attr("readonly")) {
+        api.toast({
+            msg: "该状态下，不能录入水量",
+            duration: 1000,
+            location: 'top'
+        });
+      }
+    }
+
+    function createAuditPhoto() {
+      var db = api.require('db');
+      db.selectSql({
+          name: 'Wsdatabase',
+          sql: 'SELECT * FROM AUDIT_PHOTO_UPLOAD'
+      }, function(ret, err){
+          if( ret.status ){
+              //查询到有表
+          }else{
+              //查询无表
+              var Sql = "CREATE TABLE AUDIT_PHOTO_UPLOAD(Id varchar(255),userName varchar(255),CustomerCode varchar(255),HandleTime varchar(255),isFail varchar(255),FailFailRemark varchar(255),FileList varchar(255),FileLocation varchar(255),Type varchar(255))";
+              db.executeSql({
+                  name: 'Wsdatabase',
+                  sql: Sql
+              }, function(ret, err){
+                  if( ret.status ){
+
+                  }else{
+
+                  }
+              });
+
+          }
+      });
+    }
+
+    function insertAuditPhoto(fileList, FileLocation, FileTypeNum) {
+      var myDate = new Date();
+      var nowTime = myDate.getFullYear() + "-" +
+        ((myDate.getMonth() + 1) < 10 ? "0"+(myDate.getMonth() + 1) : (myDate.getMonth() + 1)) + "-" +
+        (myDate.getDate() < 10 ? "0"+(myDate.getDate()) : (myDate.getDate()));
+      var Sql = '';
+      var db = api.require('db');
+      db.selectSql({
+          name: 'Wsdatabase',
+          sql: "SELECT * FROM AUDIT_PHOTO_UPLOAD WHERE Id = '"+ taskInfoData.Id +"'"
+      }, function(ret, err){
+          if( ret.status ){
+              if (ret.data.length > 0) {
+                Sql = "UPDATE AUDIT_PHOTO_UPLOAD SET HandleTime = '"+ nowTime +"', FileList = '"+ fileList +"', FileLocation = '"+ FileLocation +"' WHERE Id = '"+ taskInfoData.Id +"'";
+              } else {
+                Sql = "INSERT INTO AUDIT_PHOTO_UPLOAD VALUES('"+ taskInfoData.Id +"','"+ $api.getStorage('loginData').userName +"','"+ taskInfoData.CustomerCode +"','"+ nowTime +"','0','','"+ fileList +"','"+ FileLocation +"', '"+ FileTypeNum +"')";
+              }
+
+              db.executeSql({
+                  name: 'Wsdatabase',
+                  sql: Sql
+              }, function(ret, err){
+                  if( ret.status ){
+                      console.log( JSON.stringify( ret ) );
+                  }else{
+                      console.log( JSON.stringify( err ) );
+                  }
+              });
+          }else{
+              console.log( JSON.stringify( err ) );
+          }
+      });
+    }
+
+  </script>
+</html>

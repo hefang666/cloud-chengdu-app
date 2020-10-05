@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>GPS提示frame页面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/vant.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../script/vue/vant.min.js"></script>
+<script type="text/javascript"></script>
+<script>
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+
+        vant.Dialog.confirm({
+            title: '提示',
+            message: '您的GPS定位未开启,是否立即去开启?'
+        }).then(function() {
+          var gpsmodel = api.require('gpsState');
+              gpsmodel.opengps();
+              api.closeFrame();
+        }).catch(function() {
+          vant.Dialog.alert({
+              title: '提示',
+              message: '若需开启定位，请到我的-设置里面去开启定位',
+              showConfirmButton: false,
+              showCancelButton: true
+          }).catch(function() {
+            api.closeFrame({
+             name: 'updateVersion_frame'
+            });
+            api.closeFrame();
+          });
+
+        })
+
+    };
+</script>
+
+</html>

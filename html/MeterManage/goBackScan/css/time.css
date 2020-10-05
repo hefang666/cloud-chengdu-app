@@ -1,0 +1,123 @@
+/* 时间选择组件样式 */
+
+.timeText .placeholder {
+    font-size: 0.85rem;
+    color: #6E6E6E;
+}
+
+.timeText .time {
+    font-size: 0.75rem;
+    color: #6E6E6E;
+}
+
+.timeText .text {
+    font-size: 0.8rem;
+    color: #BABABA;
+    margin: 0 0.2rem;
+}
+
+.timeType .van-radio-group {
+    display: flex;
+    justify-content: space-between;
+    /*padding: 1.8rem;*/
+    font-size: 0.85rem;
+    color: #414141;
+}
+
+.van-dialog {
+    border-radius: 0;
+    width: 86vw;
+}
+
+.van-dialog .van-button {
+    font-size: 0.95rem;
+    height: 2.75rem;
+    line-height: 2.75rem;
+}
+
+.van-dialog__confirm,
+.van-dialog__confirm:active {
+    color: #2F7DF5;
+}
+
+.van-dialog__cancel,
+.van-dialog__cancel:active {
+    color: #F52F2F;
+}
+
+.van-radio__label {
+    margin-left: 0.8rem;
+}
+
+.van-radio__icon .van-icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    border: none;
+    background: url("../../image/MeterManage/gouxuankuang.png") no-repeat center;
+    background-size: 0.95rem 0.95rem;
+}
+
+.van-radio__icon .van-icon::before {
+    display: none;
+}
+
+.van-radio__icon--checked .van-icon {
+    background: url("../../image/MeterManage/xuanzhong.png") no-repeat center;
+    background-size: 0.95rem 0.95rem;
+}
+
+.timeValue .timeField {
+    display: flex;
+    align-items: flex-end;
+    padding: 0 0.9rem;
+}
+
+.timeValue .timeField .van-field__control[type=text] {
+    height: auto;
+    line-height: inherit;
+    font-size: 0.75rem;
+    color: #D4D4D4;
+}
+
+.timeValue .timeField .active .van-field__control[type=text] {
+    color: #3883FF;
+}
+
+.timeValue .timeField .van-cell {
+    padding: 0.5rem 0;
+    border-bottom: 0.03rem solid #C9C9C9;
+}
+
+.timeValue .timeField .van-cell.active {
+    border-color: #347CFF
+}
+
+.timeValue .timeField span {
+    font-size: 0.75rem;
+    color: #595959;
+    margin: 0 0.98rem;
+}
+
+.timeSelect {
+    padding: 2.3rem 0.98rem;
+}
+/* 时间选择组件样式 */
+.c-time-title{
+  font-size: 0.85rem;
+font-family: Source Han Sans CN;
+font-weight: 400;
+color: #2F60FF;
+width: 100%;
+text-align: center;
+height: 2.7rem;
+line-height: 2.7rem;
+border-bottom: 0.03rem solid #E2E2E2;
+margin-bottom: 0.3rem;
+}
+.c-month-span{
+  font-size:0.85rem;
+font-family:Source Han Sans CN;
+font-weight:400;
+color:#2F60FF;
+padding-left: 1.93rem;
+}

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>换表信息</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: calc(100% - .0rem);
+            background-color: #F3F3F3;
+        }
+
+        .ri {
+            float: right
+        }
+
+        .le {
+            float: left;
+        }
+
+        .cl {
+            clear: both;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text], .van-field__control[type=tel]{
+            height: auto;
+            line-height: inherit;
+            font-size: 0.9rem;
+            color: #626262;
+        }
+
+        .unusualTypePicker.van-cell {
+            padding: 0 1.3rem;
+            height: 2.87rem;
+            line-height: 2.87rem;
+        }
+
+        .aui-list-item,
+        .aui-list-item-middle {
+            border: none !important
+        }
+
+        .aui-bar-nav {
+            background: #fff;
+            color: #151515;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #151515;
+        }
+
+        .footer {
+            width: 100vw;
+            height: 4.08rem;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1.35rem;
+        }
+
+        .footer .van-button {
+            width: 5.5rem;
+            height: 1.86rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+        }
+
+        .footer .van-button:first-child {
+            background-color: #377EFF;
+        }
+
+        .footer .van-button:last-child {
+            background-color: #FF4141;
+            border-color: #FF4141;
+        }
+
+        .content {
+            margin: .5rem 1rem;
+            background-color: #fff;
+            border-radius: 0.8rem;
+            padding-top: .1rem;
+            padding-bottom: .2rem;
+        }
+
+        .row {
+            margin: 15px 25px 0 25px;
+        }
+
+        .text-left {
+            padding-top: 0.1rem;
+            font-size: 0.9rem;
+            color: #000;
+            display: inline-block;
+            width: 38%;
+            letter-spacing: -1px;
+        }
+
+        .text-right {
+            margin-left: 0px;
+            font-size: 0.9rem;
+            color: #656265;
+            display: inline-block;
+            width: calc(60% - 0px);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            vertical-align: top;
+        }
+
+        .text-two {
+            letter-spacing: 1.65rem;
+        }
+
+        .required {
+            color: #F52525;
+            font-size: 0.8rem;
+        }
+
+        .fill-input {
+            height: 1.5rem !important;
+            border-bottom: 1px solid #D8D8D8 !important;
+            color: #676767 !important;
+        }
+
+         ::-webkit-input-placeholder {
+            /* WebKit browsers */
+            color: #D5D5D5;
+        }
+
+         ::-moz-placeholder {
+            /* Mozilla Firefox 19+ */
+            color: #D5D5D5;
+        }
+
+         :-ms-input-placeholder {
+            /* Internet Explorer 10+ */
+            color: #D5D5D5;
+        }
+        /*下拉弹窗样式修改*/
+
+        .popup {
+            min-height: 26vh;
+            max-height: 37vh;
+            overflow: scroll!important;
+        }
+
+        .pickerMain {
+            height: 100%;
+            background-color: #fff;
+            padding: 0;
+        }
+
+        .van-search .van-field__body,
+        .van-form .van-field__body {
+            border-bottom: 0.03rem solid #D8D8D8;
+        }
+
+        .van-form .van-field {
+            width: 5 rem !important;
+            /*float: right;*/
+            color: blue;
+        }
+
+        .picker {
+            width: 100vw;
+            height: 2.13rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+            border-bottom: 0.03rem solid #EDEDED;
+        }
+
+        .picker:last-child {
+            border-bottom: none;
+        }
+
+        .picker.active {
+            background-color: #F4F4F4;
+            color: #2F81F6;
+        }
+
+        .popupFooter {
+            width: 100vw;
+            height: 2.46rem;
+            border-top: 0.25rem solid #ECECEC;
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #5A5A5A;
+            background-color: #fff;
+            position: fixed;
+            bottom: 0;
+            text-align: center;
+            line-height: 2.3rem;
+        }
+
+        .flex-con .van-cell.formField,
+        .searchInput,
+        .van-form .van-cell.formField,
+        .textAreaLabel,
+        .locationRow {
+            padding: 0.4rem 0.95rem 0.4rem 1.25rem;
+            background-color: transparent;
+        }
+
+        .van-form .van-cell.formField {}
+
+        /*.van-form .van-field__label {
+            width: 5.8rem !important;
+        }*/
+
+        .van-form .van-field_required {
+            font-size: 60px !important;
+        }
+
+        .van-form .required-class {
+            font-size: 30px !important;
+        }
+        /*下拉弹窗样式修改*/
+        .van-action-sheet__cancel{
+          height: 2.7rem;
+          line-height: 2.7rem;
+        }
+
+        .saoma {
+            width: 20px;
+            height: 20px;
+            background: url("../image/MeterManage/saoma.png") no-repeat center;
+            background-size: 100% 100%;
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical">
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">换表信息</div>
+        </header>
+
+         <van-action-sheet class='popup' v-model="showAreaSelect" cancel-text="取消" :round='false'>
+           <div class="pickerMain">
+               <div class="picker" v-for="(item,index) in AreaData" :key="index" :class="{active:billingTimeId == item.id}" @click="billingTime=item.name;billingTimeId=item.id;showAreaSelect=false">
+                   {{item.name}}
+               </div>
+           </div>
+         </van-action-sheet>
+
+         <van-action-sheet class='popup' v-model="showSourceSelect" cancel-text="取消" :round='false' >
+           <div class="pickerMain">
+             <div class="picker" v-for="(item,index) in SourceData" :key="index" :class="{active:newTableCaliberId == item.id}" @click="newTableCaliber=item.name;newTableCaliberId=item.id;showSourceSelect=false">
+                 {{item.name}}
+             </div>
+           </div>
+         </van-action-sheet>
+         <van-action-sheet class='popup' v-model="showEmergencySelect" cancel-text="取消" :round='false'>
+           <div class="pickerMain">
+             <div class="picker" v-for="(item,index) in EmergencyData" :key="index" :class="{active:newTableTypeId == item.id}" @click="newTableType=item.name;newTableTypeId=item.id;showEmergencySelect=false">
+                 {{item.name}}
+             </div>
+           </div>
+         </van-action-sheet>
+         <van-action-sheet class='popup' v-model="showLevelSelect" cancel-text="取消" :round='false'>
+           <div class="pickerMain">
+             <div class="picker" v-for="(item,index) in LevelData" :key="index" :class="{active:newTableNameId == item.id}" @click="newTableName=item.name;newTableNameId=item.id;showLevelSelect=false">
+                 {{item.name}}
+             </div>
+           </div>
+         </van-action-sheet>
+         <van-action-sheet class='popup' v-model="showTableTypeSelect" cancel-text="取消" :round='false'>
+           <div class="pickerMain">
+             <div class="picker" v-for="(item,index) in ReasonData" :key="index" :class="{active:newTableModelId == item.id}" @click="newTableModel=item.name;newTableModelId=item.id;showTableTypeSelect=false">
+                 {{item.name}}
+             </div>
+           </div>
+         </van-action-sheet>
+         <van-action-sheet class='popup' v-model="showInstallWaySelect" cancel-text="取消" :round='false'>
+           <div class="pickerMain">
+             <div class="picker" v-for="(item,index) in install" :key="index" :class="{active:installWayId == item.id}" @click="installWay=item.name;installWayId=item.id;showInstallWaySelect=false">
+                 {{item.name}}
+             </div>
+           </div>
+         </van-action-sheet>
+
+        <!-- <van-popup class="popup" v-model="showPicker" position="bottom" @closed="hideAllSelect" :lock-scroll='true'>
+            <div class="flex-wrap flex-vertical">
+
+                <div class="flex-con pickerMain" v-if="showAreaSelect">
+                    <div class="picker" v-for="(item,index) in AreaData" :key="index" :class="{active:billingTimeId == item.id}" @click="billingTime=item.name;billingTimeId=item.id;showPicker=false">
+                        {{item.name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showSourceSelect">
+                    <div class="picker" v-for="(item,index) in SourceData" :key="index" :class="{active:newTableCaliberId == item.id}" @click="newTableCaliber=item.name;newTableCaliberId=item.id;showPicker=false">
+                        {{item.name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showEmergencySelect">
+                    <div class="picker" v-for="(item,index) in EmergencyData" :key="index" :class="{active:newTableTypeId == item.id}" @click="newTableType=item.name;newTableTypeId=item.id;showPicker=false">
+                        {{item.name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showLevelSelect">
+                    <div class="picker" v-for="(item,index) in LevelData" :key="index" :class="{active:newTableNameId == item.id}" @click="newTableName=item.name;newTableNameId=item.id;showPicker=false">
+                        {{item.name}}
+                    </div>
+                </div>
+                <div class="flex-con pickerMain" v-if="showTableTypeSelect">
+                    <div class="picker" v-for="(item,index) in ReasonData" :key="index" :class="{active:newTableModelId == item.id}" @click="newTableModel=item.name;newTableModelId=item.id;showPicker=false">
+                        {{item.name}}
+                    </div>
+                </div>
+
+                <div class="flex-con pickerMain" v-if="showInstallWaySelect">
+                    <div class="picker" v-for="(item,index) in install" :key="index" :class="{active:installWayId == item.id}" @click="installWay=item.name;installWayId=item.id;showPicker=false">
+                        {{item.name}}
+                    </div>
+                </div>
+                <div class="popupFooter" @click="hideAllSelect">
+                    取消
+                </div>
+            </div>
+        </van-popup> -->
+
+        <van-dialog v-model="showTimePicker" title="" show-cancel-button :before-close="beforeClose">
+            <div class="timeSelect">
+                <van-datetime-picker v-model="currentDate" :show-toolbar="false" type="date" confirm-button-text="" cancel-button-text="" />
+                <!-- <van-datetime-picker v-model="chargeableTime" :show-toolbar="false" type="date" confirm-button-text="" cancel-button-text=""/> -->
+            </div>
+
+        </van-dialog>
+
+        <div id="main" class="aui-content flex-con">
+            <div class="content ">
+                <van-form @submit="SubmitWorkOrder" ref="WorkOrderForm">
+                    <div class="border"></div>
+                    <van-field class="formField" type='tel' :border="false" label="上次止度" required placeholder="请输入数值" name="lastTimeTableVal" v-model="lastTimeTableVal"></van-field>
+                    <van-field class="formField" type='tel' :border="false" label="旧表止度" required right-icon placeholder="请输入数值" name="oldTableEndVal" v-model="oldTableEndVal" @blur="changeWater"></van-field>
+
+                    <van-field class="formField" type='tel' :border="false" label="实际表码" required right-icon placeholder="请输入数值" name="ActualTableCode" v-model="ActualTableCode" readonly></van-field>
+
+                    <van-field class="formField" type='tel' :border="false" label="换表水量" required placeholder="请输入数值" name="changeTableWaterVal" v-model="changeTableWaterVal" readonly></van-field>
+                    <van-field class="formField" type='tel' :border="false" label="新表起度" required placeholder="请输入数值" name="newTanleStartVal" v-model="newTanleStartVal"></van-field>
+                    <van-field class="formField" type='tel' :border="false" label="新表表号" required placeholder="请输入数值" name="changeTableWaterNum" v-model="changeTableWaterNum">
+                      <template #button>
+                        <div class="saoma" tapmode @click="ScanCode"></div>
+                      </template>
+                    </van-field>
+
+                    <van-field class="formField" :border="false" label="计费时间" required readonly clickable name="billingTime" v-model="billingTime" placeholder="请选择" @click="showPicker = true;showAreaSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <van-field class="formField" :border="false" label="新表口径" required readonly clickable name="newTableCaliber" v-model="newTableCaliber" placeholder="请选择" @click="showPicker = true;showSourceSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+                    <van-field class="formField" :border="false" label="新表类型" required readonly clickable name="newTableType" v-model="newTableType" placeholder="请选择" @click="showPicker = true;showEmergencySelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+                    <van-field class="formField" :border="false" label="新表铭牌" required readonly clickable name="newTableName" v-model="newTableName" placeholder="请选择" @click="showPicker = true;showLevelSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+
+                    <!-- <van-field class="formField" type='tel' :border="false" label="新表铅封号" placeholder="请输入数值" name="newTableSealNum" v-model="newTableSealNum"></van-field>
+                    <van-field class="formField" type='tel' :border="false" label="止回阀" placeholder="请输入数值" name="checkValve" v-model="checkValve"></van-field>
+                    <van-field class="formField" type='tel' :border="false" label="减压阀" placeholder="请输入数值" name="reducingValve" v-model="reducingValve "></van-field> -->
+
+                    <van-field class="formField" :border="false" label="新表型号" readonly clickable name="newTableModel" v-model="newTableModel" placeholder="请选择" @click="showPicker = true;showTableTypeSelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+                    <van-field class="formField" :border="false" label="安装方式" readonly clickable name="installWay" v-model="installWay" placeholder="请选择" @click="showPicker = true;showInstallWaySelect=true" right-icon="../image/MeterManage/xiala.png"></van-field>
+                </van-form>
+            </div>
+        </div>
+
+        <div class="footer">
+            <van-button round block type="info" @click="api.closeWin()">
+                返回
+            </van-button>
+            <van-button round block type="danger" @click="getParmes()">
+                保存
+            </van-button>
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript">
+    var db;
+    apiready = function() {
+        api.parseTapmode();
+        messageObj = api.pageParam.messageObj;
+        taskInfoData = api.pageParam.taskInfoData;
+        console.log(JSON.stringify(taskInfoData));
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        bMap = api.require("bMap");
+        db = api.require("db");
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+
+    };
+// fnIntVue();
+    function fnIntVue() {
+        window.ApplyTaskVue = new Vue({
+            el: '#wrap',
+            data: {
+                showCustomerInfo: false,
+                showPicker: false,
+                showUnusualTypeSelect: false,
+                showAreaSelect: false,
+                showSourceSelect: false,
+                showEmergencySelect: false,
+                showLevelSelect: false,
+                showTableTypeSelect: false,
+                showInstallWaySelect: false,
+                // showReasonSelect: false,
+                // chooseOtherReason: false,
+                isFrist: true, //第一次进入，默认值
+
+                unusualType: {
+                    typeName: "",
+                    typeId: 0
+                },
+
+                AreaData: [], //换表时间
+                SourceData: [], //新表口径
+                EmergencyData: [], //新表类型
+                LevelData: [], //新表铭牌
+                ReasonData: [
+                //   {
+                //   id:0,
+                //   name:'ceshi'
+                // },
+                // {
+                //   id:1,
+                //   name:'ceshi'
+                // },
+                // {
+                //   id:2,
+                //   name:'ceshi'
+                // },
+                // {
+                //   id:3,
+                //   name:'ceshi'
+                // },
+                // {
+                //   id:4,
+                //   name:'ceshi'
+                // }
+
+              ], //新表型号
+                install: [], //安装方式
+
+                oldTableEndVal: "",
+                lastTimeTableVal: "",
+                newTanleStartVal: "",
+                changeTableWaterVal: "",
+                changeTableWaterNum: "",
+
+                billingTime: "",
+                billingTimeId: '',
+                newTableCaliber: "",
+                newTableCaliberId: '',
+                newTableType: "",
+                newTableTypeId: '',
+                newTableName: "",
+                newTableNameId: '',
+
+                newTableSealNum: "",
+                checkValve: "",
+                reducingValve: "",
+
+                newTableModel: "",
+                newTableModelId: '',
+                installWay: "",
+                installWayId: '',
+
+                showTimePicker: false,
+                currentDate: '',
+                chargeableTime: '',
+                Location: "正在定位中...",
+
+                ActualTableCode: '',  //实际表码
+            },
+            computed: {
+
+            },
+            watch: {
+                // currentDate: function(newVal, oldVal) {
+                //
+                // },
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                getParmes() {//
+                    if (this.oldTableEndVal == '') {
+                      vant.Toast('请输入旧表止度');
+                      return;
+                    } else if (this.ActualTableCode == '') {
+                      vant.Toast('请输入实际表码');
+                      return;
+                    } else if (this.changeTableWaterVal == '') {
+                      vant.Toast('请输入换表水量');
+                      return;
+                    } else if (this.newTanleStartVal == '') {
+                      vant.Toast('请输入新表起度');
+                      return;
+                    } else if (this.changeTableWaterNum == '') {
+                      vant.Toast('请输入新表表号');
+                      return;
+                    } else if (this.billingTime == '') {
+                      vant.Toast('请选择计费时间');
+                      return;
+                    } else if (this.newTableCaliber == '') {
+                      vant.Toast('请选择新表口径');
+                      return;
+                    } else if (this.newTableType == '') {
+                      vant.Toast('请选择新表类型');
+                      return;
+                    } else if (this.newTableName == '') {
+                      vant.Toast('请选择新表铭牌');
+                      return;
+                    }
+                    var obj = {
+                        'BeginScale': this.oldTableEndVal, //旧表止度
+                        'LastReadScale': this.lastTimeTableVal, //上次抄表止度
+                        'OriginalScale': this.newTanleStartVal, //新表起度
+                        'OldAmount': this.changeTableWaterVal, //换表水量
+                        'StampNo': this.changeTableWaterNum, //换表号
+                        'ActualTableCode': this.ActualTableCode, //实际表码
+
+                        'ComputeType': this.billingTime, //计费时间
+                        'ComputeTypeId': this.billingTimeId,
+
+                        'Caliber': this.newTableCaliber, //新表口径
+                        'CaliberId': this.newTableCaliberId,
+
+                        'MeterType': this.newTableType, //新表类型
+                        'MeterTypeId': this.newTableTypeId,
+
+                        'NamePlate': this.newTableName, //新表铭牌
+                        'NamePlateId': this.newTableNameId,
+
+                        'SealNo': this.newTableSealNum, //新表铅封号
+                        'Zhf': this.checkValve, //止回阀
+                        'Jyf': this.reducingValve, //减压阀
+
+                        'Model': this.newTableModel, //新表型号
+                        'ModelId': this.newTableModelId,
+
+                        'InstallationMode': this.installWay, //安装方式
+                        'InstallationModeId': this.installWayId
+
+                    }
+                    api.sendEvent({
+                        name: 'hbMessage',
+                        extra: {
+                            dataObj: obj,
+                        }
+                    });
+                    this.back();
+                },
+                showValFunc() {
+                    if (messageObj != '') {
+                        this.isFrist = false;
+
+                        this.oldTableEndVal = messageObj.dataObj.BeginScale; //旧表止度
+                        this.lastTimeTableVal = messageObj.dataObj.LastReadScale; //上次抄表止度
+                        this.newTanleStartVal = messageObj.dataObj.OriginalScale; //新表起度
+                        this.changeTableWaterVal = messageObj.dataObj.OldAmount; //换表水量
+                        this.changeTableWaterNum = messageObj.dataObj.StampNo; //换表号
+
+                        this.ActualTableCode = messageObj.dataObj.ActualTableCode; //实际表码
+
+                        this.billingTime = messageObj.dataObj.ComputeType; //计费时间
+                        this.billingTimeId = messageObj.dataObj.ComputeTypeId;
+
+                        this.newTableCaliber = messageObj.dataObj.Caliber; //新表口径
+                        this.newTableCaliberId = messageObj.dataObj.CaliberId;
+
+                        this.newTableType = messageObj.dataObj.MeterType; //新表类型
+                        this.newTableTypeId = messageObj.dataObj.MeterTypeId;
+
+                        this.newTableName = messageObj.dataObj.NamePlate; //新表铭牌
+                        this.newTableNameId = messageObj.dataObj.NamePlateId;
+
+                        this.newTableSealNum = messageObj.dataObj.SealNo; //新表铅封号
+                        this.checkValve = messageObj.dataObj.Zhf; //止回阀
+                        this.reducingValve = messageObj.dataObj.Jyf; //减压阀
+
+                        this.newTableModel = messageObj.dataObj.Model; //新表型号
+                        this.newTableModelId = messageObj.dataObj.ModelId;
+
+                        this.installWay = messageObj.dataObj.InstallationMode; //安装方式
+                        this.installWayId = messageObj.dataObj.InstallationModeId;
+                    } else {
+                      this.isFrist = true;
+
+                      //默认值
+                      this.lastTimeTableVal = taskInfoData.LastScale; //上次抄表止度
+
+                      this.newTableCaliber = taskInfoData.Caliber;  //新表口径
+
+                      this.billingTime = "下次";  //计费时间
+
+                      this.installWay = taskInfoData.InstallMode; //安装方式
+
+                      this.newTableType = taskInfoData.SbTypeId; //新表类型
+
+                    }
+
+                    this.getSelectList();
+                },
+                getSelectList() { //获取选择下拉项值
+                    var _that = this;
+                    //水表口径：SBKJ  新表类型： SBLX 新表名牌：SBMP 水表安装方式： SBAZFS 水表型号：SBXH
+                    _that.getSelectLocal('SBKJ', function(ret,err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          if (ret.data.length > 0) {
+                            var data = JSON.parse(ret.data[0].TypeData);
+                            data.sort(function(x,y){
+                              return parseInt(x.Id)-parseInt(y.Id);
+                            });
+                            _that.SourceData = [];
+                            for (item of data) {
+                                if (_that.isFrist) {
+                                  if (item.Name == _that.newTableCaliber) {
+                                    _that.newTableCaliberId = item.Id;
+                                  };
+                                }
+                                if (_that.newTableCaliberId != '' && _that.newTableCaliberId == item.Id) {
+                                  _that.newTableCaliber = item.Name;
+                                }
+
+                                _that.SourceData.push({
+                                    name: item.Name,
+                                    id: item.Id
+                                });
+                            }
+                          }
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                    });
+
+                    _that.getSelectLocal('SBLX', function(ret,err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          if (ret.data.length > 0) {
+                            var data = JSON.parse(ret.data[0].TypeData);
+                            _that.EmergencyData = [];
+                            for (item of data) {
+                                if (_that.isFrist) {
+                                  if (item.Name == _that.newTableType) {
+                                    _that.newTableTypeId = item.Id;
+                                  }
+                                  if (_that.newTableTypeId != '' && _that.newTableTypeId == item.Id) {
+                                    _that.newTableType = item.Name;
+                                  }
+                                }
+                                _that.EmergencyData.push({
+                                    name: item.Name,
+                                    id: item.Id
+                                });
+                            }
+                          }
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                    });
+
+                    _that.getSelectLocal('SBMP', function(ret,err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          if (ret.data.length > 0) {
+                            var data = JSON.parse(ret.data[0].TypeData);
+                            _that.LevelData = [];
+                            for (item of data) {
+                                if (_that.newTableNameId != '' && _that.newTableNameId == item.Id) {
+                                  _that.newTableName = item.Name
+                                }
+                                _that.LevelData.push({
+                                    name: item.Name,
+                                    id: item.Id
+                                });
+                            }
+                          }
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                    });
+
+                    _that.getSelectLocal('SBAZFS', function(ret,err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          if (ret.data.length > 0) {
+                            var data = JSON.parse(ret.data[0].TypeData);
+                            _that.install = [];
+                            for (item of data) {
+                                if (_that.isFrist) {
+                                  if (item.Name == _that.installWay) {
+                                    _that.installWayId = item.Id;
+                                  }
+                                }
+                                if (_that.installWayId != '' && _that.installWayId == item.Id) {
+                                  _that.installWay = item.Name;
+                                }
+                                _that.install.push({
+                                    name: item.Name,
+                                    id: item.Id
+                                });
+                            }
+                          }
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                    });
+
+                    _that.getSelectLocal('SBXH', function(ret,err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          if (ret.data.length > 0) {
+                            var data = JSON.parse(ret.data[0].TypeData);
+                            _that.ReasonData = [];
+                            for (item of data) {
+                                if (_that.newTableModelId != '' && _that.newTableModelId == item.Id) {
+                                  _that.newTableModel = item.Name;
+                                }
+                                _that.ReasonData.push({
+                                    name: item.Name,
+                                    id: item.Id
+                                });
+                            }
+                          }
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                    });
+
+                    _that.getSelectLocal('HBSLJSFS', function(ret,err){
+                      if( ret.status ){
+                          console.log( JSON.stringify( ret ) );
+                          if (ret.data.length > 0) {
+                            var data = JSON.parse(ret.data[0].TypeData);
+                            _that.AreaData = [];
+                            for (item of data) {
+                                if (_that.isFrist) {
+                                  if (item.Name == _that.billingTime) {
+                                    _that.billingTimeId = item.Id;
+                                  }
+                                }
+                                if (_that.billingTimeId != '' && _that.billingTimeId == item.Id) {
+                                   _that.billingTime == item.Name;
+                                }
+                                _that.AreaData.push({
+                                    name: item.Name,
+                                    id: item.Id,
+                                });
+                            }
+                          }
+                      }else{
+                          console.log( JSON.stringify( err ) );
+                      }
+                    });
+                },
+                getSelectLocal(typeId, callback) {
+                  db.selectSql({
+                      name: 'Wsdatabase',
+                      sql: "SELECT * FROM Review_SELECT_DATA WHERE TypeId = '"+ typeId +"'"
+                  }, function(ret, err){
+                      callback(ret, err);
+                  });
+                },
+                changeUnusualType(type) {
+                    this.unusualType = type;
+                    this.showPicker = false;
+                    this.resetForm();
+                },
+                changeReason() {
+                    if (!this.chooseOtherReason) {
+                        this.showPicker = true;
+                        this.showReasonSelect = true;
+                    }
+                },
+                clearCode() {
+                    this.showCustomerInfo = false;
+                    this.resetForm();
+                },
+                hideAllSelect() {
+                    this.showPicker = false;
+                    this.showUnusualTypeSelect = false;
+                    this.showAreaSelect = false;
+                    this.showSourceSelect = false;
+                    this.showEmergencySelect = false;
+                    this.showLevelSelect = false;
+                    this.showReasonSelect = false;
+                    this.showTableTypeSelect = false;
+                    this.showInstallWaySelect = false;
+                },
+                resetForm() {
+                    this.oldTableEndVal = "";
+                    this.lastTimeTableVal = "";
+                    this.newTanleStartVal = "";
+                    this.changeTableWaterVal = "";
+                    this.changeTableWaterNum = "";
+
+                    this.billingTime = "";
+                    this.billingTimeId = '';
+                    this.newTableCaliber = "";
+                    this.newTableCaliberId = '';
+                    this.newTableType = "";
+                    this.newTableTypeId = '';
+                    this.newTableName = "";
+                    this.newTableNameId = '';
+
+                    this.newTableSealNum = "";
+                    this.checkValve = "";
+                    this.reducingValve = "";
+
+                    this.newTableModel = "";
+                    this.newTableModelId = '';
+                    this.installWay = "";
+                    this.installWayId = '';
+
+                },
+                submit() {
+                    this.$refs.WorkOrderForm.submit();
+                },
+                SubmitWorkOrder(values) {
+                    // console.log("工单", values);
+                },
+                beforeClose(action, done) {
+                    if (action == "confirm") {
+                        var year = this.currentDate.getFullYear();
+                        var month = this.currentDate.getMonth() + 1;
+                        var day = this.currentDate.getDate();
+                        this.chargeableTime = year + '-' + month + '-' + day;
+                        done();
+                    } else if (action == 'cancel') {
+                        done();
+                    }
+                },
+                changeWater(){  //计算水量
+                  if (this.oldTableEndVal == '') {
+                    this.changeTableWaterVal = '';
+                  } else {
+                    if (parseFloat(this.oldTableEndVal) < 0) {
+                      vant.Toast('旧表止度不能小于0');
+                      this.oldTableEndVal = '';
+                    } else {
+                      if (parseFloat(this.lastTimeTableVal) > parseFloat(this.oldTableEndVal)) {
+                        this.changeTableWaterVal = '0';
+                        this.ActualTableCode = this.oldTableEndVal;
+                        this.oldTableEndVal = this.lastTimeTableVal;
+                      } else {
+                        this.changeTableWaterVal = (parseFloat(this.oldTableEndVal) - parseFloat(this.lastTimeTableVal)).toString();
+                        this.ActualTableCode = this.oldTableEndVal;
+                      }
+                    }
+                  }
+                },
+                ScanCode() {  //扫码录入新表表号
+                  var _that = this;
+                  var FNScanner = api.require("FNScanner");
+                  FNScanner.open({
+                      rect: {
+                          x: 0,
+                          y: 0,
+                          w: api.winWidth,
+                          h: api.winHeight,
+                      },
+                      autorotation: true,
+                      hintText: "扫码获取水表表号",
+                      font: {
+                          lightText: {
+                              size: 13,
+                          }
+                      }
+                  }, (ret, err) => {
+                      if (ret.eventType == 'success') {
+                          var content = ret.content;
+                          _that.changeTableWaterNum = ret.content;
+                      }
+                  });
+                },
+            },
+            mounted: function() {
+                this.showValFunc();
+            }
+        })
+    }
+</script>
+
+</html>

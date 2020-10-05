@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>表号维护界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-size: 0.95rem;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+        }
+
+        .footer {
+            width: 100vw;
+            height: 4.08rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 2.4rem;
+            background-color: #fff;
+        }
+
+        .footer .van-button {
+            width: 13.98rem;
+            height: 2.23rem;
+            line-height: normal;
+            font-size: 0.95rem;
+            color: #fff;
+            background-color: #377EFF;
+        }
+
+        .aui-tab {
+            width: 100%;
+        }
+
+        .aui-tab-item {
+            font-size: 0.95rem;
+            color: #363636;
+            padding: 1.5rem 0 1.25rem 0;
+            line-height: normal;
+            height: auto;
+        }
+
+        .aui-tab-item:first-child:after {
+            content: '';
+            position: absolute;
+            left: auto;
+            top: 1.7rem;
+            bottom: 0;
+            right: 0;
+            height: 1.85rem;
+            width: 0.03rem;
+            background-color: #DCDCDC;
+        }
+
+        .number1,
+        .number2 {
+            font-size: 1.6rem;
+            height: 1.35rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title1,
+        .title2 {
+            font-size: 0.75rem;
+            height: 0.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 0.75rem;
+        }
+
+        .number1,
+        .title1 {
+            color: #167CFB;
+        }
+
+        .number2,
+        .title2 {
+            color: #FF971D;
+        }
+
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            font-size: 0.75rem;
+            color: #999999;
+            border-right: 0.03rem solid #BBBBBB;
+            padding-right: 1.3rem;
+        }
+
+        .van-search {
+            padding: 0 1.25rem 1.05rem 1.25rem;
+        }
+
+        .van-search__content--round {
+            background-color: #fff;
+            border: 0.03rem solid #C4C4C4;
+            border-radius: 1rem;
+            padding-left: 0.93rem;
+        }
+
+        .van-search .van-cell {
+            padding: 0.3rem 0.83rem 0.3rem 0;
+        }
+
+        .van-field__right-icon {
+            padding-left: 0.83rem;
+            padding-right: 0.3rem;
+        }
+
+        .searchIcon {
+            width: 1rem;
+            height: 1rem;
+            background: url("../image/MeterManage/sousuo2.png") no-repeat center;
+            background-size: 0.83rem 0.83rem;
+        }
+
+        .van-field__clear {
+            position: absolute;
+            padding: 0 0.3rem;
+            right: 2.1rem;
+        }
+
+        .filterAndDownload {
+            width: 100%;
+            height: 3.45rem;
+            padding: 0 1.13rem 0 0.93rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.45rem;
+            background-color: #fff;
+            border-bottom: 0.15rem solid #F3F3F3;
+        }
+
+        .unDownload {
+            font-size: 0.9rem;
+            color: #2E2E2E;
+            display: flex;
+        }
+
+        .unDownload .aui-checkbox {
+            background-color: #fff;
+            border: solid 1px #D9D9D9;
+            width: 0.95rem;
+            height: 0.95rem;
+            top: 0.15rem;
+            left: 0rem;
+        }
+
+        .unDownload div:last-child {
+            margin-left: 0.8rem;
+            font-size: 0.9rem;
+            color: #2E2E2E;
+        }
+
+        .van-checkbox__label {
+            margin-left: 0.8rem;
+        }
+
+        .van-checkbox__icon .van-icon {
+            width: 0.95rem;
+            height: 0.95rem;
+            border: none;
+            background: url("../image/MeterManage/gouxuankuang.png") no-repeat center;
+            background-size: 0.95rem 0.95rem;
+        }
+
+        .van-checkbox__icon .van-icon::before {
+            display: none;
+        }
+
+        .van-checkbox__icon--checked .van-icon {
+            background: url("../image/MeterManage/xuanzhong.png") no-repeat center;
+            background-size: 0.95rem 0.95rem;
+        }
+
+        .filterAndDownload .van-button {
+            width: 4.63rem;
+            height: 1.55rem;
+            line-height: normal;
+            font-size: 0.8rem;
+            color: #fff;
+            background-color: #00D789;
+        }
+
+        .cell {
+            width: 100%;
+            height: 2.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 0 0.13rem 0 0.93rem;
+            margin: 0.15rem 0;
+        }
+
+        .bookName {
+            height: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #08CD86;
+        }
+
+        .bookName .van-checkbox__label {
+            font-size: 0.9rem;
+            color: #FB3B3B;
+        }
+
+        .bookName.downloaded .van-checkbox__label {
+            color: #08CD86;
+        }
+
+        .total {
+            width: 4rem;
+            height: 0.95rem;
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.7rem;
+            color: #AAAAAA;
+        }
+
+        .c-aui-row {
+            width: 100%;
+            height: 2.55rem;
+            line-height: 2.55rem;
+            border-bottom: 0.15rem solid rgba(243, 243, 243, 1);
+            background: #fff;
+        }
+
+        .aui-checkbox {
+            background-color: #fff;
+            border: solid 1px #D9D9D9;
+            width: 0.95rem;
+            height: 0.95rem;
+            left: 0.95rem;
+            top: 0.7rem;
+        }
+
+        .aui-checkbox.aui-checked {
+            background-color: #2074FF;
+            border: solid 1px #2074FF;
+        }
+
+        .c-aui-row .aui-col-xs-7 {
+            padding-left: 0rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #FB3B3B;
+            margin-left: -0.3rem;
+        }
+
+        .c-aui-row .aui-col-xs-3 {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: #AAAAAA;
+            padding-left: 0.8rem;
+        }
+
+        .c-aui-row .aui-col-xs-7.c-downloaded {
+            color: #08CD86;
+        }
+
+        .c-aui-row .aui-col-xs-12 {
+            width: 100%;
+            font-size: 0.8rem;
+            color: #A1A1A1;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak>
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">表号维护</div>
+        </header>
+
+        <div class="aui-tab">
+            <div class="aui-tab-item">
+                <div class="number1">{{BookNum}}</div>
+                <div class="title1">
+                    开户本数
+                </div>
+            </div>
+            <div class="aui-tab-item">
+                <div class="number2">{{TotalNum}}</div>
+                <div class="title2">
+                    开户总数
+                </div>
+            </div>
+        </div>
+
+        <van-search v-model="searchValue" placeholder="请输入内容" left-icon="" shape="round" @clear="onClear">
+            <div class="searchIcon" slot="right-icon" onclick='onSearch()'></div>
+        </van-search>
+
+        <div class="filterAndDownload">
+            <div class="unDownload" onclick='notDownload(this)'>
+                <!-- <van-checkbox shape="square" v-model="showUnDownload">未下载</van-checkbox> -->
+                <div type="checkbox" class='aui-checkbox'></div>
+                <div>未下载</div>
+            </div>
+            <van-button round block type="success" onclick='DownloadData()'>
+                下载
+            </van-button>
+        </div>
+
+        <div id="main" class="flex-con">
+            <!-- <div class="aui-row c-aui-row"  v-for="(book,index) in listData" :key="index">
+                <div class="aui-col-xs-1" @click='onSelectChecked(index,book)'><div type="checkbox" :class='{aui-checkbox,aui-checked:book.downloaded}' ></div> </div>
+                 <div class="aui-col-xs-8">{{book.Name.substring(0,15)}}...</div>
+                <div class="aui-col-xs-3">总数:&nbsp;{{book.Count}}</div>
+            </div> -->
+            <!-- <div class="aui-row c-aui-row">
+                <div class="aui-col-xs-1"><input type="checkbox" class='aui-checkbox aui-checked'> </div>
+                <div class="aui-col-xs-8">5657677</div>
+                <div class="aui-col-xs-3">总数:&nbsp;78799</div>
+            </div> -->
+
+            <!-- <van-checkbox-group v-model="checkedBooks">
+                <div class="cell" v-for="(book,index) in listData" :key="index" @click="toggleChecked(index,book)">
+
+                    <div class="bookName" :class="{downloaded:book.downloaded}">
+                        <van-checkbox shape="square" v-model="book.checked" :name="book" ref="checkboxes">{{book.Name.substring(0,15)}}...</van-checkbox>
+                    </div>
+
+                    <div class="total">总数：{{book.Count}}</div>
+
+                </div>
+            </van-checkbox-group> -->
+
+        </div>
+
+        <div class="footer">
+
+            <van-button round block type="info" @click="LeakScan">
+                漏扫
+            </van-button>
+
+        </div>
+
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/template" id='listDemo'>
+    {{ if list.length >0}} {{each list value i}}
+    <div class="aui-row c-aui-row">
+        <div class="aui-col-xs-2" param="{{value}}" onclick='onSelectChecked(this)'>
+            <div type="checkbox" param="{{value}}" class='aui-checkbox'></div>
+        </div>
+        {{if value.downloaded == 1}}
+        <div class="aui-col-xs-7 c-downloaded" param="{{value}}" onclick="onGotoScan(this)">{{value.Name.substring(0,15)}}...</div>
+        {{else}}
+        <div class="aui-col-xs-7" param="{{value}}" onclick="onGotoScan(this)">{{value.Name.substring(0,15)}}...</div>
+        {{/if}}
+        <div class="aui-col-xs-3">总数:&nbsp;{{value.Count}}</div>
+    </div>
+    {{/each}} {{else}}
+    <div class="aui-row c-aui-row" param="{{value}}" onclick='onSelectChecked(this)'>
+        <div class="aui-col-xs-12">没有更多的搜索结果!</div>
+    </div>
+    {{/if}}
+</script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        getDatas();
+        api.addEventListener({
+            name: 'RenderCopyList'
+        }, function(ret, err) {
+            window.location.reload();
+        });
+        api.addEventListener({
+            name: 'scrolltobottom',
+            extra: {
+                threshold: 0 //设置距离底部多少距离时触发，默认值为0，数字类型
+            }
+        }, function(ret, err) {
+            VmData.Pageindex+=1;
+            getDataList();
+
+        });
+
+    };
+    var VmData = {
+            searchValue: "",
+            BookNum: 0,
+            TotalNum: 0,
+            AllBookNum:0,
+            AllTotalNum:0,
+            showUnDownload: false,
+            checkedBooks: [],
+            booksData: [],
+            rawData: [], //原始数据，
+            Pageindex: 1,
+
+        }
+        // fnIntVue();
+
+    function fnIntVue() {
+        window.FilterVue = new Vue({
+            el: '#wrap',
+            data: VmData,
+            computed: {
+                listData: function() {
+                    if (this.showUnDownload) {
+                        return this.booksData.filter(function(item) {
+                            return !item.downloaded;
+                        })
+                    } else {
+                        return this.booksData;
+                    }
+                }
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                },
+                LeakScan() {
+                    if ($('.c-downloaded').length > 0) {
+                        api.openWin({
+                            name: 'MeterNoScan',
+                            url: './MeterNoScan.html',
+                            pageParam: {
+                                data: '',
+                                from: 'button'
+                            }
+                        });
+                    } else {
+                        vant.Toast('请先下载数据!')
+                    }
+
+                },
+                toggleChecked(index, data) {
+                    this.$refs.checkboxes[index].toggle();
+                },
+                onClear: function() {
+                    VmData.Pageindex =1;
+                    getDatas();
+                },
+                createTable: function() {
+                    var db = api.require("db");
+                    //  db.executeSql({
+                    //   name: 'Wsdatabase',
+                    //   sql: 'DROP TABLE UserInfosheet'
+                    //   }, function(ret, err) {
+                    //   if (ret.status) {
+                    //   // console.log("表删除成功");
+                    //   } else {
+                    //   // console.log("表删除失败");
+                    //   }
+                    //   });
+                    //    db.executeSql({
+                    //    name: 'Wsdatabase',
+                    //     sql: 'DROP TABLE Copyformsheet'
+                    //     }, function(ret, err) {
+                    //     if (ret.status) {
+                    //     // console.log("表删除成功");
+                    //     } else {
+                    //     // console.log("表删除失败");
+                    //     }
+                    //     });
+                    // 抄表册表
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: 'SELECT * FROM Copyformsheet'
+                    }, (ret, err) => {
+                        if (ret.status) {
+                            // 表存在,则不重新建立
+                        } else {
+                            // 创建表（表不存在）
+                            db.executeSql({
+                                name: 'Wsdatabase',
+                                sql: 'CREATE TABLE Copyformsheet(Id int,BookId int, Name varchar(255), Count int, downloaded int,sweepCodeNum int,uploadedNum int,usersCount int)'
+                            }, (ret, err) => {
+                                if (ret.status) {
+                                    // console.log('表创建成功');
+                                } else {
+                                    console.log('表创建失败');
+                                }
+                            });
+                        }
+                    });
+                    // 用户信息表
+                    db.selectSql({
+                        name: 'Wsdatabase',
+                        sql: 'SELECT * FROM UserInfosheet'
+                    }, (ret, err) => {
+                        if (ret.status) {
+                            // 表存在,则不重新建立
+                        } else {
+                            // 创建表（表不存在）
+                            db.executeSql({
+                                name: 'Wsdatabase',
+                                sql: 'CREATE TABLE UserInfosheet(Id int,BookId varchar(255),CustomerCode varchar(255),CustomerName varchar(255),Address varchar(255),Location varchar(255),NatureName varchar(255),Caliber varchar(255),MeterType varchar(255),StampNo varchar(255),AreaId varchar(255),OrganizationCode varchar(255),Longitude varchar(255),Latitude varchar(255),Remark varchar(255),ImageUrl varchar(255),isUpload int,errMessage varchar(255))'
+                            }, (ret, err) => {
+                                if (ret.status) {
+                                    // console.log('用户表创建成功');
+                                } else {
+                                    // console.log('用户表创建失败');
+                                }
+                            });
+                        }
+                    });
+
+                },
+
+            },
+            mounted: function() {
+                this.createTable();
+            }
+        })
+    }
+    // 搜索
+    function onSearch() {
+      VmData.Pageindex =1;
+        getDatas();
+    }
+    // 列表中复选框选择
+    function onSelectChecked(that) {
+        var param = $(that).attr('param');
+        // console.log(JSON.stringify(param));
+        if ($(that).find('.aui-checkbox').hasClass('aui-checked')) {
+            $(that).find('.aui-checkbox').removeClass('aui-checked');
+        } else {
+            $(that).find('.aui-checkbox').addClass('aui-checked');
+        }
+
+    }
+    // 未下载筛选
+    function notDownload(that) {
+        var db = api.require("db");
+        var selectSql = '';
+        $('#main').html('');
+        if ($(that).find('.aui-checkbox').hasClass('aui-checked')) {
+            $(that).find('.aui-checkbox').removeClass('aui-checked');
+            selectSql = 'SELECT * FROM Copyformsheet';
+        } else {
+            $(that).find('.aui-checkbox').addClass('aui-checked');
+            selectSql = 'SELECT * FROM Copyformsheet where downloaded = 0';
+        }
+
+        setTimeout(() => {
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: selectSql
+            }, function(ret, err) {
+                if (ret.status) {
+                    renderData(ret.data);
+                }
+            });
+        }, 500)
+    }
+    // 获取抄表册数据
+    function getDatas() {
+
+        var db = api.require("db");
+        var searchValue = VmData.searchValue;
+        var body = {
+            Name: VmData.searchValue,
+        };
+
+        if (api.connectionType != 'none' && api.connectionType != "2g") {
+          api.showProgress({
+              style: 'default',
+              animationType: 'fade',
+              title: '加载中...',
+              modal: false
+          });
+            fnPost('OSM003', body, 'application/json', false, false, (ret, err) => {
+                if (ret && ret.Status == 0) {
+                    var data = JSON.parse(ret.Data);
+                    // console.log(JSON.stringify(data));
+                    var dataNumber = 0;
+                    if (data.Books.length > 0) {
+                        for (let i = 0; i < data.Books.length; i++) {
+                            (function(i) {
+                                VmData.booksData.push(data.Books[i]);
+                                db.selectSql({
+                                    name: 'Wsdatabase',
+                                    sql: 'SELECT BookId FROM Copyformsheet where BookId =' + data.Books[i].Id + ''
+                                }, (ret, err) => {
+                                    if (ret.status) {
+                                        // 判断数据库中是否存在（存在则更新，不存在则添加到表中）
+                                        dataNumber++;
+                                        if (ret.data.length == 0) {
+                                            // 查询数据是否已经下载到本地，已经下载，则更新数据，没有下载，则下载到本地
+                                            db.executeSql({
+                                                name: 'Wsdatabase',
+                                                sql: 'INSERT INTO Copyformsheet (Id,BookId,Name,Count,downloaded,sweepCodeNum,uploadedNum,usersCount)  VALUES (' + i + ',' + data.Books[i].Id + ',"' + data.Books[i].Name +
+                                                    '",' + data.Books[i].Count +
+                                                    ',0,0,0,' + data.Books[i].Count + ')'
+                                            }, function(ret, err) {
+                                                if (ret.status) {
+                                                    // console.log( JSON.stringify( ret ) );
+                                                } else {
+                                                    console.log(JSON.stringify(err));
+                                                }
+                                            });
+                                        } else {
+                                            db.executeSql({
+                                                name: 'Wsdatabase',
+                                                sql: 'UPDATE Copyformsheet SET BookId = ' + data.Books[i].Id + ',Name="' + data.Books[i].Name + '",Count=' + data.Books[i].Count + ' WHERE BookId = ' + data.Books[i]
+                                                    .Id + ''
+                                            }, function(ret, err) {
+                                                if (ret.status) {
+                                                    // console.log(JSON.stringify(ret));
+                                                } else {
+                                                    console.log(JSON.stringify(err));
+                                                }
+                                            });
+                                        }
+
+                                        if (dataNumber == data.Books.length) { //dataNumber 用于判断循环是否结束
+                                            // $('#main').html('');
+                                            VmData.BookNum = VmData.booksData.length;
+                                            VmData.AllBookNum=VmData.booksData.length;
+                                            var TotalNum = 0;
+                                            VmData.booksData.forEach(e => {
+                                                TotalNum += parseInt(e.Count);
+                                            })
+                                            VmData.TotalNum = TotalNum;
+                                            VmData.AllTotalNum =TotalNum;
+                                                  getDataList();
+                                            // 没有搜索条件时
+                                            // if (searchValue == '') {
+                                            //     VmData.BookNum = data.BookCount;
+                                            //     VmData.TotalNum = data.CustomerCount;
+                                            //     getDataList();
+                                            //     // db.selectSql({
+                                            //     //     name: 'Wsdatabase',
+                                            //     //     sql: `SELECT * FROM Copyformsheet limit ${this.Pageindex},20`
+                                            //     // }, (ret, err) => {
+                                            //     //     if (ret.status) {
+                                            //     //         console.log( JSON.stringify( ret ) );
+                                            //     //         this.booksData = ret.data;
+                                            //     //         var Pdata = {
+                                            //     //             list: this.booksData,
+                                            //     //         }
+                                            //     //         var str = template('listDemo', Pdata);
+                                            //     //         $('#main').append(str);
+                                            //     //         api.hideProgress();
+                                            //     //     }
+                                            //     // });
+                                            // } else {
+                                            //     // 有搜索条件时
+                                            //     db.selectSql({
+                                            //         name: 'Wsdatabase',
+                                            //         sql: 'SELECT * FROM Copyformsheet where Name LIKE "%' + searchValue + '%"'
+                                            //     }, (ret, err) => {
+                                            //         if (ret.status) {
+                                            //             renderData(ret.data);
+                                            //         }
+                                            //     });
+                                            // }
+
+                                        }
+                                    }
+                                });
+                            })(i);
+
+
+                        } //for语句执行完毕
+                        VmData.rawData = this.booksData;
+                    }
+                } else {
+                    //  查询结果为0的时候
+                    renderData([]);
+                }
+            });
+
+        } else { // 没有网络时，查询本地数据库
+          api.showProgress({
+              style: 'default',
+              animationType: 'fade',
+              title: '加载中...',
+              modal: false
+          });
+            var sql = '';
+            if (searchValue == '') {
+                sql = `SELECT * FROM Copyformsheet order by downloaded desc`;
+            } else {
+                sql = 'SELECT * FROM Copyformsheet where Name LIKE "%' + searchValue + '%"';
+            }
+            db.selectSql({
+                name: 'Wsdatabase',
+                sql: sql
+            }, function(ret, err) {
+                if (ret.status) {
+                  VmData.booksData = ret.data;
+                  VmData.BookNum = VmData.booksData.length;
+                  VmData.AllBookNum=VmData.booksData.length;
+                  var TotalNum = 0;
+                  VmData.booksData.forEach(e => {
+                      TotalNum += parseInt(e.Count);
+                  })
+                  VmData.TotalNum = TotalNum;
+                  VmData.AllTotalNum =TotalNum;
+                    api.hideProgress();
+                    renderData(ret.data);
+                }
+            });
+        }
+
+    }
+
+    function getDataList(){
+      // 判断是否有查询条件
+      api.showProgress({
+          title: '加载中',
+          text: '',
+          modal: false
+      });
+      var sql = '';
+      var db = api.require("db");
+      if(VmData.Pageindex == 1){
+          var page = VmData.Pageindex;
+      } else {
+          var count = VmData.Pageindex -1;
+          var page = count*20 +1;
+      }
+      if (VmData.searchValue == '') {
+          sql = `SELECT * FROM Copyformsheet order by downloaded desc `;
+      } else {
+          sql = 'SELECT * FROM Copyformsheet where Name LIKE "%' + VmData.searchValue + '%"';
+      }
+
+      db.selectSql({
+          name: 'Wsdatabase',
+          sql: sql
+      }, function(ret, err) {
+          if (ret.status) {
+            if(ret.data.length > 0){
+                renderData(ret.data);
+            } else  {
+              vant.Toast('没有更多数据了!');
+            }
+
+          }
+      });
+    }
+
+    //  渲染数据
+    function renderData(data) {
+        // $('#main').html('');
+        VmData.booksData = data;
+        if(VmData.searchValue!=''){
+          VmData.BookNum = VmData.booksData.length;
+          var TotalNum = 0;
+          VmData.booksData.forEach(e => {
+              TotalNum += parseInt(e.Count);
+          })
+          VmData.TotalNum = TotalNum;
+        } else {
+          VmData.BookNum = VmData.AllBookNum;
+          VmData.TotalNum = VmData.AllTotalNum;
+        }
+        if(VmData.Pageindex == 1){
+          $('#main').html('');
+        }
+        var Pdata = {
+            list: VmData.booksData,
+        }
+        var str = template('listDemo', Pdata);
+        $('#main').append(str);
+        if($('#main').html()!=''){
+            api.hideProgress();
+        }
+
+    }
+    //  下载用户数据
+    //  下载用户数据
+    var tableId = 0;
+    function DownloadData() {
+        var checkedData = $('#main .aui-checked');
+        if (checkedData.length == 0) {
+            vant.Toast('请先选择需要下载的资源!');
+            return false;
+        }
+        var db = api.require("db");
+        db.selectSql({
+            name: 'Wsdatabase',
+            sql: 'select Id from UserInfosheet order by Id desc limit 1'
+        }, (ret, err) => {
+            if (ret.status) {
+                if (ret.data.length > 0) {
+                    tableId = ret.data[0].Id;
+                }
+            }
+        });
+        if (api.connectionType != 'none' && api.connectionType != '2g') {
+            api.showProgress({
+                style: 'default',
+                animationType: 'fade',
+                title: '加载中...',
+                modal: false
+            });
+            var bookDatas = [];
+            var forNmuber = 0; //用于判断选择的数据是否已经循环完
+            for (let i = 0; i < checkedData.length; i++) {
+                var data = $(checkedData[i]).attr('param');
+                // console.log(JSON.stringify(data));
+                data = JSON.parse(data);
+                bookDatas.push(data);
+            }
+
+            if (checkedData.length == bookDatas.length) {
+                let n = 0;
+                var bookDatasCounts = 0,
+                    singsCounts = 0,
+                    logId = 0;
+                for (; n < bookDatas.length; n++) {
+                    (function(n) {
+                        var bookCount = bookDatas[n].Count;
+                        bookDatasCounts += bookDatas[n].Count;
+                        var BookId = bookDatas[n].BookId;
+                        var count = 0;
+                        var body = {
+                            BookId: bookDatas[n].BookId,
+                            ReaderId: '',
+                            Code: '',
+                            BeginTime: '',
+                            EndTime: '',
+                            Obscure: '',
+                            isWater: "1",
+                        };
+                        fnPost('OSM002', body, 'application/json', false, false, (ret, err) => {
+                            api.hideProgress();
+                            if (ret && ret.Status == 0) {
+                                var data = JSON.parse(ret.Data);
+                                var result = JSON.parse(JSON.stringify(data));
+                                for (let m = 0; m < result.length; m++) {
+                                    (function(m) {
+                                        db.selectSql({
+                                            name: 'Wsdatabase',
+                                            sql: 'SELECT * FROM UserInfosheet where BookId =' + BookId + ' and CustomerCode="' + result[m].CustomerCode + '"'
+                                        }, (ret, err) => {
+                                            if (ret.status) {
+
+                                                if (ret.data.length == 0) {
+                                                    tableId++;
+                                                    db.executeSql({
+                                                        name: 'Wsdatabase',
+                                                        sql: 'INSERT INTO UserInfosheet (Id,BookId,CustomerCode,CustomerName,Address,Location,NatureName,Caliber,MeterType,StampNo,AreaId,OrganizationCode,Longitude,Latitude ,Remark,ImageUrl,isUpload,errMessage) VALUES (' +
+                                                            tableId + ',"' +
+                                                            BookId + '","' + result[m].CustomerCode + '","' + result[m].CustomerName + '","' + result[m].Address + '","' + result[m].Location + '","' + result[m].NatureName +
+                                                            '","' + result[m].Caliber + '","' + result[m].MeterType + '","' + result[m].StampNo + '","' + result[m].AreaId + '","' + result[m].OrganizationCode +
+                                                            '","","","","",0,"")'
+                                                    }, function(ret, err) {
+                                                        if (ret.status) {
+                                                            count++;
+                                                            singsCounts++;
+                                                            if (count == bookCount) {
+                                                                forNmuber++;
+                                                                logId++;
+                                                                // 更新抄表册 (用于判断抄表册里面的用户是否已经下载完)
+                                                                db.executeSql({
+                                                                    name: 'Wsdatabase',
+                                                                    sql: 'UPDATE Copyformsheet SET downloaded= 1  WHERE BookId = ' + BookId + ''
+                                                                }, function(ret, err) {
+                                                                    if (ret.status) {
+                                                                        if (forNmuber == bookDatas.length) {
+                                                                            getDataList();
+                                                                        }
+
+                                                                    } else {
+                                                                        console.log(JSON.stringify(err));
+                                                                    }
+                                                                });
+
+                                                                // 插入日志信息
+                                                                var time = moment().format('YYYY-MM-DD HH:mm:ss');
+
+                                                                db.executeSql({
+                                                                    name: 'Wsdatabase',
+                                                                    sql: 'INSERT into Logsheet (Id,content,time) values (' + logId + ',"水表维护抄表本下载成功","' + time + '")'
+                                                                }, function(ret, err) {
+                                                                    if (ret.status) {
+                                                                        //  console.log( "日志添加成功");
+                                                                    } else {
+                                                                        console.log(JSON.stringify(err));
+                                                                    }
+                                                                });
+                                                            }
+                                                            // if 更新抄表册和插入日志 结束
+                                                            if (singsCounts == bookDatasCounts) {
+                                                                api.toast({
+                                                                    msg: '资源下载成功',
+                                                                    duration: 2000,
+                                                                    location: 'top'
+                                                                });
+
+                                                            }
+                                                        }
+                                                    }); //接口调用结束
+
+                                                }
+                                            }
+                                        });
+                                    })(m);
+                                }
+                                // for 语句结束
+                                // console.log(JSON.stringify(result));
+                            } else{
+                              vant.Toast(ret.Message);
+                            }
+                        });
+                    })(n);
+                }
+            }
+        } else {
+            api.toast({
+                msg: '网络未连接,请连接网络后下载',
+                duration: 2000,
+                location: 'top'
+            });
+
+        }
+
+    }
+
+    // 进行扫码
+    function onGotoScan(that) {
+        var params = $(that).attr('param');
+        if ($(that).hasClass('c-downloaded')) {
+            api.openWin({
+                name: 'MeterNoScan',
+                url: './MeterNoScan.html',
+                pageParam: {
+                    data: JSON.parse(params),
+                    from: 'list'
+                }
+            });
+
+            //  var db = api.require("db");
+            //  db.selectSql({
+            //      name: 'Wsdatabase',
+            //      sql: 'SELECT * FROM UserInfosheet'
+            //  }, function(ret, err){
+            //      if( ret.status ){
+            //          console.log( JSON.stringify( ret ) );
+            //          console.log( ret.data.length);
+            //      }else{
+            //          alert( JSON.stringify( err ) );
+            //      }
+            //  });
+
+        } else {
+            api.toast({
+                msg: '请先下载资源',
+                duration: 2000,
+                location: 'top'
+            });
+
+        }
+    }
+</script>
+
+</html>

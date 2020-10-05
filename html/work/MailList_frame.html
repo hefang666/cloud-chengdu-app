@@ -1,0 +1,447 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>客户通讯录页面</title>
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/dialog.css" />
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+            overflow-y: hidden;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 3;
+            background-color: #fff;
+            color: #333333;
+            font-size: 0.9rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+            border: none;
+            background-size: 100% 1px;
+            background-repeat: no-repeat;
+            background-position: bottom;
+            background-image: linear-gradient(0, #dddddd, #dddddd 50%, transparent 50%);
+            background-image: -webkit-linear-gradient(90deg, #dddddd, #dddddd 50%, transparent 50%);
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333;
+            font-weight: 900;
+            width: 0.6rem;
+            height: 1.05rem;
+        }
+        /*顶部导航栏*/
+
+        #header {
+            position: fixed;
+            background: #F8F8F8;
+        }
+
+        #header .add {
+            width: 1rem;
+            height: 1rem;
+            background: url('../../../image/Customer/mail-add.png');
+            background-size: 1rem 1rem;
+            position: absolute;
+            right: 0.9rem;
+            bottom: 0.7rem;
+        }
+
+        #header .aui-bar-nav,
+        .aui-bar.aui-bar-light {
+            background-image: none;
+        }
+        /*搜索条*/
+
+        .aui-searchbar {
+            height: 3.4rem;
+            position: absolute;
+            bottom: 0.75rem;
+            background-color: #F8F8F8;
+        }
+
+        .aui-searchbar .aui-searchbar-input {
+            width: 17.15rem;
+            height: 1.8rem;
+            background: rgba(142, 142, 147, 0.12);
+            border-radius: 0.5rem;
+            line-height: 2rem;
+        }
+
+        .aui-searchbar .aui-searchbar-input input {
+            margin-top: 0.2rem;
+            font-size: 0.85rem;
+            color: #8E8E93;
+        }
+
+        #search .aui-searchbar-clear-btn {
+            top: 7px;
+            background: #fff;
+        }
+        /*联系人列表*/
+
+        .department {
+            position: absolute;
+            /*top: 5.8rem;*/
+            width: 100%;
+            height: 2rem;
+            background: rgba(245, 245, 255, 1);
+        }
+
+        .department .departmentIcon {
+            width: 1.2rem;
+            height: 1.05rem;
+            background: url('../../../image/Customer/department.png');
+            background-size: 1.1rem 1.05rem;
+            margin: 0.5rem 0.3rem 0 0;
+        }
+
+        .department .aui-list .aui-list-item-inner {
+            font-size: 0.85rem;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: #333333;
+        }
+
+        .department .aui-list {
+            background-color: #F5F5FF;
+            background-image: none;
+        }
+
+        .department .aui-list .aui-list-item {
+            background-image: none;
+        }
+
+        .aui-list-item-arrow:before {
+            content: '';
+            width: 0.4rem;
+            height: 0.4rem;
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            margin-top: -0.2rem;
+            background: transparent;
+            border: 1px solid #999;
+            border-top: none;
+            border-right: none;
+            z-index: 2;
+            -webkit-border-radius: 0;
+            border-radius: 0;
+            -webkit-transform: rotate(-135deg);
+            transform: rotate(-135deg);
+        }
+        /*总和*/
+
+        .contactsSum {
+            width: 100%;
+            position: fixed;
+            bottom: 0.35rem;
+            /*padding: 1rem 7.15rem 0 7.15rem;*/
+        }
+
+        .contacts_title {
+            width: 4.45rem;
+            height: 1rem;
+            font-size: 0.7rem;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: #666;
+            line-height: 1rem;
+            letter-spacing: -0.02rem;
+            margin: 0 7.15rem;
+        }
+
+        .contacts_title span {
+            color: #FC8670;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="aui-bar aui-bar-nav aui-bar-light" id="header">
+        <div class="aui-pull-left aui-btn" tapmode data-action="back">
+
+        </div>
+        <div class="aui-title">通讯录</div>
+        <div class="aui-pull-right add open-win" win='creatContacts'>
+        </div>
+    </header>
+    <div class="aui-searchbar" id="search">
+        <div class="aui-searchbar-input aui-border-radius">
+            <i class="aui-iconfont aui-icon-search"></i>
+            <input type="search" placeholder="请输入搜索内容" id="search-input">
+            <div class="aui-searchbar-clear-btn" tapmode data-action='clearSearch'>
+                <i class="aui-iconfont aui-icon-close"></i>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="department" id="department">
+        <ul class="aui-list aui-list-in">
+            <li class="aui-list-item open-win" win='GroupContacts'>
+                <div class="departmentIcon"></div>
+                <div class="aui-list-item-inner aui-list-item-arrow">
+                    部门
+                </div>
+            </li>
+        </ul>
+    </div> -->
+
+    <div class="contactsSum aui-hide">
+        <div class="contacts_title">
+            共<span id='contactsNum'></span>位联系人
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/diy/public.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/hammer.min.js"></script>
+<script type="text/javascript" src="../../script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/diy/template.js"></script>
+<script type="text/javascript">
+    var headerH;
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.setWinAttr({
+            bounces: false
+        });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        searchH = $api.offset($api.byId('search')).h;
+        $('.aui-searchbar').css('top', '' + headerH + 'px');
+        fnReady();
+        // mailList();
+        getSysContacts();
+    };
+
+    operationDom();
+    var actionList = {
+        'back': function() {
+            api.closeWin();
+        },
+        'clearSearch': function() {
+            $(this).hide();
+            $('#search-input').val('');
+            // mailList();
+        }
+
+    }
+    $('#search-input').bind('input propertychange', function() {
+        var value = $(this).val();
+        if (value == '') {
+            $('.aui-searchbar-clear-btn').hide();
+            // mailList();
+        } else {
+            $('.aui-searchbar-clear-btn').show();
+            // mailList();
+        }
+
+    });
+
+  //  获取手机本身联系人
+   function getSysContacts(){
+    //  console.log(api.systemVersion)
+     if(api.systemVersion < 9 &&  api.systemType == "ios" ){
+       api.toast({
+           msg: '系统版本过低',
+           duration: 2000,
+           location: 'middle'
+       });
+  //    } else {
+  //      var DVContacts = api.require('DVContacts');
+  //        DVContacts.allContacts(function(ret,err) {
+  //     if (ret) {
+  //         console.log(JSON.stringify(ret));
+  //     } else {
+  //       console.log(JSON.stringify(err));
+  //     }
+  // });
+
+
+     }
+   }
+
+
+
+
+
+
+    function mailList() {
+        var UIListCard = api.require('UIListCard');
+        var h = $api.offset($api.byId('header')).h + $api.offset($api.byId('search')).h;
+        var filter = $('#search-input').val();
+        var PageIndex = 1;
+        var url = 'services/app/Contact/GetContactList?OrgId=0&Type=2&ContactName=' + filter + '&PageIndex=' + PageIndex + '&SkipCount=1&MaxResultCount=10';
+        fnGet(url, {}, false, function(ret, err) {
+          api.hideProgress();
+            if (ret && ret.result.items.length != 0) {
+                var result = ret.result.items;
+                $('.contactsSum').removeClass('aui-hide');
+                $('.contactsSum').find('span').text(result.length);
+                var contacts = [];
+                result.forEach(function(p){
+                    var contact = {
+                        "id": p.id,
+                        "name": p.contactName,
+                        "customerTypes": "",
+                        "orgName": p.orgName,
+                        "tags": "",
+                        "isremark": 1,
+                        "phones": [{
+                            "tel": p.mobile,
+                            "type": "1"
+                        }, {
+                            "tel": p.tel,
+                            "type": "1"
+                        }]
+                    };
+                    contacts.push(contact);
+                });
+
+                UIListCard.open({
+                    rect: {
+                        x: 0,
+                        y: h,
+                        w: api.frameWidth,
+                        h: 515
+                    },
+                    styles: {
+                        backgroudColor: '#fff',
+                        sectionTitle: {
+                            bgColor: '#eee',
+                            color: '#333',
+                            size: 17,
+                            height: 25
+                        },
+                        item: {
+                            bgColor: '#fff',
+                            activeBgColor: '#eee',
+                            color: '#666',
+                            size: 18,
+                            height: 79,
+                            customerColor: '#999',
+                            customerSize: 12,
+
+                        }
+                    },
+                    contacts: contacts,
+                    fixedOn: 'MailList_frame'
+                }, function(ret) {
+                    if (ret) {
+                        var value = ret.contact;
+                        if (ret.eventType == 'click') {
+                            api.actionSheet({
+                                cancelTitle: '取消',
+                                buttons: ['电话', '短信']
+                            }, function(ret, err) {
+
+                                var index = ret.buttonIndex;
+                                if (index != 3) {
+                                    Call(value.phones, index);
+                                }
+
+                            });
+
+                        }
+                    }
+                });
+            }
+            api.hideProgress();
+        });
+    }
+
+    function Call(value, index) {
+        var Phones = [];
+        var PhoneObj = [];
+        for (var i = 0; i < value.length; i++) {
+            value[i].index = i;
+            if (value[i].tel != '') {
+                if (value.length > 1 && value[i].index != 0) {
+                    if (value[i - 1].tel == '') {
+                        value[i].index = value[i].index - 1;
+                    }
+                }
+                Phones.push(value[i].tel);
+                PhoneObj.push({
+                    index: value[i].index,
+                    value: value[i].tel,
+                });
+
+            }
+        }
+        if (index == 1) {
+            api.actionSheet({
+                cancelTitle: '取消',
+                buttons: Phones
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                PhoneObj.forEach(function(p){
+                    if (p.index == (index - 1)) {
+                        api.call({
+                            type: 'tel_prompt',
+                            number: p.value
+                        });
+                    }
+                });
+
+            });
+        } else {
+            api.actionSheet({
+                cancelTitle: '取消',
+                buttons: Phones
+            }, function(ret, err) {
+                var index = ret.buttonIndex;
+                PhoneObj.forEach(function(p){
+                    if (p.index == (index - 1)) {
+                        api.sms({
+                            numbers: [p.value],
+                            text: '测试短信',
+                        }, function(ret, err) {
+                            if (ret && ret.status) {
+                                api.toast({
+                                    msg: '短信发送成功',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            } else {
+                                api.toast({
+                                    msg: '短信发送失败',
+                                    duration: 2000,
+                                    location: 'bottom'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        }
+
+    }
+</script>
+
+</html>

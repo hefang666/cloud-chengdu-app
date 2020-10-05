@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>用户详情界面</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/vant.css" />
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+            color: #FFF;
+            font-size: 0.95rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #FFF;
+            font-weight: 900;
+        }
+
+        .aui-bar-nav .aui-pull-right {
+            font-size: 0.95rem;
+        }
+
+        [v-cloak] {
+            display: none;
+        }
+
+        .flex-con {
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            background-color: #F3F3F3;
+            padding: 1.55rem 0.75rem;
+        }
+
+        .card {
+            border-radius: 0.6rem;
+            background-color: #fff;
+            padding: 0rem 0.68rem 1rem 0.68rem;
+            margin-bottom: 1.57rem;
+        }
+
+        .flex-con .van-cell {
+            padding: 0.4rem 0.55rem;
+            background-color: transparent;
+        }
+
+        .title {
+            font-size: 0.9rem;
+            color: #2979FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 0.08rem solid #4F96FF;
+            padding: 0.6rem 0 0.5rem 0;
+        }
+
+        .van-field__label {
+            font-size: 0.9rem;
+            color: #1F1F1F;
+        }
+
+        .van-field__control[type=text],
+        .van-field__control[type=search] {
+            height: auto;
+            line-height: inherit;
+            width: 49vw;
+            font-size: 0.9rem;
+            color: #626262;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .flex-con .van-field__label span {
+            width: 4rem;
+            font-size: 0.9rem;
+            color: #1F1F1F;
+            text-align: justify;
+            text-align-last: justify;
+            padding: 0;
+            margin-right: 1rem;
+            padding-left: 0.15rem;
+        }
+
+        .flex-con .van-field__label span::after {
+            content: ".";
+            display: inline-block;
+            width: 100%;
+            overflow: hidden;
+            height: 0;
+        }
+
+        .flex-con .van-field__label {
+            height: 0;
+        }
+
+        .van-cell:not(:last-child)::after {
+            right: 0.53rem;
+            left: 0.55rem;
+        }
+
+        .table {
+            padding: 0.5rem;
+        }
+
+        .table table {
+            width: 100%;
+        }
+
+        table>thead>tr>th,
+        table>tbody>tr>td {
+            text-align: center;
+            padding: 0.5rem 0 0.25rem 0;
+            font-size: 0.8rem;
+            font-weight: 400;
+        }
+
+        table>thead>tr>th {
+            color: #1F1F1F;
+        }
+
+        table>tbody>tr>td {
+            color: #656565;
+        }
+
+        table>tbody>tr {
+            border-bottom: 0.03rem solid #E4E4E4;
+        }
+
+        table>tbody>tr:last-child {
+            border-bottom: none;
+        }
+
+        table>thead>tr>th:first-child,
+        table>tbody>tr>td:first-child {
+            text-align: center;
+        }
+
+        .c-nodata {
+            width: 100%;
+            text-align: center;
+            color: #2979FF;
+        }
+
+        .c-col-center {
+            text-align: center;
+        }
+
+        * {
+            -webkit-user-select: auto;
+        }
+
+        .van-tabs .van-tab__text {
+            font-size: 0.8rem;
+        }
+
+        .van-tabs .van-tabs__line {
+            background-color: #2979FF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrap" class="flex-wrap flex-vertical" v-cloak v-swiperight='back'>
+
+        <header class="aui-bar aui-bar-nav" id="header">
+            <div class="aui-pull-left aui-btn" tapmode @click='back'>
+                <span class="aui-iconfont aui-icon-left"></span>
+            </div>
+            <div class="aui-title">用户详情</div>
+        </header>
+
+        <div id="main" class="flex-con">
+
+            <div class="card">
+                <div class="title">基本信息</div>
+                <van-field class="formField" label="用户名称" :value="customerInfo.CustomerName" readonly></van-field>
+                <van-field class="formField" label="用户编号" :value="customerInfo.CustomerCode" readonly></van-field>
+                <van-field class="formField" label="用户地址" :value="customerInfo.Address" readonly></van-field>
+                <van-field class="formField" label="用水性质" :value="customerInfo.NatureName" readonly></van-field>
+                <van-field class="formField" label="表号" :value="customerInfo.StampNo" readonly></van-field>
+                <van-field class="formField" label="口径" :value="customerInfo.Caliber" readonly></van-field>
+                <van-field class="formField" label="水表类型" :value="customerInfo.MeterType" readonly></van-field>
+                <van-field v-if='customerInfo.Longitude!="" &&  customerInfo.Latitude!=""' class="formField" label="水表位置" :value="customerInfo.Location" right-icon='./image/dingwei.png' @click-right-icon='openMapLookLocation' readonly></van-field>
+                <van-field v-else class="formField" label="水表位置" :value="customerInfo.Location" readonly></van-field>
+                <van-field class="formField" label="手机" :value="customerInfo.Mobile" readonly></van-field>
+                <van-field class="formField" label="固话" :value="customerInfo.Telphone" readonly></van-field>
+            </div>
+
+            <div class="card">
+                <van-tabs v-model="tabActive">
+                    <van-tab v-for="(item,index) in TabTitle" :title="item">
+                        <div class="table" v-show='index == 0'>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>任务类型</th>
+                                        <th>任务时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody class='c-copy'>
+                                    <tr v-if='customerInfo.Tasks.length > 0' v-for="(item,index) in customerInfo.Tasks" :key="index">
+                                        <td>{{index+1}}</td>
+                                        <td>{{item.TypeName}}</td>
+                                        <td>{{moment(item.CreatedTime).format("YYYY-MM-DD")}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-show='customerInfo.Tasks.length == 0' class='c-nodata'>暂无数据!</div>
+                        </div>
+                        <div class="table" v-show='index == 1'>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>月份</th>
+                                        <th>起度</th>
+                                        <th>止度</th>
+                                        <th>水量</th>
+                                    </tr>
+                                </thead>
+                                <tbody class='c-copy'>
+                                    <tr v-if='customerInfo.Measures.length > 0' v-for="(item,index) in customerInfo.Measures" :key="index">
+                                        <td>{{item.ReadMonth}}</td>
+                                        <td>{{item.BeginScale}}</td>
+                                        <td>{{item.EndScale}}</td>
+                                        <td>{{item.Amount}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-show='customerInfo.Measures.length == 0' class='c-nodata'>暂无数据!</div>
+                        </div>
+                        <div class="table" v-show='index == 2'>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>缴费金额</th>
+                                        <th>缴费时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody class='c-copy'>
+                                    <tr v-if='customerInfo.Payments.length > 0' v-for="(item,index) in customerInfo.Payments" :key="index">
+                                        <td>{{index+1}}</td>
+                                        <td>{{item.Money}}</td>
+                                        <td>{{item.PayTime}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-show='customerInfo.Payments.length == 0' class='c-nodata'>暂无数据!</div>
+                        </div>
+                        <div class="table" v-show='index == 3'>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>欠费水量</th>
+                                        <th>欠费金额</th>
+                                        <th>抄表时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody class='c-copy'>
+                                    <tr v-if='customerInfo.Arrears.length > 0' v-for="(item,index) in customerInfo.Arrears" :key="index">
+                                        <td>{{item.Amount}}</td>
+                                        <td>{{item.Money}}</td>
+                                        <td>{{item.ReadMonth}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div v-show='customerInfo.Arrears.length == 0' class='c-nodata'>暂无数据!</div>
+                        </div>
+                    </van-tab>
+                </van-tabs>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/moment.js"></script>
+<script type="text/javascript" src="../../public/script/vue/fastclick.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vue.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vant.min.js"></script>
+<script type="text/javascript" src="../../public/script/vue/vueTouch.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        api.parseTapmode();
+        var header = $api.byId('header');
+        $api.fixStatusBar(header);
+        fnIntVue();
+        Origami.fastclick(document.body) //消除vue的ios端点击延迟
+        api.addEventListener({
+            name: 'keyback'
+        }, function(ret, err){
+            if( ret ){
+            AddAppVue.back();
+            }
+        });
+
+    };
+    // fnIntVue();
+    function fnIntVue() {
+        window.AddAppVue = new Vue({
+            el: '#wrap',
+            data: {
+                tableData: [],
+                customerInfo: {
+                    Tasks: [],
+                    Arrears: [],
+                    Payments: [],
+                    Measures: []
+
+                },
+                tabActive: 0,
+                TabTitle: ['任务统计', '用水记录', '缴费记录', '欠费记录']
+
+            },
+            mounted: function() {
+                this.customerInfo = api.pageParam;
+            },
+            methods: {
+                back() { //返回上一个页面
+                    api.closeWin({});
+                    api.sendEvent({
+                        name: 'closeCustomerDetail',
+                    });
+
+                },
+                OnPressLong: function(value) {
+                    api.toast({
+                        msg: value,
+                        duration: 3000,
+                        location: 'bottom'
+                    });
+                },
+                getNameFromCoords() {
+                    var _this = this;
+                    var map = api.require('bMap');
+                    map.getNameFromCoords({
+                        lon: _this.customerInfo.Longitude,
+                        lat: _this.customerInfo.Latitude
+                    }, function(ret, err) {
+                        if (ret.status) {
+                            _this.customerInfo.Location = ret.address;
+                        }
+                    });
+                },
+                openMapLookLocation() {
+                    var _this = this;
+                    api.openWin({
+                        name: 'mapLocation',
+                        url: './mapLocation.html',
+                        pageParam: _this.customerInfo
+                    });
+                }
+            },
+        })
+    }
+</script>
+
+</html>

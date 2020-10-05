@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>关于版本</title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/dialog.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/dialogAlert.css">
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+        }
+
+        .aui-bar-nav {
+            top: 0;
+            z-index: 1;
+            background-color: #fff;
+            color: #333333;
+            font-size: 0.9rem;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 0rem;
+        }
+
+        .aui-bar-nav .aui-btn .aui-iconfont {
+            color: #333333;
+            font-weight: 900;
+        }
+
+        .aui-list:after {
+            display: none;
+        }
+
+        .aui-list {
+            background-image: none !important;
+        }
+
+        .aui-list-item-arrow:before {
+            border-color: #A2A2A2;
+        }
+
+        .mine_List .aui-list .aui-list-item-media {
+            width: 2.0rem;
+            padding-right: 0 !important;
+        }
+
+        .mine_List .aui-list .aui-list-item {
+            min-height: 2.7rem !important;
+            font-size: 0.75rem;
+        }
+
+        .aui-dialog-body {
+            color: #333 !important;
+            font-size: 0.8rem !important;
+        }
+
+        .aui-list .aui-list-item-text {
+            font-size: 0.7rem;
+        }
+
+        .hasNewVersion {
+            display: inline-block;
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background: red;
+            margin-right: 0.5rem;
+        }
+
+        .isShow {
+            display: none;
+        }
+
+        .c-cloud-title {
+            display: inline-block;
+            float: left;
+            /*width: 14.5rem;*/
+        }
+        #cloudHasUpdate{
+          display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="aui-bar aui-bar-nav aui-border-b" id="header">
+        <div class="aui-pull-left aui-btn" tapmode onclick="fnReturnMineFrame();">
+            <span class="aui-iconfont aui-icon-left"></span>
+        </div>
+        <div class="aui-title">设置</div>
+    </header>
+
+    <div class="aui-content mine_List">
+        <ul class="aui-list">
+            <li class="aui-list-item" tapmode onclick="fnCheckUpdate()" id="app_version">
+                <div class="aui-list-item-inner">
+                    <div class="aui-list-item-inner aui-list-item-arrow">
+
+                        <span class='c-cloud-title'>综合水务平台 <span class="hasNewVersion" id='cloudHasUpdate'></span></span>
+
+                        <div class="aui-list-item-text">
+                            <span id="yun_versionNo"></span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <div id="versionDemo">
+
+            </div>
+
+
+
+
+        </ul>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/common.js"></script>
+<script type="text/javascript" src="../../script/diy/public.js"></script>
+<script type="text/javascript" src="../../script/remote.js"></script>
+<script type="text/javascript" src="../../script/zepto.js"></script>
+<script type="text/javascript" src="../../script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/template" id='list'>
+    {{each list value i}} {{ if value.moduleCode!='WaterStarOne-Cloud-S9'}}
+    <li class="aui-list-item" tapmode onclick="applicationUpdate({{value}},this)">
+        <div class="aui-list-item-inner">
+            <div class="aui-list-item-inner aui-list-item-arrow">
+                {{value.moduleName}}
+                <div class="aui-list-item-text">
+                    <!-- 用户判断是否有新的版本 -->
+                    {{if value.newHasVersion}}
+                    <span class="hasNewVersion"></span> {{else}}
+                    <span class="hasNewVersion isShow"></span> {{/if}}
+                    <span class='versionNo'>V{{value.versionNo}}</span>
+                </div>
+            </div>
+        </div>
+    </li>
+    {{/if}} {{/each}}
+</script>
+<script type="text/javascript">
+    apiready = function() {
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        api.parseTapmode();
+        fnReady();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        headerH = $api.offset(header).h;
+        initList();
+        fnCheckUpdate(1);
+
+    };
+
+    function initList() {
+        if (api.systemType == 'ios') {
+            api.setStatusBarStyle({
+                style: 'dark',
+            });
+            $('#app_version').hide();
+        } else {
+            // 云平台app的版本，不是公共样式版本
+            $('#yun_versionNo').text("V" + api.appVersion);
+        }
+        var userLoginInformation = $api.getStorage('userLoginInformation');
+        var versionInformation = userLoginInformation.versionInformation;
+        var appList = userLoginInformation.appList[0].applications;
+        // console.log(JSON.stringify(userLoginInformation));
+        if (appList == null) {
+            return;
+        }
+        var lists = [];
+        for (let v = 0; v < versionInformation.length; v++) {
+            for (let a = 0; a < appList.length; a++) {
+                if (versionInformation[v].moduleCode === appList[a].coding) {
+                    lists.push(versionInformation[v]);
+                }
+            }
+        }
+        var data = {
+            list: lists,
+        }
+        $("#versionDemo").html('');
+        var str = template('list', data);
+        $("#versionDemo").append(str);
+    }
+
+
+
+    var dialog = new auiDialog();
+    //返回我的页面
+    function fnReturnMineFrame() {
+        api.closeWin({});
+    }
+
+    // 检查版本是否有新的版本
+    function applicationUpdate(params, that) {
+        // console.log(JSON.stringify(params));
+        var userLoginInformation = $api.getStorage('userLoginInformation');
+        // console.log(JSON.stringify(userLoginInformation));
+        if (params.newHasVersion) {
+            dialogAlert({
+                title: '提示',
+                content: '发现新版本,是否立即更新',
+                buttons: ['确定', '取消'],
+            }, function(ret) {
+                if (ret.buttonIndex == 1) {
+                    singleAppUpdate(params, true, (ret) => {
+                        initList();
+                        remarkFrame(params);
+                        addNewField();
+                    });
+                }
+            });
+        } else {
+            // 调用接口，查询新的版本
+            var body = {
+                body: JSON.stringify({
+                    "tenantId": userLoginInformation.loginSuccessData.tenantId,
+                })
+            };
+            fnPost('services/app/AppVersionService/CheckAppVsersionByTeantId', body, 'application/json', true, false, (ret, err) => {
+                api.hideProgress();
+                if (ret && ret.success) {
+                    var result = ret.result;
+                    for (let i = 0; i < result.length; i++) {
+                        if (params.moduleCode == result[i].moduleCode) {
+                            if (params.versionNo != result[i].versionNo || result[i].packetUrl !== params.packetUrl) {
+                                $(that).find('.versionNo').siblings().removeClass('isShow');
+                                result[i].newVersionPackageUrl = result[i].packetUrl;
+                                result[i].newHasVersion = true;
+                                result[i].newVersionNo = result[i].versionNo;
+                                dialogAlert({
+                                    title: '提示',
+                                    content: '发现新版本,是否立即更新',
+                                    buttons: ['确定', '取消'],
+                                }, function(ret) {
+                                    if (ret.buttonIndex == 1) {
+                                        singleAppUpdate(result[i], false, (ret) => {
+                                            remarkFrame(result[i]);
+                                            initList();
+                                            addNewField();
+                                        });
+                                    }
+                                });
+                            } else {
+                                api.toast({
+                                    msg: '已经是最新版了',
+                                    duration: 2000,
+                                    location: 'top'
+                                });
+
+                            }
+                        }
+                    }
+                }
+                api.hideProgress();
+            });
+
+        }
+    }
+
+    function remarkFrame(params) {
+        api.openFrame({
+            name: 'updateVersion_frame',
+            url: '../work/updateVersion_frame.html',
+            rect: {
+                x: 0,
+                y: 0,
+                w: 'auto',
+                h: 'auto'
+            },
+            bounces: false,
+            pageParam: {
+                type: 'remark',
+                number: 'one',
+                data: params
+            },
+            bgColor: 'rgba(0,0,0,0.1)',
+        });
+    }
+
+    //检查云平台更新
+    function fnCheckUpdate(type = 0) {
+        var mam = api.require('mam');
+        api.showProgress({
+            style: 'default',
+            animationType: 'fade',
+            title: '加载中...',
+            modal: false
+        });
+        mam.checkUpdate(function(ret, err) {
+            api.hideProgress();
+            if (ret.status) {
+                var result = ret.result;
+                if (result.update == true && result.closed == false) {
+                  if(type == 1){
+                    $('#cloudHasUpdate').show();
+                  }else {
+                    api.openFrame({
+                        name: 'checkupdate_frm',
+                        url: './checkupdate_frm.html',
+                        rect: {
+                            x: 0,
+                            y: 0,
+                            w: 'auto',
+                            h: 'auto'
+                        },
+                        pageParam: {
+                            version: result.version,
+                            updateTip: result.updateTip,
+                            source: result.source
+                        },
+                        bounces: false,
+                        bgColor: 'rgba(0,0,0,0.4)',
+                    });
+                  }
+                } else {
+                  if(type == 0){
+                    api.toast({
+                        msg: '当前已是最新版本',
+                        duration: 2000,
+                        location: 'top'
+                    });
+                  }
+
+                }
+            } else {
+              if(type == 0){
+                api.toast({
+                    msg: '服务器繁忙，请稍后再试',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+              }
+            }
+        })
+    }
+</script>
+
+</html>

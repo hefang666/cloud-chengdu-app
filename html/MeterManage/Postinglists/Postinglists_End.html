@@ -1,0 +1,579 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>张贴列表</title>
+    <link rel="stylesheet" type="text/css" href="../../public/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/aui1.css" />
+    <link rel="stylesheet" type="text/css" href="../../public/css/dialog.css" />
+    <style>
+      html,
+      body {
+          width: 100%;
+          height: 100%;
+          background-color: #F3F3F3;
+      }
+
+      .aui-bar-nav {
+          top: 0;
+          z-index: 1;
+          background: linear-gradient(90deg, rgba(46, 142, 250, 1), rgba(49, 89, 235, 1));
+          color: #FFF;
+          font-size: 0.95rem;
+          font-weight: normal;
+          font-stretch: normal;
+          letter-spacing: 0rem;
+      }
+
+      .aui-bar-nav .aui-btn .aui-iconfont {
+          color: #FFF;
+          font-size: 0.95rem;
+      }
+
+      .aui-bar-nav .aui-pull-right {
+          font-size: 0.95rem;
+      }
+
+      [v-cloak] {
+          display: none;
+      }
+
+      .flex-con {
+          overflow: auto;
+          -webkit-overflow-scrolling: touch;
+          background-color: #F3F3F3;
+      }
+
+      .footer {
+          width: 100vw;
+          display: flex;
+          justify-content: center;
+      }
+
+      .footer .van-button {
+          width: 13.98rem;
+          height: 2.23rem;
+          line-height: normal;
+          font-size: 0.95rem;
+          color: #fff;
+          background-color: #377EFF;
+      }
+
+      .aui-tab {
+          width: 100%;
+      }
+
+      .aui-tab-item {
+          font-size: 0.95rem;
+          color: #363636;
+          padding: 1.5rem 0 1.25rem 0;
+          line-height: normal;
+          height: auto;
+      }
+
+      .aui-tab-item:first-child:after {
+          content: '';
+          position: absolute;
+          left: auto;
+          top: 1.7rem;
+          bottom: 0;
+          right: 0;
+          height: 1.85rem;
+          width: 0.03rem;
+          background-color: pink;
+      }
+      .aui-tab-item:nth-child(2):after {
+          content: '';
+          position: absolute;
+          left: auto;
+          top: 1.7rem;
+          bottom: 0;
+          right: 0;
+          height: 1.85rem;
+          width: 0.03rem;
+          background-color: #DCDCDC;
+      }
+
+      .number1,
+      .number2
+      ,.number3 {
+          font-size: 1.6rem;
+          height: 1.35rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .title1,
+      .title2,
+      .title3 {
+          font-size: 0.75rem;
+          height: 0.75rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 0.75rem;
+      }
+
+      .number1,
+      .title1 {
+          color: #167CFB;
+      }
+
+      .number2,
+      .title2 {
+          color: rgba(19, 201, 122, 1);
+      }
+      .number3,
+      .title3 {
+          color: rgba(255, 50, 50, 1);
+      }
+      /*搜索*/
+      .aui-searchbar{
+        background-color: #fff;
+        height: auto!important;
+      }
+      .aui-searchbar .aui-searchbar-input{
+        position: relative;
+        height: 2rem;
+        background: pink;
+        margin: 0 1.25rem;
+        margin-top: 1rem;
+        background-color: #fff;
+        border: 0.03rem solid #C4C4C4;
+        border-radius: 1rem;
+        margin-bottom: 1rem;
+      }
+      .aui-searchbar .aui-searchbar-input #search-input{
+        height: 100%;
+      }
+      .aui-searchbar .aui-searchbar-input .search_suer{
+        position: absolute;
+        right: 1rem;
+        top:0.4rem;
+        width: 1rem;
+        height: 1rem;
+        background: url("../image/MeterManage/Posting/sousuo.png") no-repeat center;
+        background-size: 0.83rem 0.83rem;
+      }
+      .aui-searchbar .aui-searchbar-input .search_shanchu{
+        position: absolute;
+        right: 4rem;
+        top:0.4rem;
+        width: 1rem;
+        height: 1rem;
+        background: url("../image/MeterManage/shanchu.png") no-repeat center;
+        background-size: 0.83rem 0.83rem;
+      }
+      .aui-searchbar .aui-searchbar-input .search_shu{
+        position: absolute;
+        right: 3rem;
+        top:0.4rem;
+        width: 1px;
+        height: 1rem;
+        background: #C4C4C4;
+      }
+      /*待处理选择*/
+      .filterAndDownload{
+        background: #fff;
+        width: 100%;
+        padding: 0 1rem;
+        margin: 0.3rem auto;
+      }
+      .filterAndDownload-mian{
+        display: flex;
+        width: 100%;
+        flex-flow:row;
+        padding: 0.5rem;
+        padding-left: 0rem;
+        padding-right: 0rem;
+      }
+      .filterAndDownload-mian li{
+        flex: 1;
+      }
+      .filterAndDownload-mian #postingData{
+        text-align: right;
+      }
+      /*.filterAndDownload-mian li:nth-child(1){
+        flex: 20%!important;
+      }
+
+      .filterAndDownload-mian li:nth-child(3){
+        flex: 40%!important;
+      }
+      .filterAndDownload-mian li:nth-child(4){
+        flex: 30%!important;
+      }*/
+      /*列表*/
+      .aui-list .aui-list-item {
+          border-bottom: none;
+      }
+      .content-mian{
+        background:#f3f3f3;
+        /*overflow: hidden;*/
+      }
+      .content-mian .aui-list-item{
+          background: #fff;
+          margin-bottom: 0.2rem;
+          margin-top: #fff;
+      }
+      @media screen and (-webkit-min-device-pixel-ratio: 1.5) .aui-border-b {
+          background-image: none;
+          /*background-image: -webkit-linear-gradient(90deg,#dddddd,#dddddd 50%,transparent 50%); */
+      }
+
+      .aui-list-item-arrow:before {
+          border-color: #A2A2A2 !important;
+      }
+
+      .aui-list-item-arrow.change:before {
+          border-color: #A2A2A2 !important;
+          right: 0.6rem !important;
+          margin-top: -0.3rem !important;
+      }
+
+      .aui-list:after {
+          border: none !important;
+      }
+
+      .aui-list-buttons {
+          padding-left: 0 !important;
+          padding: 0.55rem 1.85rem !important;
+          display: flex !important;
+      }
+
+      .aui-card-list {
+          padding: 0rem 0 0rem 1rem;
+          background: #fff;
+          width: 100%;
+          margin-bottom: 0rem!important;
+          /*box-sizing: border-box;*/
+          /*border-radius: 0.6rem;
+          box-shadow: 0rem 0.3rem 0.5rem 0rem rgba(227, 227, 227, 0.68);*/
+      }
+
+      .style-circle {
+          width: 0.3rem;
+          height: 0.3rem;
+          background: #FFBF03;
+          display: inline-block;
+          position: absolute;
+          border-radius: 0.5rem;
+          top: 0.95rem;
+          right: 3.5rem;
+      }
+      .aui-card-list-content-padded {
+          position: relative;
+          padding: 0.5rem 0;
+      }
+      .approver-color {
+          position: absolute;
+          right: 0.6rem;
+          top:2.5rem;
+          color: #FFBF03;
+      }
+      .aui-list-item-text:first-child{
+        color: rgba(28, 28, 28, 1);
+        font-size: 0.95rem;
+        font-weight:400;
+      }
+      .aui-list-item-text {
+          width: 80%;
+          color: rgba(141, 141, 141, 1);
+          font-size: 0.8rem;
+      }
+      .aui-list-item-text:nth-child(5){
+        position: relative;
+      }
+      .aui-list-item-text:nth-child(5) img{
+        top:0.2rem;
+        width: 0.6rem;
+        position: absolute;
+      }
+      .aui-list-item-text:nth-child(5) span{
+        margin-left: 1rem;
+      }
+      .style-color {
+          color: #7164F9;
+      }
+
+      .aui-list {
+          border: none;
+      }
+
+      .aui-card-list-header,
+      .aui-card-list-footer {
+          padding: 0;
+      }
+      .aui-content{
+        height: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+    </style>
+</head>
+
+<body>
+  <div id="wrap" class="flex-wrap flex-vertical">
+      <header class="aui-bar aui-bar-nav" id="header">
+          <div class="aui-pull-left aui-btn" tapmode data-action="back">
+              <span class="aui-iconfont aui-icon-left"></span>
+          </div>
+          <div class="aui-title">张贴列表</div>
+          <div class="aui-pull-right aui-btn" tapmode data-action="CodeScanning">
+              <img src="../image/MeterManage/Posting/saoma.png" alt="">
+          </div>
+      </header>
+      <div class="aui-searchbar" id="search">
+            <div class="aui-searchbar-input aui-border-radius">
+
+                <input type="search" placeholder="请输入搜索内容" id="search-input"  tapmode data-oninput="focusing">
+                <div class="aui-searchbar-clear-btn">
+                    <i class="shu aui-iconfont aui-icon-close"></i>
+                </div>
+                <div class="search_shanchu aui-hide" id="search_shanchu" tapmode data-action="delete"></div>
+                 <div class="search_shu"></div>
+                <div class="search_suer"  tapmode data-action="search"></div>
+            </div>
+            <div class="aui-searchbar-btn">取消</div>
+        </div>
+      <div class="filterAndDownload">
+        <ul class="filterAndDownload-mian">
+          <li>张贴总数:<span id="postingNumer">0</span></li>
+          <li id="postingData" style="color:rgba(170, 170, 170, 1);font-size:0.8rem;line-height:1.3rem;">(0000/00/00)</li>
+        </ul>
+      </div>
+      <div id="main" class="flex-con">
+        <div class="aui-content">
+            <ul class="content-mian" id="dataListUser">
+              <!-- <li class="aui-list-item aui-list-item-middle" tapmode data-action="openDetails" parse="{{value}}" parsedata="{{value.StatusName}}">
+                  <div class="aui-card-list">
+                      <div class="aui-card-list-content-padded">
+                          <div class="aui-list-item-text">
+                              {{value.CustomerCode}}
+                          </div>
+                          <div class="aui-list-item-text aui-ellipsis-1">
+                              户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名:{{value.CustomerName}}
+                          </div>
+                          <div class="aui-list-item-text aui-ellipsis-1">
+                              欠费金额:{{value.ArrearMoney}}
+                          </div>
+                          <div class="aui-list-item-text">
+                            <img src="../image/MeterManage/Posting/dingwei.png" alt="">
+                            <span>{{value.Address}}</span>
+                          </div>
+                          <span class="approver-color aui-padded-r-15"></i id="paddedtext">{{value.StatusName}}</span>
+                      </div>
+                  </div>
+              </li> -->
+
+              </ul>
+        </div>
+
+      </div>
+
+      <div class="footer">
+
+
+
+      </div>
+
+  </div>
+
+</body>
+<script type="text/javascript" src="../../public/script/api.js"></script>
+<script type="text/javascript" src="../../public/script/common.js"></script>
+<script type="text/javascript" src="../../public/script/diy/public.js"></script>
+<script type="text/javascript" src="../script/remote.js"></script>
+<script type="text/javascript" src="../../public/script/hammer.min.js"></script>
+<script type="text/javascript" src="../../public/script/aui-dialog.js"></script>
+<script type="text/javascript" src="../../public/script/zepto.js"></script>
+<script type="text/javascript" src="../../public/script/template.js"></script>
+<script type="text/template" id="Booksdata">
+  {{each list value i}}
+    <li class="aui-list-item aui-list-item-middle" tapmode data-action="openDetails" parse="{{value}}" parsedata="{{value.StatusName}}">
+        <div class="aui-card-list">
+            <div class="aui-card-list-content-padded">
+                <div class="aui-list-item-text">
+                    {{value.CustomerCode}}
+                </div>
+                <div class="aui-list-item-text">
+                    工单号:{{value.TaskNo}}
+                </div>
+                <div class="aui-list-item-text">
+                    户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 名:{{value.CustomerName}}
+                </div>
+                {{if value.ArrearMoney==""||value.ArrearMoney==" "}}
+                <div>欠费金额 0</div>
+                {{else}}
+                <div class="aui-list-item-text aui-ellipsis-1">
+                    欠费金额:{{value.ArrearMoney}}
+                </div>
+                {{/if}}
+
+                <div class="aui-list-item-text">
+                  <img src="../image/MeterManage/Posting/dingwei.png" alt="">
+                  <span>{{value.Address}}</span>
+                </div>
+                <span class="approver-color aui-padded-r-15"></i id="paddedtext">{{value.StatusName}}</span>
+            </div>
+        </div>
+    </li>
+  {{/each}}
+</script>
+<script type="text/javascript">
+    var headerH,db,PostingId,PostingName;
+    var WorkTypeId,WorkTypeCode,WorkTypeSource;//任务认领传过来的任务id ,任务的类型id，任务的类型名字
+    apiready = function() {
+        db = api.require("db");
+        api.addEventListener({
+            name: 'changedFontSize'
+        }, function(ret, err) {
+            if (ret) {
+                changeFontSize();
+            }
+        });
+        // api.setWinAttr({
+        //     bounces: false
+        // });
+        api.parseTapmode();
+        var header = $api.byId('header');
+        // 实现沉浸式状态栏效果
+        $api.fixStatusBar(header);
+        // 计算header和tab元素的高度
+        headerH = $api.offset(header).h;
+        // center = $api.offset($api.byId('center')).h;
+        $('#center').css('margin-top', '' + headerH + 'px');
+        WorkTypeId = api.pageParam.data.taskCode;
+        WorkTypeCode = '4'
+        WorkTypeSource = '营销系统'
+        PostingList('','')
+
+
+    };
+
+
+    var actionList = {
+      'back': function() {
+          api.closeWin();
+      },
+      'openDetails':function(){
+        var StatusNamedata = $(this).attr("parse");
+        var parsedata = $(this).attr("parsedata");
+        api.openWin({
+            name: 'Postinglists_Details',
+            url: './Postinglists_Details.html',
+            pageParam: JSON.parse(StatusNamedata)
+        });
+      },
+      'search':function(){
+          var CodeNumer = $('#search-input').val()
+          $("#dataListUser").empty();
+          if(CodeNumer==""){
+            api.toast({
+                msg: '请输入搜索类容',
+                duration: 2000,
+                location: 'top'
+            });
+
+          }else {
+            PostingList(CodeNumer,"")
+          }
+
+      },
+      'delete':function(){
+        $('#search-input').val('')
+      },
+      'CodeScanning': function() {//扫描
+          var userCode
+          var FNScanner = api.require('FNScanner');
+          FNScanner.open({
+              autorotation: true
+          }, function(ret, err) {
+              if (ret) {
+                  if (ret.eventType == 'success') {
+                      userCode = ret.content;
+                      $("#dataListUser").empty();
+                      PostingList(userCode,"")
+                  }else{
+
+                  }
+              } else {
+                  console.log(JSON.stringify(err));
+              }
+          });
+      }
+
+
+    }
+    var oninputList = {
+      'focusing':function(){
+        $('#search_shanchu').removeClass("aui-hide")
+        if($('#search-input').val()==''){
+          $('#search_shanchu').removeClass("aui-hide")
+          $("#dataListUser").empty();
+          PostingList('','')
+
+        }
+      }
+    }
+    function handleAnnotData(dataList) {
+        var list = {
+            list: dataList
+        }
+        var str = template('Booksdata', list)
+        $api.append($api.byId('dataListUser'), str);
+        fnReady();
+        // operationDom();
+        operationDom();
+    }
+    // 第一次进去查询本地是否有相关认领任务的数据，如果没有就下载然后加载出来
+    function PostingList(CodeNumer,Status){
+      var ReqCode = typeof(CodeNumer) == 'undefined' ? '' : CodeNumer;
+      var Status = typeof(Status) == 'undefined' ? '' : Status;
+      var body = {
+        TaskNo:WorkTypeId,
+        CustomerCode:ReqCode,
+        // Status:Status
+      }
+      fnPost('MMS002', body, 'application/json', false, false, function(ret, err){
+        api.hideProgress();
+
+        if (ret && ret.Status == '0'){
+          var dataList = JSON.parse(ret.Data);
+          $("#postingNumer").text(dataList.length)
+          // 渲染张贴数目
+          var dataBase = []
+          for (var i = 0; i < dataList.length; i++){
+            if(dataList[i].Status!="7"){
+              dataBase.push(dataList[i])
+            }
+
+          }
+          if(dataBase.length>0){
+            var dataTime = dataBase[0].DispatchTime;
+            $('#postingData').text("("+dataTime.slice(0,10)+")")
+            handleAnnotData(dataBase)
+          }else{
+
+          }
+        }else {
+          api.toast({
+                        msg:ret.Message,
+                        duration: 2000,
+                        location: 'middle'
+                    });
+        }
+
+      })
+
+    }
+
+</script>
+
+</html>
