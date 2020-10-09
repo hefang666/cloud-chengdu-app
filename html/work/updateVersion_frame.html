@@ -196,6 +196,24 @@
                                 }
                             }
                         });
+                    }else if (api.pageParam.type == 'cloudUpdate') {
+                      // 云平台更新提示
+                      vant.Dialog.confirm({
+                          title: '提示',
+                          message: 'app有新版本，是否立即更新',
+                      })
+                      .then(function() {
+                        var param = api.pageParam.data;
+                        // console.log(JSON.stringify(param));
+                        // console.log('点击了确定');
+                        // 点击确定，更新app
+                        downLoadZipData(param, true)
+                      })
+                      .catch(function() {
+                        // 点击取消，判断内部有没有更新
+                        // console.log('点击了取消');
+                        api.closeFrame();
+                      })
                     }
                 },
                 btnSure:function() {
