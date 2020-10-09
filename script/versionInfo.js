@@ -32,9 +32,261 @@ function createVersionInfoSheets() { // 创建版本更新表  （zxf 20200622 1
         }
     });
 }
+// apk 更新 20201009 开始
+// 版本信息接口（判断云台是否有更新）
+function CheckAppVsersionByTeantId() {
+    var userLoginInformation = $api.getStorage('userLoginInformation');
+    var getLoginInfo = $api.getStorage('getLoginInfo');
+    if (getLoginInfo != undefined) { //判断用户是否登录
+        fnPost('services/app/AppVersionService/CheckAppVsersionByTeantId', {
+            body: JSON.stringify({
+                "tenantId": getLoginInfo.tenantInfo.tenantId
+            })
+        }, 'application/json', true, false, function(ret, err) {
+            api.hideProgress();
+            if (ret && ret.success) {
+              var appVersion = api.appVersion;
+              appVersion = transVersion(appVersion);
+              console.log(appVersion);
+                var callbackResult = ret.result;
+                var userLoginInformation = $api.getStorage('userLoginInformation'); //用户信息
+                // 云平台数据
+                var cloudData;
+                // 先判断云平台是否有更新
+                for (var i = 0; i < callbackResult.length; i++) {
+                  if (callbackResult[i].moduleCode == 'WaterStarOne-Cloud-S9-APP') {
+                    cloudData = callbackResult[i];
+                    break;
+                  }
+                }
+                // exit();
+                console.log(JSON.stringify(cloudData));
+                var db = api.require("db");
+                if (appVersion == cloudData.versionNo) {
+                  // 当前app版本号等于线上的版本号，代表没有新的版本，更新本地数据库，开始判断app内部是否有更新
+                  db.executeSql({
+                      name: 'Wsdatabase',
+                      sql: ' UPDATE VersionInfoSheets SET versionNo = '+cloudData.versionNo+',packetUrl ="'+cloudData.packetUrl+'",newVersionNo = 0,isHasNewVersion ="0",newPackageUrl = "" WHERE  moduleCode = "'+cloudData.moduleCode+'" and userName = "'+versionCurentUserName+'"'
+                  }, function(ret, err) {
+                    console.log(JSON.stringify(ret));
+                      if (ret.status) {
+                        CheckAppVsersionByInfo();
+                      }
+                  });
+                } else {
+                  // 去判断有没有更新
+                  db.selectSql({
+                      name: 'Wsdatabase',
+                      sql: 'SELECT * FROM VersionInfoSheets where moduleCode = "'+ cloudData.moduleCode +'"and userName="'+versionCurentUserName+'"'
+                  }, function(ret, err) {
+                    // exit();
+                    console.log(JSON.stringify(ret.data));
+                      if (ret.status) {
+                        // exit();
+                        // console.log(ret.data.length);
+                          if (ret.data.length == 0) { //判断数据是否存在  存在则更新数据，不存在，则添加数据
+                            // console.log('不存在数据');
+                              // insertDataToVersionInfoSheets(curentData, newVersionData);
+                              db.executeSql({
+                                  name: 'Wsdatabase',
+                                  // sql: `INSERT INTO VersionInfoSheets (Id,sort,versionNo,newVersionNo,tenantId,isHasNewVersion,moduleCode,moduleName, packetUrl,creationTime,creatorUserId,creatorUserName,lanApiUrl,netApiUrl,remark,tenantName,newPackageUrl,userName) VALUES (${curentData.id},${curentData.sort},${curentData.versionNo},0,${curentData.tenantId},0,"${curentData.moduleCode}","${curentData.moduleName}","${curentData.packetUrl}","${curentData.creationTime}","${curentData.creatorUserId}","${curentData.creatorUserName}","${curentData.lanApiUrl}","${curentData.netApiUrl}","${curentData.remark}","${curentData.tenantName}","","${versionCurentUserName}")`
+                                  sql: 'INSERT INTO VersionInfoSheets (Id,sort,versionNo,newVersionNo,tenantId,isHasNewVersion,moduleCode,moduleName, packetUrl,creationTime,creatorUserId,creatorUserName,lanApiUrl,netApiUrl,remark,tenantName,newPackageUrl,userName) VALUES (' + cloudData.id + ',' + cloudData.sort + ',' + cloudData.versionNo + ',0,' + cloudData.tenantId + ',0,"' + cloudData.moduleCode + '","' + cloudData.moduleName + '","' + cloudData.packetUrl + '","' + cloudData.creationTime +
+                                  '","' + cloudData.creatorUserId + '","' + cloudData.creatorUserName + '","' + cloudData.lanApiUrl + '","' + cloudData.netApiUrl + '","' + cloudData.remark + '","' + cloudData.tenantName + '","","' + versionCurentUserName +'")'
+                              }, function(rets, err) {
+                                console.log(JSON.stringify(ret));
+                                if (rets.status) {
+                                  // 插入成功,下载压缩包
+                                  downLoadZipData(cloudData, false);
+                                }
+                              })
+                          } else {
+                            // console.log('存在数据');
+                            db.selectSql({
+                                name: 'Wsdatabase',
+                                sql:' SELECT * FROM VersionInfoSheets WHERE moduleCode = "' + cloudData.moduleCode + '" and versionNo = ' + cloudData.versionNo+' and packetUrl = "' + cloudData.packetUrl + '" and userName="'+versionCurentUserName+'"'
+                            }, function(rets, err) {
+                              console.log(JSON.stringify(ret));
+                              if (rets.status) {
+                                if (rets.data.length == 0) {
+                                  // console.log('有新版本');
+                                  // 不存在数据,更新数据
+                                  db.executeSql({
+                                      name: 'Wsdatabase',
+                                      // sql: `UPDATE  VersionInfoSheets SET Id = ${curentData.id},sort = ${curentData.sort},newVersionNo = ${curentData.versionNo},tenantId = ${curentData.tenantId},isHasNewVersion = "1",creationTime = '${curentData.creationTime}',creatorUserId = '${curentData.creatorUserId}',creatorUserName = '${curentData.creatorUserName}',lanApiUrl = '${curentData.lanApiUrl}',netApiUrl = '${curentData.netApiUrl}',remark = '${curentData.remark}',tenantName = '${curentData.tenantName}',newPackageUrl = '${curentData.packetUrl}' WHERE moduleCode = '${curentData.moduleCode}' and userName = '${versionCurentUserName}'`
+                                      sql:' UPDATE  VersionInfoSheets SET Id = '+cloudData.id+',sort = '+cloudData.sort+',newVersionNo = '+cloudData.versionNo+',tenantId = '+cloudData.tenantId+',isHasNewVersion = "1",creationTime = "'+cloudData.creationTime+'",creatorUserId = "'+cloudData.creatorUserId+'",creatorUserName = "'+cloudData.creatorUserName+'",lanApiUrl = "'+cloudData.lanApiUrl+'",netApiUrl = "'+cloudData.netApiUrl+'",remark = "'+cloudData.remark+'",tenantName = "'+cloudData.tenantName+'",newPackageUrl = "'+cloudData.packetUrl
+                                      +'" WHERE moduleCode = "'+cloudData.moduleCode+'" and userName = "'+versionCurentUserName+'"'
+                                  }, function(ret1, err) {
+                                    console.log(JSON.stringify(ret1));
+                                    if (ret1.status) {
+                                      // 更新成功，提示有新版本
+                                      db.selectSql({
+                                          name: 'Wsdatabase',
+                                          // sql: ' SELECT * FROM VersionInfoSheets '
+                                          sql: ' SELECT * FROM VersionInfoSheets WHERE moduleCode = "' + cloudData.moduleCode + '" and isHasNewVersion = "1" and newVersionNo = "' + cloudData.versionNo + '" and userName="'+versionCurentUserName+'"'
+                                      }, function(ret2, err) {
+                                        // console.log('--------------------')
+                                        console.log(JSON.stringify(ret2));
+                                        if (ret2.status) {
+                                          if (ret2.data != 0) {
+                                            var data = ret2.data[0];
+                                            // exit();
+                                            api.openFrame({
+                                                name: 'updateVersion_frame',
+                                                url: 'widget://html/work/updateVersion_frame.html',
+                                                rect: {
+                                                    x: 0,
+                                                    y: 0,
+                                                    w: 'auto',
+                                                    h: 'auto'
+                                                },
+                                                bounces: false,
+                                                pageParam: {
+                                                    type: 'cloudUpdate',
+                                                    data: data
+                                                },
+                                                bgColor: 'rgba(0,0,0,0.1)',
+                                            });
+                                          }
+                                        }
+                                        // console.log(JSON.stringify(err));
+                                      })
+                                    }
+                                  })
+                                } else {
+                                  // console.log('没有新版本');
+                                  // 没有新版本，判断内部有没有更新
+                                  CheckAppVsersionByInfo();
+                                }
+                              }
+                            })
+                          }
+                      }
+                  });
+                }
+            } else {
+                api.toast({
+                    msg: '网络无法连接，请检查网络配置',
+                    duration: 2000,
+                    location: 'top'
+                });
+            }
+        });
+    }
+}
+
+// 版本号转换（00.01.73->1.73）
+function transVersion(data) {
+  if (data != '') {
+    var newVersion = ''
+    for (var i = 0; i < data.length; i++) {
+      if (data[i] == '0' || data[i] == '.') {
+        newVersion =  data.substr(i+1);
+      } else {
+         break;
+      }
+    }
+    return newVersion;
+  }
+}
+
+// 下载云平台压缩包的相应数据处理
+function downLoadZipData(data,isUpdate) {
+  console.log(JSON.stringify(data));
+  // 处理下载地址
+  var moduleName = data.moduleName.replace(/(^\s*)/g, "");
+  if (isUpdate) {
+      if (data.newPackageUrl != "") {
+          var packetUrl = data.newPackageUrl.replace(/(^\s*)/g, "");
+      }
+  } else {
+      if (data.packetUrl != "") {
+          var packetUrl = data.packetUrl.replace(/(^\s*)/g, "");
+      }
+  }
+  var downloadUrl = apiUrl + packetUrl;
+  // 判断文件是否存在
+  var fs = api.require('fs'); //引用fs模块
+  fs.exist({
+      path: ''+api.fsDir+'/'+moduleName+'.zip'
+  }, function(ret, err) {
+    console.log(JSON.stringify(ret));
+      if (ret.exist) {
+          // 文件存在,并且有新的版本，则更新
+          removeFilesToLocal(data);
+          downLoadZip(moduleName, downloadUrl);
+
+      } else {
+          // 文件不存在，下载
+          if (packetUrl != '' && downloadUrl != '') {
+              downLoadZip(moduleName, downloadUrl);
+          }
+      }
+    })
+}
+
+// 下载云平台的压缩包
+function downLoadZip(moduleName, downloadUrl) {
+  var zip = api.require("zip");
+  var db = api.require("db");
+  api.download({
+      url: downloadUrl,
+      savePath:'fs://'+moduleName+'.zip',
+      report: true,
+      cache: false,
+      allowResume: true
+  }, function(ret, err) {
+      if (ret.state == 1) {
+        // 下载成功，解压
+        zip.unarchive({
+            file: 'fs://'+moduleName+'.zip',
+            password: '',
+            toPath: 'fs://wgt/'
+        }, function(ret1, err1) {
+            if (ret1.status) {
+              var fs = api.require("fs");
+              // fs.readDir({
+              //     path: 'fs://wgt/cloudApp'
+              // }, function(ret2, err2) {
+              //   console.log(JSON.stringify(ret2));
+              //   console.log(JSON.stringify(err2));
+              //     if (ret2.exist) {
+              //         // 文件存在,并且有新的版本，则更新
+              //
+              //     } else {
+              //         // 文件不存在，下载
+              //     }
+              //   })
+
+              // 为后续可能出现高低版本预留判断
+              var type = 'hight';
+              if (type == 'hight') {
+                type = 'WaterStarOne-Cloud-S9-APP'
+              } else {
+                type = 'WaterStarOne-Cloud-S9-APP-low'
+              }
+                fs.exist({
+                    path: 'fs://wgt/cloudApp/' + type + '.apk'
+                }, function(ret2, err2) {
+                    if (ret2.exist) {
+                        // apk包存在，安装
+                        var savePath = 'fs://wgt/cloudApp/' + type + '.apk';
+                        api.installApp({
+                          appUri : savePath
+                        });
+
+                    } else {
+                        // 文件不存在，下载
+                    }
+                  })
+            }
+          })
+      }
+  })
+}
+// apk 结束
 
 // 版本信息接口
-function CheckAppVsersionByTeantId() {
+function CheckAppVsersionByInfo() {
     var userLoginInformation = $api.getStorage('userLoginInformation');
      var getLoginInfo = $api.getStorage('getLoginInfo');
     if (getLoginInfo != undefined) { //判断用户是否登录
@@ -292,9 +544,9 @@ function downDataToLocalZip(type) {
       sql = 'SELECT * FROM VersionInfoSheets where isHasNewVersion="1" and userName="'+versionCurentUserName+'"';
     }
     // type 返回 update后 弹出进度条
-    // if(type == 'update'){
-    //   adilog("更新安装包中","请稍后...");
-    // }
+    if(type == 'update'){
+      adilog("更新安装包中","请稍后...");
+    }
 
     db.selectSql({
         name: 'Wsdatabase',
@@ -502,8 +754,8 @@ fs.open({
                          }, function(ret, err) {
                              if (ret.status) {
                                  if (ret.data.length > 0) {
-                                  //  var UIActionProgress = api.require('UIActionProgress');
-                                  //  UIActionProgress.close();
+                                   var UIActionProgress = api.require('UIActionProgress');
+                                   UIActionProgress.close();
                                      api.openFrame({
                                          name: 'delete_frame',
                                          url: 'widget://html/delete_frame.html',
@@ -546,8 +798,8 @@ fs.open({
                      }
                  }
                }else{
-                //  var UIActionProgress = api.require('UIActionProgress');
-                //  UIActionProgress.close();
+                 var UIActionProgress = api.require('UIActionProgress');
+                 UIActionProgress.close();
               //  版本文件里面和版本不相等，说明更新文件有问题，给出提示
               api.toast({
                   msg: '更新失败,请刷新页面重新更新!',
@@ -571,8 +823,8 @@ fs.open({
                 }
             });
         } else if (ret.state == 2) {
-          // var UIActionProgress = api.require('UIActionProgress');
-          // UIActionProgress.close();
+          var UIActionProgress = api.require('UIActionProgress');
+          UIActionProgress.close();
           vant.Dialog.alert({
               title: '提示',
               message: '当前网络环境不好，若需更新版本，请到我的-设置-关于版本中更新版本',
