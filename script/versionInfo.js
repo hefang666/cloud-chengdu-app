@@ -48,29 +48,38 @@ function CheckAppVsersionByTeantId() {
               var appVersion = api.appVersion;
               var appName = api.appName;
               appVersion = transVersion(appVersion);
+              // appVersion = transVersion('00.00.02');
               // var versionNum = '';
-              // if (appName != '综合水务平台') {
-              //   // 是测试包，包名为自定义版本号
-              //   appVersion = appName;
-              // }
-              // console.log(appVersion);
-              // console.log(appName);
+              if (appName != '综合水务平台') {
+                // 是测试包，包名为自定义版本号
+                appVersion = appName;
+              }
+              console.log(appVersion);
+              console.log(typeof(appVersion));
+              console.log(appName);
                 var callbackResult = ret.result;
                 var userLoginInformation = $api.getStorage('userLoginInformation'); //用户信息
                 // 云平台数据
                 var cloudData;
                 // 先判断云平台是否有更新
+                console.log(JSON.stringify(callbackResult));
                 for (var i = 0; i < callbackResult.length; i++) {
+                  console.log(JSON.stringify(callbackResult[i]));
                   if (callbackResult[i].moduleCode == 'WaterStarOne-Cloud-S9-APP') {
                     cloudData = callbackResult[i];
                     break;
                   }
                 }
+                if (cloudData == undefined) {
+                  // 找不到WaterStarOne-Cloud-S9-APP，没有更新，判断内部是否有更新
+                  CheckAppVsersionByInfo();
+                  return;
+                }
                 // exit();
-                // console.log(JSON.stringify(cloudData));
+                console.log(JSON.stringify(cloudData));
                 // console.log(appVersion == cloudData.versionNo);
                 var db = api.require("db");
-                if (appVersion == cloudData.versionNo) {
+                if (String(appVersion) == String(cloudData.versionNo)) {
                   // 当前app版本号等于线上的版本号，代表没有新的版本，更新本地数据库，开始判断app内部是否有更新
                   db.executeSql({
                       name: 'Wsdatabase',
@@ -130,7 +139,7 @@ function CheckAppVsersionByTeantId() {
                                       db.selectSql({
                                           name: 'Wsdatabase',
                                           // sql: ' SELECT * FROM VersionInfoSheets '
-                                          sql: ' SELECT * FROM VersionInfoSheets WHERE moduleCode = "' + cloudData.moduleCode + '" and isHasNewVersion = "1" and newVersionNo = "' + cloudData.versionNo + '" and userName="'+versionCurentUserName+'"'
+                                          sql: ' SELECT * FROM VersionInfoSheets WHERE moduleCode = "' + cloudData.moduleCode + '" and isHasNewVersion = "1" and newVersionNo = ' + cloudData.versionNo + ' and userName="'+versionCurentUserName+'"'
                                       }, function(ret2, err) {
                                         // console.log('--------------------')
                                         // console.log(JSON.stringify(ret2));
@@ -186,13 +195,31 @@ function CheckAppVsersionByTeantId() {
 function transVersion(data) {
   if (data != '') {
     var newVersion = ''
-    for (var i = 0; i < data.length; i++) {
-      if (data[i] == '0' || data[i] == '.') {
-        newVersion =  data.substr(i+1);
-      } else {
-         break;
+    var arr = data.split('.');
+    for (var i = 0; i < arr.length; i++) {
+      if (i == 0) {
+        arr[i] = parseInt(arr[i]);
+        if (arr[i] == 0) {
+          // console.log('第一位为0, 不拼接');
+        } else {
+          newVersion =  newVersion + arr[i] + '.'
+        }
+      } else if (i == 1) {
+        // 第二个
+        arr[i] = parseInt(arr[i]);
+        newVersion = newVersion + arr[i] + '.';
+      } else if (i == 2) {
+        // 为最后一个,不转，可以为01,02....，且末尾不加 '.'
+        newVersion = newVersion + arr[i];
       }
     }
+    // for (var i = 0; i < data.length; i++) {
+    //   if (data[i] == '0' || data[i] == '.') {
+    //     newVersion =  data.substr(i+1);
+    //   } else {
+    //      break;
+    //   }
+    // }
     return newVersion;
   }
 }
@@ -217,7 +244,8 @@ function downLoadZipData(data,isUpdate) {
   fs.exist({
       path: ''+api.fsDir+'/'+moduleName+'.zip'
   }, function(ret, err) {
-    console.log(JSON.stringify(ret));
+    // console.log(JSON.stringify(ret));
+    // console.log('11111111');
       if (ret.exist) {
           // 文件存在,并且有新的版本，则更新
           removeFilesToLocal(data);
@@ -237,7 +265,9 @@ function downLoadZipData(data,isUpdate) {
 function downLoadZip(moduleName, downloadUrl) {
   var zip = api.require("zip");
   var db = api.require("db");
+  var UIActionProgress = api.require('UIActionProgress');
   adilog('下载安装包','下载中');
+  console.log('222222');
   api.download({
       url: downloadUrl,
       savePath:'fs://'+moduleName+'.zip',
@@ -245,15 +275,26 @@ function downLoadZip(moduleName, downloadUrl) {
       cache: false,
       allowResume: true
   }, function(ret, err) {
-      if (ret.state == 1) {
-        var UIActionProgress = api.require('UIActionProgress');
+    console.log('3333333333');
+    console.log(JSON.stringify(ret));
+      var UIActionProgress = api.require('UIActionProgress');
+      if (ret.state == 0) {
         UIActionProgress.setData({
             data: {
-                title: '正在解压',
-                msg: '解压中',
-                value: 50
+                title: '下载中',
+                msg: '下载中',
+                value: ret.percent
             }
         });
+      } else if (ret.state == 1) {
+        // UIActionProgress.setData({
+        //     data: {
+        //         title: '正在解压',
+        //         msg: '解压中',
+        //         value: 90
+        //     }
+        // });
+        UIActionProgress.close();
         // 下载成功，解压
         zip.unarchive({
             file: 'fs://'+moduleName+'.zip',
@@ -261,15 +302,28 @@ function downLoadZip(moduleName, downloadUrl) {
             toPath: 'fs://wgt/'
         }, function(ret1, err1) {
             if (ret1.status) {
+              console.log('解压成功');
+              // UIActionProgress.close();
+              // var UIActionProgress = api.require('UIActionProgress');
+              // UIActionProgress.setData({
+              //     data: {
+              //         title: '解压完成',
+              //         msg: '马上安装',
+              //         value: 100
+              //     }
+              // });
+
               var fs = api.require("fs");
-              UIActionProgress.setData({
-                  data: {
-                      title: '解压完成',
-                      msg: '马上安装',
-                      value: 100
-                  }
-              });
-              UIActionProgress.close();
+              // var UIActionProgress = api.require('UIActionProgress');
+              // UIActionProgress.setData({
+              //     data: {
+              //         title: '解压完成',
+              //         msg: '马上安装',
+              //         value: 100
+              //     }
+              // });
+              // console.log('关闭进度条');
+
               // fs.readDir({
               //     path: 'fs://wgt/cloudApp'
               // }, function(ret2, err2) {
@@ -293,16 +347,20 @@ function downLoadZip(moduleName, downloadUrl) {
                 fs.exist({
                     path: 'fs://wgt/cloudApp/' + type + '.apk'
                 }, function(ret2, err2) {
+                  console.log(JSON.stringify(ret2));
                     if (ret2.exist) {
                         // apk包存在，安装
                         var savePath = 'fs://wgt/cloudApp/' + type + '.apk';
-                        api.closeFrame({
-                            name: 'updateVersion_frame'
-                        });
+                        // api.closeFrame({
+                        //     name: 'updateVersion_frame'
+                        // });
+                        console.log('安装apk包');
                         api.installApp({
                           appUri : savePath
                         });
-
+                        api.closeFrame({
+                            name: 'updateVersion_frame'
+                        });
                     } else {
                         // 文件不存在
                     }
@@ -310,8 +368,6 @@ function downLoadZip(moduleName, downloadUrl) {
             }
           })
       } else if (ret.state == 2) {
-        // alert('下载失败；state == 2');
-        // 下载失败
         var UIActionProgress = api.require('UIActionProgress');
         UIActionProgress.setData({
             data: {
@@ -326,16 +382,18 @@ function downLoadZip(moduleName, downloadUrl) {
         });
       } else if (err != '' ){
         // 下载错误
-        // alert('下载错误；error');
-        var UIActionProgress = api.require('UIActionProgress');
-        UIActionProgress.setData({
-            data: {
-                title: '下载失败',
-                msg: '下载失败',
-                value: 0
-            }
-        });
+        alert('下载错误；error');
+        // var UIActionProgress = api.require('UIActionProgress');
+        // UIActionProgress.setData({
+        //     data: {
+        //         title: '下载失败',
+        //         msg: '下载失败',
+        //         value: 0
+        //     }
+        // });
+        console.log('失败');
         UIActionProgress.close();
+        console.log('关闭进度条');
         api.closeFrame({
             name: 'updateVersion_frame'
         });

@@ -6,7 +6,7 @@ var app = {
 var now = Date.now();
 
 function fnGet(path, data, isDelete, callback) {
-    console.log(api.connectionType);
+    // console.log(api.connectionType);
     if(api.connectionType == 'none'){
       api.toast({
           msg: '网络连接错误,请检查网络是否连接',
