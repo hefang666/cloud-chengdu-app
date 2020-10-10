@@ -296,6 +296,9 @@ function downLoadZip(moduleName, downloadUrl) {
                     if (ret2.exist) {
                         // apk包存在，安装
                         var savePath = 'fs://wgt/cloudApp/' + type + '.apk';
+                        api.closeFrame({
+                            name: 'updateVersion_frame'
+                        });
                         api.installApp({
                           appUri : savePath
                         });
@@ -318,6 +321,9 @@ function downLoadZip(moduleName, downloadUrl) {
             }
         });
         UIActionProgress.close();
+        api.closeFrame({
+            name: 'updateVersion_frame'
+        });
       } else if (err != '' ){
         // 下载错误
         // alert('下载错误；error');
@@ -330,6 +336,9 @@ function downLoadZip(moduleName, downloadUrl) {
             }
         });
         UIActionProgress.close();
+        api.closeFrame({
+            name: 'updateVersion_frame'
+        });
       }
   })
 }
