@@ -49,11 +49,12 @@ function CheckAppVsersionByTeantId() {
               var appName = api.appName;
               appVersion = transVersion(appVersion);
               // var versionNum = '';
-              if (appName != '综合水务平台') {
-                // 是测试包，包名为自定义版本号
-                appVersion = appName;
-              }
-              console.log(appVersion);
+              // if (appName != '综合水务平台') {
+              //   // 是测试包，包名为自定义版本号
+              //   appVersion = appName;
+              // }
+              // console.log(appVersion);
+              // console.log(appName);
                 var callbackResult = ret.result;
                 var userLoginInformation = $api.getStorage('userLoginInformation'); //用户信息
                 // 云平台数据
@@ -66,7 +67,8 @@ function CheckAppVsersionByTeantId() {
                   }
                 }
                 // exit();
-                console.log(JSON.stringify(cloudData));
+                // console.log(JSON.stringify(cloudData));
+                // console.log(appVersion == cloudData.versionNo);
                 var db = api.require("db");
                 if (appVersion == cloudData.versionNo) {
                   // 当前app版本号等于线上的版本号，代表没有新的版本，更新本地数据库，开始判断app内部是否有更新
@@ -74,7 +76,7 @@ function CheckAppVsersionByTeantId() {
                       name: 'Wsdatabase',
                       sql: ' UPDATE VersionInfoSheets SET versionNo = '+cloudData.versionNo+',packetUrl ="'+cloudData.packetUrl+'",newVersionNo = 0,isHasNewVersion ="0",newPackageUrl = "" WHERE  moduleCode = "'+cloudData.moduleCode+'" and userName = "'+versionCurentUserName+'"'
                   }, function(ret, err) {
-                    console.log(JSON.stringify(ret));
+                    // console.log(JSON.stringify(ret));
                       if (ret.status) {
                         CheckAppVsersionByInfo();
                       }
@@ -89,7 +91,7 @@ function CheckAppVsersionByTeantId() {
                     console.log(JSON.stringify(ret.data));
                       if (ret.status) {
                         // exit();
-                        // console.log(ret.data.length);
+                        console.log(ret.data.length);
                           if (ret.data.length == 0) { //判断数据是否存在  存在则更新数据，不存在，则添加数据
                             // console.log('不存在数据');
                               // insertDataToVersionInfoSheets(curentData, newVersionData);
@@ -99,7 +101,7 @@ function CheckAppVsersionByTeantId() {
                                   sql: 'INSERT INTO VersionInfoSheets (Id,sort,versionNo,newVersionNo,tenantId,isHasNewVersion,moduleCode,moduleName, packetUrl,creationTime,creatorUserId,creatorUserName,lanApiUrl,netApiUrl,remark,tenantName,newPackageUrl,userName) VALUES (' + cloudData.id + ',' + cloudData.sort + ',' + cloudData.versionNo + ',0,' + cloudData.tenantId + ',0,"' + cloudData.moduleCode + '","' + cloudData.moduleName + '","' + cloudData.packetUrl + '","' + cloudData.creationTime +
                                   '","' + cloudData.creatorUserId + '","' + cloudData.creatorUserName + '","' + cloudData.lanApiUrl + '","' + cloudData.netApiUrl + '","' + cloudData.remark + '","' + cloudData.tenantName + '","","' + versionCurentUserName +'")'
                               }, function(rets, err) {
-                                console.log(JSON.stringify(ret));
+                                // console.log(JSON.stringify(ret));
                                 if (rets.status) {
                                   // 插入成功,下载压缩包
                                   downLoadZipData(cloudData, false);
@@ -111,7 +113,7 @@ function CheckAppVsersionByTeantId() {
                                 name: 'Wsdatabase',
                                 sql:' SELECT * FROM VersionInfoSheets WHERE moduleCode = "' + cloudData.moduleCode + '" and versionNo = ' + cloudData.versionNo+' and packetUrl = "' + cloudData.packetUrl + '" and userName="'+versionCurentUserName+'"'
                             }, function(rets, err) {
-                              console.log(JSON.stringify(ret));
+                              // console.log(JSON.stringify(ret));
                               if (rets.status) {
                                 if (rets.data.length == 0) {
                                   // console.log('有新版本');
@@ -122,7 +124,7 @@ function CheckAppVsersionByTeantId() {
                                       sql:' UPDATE  VersionInfoSheets SET Id = '+cloudData.id+',sort = '+cloudData.sort+',newVersionNo = '+cloudData.versionNo+',tenantId = '+cloudData.tenantId+',isHasNewVersion = "1",creationTime = "'+cloudData.creationTime+'",creatorUserId = "'+cloudData.creatorUserId+'",creatorUserName = "'+cloudData.creatorUserName+'",lanApiUrl = "'+cloudData.lanApiUrl+'",netApiUrl = "'+cloudData.netApiUrl+'",remark = "'+cloudData.remark+'",tenantName = "'+cloudData.tenantName+'",newPackageUrl = "'+cloudData.packetUrl
                                       +'" WHERE moduleCode = "'+cloudData.moduleCode+'" and userName = "'+versionCurentUserName+'"'
                                   }, function(ret1, err) {
-                                    console.log(JSON.stringify(ret1));
+                                    // console.log(JSON.stringify(ret1));
                                     if (ret1.status) {
                                       // 更新成功，提示有新版本
                                       db.selectSql({
@@ -131,7 +133,7 @@ function CheckAppVsersionByTeantId() {
                                           sql: ' SELECT * FROM VersionInfoSheets WHERE moduleCode = "' + cloudData.moduleCode + '" and isHasNewVersion = "1" and newVersionNo = "' + cloudData.versionNo + '" and userName="'+versionCurentUserName+'"'
                                       }, function(ret2, err) {
                                         // console.log('--------------------')
-                                        console.log(JSON.stringify(ret2));
+                                        // console.log(JSON.stringify(ret2));
                                         if (ret2.status) {
                                           if (ret2.data != 0) {
                                             var data = ret2.data[0];
@@ -197,7 +199,7 @@ function transVersion(data) {
 
 // 下载云平台压缩包的相应数据处理
 function downLoadZipData(data,isUpdate) {
-  console.log(JSON.stringify(data));
+  // console.log(JSON.stringify(data));
   // 处理下载地址
   var moduleName = data.moduleName.replace(/(^\s*)/g, "");
   if (isUpdate) {
@@ -305,7 +307,9 @@ function downLoadZip(moduleName, downloadUrl) {
             }
           })
       } else if (ret.state == 2) {
+        // alert('下载失败；state == 2');
         // 下载失败
+        var UIActionProgress = api.require('UIActionProgress');
         UIActionProgress.setData({
             data: {
                 title: '下载失败',
@@ -313,10 +317,11 @@ function downLoadZip(moduleName, downloadUrl) {
                 value: 0
             }
         });
-        var fs = api.require("fs");
         UIActionProgress.close();
-      } else if (err1 != '' ){
+      } else if (err != '' ){
         // 下载错误
+        // alert('下载错误；error');
+        var UIActionProgress = api.require('UIActionProgress');
         UIActionProgress.setData({
             data: {
                 title: '下载失败',
@@ -324,7 +329,6 @@ function downLoadZip(moduleName, downloadUrl) {
                 value: 0
             }
         });
-        var fs = api.require("fs");
         UIActionProgress.close();
       }
   })
