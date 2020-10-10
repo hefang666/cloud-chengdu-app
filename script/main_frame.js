@@ -193,7 +193,8 @@ function fnInVue() {
                                 _this.userLoginInformation.appList = _this.appData;
                                 $api.setStorage('userLoginInformation', userLoginInformation);
                                 // 调用模块版本更新方法(组件化)
-                                CheckAppVsersionByTeantId();
+                                // CheckAppVsersionByTeantId();
+                                CheckAppVsersionByInfo();
 
                                 _this.showCbUpdateBtn = false; //抄表更新按钮是否显示（有抄表管家才可以）
 

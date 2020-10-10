@@ -198,7 +198,7 @@
                             var db = api.require("db");
                             db.selectSql({
                                 name: 'Wsdatabase',
-                                sql: 'SELECT * FROM VersionInfoSheets where isHasNewVersion = "1" and userName="' + this.versionCurentUserName + '"'
+                                sql: 'SELECT * FROM VersionInfoSheets where isHasNewVersion = "1" and moduleCode != "WaterStarOne-Cloud-S9-APP" and userName="' + this.versionCurentUserName + '"'
                             }, function(ret, err) {
                                 if (ret.status) {
                                     if (ret.data.length > 0) {
